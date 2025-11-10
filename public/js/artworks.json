@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "title": "Whispers of the Forest",
+        "size": "24x36 in",
+        "materials": "Mixed media on canvas",
+        "image": "img/art1.jpeg",
+        "description": "A piece that captures the quiet, mystical energy of a forest floor, combining bark, dried moss, and acrylics.",
+        "available": false
+    },
+    {
+        "id": 2,
+        "title": "Ocean's Breath",
+        "size": "30x48 in",
+        "materials": "Resin, sand, and pigments on wood panel",
+        "image": "img/art2.jpeg",
+        "description": "Inspired by the rugged coastline of Northern California, this piece evokes the movement and texture of the sea.",
+        "available": true
+    },
+    {
+        "id": 3,
+        "title": "Earthen Veins",
+        "size": "20x20 in",
+        "materials": "Soil, clay, and roots on canvas",
+        "image": "img/art3.jpeg",
+        "description": "An exploration of the intricate patterns found beneath the earth's surface.",
+        "available": true
+    },
+    {
+        "id": 4,
+        "title": "Sun-Bleached Memories",
+        "size": "48x30 in",
+        "materials": "Driftwood, linen, and oil paint",
+        "image": "img/art4.jpeg",
+        "description": "A tribute to the quiet passage of time, using elements weathered by sun and water.",
+        "available": true
+    },
+    {
+        "id": 5,
+        "title": "Resilience",
+        "size": "22x28 in",
+        "materials": "Bark, charcoal, and resin",
+        "image": "img/art5.jpeg",
+        "description": "This piece speaks to the strength and beauty of nature's ability to endure and adapt.",
+        "available": false
+    }
+]
