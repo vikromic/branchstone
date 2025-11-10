@@ -1,13 +1,12 @@
-node_modules
-.next
-out
-dist
-*.log
+# System files
 .DS_Store
-.env.local
-.env.*.local
-.vercel
-.idea
-*.swp
-*.swo
+Thumbs.db
+.vscode/
+.idea/
 
+# Dependency directories
+node_modules/
+
+# Build files
+*.log
+*.lock
