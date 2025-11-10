@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM fully loaded. Starting initialization.');
     // Add a class to the body to indicate that JS is active and animations can be applied.
     document.body.classList.add('js-animations-active');
     
@@ -74,12 +73,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    console.log('Animating element:', entry.target); // Diagnostic log
                     entry.target.classList.add('is-visible');
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         animatedElements.forEach(element => {
             observer.observe(element);
@@ -153,16 +151,17 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeImageOverlays() {
         // We've replaced the image overlay with responsive text content cards
         // This function remains for backwards compatibility but doesn't do anything
-        console.log('Image overlay functionality replaced with responsive content cards');
     }
 
     // --- Global Initializers ---
     initializeThemeToggle();
-    console.log('Total animate-on-scroll elements found:', document.querySelectorAll('.animate-on-scroll').length);
     initializeAnimations();
     initializeImageOverlays();
-    console.log('Initialization complete.');
 });
 
-// Log page load outside DOMContentLoaded to ensure script execution
-console.log('Script file loaded.');
+// Add event listener for images to ensure they're properly loaded
+document.addEventListener('load', function(e) {
+    if (e.target.tagName === 'IMG') {
+        e.target.classList.add('image-loaded');
+    }
+}, true);

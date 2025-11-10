@@ -3,11 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Viktoria Branchstone - Mixed media artist inspired by natural textures and quiet resilience">
+    <meta name="keywords" content="art, artist, mixed media, natural materials, wood, moss, bark, resin">
+    <meta property="og:title" content="Viktoria Branchstone - Art">
+    <meta property="og:description" content="Mixed media art inspired by natural textures and quiet resilience">
+    <meta property="og:image" content="img/artist.jpeg">
+    <meta property="og:url" content="https://branchstone.art">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="theme-color" content="#F8F8F8" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#2B2D30" media="(prefers-color-scheme: dark)">
+    
     <title>Viktoria Branchstone - Art</title>
-    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="img/artist.jpeg" as="image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 </head>
 <body>
     <header>
@@ -33,7 +49,7 @@
                 VIKTORIA
             </h1>
             <p class="subtext animate-on-scroll">Art inspired by natural textures and quiet resilience.</p>
-            <img src="img/artist.jpeg" alt="Viktoria Branchstone" class="portrait-rect animate-on-scroll">
+            <img src="img/artist.jpeg" alt="Viktoria Branchstone" class="portrait-rect animate-on-scroll" loading="lazy">
         </div>
     </main>
 
@@ -51,11 +67,9 @@
         })();
     </script>
     <script>
-        // Emergency failsafe - manual animation trigger
-        console.log('Running emergency animation failsafe');
+        // Failsafe animation trigger for better user experience
         setTimeout(function() {
             var elements = document.querySelectorAll('.animate-on-scroll');
-            console.log('Found', elements.length, 'animate-on-scroll elements');
             elements.forEach(function(element) {
                 element.classList.add('is-visible');
             });
