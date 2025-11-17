@@ -14,22 +14,93 @@ document.addEventListener('DOMContentLoaded', function() {
         const lightboxDescription = document.getElementById('lightbox-description');
         const closeLightbox = document.querySelector('.close-lightbox');
         const inquireBtn = document.querySelector('.inquire-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const sliderIndicator = document.getElementById('slider-indicator');
+
+        let currentImages = [];
+        let currentIndex = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function updateSlider() {
+            if (currentImages.length === 0) return;
+            
+            lightboxImg.src = currentImages[currentIndex];
+            lightboxImg.alt = lightboxTitle.textContent || '';
+            
+            // Update slider buttons visibility
+            if (prevBtn) prevBtn.style.display = currentImages.length > 1 ? 'flex' : 'none';
+            if (nextBtn) nextBtn.style.display = currentImages.length > 1 ? 'flex' : 'none';
+            
+            // Update indicator
+            if (sliderIndicator && currentImages.length > 1) {
+                sliderIndicator.textContent = `${currentIndex + 1} / ${currentImages.length}`;
+                sliderIndicator.style.display = 'block';
+            } else if (sliderIndicator) {
+                sliderIndicator.style.display = 'none';
+            }
+        }
+
+        function showNext() {
+            if (currentImages.length > 0) {
+                currentIndex = (currentIndex + 1) % currentImages.length;
+                updateSlider();
+            }
+        }
+
+        function showPrev() {
+            if (currentImages.length > 0) {
+                currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+                updateSlider();
+            }
+        }
+
+        // Touch/swipe support for mobile
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }
+
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                // Swipe left - next image
+                showNext();
+            }
+            if (touchEndX > touchStartX + 50) {
+                // Swipe right - previous image
+                showPrev();
+            }
+        }
 
         galleryItems.forEach(item => {
             item.addEventListener('click', () => {
-                lightboxImg.src = item.dataset.img;
-                lightboxImg.alt = item.dataset.title;
+                // Get images array from dataset or use single image
+                const imagesJson = item.dataset.images;
+                currentImages = imagesJson ? JSON.parse(imagesJson) : [item.dataset.img];
+                currentIndex = 0;
+                
                 lightboxTitle.textContent = item.dataset.title;
-                lightboxSize.textContent = `Size: ${item.dataset.size}`;
-                lightboxMaterials.textContent = `Materials: ${item.dataset.materials}`;
+                // Use translations for labels if available
+                const sizeLabel = window.getTranslation ? window.getTranslation('lightbox.size') : 'Size:';
+                const materialsLabel = window.getTranslation ? window.getTranslation('lightbox.materials') : 'Materials:';
+                lightboxSize.textContent = `${sizeLabel} ${item.dataset.size}`;
+                lightboxMaterials.textContent = `${materialsLabel} ${item.dataset.materials}`;
                 lightboxDescription.textContent = item.dataset.description;
                 
+                updateSlider();
                 lightbox.style.display = 'flex';
             });
         });
 
         function close() {
             lightbox.style.display = 'none';
+            currentImages = [];
+            currentIndex = 0;
         }
 
         // Close with X button
@@ -39,6 +110,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && lightbox.style.display === 'flex') {
                 close();
+            } else if (e.key === 'ArrowLeft' && lightbox.style.display === 'flex') {
+                showPrev();
+            } else if (e.key === 'ArrowRight' && lightbox.style.display === 'flex') {
+                showNext();
             }
         });
         
@@ -46,7 +121,25 @@ document.addEventListener('DOMContentLoaded', function() {
             lightbox.addEventListener('click', (e) => {
                 if (e.target === lightbox) close();
             });
+            
+            // Touch events for swipe
+            const imageWrapper = lightbox.querySelector('.lightbox-image-wrapper');
+            if (imageWrapper) {
+                imageWrapper.addEventListener('touchstart', handleTouchStart, false);
+                imageWrapper.addEventListener('touchend', handleTouchEnd, false);
+            }
         }
+
+        // Slider buttons
+        if (prevBtn) prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showPrev();
+        });
+        
+        if (nextBtn) nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showNext();
+        });
 
         if (inquireBtn) {
             inquireBtn.addEventListener('click', () => {
@@ -131,6 +224,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     item.dataset.materials = artwork.materials;
                     item.dataset.description = artwork.description;
                     item.dataset.img = artwork.image;
+                    // Store images array as JSON string
+                    if (artwork.images && artwork.images.length > 0) {
+                        item.dataset.images = JSON.stringify(artwork.images);
+                    }
 
                     const unavailableDot = !artwork.available ? '<span class="unavailable-dot"></span>' : '';
 

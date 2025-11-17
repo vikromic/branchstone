@@ -2,8 +2,8 @@
 :root {
     /* Light Theme */
     --background-color: #F8F8F8; /* Light grey color as specified */
-    --text-color: #1d1d1f;
-    --text-rgb: 29, 29, 31; /* RGB values for text color */
+    --text-color: #2B2B2B; /* Dark coal grey for better contrast */
+    --text-rgb: 43, 43, 43; /* RGB values for text color */
     --secondary-text: #555555; /* Dark grey for secondary text */
     --accent-color: #0066cc; /* Blue accent for links and highlights */
     --card-background: #ffffff;
@@ -96,6 +96,12 @@ nav ul {
     flex: 1;
 }
 
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 nav a {
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -111,6 +117,25 @@ nav a:hover {
     border-bottom: 2px solid var(--text-color);
 }
 
+/* Language Toggle */
+.lang-toggle {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    padding: 0.4rem 0.8rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-color);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    margin-right: 0.5rem;
+}
+
+.lang-toggle:hover {
+    background-color: rgba(var(--text-rgb), 0.1);
+    border-color: var(--text-color);
+}
+
 /* Theme Toggle */
 .theme-toggle {
     background: transparent;
@@ -119,7 +144,6 @@ nav a:hover {
     width: 24px;
     height: 24px;
     padding: 0.3rem;
-    margin-left: 0.5rem;
     transition: transform 0.3s ease;
     display: flex;
     align-items: center;
@@ -555,11 +579,82 @@ main {
     to { opacity: 1; transform: scale(1); }
 }
 
-#lightbox-img {
+.lightbox-image-container {
+    position: relative;
     max-width: 60%;
     background-color: #000; /* Keep black for better image contrast in both themes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-image-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#lightbox-img {
+    max-width: 100%;
     max-height: 90vh;
     object-fit: contain;
+    display: block;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.slider-btn:hover {
+    background-color: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.slider-btn svg {
+    width: 24px;
+    height: 24px;
+    color: #2B2B2B;
+}
+
+.slider-btn-prev {
+    left: 1rem;
+}
+
+.slider-btn-next {
+    right: 1rem;
+}
+
+.slider-indicator {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    z-index: 10;
+    display: none;
 }
 
 #lightbox-caption {
@@ -678,8 +773,12 @@ main {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--secondary-text);
+    color: #2B2B2B; /* Dark coal grey for labels */
     font-size: 0.9rem;
+}
+
+[data-theme="dark"] .form-group label {
+    color: #CED0D3;
 }
 
 .form-group input,
@@ -692,7 +791,28 @@ main {
     font-size: 1rem;
     box-sizing: border-box;
     background-color: #f5f5f7;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    color: #2B2B2B; /* Dark coal grey for text */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode form inputs */
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea {
+    background-color: #383A3E;
+    border-color: #45474a;
+    color: #F9F9F9;
+}
+
+[data-theme="dark"] .form-group input::placeholder,
+[data-theme="dark"] .form-group textarea::placeholder {
+    color: #CED0D3;
+    opacity: 1;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #2B2B2B;
+    opacity: 0.6;
 }
 
 .form-group input:focus,
@@ -749,6 +869,16 @@ main {
     /* Navigation */
     nav ul {
         gap: 1.5rem;
+    }
+    
+    .header-controls {
+        gap: 0.3rem;
+    }
+    
+    .lang-toggle {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+        margin-right: 0.3rem;
     }
 
     /* About Page */
@@ -810,6 +940,11 @@ main {
         max-width: 95vw;
     }
     
+    .lightbox-image-container {
+        max-width: 100%;
+        max-height: 50vh;
+    }
+    
     #lightbox-img {
         max-width: 100%;
         max-height: 50vh;
@@ -826,6 +961,24 @@ main {
         top: 0.5rem;
         right: 1rem;
         font-size: 1.8rem;
+    }
+    
+    .slider-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .slider-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .slider-btn-prev {
+        left: 0.5rem;
+    }
+    
+    .slider-btn-next {
+        right: 0.5rem;
     }
 }
 
