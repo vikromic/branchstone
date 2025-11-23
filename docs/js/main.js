@@ -371,9 +371,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
+                    // Add will-change for performance
+                    entry.target.style.willChange = 'transform, opacity, filter';
+
                     // Staggered animation with blur-to-focus
                     setTimeout(() => {
                         entry.target.classList.add('is-visible');
+
+                        // Remove will-change after animation completes
+                        setTimeout(() => {
+                            entry.target.style.willChange = 'auto';
+                        }, 1000);
                     }, index * 100); // 100ms delay between elements
                     observer.unobserve(entry.target);
                 }
@@ -408,6 +416,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initParallaxEffects() {
+        // Disable parallax on mobile for better performance
+        if (window.innerWidth <= 768) return;
+
         let ticking = false;
 
         const parallaxElements = [
@@ -687,10 +698,27 @@ document.addEventListener('DOMContentLoaded', function () {
         // This function remains for backwards compatibility but doesn't do anything
     }
 
+    // Language toggle functionality
+    function initializeLanguageToggle() {
+        const langToggle = document.getElementById('lang-toggle');
+        if (!langToggle) return;
+
+        langToggle.addEventListener('click', function() {
+            const langOptions = this.querySelectorAll('.lang-option');
+            langOptions.forEach(option => {
+                option.classList.toggle('active-lang');
+            });
+
+            // Here you would typically trigger translation logic
+            // For now, just toggle the visual state
+        });
+    }
+
     // --- Global Initializers ---
     initializeThemeToggle();
     initializeAnimations();
     initializeImageOverlays();
+    initializeLanguageToggle();
 });
 
 // Add event listener for images to ensure they're properly loaded

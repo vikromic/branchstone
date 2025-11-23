@@ -28,6 +28,19 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap"
         rel="stylesheet" media="print" onload="this.media='all'">
+
+    <!-- Initialize theme as early as possible to avoid flickering -->
+    <script>
+        (function () {
+            // Check system or user preference for theme
+            const userPreference = localStorage.getItem('theme');
+            const systemPreference = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const currentTheme = userPreference || systemPreference;
+
+            // Apply theme immediately
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        })();
+    </script>
 </head>
 
 <body>
@@ -41,22 +54,29 @@
             <span class="mobile-page-title" id="mobile-page-title" data-translate="nav.home">Home</span>
             <div class="menu-hover-bg" id="menu-hover-bg"></div>
             <ul id="mobile-nav-menu">
-                <li><a href="index.html" data-translate="nav.home" data-hover-img="img/artist.jpeg">Home</a></li>
+                <li><a href="index.html" class="active" data-translate="nav.home"
+                        data-hover-img="img/artist.jpeg">Home</a></li>
                 <li><a href="gallery.html" data-translate="nav.gallery"
                         data-hover-img="img/gallery-preview.jpg">Gallery</a></li>
                 <li><a href="about.html" data-translate="nav.about" data-hover-img="img/about-me.jpeg">About</a></li>
                 <li><a href="contact.html" data-translate="nav.contact" data-hover-img="img/contact-bg.jpg">Contact</a>
                 </li>
             </ul>
-            <div class="menu-footer">
-                <div class="social-links-minimal">
-                    <a href="#" aria-label="Instagram">IG</a>
-                    <a href="#" aria-label="Twitter">TW</a>
-                    <a href="#" aria-label="Email">EM</a>
-                </div>
-            </div>
             <div class="header-controls">
-                <button class="lang-toggle" id="lang-toggle" aria-label="Toggle language">EN | UA</button>
+                <div class="social-links-minimal">
+                    <a href="https://www.instagram.com/branchstone.art" target="_blank" rel="noopener noreferrer"
+                        aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+                </div>
+                <button class="lang-toggle" id="lang-toggle" aria-label="Toggle language">
+                    <span class="lang-option active-lang" data-lang="en">EN</span> | <span class="lang-option"
+                        data-lang="ua">UA</span>
+                </button>
                 <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
                     <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path
@@ -81,8 +101,8 @@
             </div>
             <div class="hero-content">
                 <h1 class="hero-title animate-on-scroll" data-translate="home.title">
-                    BRANCHSTONE
-                    <span class="hero-subtitle">VIKTORIA</span>
+                    VIKTORIA
+                    <span class="hero-subtitle">BRANCHSTONE</span>
                 </h1>
                 <p class="hero-tagline animate-on-scroll" data-translate="home.subtext">
                     Art inspired by natural textures and quiet resilience
@@ -138,17 +158,7 @@
     <script src="js/translations.js"></script>
     <script src="js/main.js"></script>
     <!-- Initialize theme as early as possible to avoid flickering -->
-    <script>
-        (function () {
-            // Check system or user preference for theme
-            const userPreference = localStorage.getItem('theme');
-            const systemPreference = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            const currentTheme = userPreference || systemPreference;
 
-            // Apply theme immediately
-            document.documentElement.setAttribute('data-theme', currentTheme);
-        })();
-    </script>
     <script>
         // Failsafe animation trigger for better user experience
         setTimeout(function () {
