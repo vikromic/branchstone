@@ -1,7 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Add a class to the body to indicate that JS is active and animations can be applied.
     document.body.classList.add('js-animations-active');
-    
+
+    // Initialize smooth scroll
+    initSmoothScroll();
+
+    // Initialize parallax effects
+    initParallaxEffects();
+
+    // Initialize magnetic hover effects
+    initMagneticHover();
+
     function initializeLightbox() {
         const lightbox = document.getElementById('lightbox');
         const galleryItems = document.querySelectorAll('.gallery-item');
@@ -164,19 +173,134 @@ document.addEventListener('DOMContentLoaded', function() {
         if (animatedElements.length === 0) return;
 
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
+                    // Staggered animation with blur-to-focus
+                    setTimeout(() => {
+                        entry.target.classList.add('is-visible');
+                    }, index * 100); // 100ms delay between elements
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
 
         animatedElements.forEach(element => {
             observer.observe(element);
         });
     }
-    
+
+    function initSmoothScroll() {
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // CSS-based smooth scrolling
+        document.documentElement.style.scrollBehavior = 'smooth';
+    }
+
+    function initParallaxEffects() {
+        let ticking = false;
+
+        const parallaxElements = [
+            { selector: '.hero-bg-image', speed: 0.3 },
+            { selector: '.featured-item', speed: 0.08 },
+            { selector: '.home-about-image', speed: 0.12 },
+            { selector: '.gallery-item', speed: 0.15 }
+        ];
+
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+
+            parallaxElements.forEach(item => {
+                const elements = document.querySelectorAll(item.selector);
+                elements.forEach((el, index) => {
+                    const rect = el.getBoundingClientRect();
+                    const elementTop = rect.top + scrolled;
+                    const elementHeight = rect.height;
+                    const viewportHeight = window.innerHeight;
+
+                    // Only apply parallax when element is in viewport
+                    if (rect.top < viewportHeight && rect.bottom > 0) {
+                        const distance = scrolled - elementTop + viewportHeight;
+                        const movement = distance * item.speed;
+
+                        // For gallery items, add slight variation
+                        const variation = item.selector === '.gallery-item' ? (index % 3 - 1) * 0.05 : 0;
+                        const finalMovement = movement + (movement * variation);
+
+                        el.style.transform = `translateY(${finalMovement}px)`;
+                    }
+                });
+            });
+
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick, { passive: true });
+        updateParallax(); // Initial call
+    }
+
+    function initMagneticHover() {
+        // Magnetic hover effect for gallery items
+        function addMagneticEffect(element) {
+            element.addEventListener('mousemove', function(e) {
+                const rect = element.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                const moveX = x * 0.08;
+                const moveY = y * 0.08;
+
+                element.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+
+            element.addEventListener('mouseleave', function() {
+                element.style.transform = '';
+            });
+        }
+
+        // Apply to existing gallery items
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            addMagneticEffect(item);
+        });
+
+        // Create a mutation observer to watch for new gallery items
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+                mutation.addedNodes.forEach(node => {
+                    if (node.classList && node.classList.contains('gallery-item')) {
+                        addMagneticEffect(node);
+                    }
+                });
+            });
+        });
+
+        const galleryGrid = document.querySelector('.gallery-grid');
+        if (galleryGrid) {
+            observer.observe(galleryGrid, { childList: true });
+        }
+    }
+
     function initializeThemeToggle() {
         const themeToggle = document.getElementById('theme-toggle');
         if (!themeToggle) return;
@@ -210,6 +334,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // --- Page Specific Logic ---
+
+    // Load featured artworks on home page
+    const featuredGrid = document.getElementById('featured-artworks');
+    if (featuredGrid) {
+        fetch('js/artworks.json')
+            .then(response => response.json())
+            .then(data => {
+                // Take first 6 artworks for featured section
+                const featuredArtworks = data.slice(0, 6);
+
+                featuredArtworks.forEach((artwork, index) => {
+                    const item = document.createElement('a');
+                    item.href = 'gallery.html';
+                    item.className = 'featured-item animate-on-scroll';
+
+                    item.innerHTML = `
+                        <img src="${artwork.image}" alt="${artwork.title}" loading="${index < 3 ? 'eager' : 'lazy'}">
+                        <div class="featured-item-info">
+                            <h3>${artwork.title}</h3>
+                            <p>${artwork.size}</p>
+                        </div>
+                    `;
+
+                    featuredGrid.appendChild(item);
+                });
+
+                // Re-initialize animations for featured items
+                initializeAnimations();
+            })
+            .catch(error => console.error('Error loading featured artworks:', error));
+    }
+
     const galleryGrid = document.querySelector('.gallery-grid');
     if (galleryGrid) {
         // This is the Gallery page
@@ -218,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 data.forEach(artwork => {
                     const item = document.createElement('div');
-                    item.className = `gallery-item ${artwork.layout || ''}`;
+                    item.className = `gallery-item ${artwork.layout || ''} animate-on-scroll`;
                     item.dataset.title = artwork.title;
                     item.dataset.size = artwork.size;
                     item.dataset.materials = artwork.materials;
@@ -240,9 +396,93 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                     galleryGrid.appendChild(item);
                 });
+
+                // Re-initialize animations for dynamically created gallery items
+                initializeAnimations();
                 initializeLightbox(); // Init lightbox after images are loaded
+
+                // Mobile gallery enhancements
+                if (window.innerWidth <= 768) {
+                    initMobileGallery(data.length);
+                }
             })
             .catch(error => console.error('Error fetching artworks:', error));
+    }
+
+    function initMobileGallery(itemCount) {
+        const galleryGrid = document.querySelector('.gallery-grid');
+        if (!galleryGrid) return;
+
+        // Create progress dots container
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'gallery-progress';
+
+        // Create dots
+        for (let i = 0; i < itemCount; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'gallery-progress-dot';
+            if (i === 0) dot.classList.add('active');
+            progressContainer.appendChild(dot);
+        }
+
+        galleryGrid.parentNode.appendChild(progressContainer);
+
+        // Update active dot on scroll
+        let scrollTimeout;
+        galleryGrid.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollLeft = galleryGrid.scrollLeft;
+                const itemWidth = galleryGrid.querySelector('.gallery-item').offsetWidth + 24; // item + gap
+                const activeIndex = Math.round(scrollLeft / itemWidth);
+
+                document.querySelectorAll('.gallery-progress-dot').forEach((dot, index) => {
+                    dot.classList.toggle('active', index === activeIndex);
+                });
+            }, 50);
+        }, { passive: true });
+
+        // Add swipe hint
+        setTimeout(() => {
+            addSwipeHint(galleryGrid);
+        }, 1000);
+    }
+
+    function addSwipeHint(container) {
+        const hint = document.createElement('div');
+        hint.style.cssText = `
+            position: fixed;
+            bottom: 50%;
+            right: 1rem;
+            transform: translateY(50%);
+            color: var(--accent-color);
+            font-size: 2rem;
+            animation: swipeHint 2s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.7;
+        `;
+        hint.innerHTML = '→';
+        document.body.appendChild(hint);
+
+        // Add animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes swipeHint {
+                0%, 100% { transform: translateY(50%) translateX(0); opacity: 0.7; }
+                50% { transform: translateY(50%) translateX(10px); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Remove hint after first interaction
+        container.addEventListener('scroll', () => {
+            hint.style.display = 'none';
+        }, { once: true });
+
+        container.addEventListener('touchstart', () => {
+            hint.style.display = 'none';
+        }, { once: true });
     }
 
     function initializeImageOverlays() {

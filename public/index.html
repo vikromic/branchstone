@@ -45,15 +45,64 @@
     </header>
 
     <main class="home-main">
-        <div class="hero">
-            <h1 class="animate-on-scroll" data-translate="home.title">
-                BRANCHSTONE
-                <br>
-                VIKTORIA
-            </h1>
-            <p class="subtext animate-on-scroll" data-translate="home.subtext">Art inspired by natural textures and quiet resilience.</p>
-            <img src="img/artist.jpeg" alt="Viktoria Branchstone" class="portrait-rect animate-on-scroll" loading="lazy">
-        </div>
+        <!-- Full-Viewport Immersive Hero -->
+        <section class="hero-fullscreen">
+            <div class="hero-background">
+                <img src="img/artist.jpeg" alt="Viktoria Branchstone" class="hero-bg-image" loading="eager">
+                <div class="hero-overlay"></div>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title animate-on-scroll" data-translate="home.title">
+                    BRANCHSTONE
+                    <span class="hero-subtitle">VIKTORIA</span>
+                </h1>
+                <p class="hero-tagline animate-on-scroll" data-translate="home.subtext">
+                    Art inspired by natural textures and quiet resilience
+                </p>
+                <div class="hero-cta animate-on-scroll">
+                    <a href="gallery.html" class="btn-primary">Explore Gallery</a>
+                    <a href="about.html" class="btn-secondary">About the Artist</a>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14m0 0l-7-7m7 7l7-7"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Featured Artworks Section -->
+        <section class="featured-works">
+            <div class="section-header">
+                <h2 class="animate-on-scroll">Featured Works</h2>
+                <a href="gallery.html" class="view-all-link">View All</a>
+            </div>
+            <div class="featured-grid" id="featured-artworks">
+                <!-- Dynamically loaded from artworks.json -->
+            </div>
+        </section>
+
+        <!-- About Snippet -->
+        <section class="home-about">
+            <div class="home-about-content animate-on-scroll">
+                <h2>Creating Art from Nature's Imperfections</h2>
+                <p>I work with found materials—wood, moss, bark, algae—to create abstract compositions that preserve the raw beauty of nature. Each piece begins with something I couldn't leave behind.</p>
+                <a href="about.html" class="btn-text">Read My Story →</a>
+            </div>
+            <div class="home-about-image animate-on-scroll">
+                <img src="img/about-me.jpeg" alt="Artist at work" loading="lazy">
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="home-cta">
+            <h2 class="animate-on-scroll">Ready to Find Your Piece?</h2>
+            <p class="animate-on-scroll">Explore the full collection or get in touch to discuss commissions.</p>
+            <div class="cta-buttons animate-on-scroll">
+                <a href="gallery.html" class="btn-primary-large">Browse Gallery</a>
+                <a href="contact.html" class="btn-secondary-large">Get in Touch</a>
+            </div>
+        </section>
     </main>
 
     <script src="js/translations.js"></script>
