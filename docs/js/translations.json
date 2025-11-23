@@ -37,7 +37,7 @@
             "emailLabel": "Email",
             "messageLabel": "Message",
             "submit": "Send Message",
-            "inquire": "Inquire for details"
+            "inquire": "Request Acquisition Details"
         },
         "lightbox": {
             "size": "Size:",
@@ -82,7 +82,7 @@
             "emailLabel": "Email",
             "messageLabel": "Повідомлення",
             "submit": "Відправити повідомлення",
-            "inquire": "Запитати деталі"
+            "inquire": "Запит на придбання"
         },
         "lightbox": {
             "size": "Розмір:",

@@ -160,17 +160,40 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initializeAnimations() {
+        // Initialize Lenis for smooth scrolling
+        if (typeof Lenis !== 'undefined') {
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: true,
+                mouseMultiplier: 1,
+                smoothTouch: false,
+                touchMultiplier: 2,
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+
+            requestAnimationFrame(raf);
+        }
+
+        // Cinematic Reveal Animations
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
         if (animatedElements.length === 0) return;
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    // Add a slight delay based on index if siblings are animating together
                     entry.target.classList.add('is-visible');
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        }, { threshold: 0.15, rootMargin: '0px 0px -100px 0px' }); // Trigger slightly later for drama
 
         animatedElements.forEach(element => {
             observer.observe(element);
