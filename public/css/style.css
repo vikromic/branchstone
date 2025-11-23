@@ -1680,14 +1680,15 @@ section {
     }
 
 
-    /* Mobile Gallery - Horizontal Swipeable Cards! */
+    /* Mobile Gallery - Enhanced Immersive Experience */
     .gallery-main {
-        padding: 2rem 0 4rem;
+        padding: 2rem 0 3rem;
     }
 
     .gallery-main h2 {
         padding: 0 1.5rem;
         margin-bottom: 2rem;
+        font-size: clamp(2.5rem, 10vw, 3.5rem);
     }
 
     .gallery-grid {
@@ -1698,8 +1699,8 @@ section {
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
-        gap: 1.5rem;
-        padding: 1rem 1.5rem 2rem;
+        gap: 1rem;
+        padding: 1rem 1rem 2rem;
         grid-template-columns: none;
 
         /* Hide scrollbar but keep functionality */
@@ -1712,62 +1713,97 @@ section {
     }
 
     .gallery-item {
-        flex: 0 0 85vw;
-        max-width: 85vw;
+        flex: 0 0 90vw;
+        max-width: 90vw;
         scroll-snap-align: center;
         scroll-snap-stop: always;
         height: 70vh;
+        max-height: 70vh;
         min-height: 500px;
         position: relative;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 20px;
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.15),
+            0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
     /* Touch feedback */
     .gallery-item:active {
-        transform: scale(0.98);
+        transform: scale(0.97);
+        box-shadow: 
+            0 5px 15px rgba(0, 0, 0, 0.1),
+            0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .gallery-item.wide, .gallery-item.tall {
-        flex: 0 0 85vw;
-        max-width: 85vw;
+        flex: 0 0 90vw;
+        max-width: 90vw;
     }
 
     .gallery-item img {
         height: 100%;
+        width: 100%;
         object-fit: cover;
+        border-radius: 20px;
     }
 
-    /* Swipe indicator */
+    /* Enhanced gallery item info */
+    .gallery-item-info {
+        padding: 2.5rem 2rem 2rem;
+        background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0) 100%);
+    }
+
+    .gallery-item-info h3 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .gallery-item-info p {
+        font-size: 1rem;
+    }
+
+    /* Peek effect for next card */
+    .gallery-grid::before,
     .gallery-grid::after {
         content: '';
-        flex: 0 0 1.5rem;
+        flex: 0 0 5vw;
         height: 1px;
     }
 
-    /* Progress dots for mobile gallery */
+    /* Enhanced progress dots */
     .gallery-progress {
         display: flex;
         justify-content: center;
-        gap: 0.5rem;
-        padding: 1.5rem;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 2rem 1rem;
         position: sticky;
         bottom: 0;
-        background: linear-gradient(to top, var(--background-color) 80%, transparent);
+        background: linear-gradient(to top, var(--background-color) 70%, transparent);
         z-index: 10;
     }
 
     .gallery-progress-dot {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
         background: var(--border-color);
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        cursor: pointer;
+        border: 2px solid transparent;
     }
 
     .gallery-progress-dot.active {
-        width: 24px;
-        border-radius: 4px;
+        width: 32px;
+        height: 10px;
+        border-radius: 5px;
         background: var(--accent-color);
+        box-shadow: 0 2px 8px rgba(0, 102, 204, 0.4);
+    }
+
+    .gallery-progress-dot:not(.active):active {
+        transform: scale(1.2);
     }
 
     /* Lightbox */
