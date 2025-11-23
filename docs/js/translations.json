@@ -11,7 +11,8 @@
             "subtext": "Art inspired by natural textures and quiet resilience."
         },
         "gallery": {
-            "title": "Gallery"
+            "title": "Gallery",
+            "sold": "Sold"
         },
         "about": {
             "title": "ABOUT ME",
@@ -55,7 +56,8 @@
             "subtext": "Мистецтво, натхненне природними текстурами та тихою стійкістю."
         },
         "gallery": {
-            "title": "Галерея"
+            "title": "Галерея",
+            "sold": "Продано"
         },
         "about": {
             "title": "ПРО МЕНЕ",
@@ -88,4 +90,3 @@
         }
     }
 }
-

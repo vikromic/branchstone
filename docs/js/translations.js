@@ -17,7 +17,7 @@ async function loadTranslations() {
 function getTranslation(key, lang = currentLang) {
     const keys = key.split('.');
     let value = translations[lang];
-    
+
     for (const k of keys) {
         if (value && typeof value === 'object') {
             value = value[k];
@@ -25,18 +25,18 @@ function getTranslation(key, lang = currentLang) {
             return null;
         }
     }
-    
+
     return value || null;
 }
 
 // Apply translations to all elements with data-translate attribute
 function applyTranslations() {
     const elements = document.querySelectorAll('[data-translate]');
-    
+
     elements.forEach(element => {
         const key = element.getAttribute('data-translate');
         const translation = getTranslation(key);
-        
+
         if (translation) {
             // Handle special cases
             if (key === 'home.title') {
@@ -70,13 +70,13 @@ function applyTranslations() {
             }
         }
     });
-    
+
     // Update language toggle button
     const langToggle = document.getElementById('lang-toggle');
     if (langToggle) {
         langToggle.textContent = currentLang === 'en' ? 'EN | UA' : 'EN | UA';
     }
-    
+
     // Update HTML lang attribute
     document.documentElement.lang = currentLang;
 }
@@ -89,12 +89,12 @@ function switchLanguage(lang) {
 }
 
 // Initialize language system
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadTranslations();
-    
+
     const langToggle = document.getElementById('lang-toggle');
     if (langToggle) {
-        langToggle.addEventListener('click', function() {
+        langToggle.addEventListener('click', function () {
             const newLang = currentLang === 'en' ? 'ua' : 'en';
             switchLanguage(newLang);
         });
@@ -104,8 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // Export for use in other scripts
 window.switchLanguage = switchLanguage;
 window.getTranslation = getTranslation;
+window.applyTranslations = applyTranslations;
 Object.defineProperty(window, 'currentLang', {
-    get: function() { return currentLang; },
-    set: function(val) { currentLang = val; }
+    get: function () { return currentLang; },
+    set: function (val) { currentLang = val; }
 });
 

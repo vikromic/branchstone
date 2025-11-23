@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Add a class to the body to indicate that JS is active and animations can be applied.
     document.body.classList.add('js-animations-active');
-    
+
     function initializeLightbox() {
         const lightbox = document.getElementById('lightbox');
         const galleryItems = document.querySelectorAll('.gallery-item');
@@ -25,14 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function updateSlider() {
             if (currentImages.length === 0) return;
-            
+
             lightboxImg.src = currentImages[currentIndex];
             lightboxImg.alt = lightboxTitle.textContent || '';
-            
+
             // Update slider buttons visibility
             if (prevBtn) prevBtn.style.display = currentImages.length > 1 ? 'flex' : 'none';
             if (nextBtn) nextBtn.style.display = currentImages.length > 1 ? 'flex' : 'none';
-            
+
             // Update indicator
             if (sliderIndicator && currentImages.length > 1) {
                 sliderIndicator.textContent = `${currentIndex + 1} / ${currentImages.length}`;
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const imagesJson = item.dataset.images;
                 currentImages = imagesJson ? JSON.parse(imagesJson) : [item.dataset.img];
                 currentIndex = 0;
-                
+
                 lightboxTitle.textContent = item.dataset.title;
                 // Use translations for labels if available
                 const sizeLabel = window.getTranslation ? window.getTranslation('lightbox.size') : 'Size:';
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 lightboxSize.textContent = `${sizeLabel} ${item.dataset.size}`;
                 lightboxMaterials.textContent = `${materialsLabel} ${item.dataset.materials}`;
                 lightboxDescription.textContent = item.dataset.description;
-                
+
                 updateSlider();
                 lightbox.style.display = 'flex';
             });
@@ -105,9 +105,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Close with X button
         if (closeLightbox) closeLightbox.addEventListener('click', close);
-        
+
         // Close with ESC key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && lightbox.style.display === 'flex') {
                 close();
             } else if (e.key === 'ArrowLeft' && lightbox.style.display === 'flex') {
@@ -116,12 +116,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 showNext();
             }
         });
-        
+
         if (lightbox) {
             lightbox.addEventListener('click', (e) => {
                 if (e.target === lightbox) close();
             });
-            
+
             // Touch events for swipe
             const imageWrapper = lightbox.querySelector('.lightbox-image-wrapper');
             if (imageWrapper) {
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
             showPrev();
         });
-        
+
         if (nextBtn) nextBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             showNext();
@@ -146,13 +146,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Get the artwork details to include in the inquiry
                 const artworkTitle = lightboxTitle.textContent || 'this artwork';
                 const artworkSize = lightboxSize.textContent.replace('Size: ', '') || '';
-                
+
                 // Create a pre-filled message template
                 const message = `I'm interested in "${artworkTitle}" (${artworkSize}). Please provide more information about availability and pricing.`;
-                
+
                 // Store the message in localStorage to access it on the contact page
                 localStorage.setItem('inquiryMessage', message);
-                
+
                 // Navigate to the contact page
                 window.location.href = 'contact.html';
             });
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
             observer.observe(element);
         });
     }
-    
+
     function initializeThemeToggle() {
         const themeToggle = document.getElementById('theme-toggle');
         if (!themeToggle) return;
@@ -185,14 +185,14 @@ document.addEventListener('DOMContentLoaded', function() {
         function getSystemThemePreference() {
             return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
-        
+
         // Check if user has set a theme preference, otherwise use system preference
         const userPreference = localStorage.getItem('theme');
         const currentTheme = userPreference || getSystemThemePreference();
-        
+
         // Apply the current theme
         document.documentElement.setAttribute('data-theme', currentTheme);
-        
+
         // Listen for system theme changes
         if (!userPreference && window.matchMedia) {
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
@@ -200,22 +200,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.documentElement.setAttribute('data-theme', newTheme);
             });
         }
-        
+
         // Add click event to toggle theme
-        themeToggle.addEventListener('click', function() {
+        themeToggle.addEventListener('click', function () {
             let newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme); // Store user preference
         });
     }
-    
+
     // --- Page Specific Logic ---
     const galleryGrid = document.querySelector('.gallery-grid');
     if (galleryGrid) {
+        // Show skeleton loader while loading
+        const skeletonCount = 6;
+        let skeletonHTML = '';
+        for (let i = 0; i < skeletonCount; i++) {
+            skeletonHTML += '<div class="skeleton-item"></div>';
+        }
+        galleryGrid.innerHTML = skeletonHTML;
+
         // This is the Gallery page
         fetch('js/artworks.json')
             .then(response => response.json())
             .then(data => {
+                // Clear skeletons
+                galleryGrid.innerHTML = '';
+
                 data.forEach(artwork => {
                     const item = document.createElement('div');
                     item.className = `gallery-item ${artwork.layout || ''}`;
@@ -229,20 +240,29 @@ document.addEventListener('DOMContentLoaded', function() {
                         item.dataset.images = JSON.stringify(artwork.images);
                     }
 
-                    const unavailableDot = !artwork.available ? '<span class="unavailable-dot"></span>' : '';
+                    const statusBadge = !artwork.available ? '<span class="status-badge sold" data-translate="gallery.sold">Sold</span>' : '';
 
                     item.innerHTML = `
                         <img src="${artwork.image}" alt="${artwork.title}">
                         <div class="gallery-item-info">
-                            <h3>${artwork.title} ${unavailableDot}</h3>
+                            <h3>${artwork.title} ${statusBadge}</h3>
                             <p>${artwork.size}</p>
                         </div>
                     `;
                     galleryGrid.appendChild(item);
                 });
+
+                // Apply translations to newly added elements
+                if (window.applyTranslations) {
+                    window.applyTranslations();
+                }
+
                 initializeLightbox(); // Init lightbox after images are loaded
             })
-            .catch(error => console.error('Error fetching artworks:', error));
+            .catch(error => {
+                console.error('Error fetching artworks:', error);
+                galleryGrid.innerHTML = '<p>Unable to load gallery. Please try again later.</p>';
+            });
     }
 
     function initializeImageOverlays() {
@@ -254,10 +274,33 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeThemeToggle();
     initializeAnimations();
     initializeImageOverlays();
+
+    // Contact Form Handling
+    const contactForm = document.querySelector('form[action*="formspree"]');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (e) {
+            const btn = this.querySelector('button[type="submit"]');
+            if (btn) {
+                const originalText = btn.textContent;
+                btn.textContent = 'Sending...';
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'wait';
+
+                // Reset after a timeout in case of error/navigation
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                }, 5000);
+            }
+        });
+    }
 });
 
 // Add event listener for images to ensure they're properly loaded
-document.addEventListener('load', function(e) {
+document.addEventListener('load', function (e) {
     if (e.target.tagName === 'IMG') {
         e.target.classList.add('image-loaded');
     }
