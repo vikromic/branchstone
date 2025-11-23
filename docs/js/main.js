@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add a class to the body to indicate that JS is active and animations can be applied.
     document.body.classList.add('js-animations-active');
 
+    // Initialize mobile menu
+    initializeMobileMenu();
+
     // Initialize smooth scroll
     initSmoothScroll();
 
@@ -10,6 +13,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize magnetic hover effects
     initMagneticHover();
+
+    function initializeMobileMenu() {
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileNavMenu = document.getElementById('mobile-nav-menu');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        const body = document.body;
+
+        if (!mobileMenuToggle || !mobileNavMenu || !mobileMenuOverlay) return;
+
+        function toggleMobileMenu() {
+            mobileMenuToggle.classList.toggle('active');
+            mobileNavMenu.classList.toggle('active');
+            mobileMenuOverlay.classList.toggle('active');
+            body.style.overflow = mobileNavMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            mobileMenuToggle.classList.remove('active');
+            mobileNavMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            body.style.overflow = '';
+        }
+
+        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+        mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+        // Close menu when clicking a nav link
+        const navLinks = mobileNavMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // Set current page title in mobile header
+        const mobilePageTitle = document.getElementById('mobile-page-title');
+        if (mobilePageTitle) {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const pageTitles = {
+                'index.html': 'Home',
+                'gallery.html': 'Gallery',
+                'about.html': 'About',
+                'contact.html': 'Contact'
+            };
+
+            const title = pageTitles[currentPage] || 'Home';
+            mobilePageTitle.textContent = title;
+            mobilePageTitle.setAttribute('data-translate', `nav.${title.toLowerCase()}`);
+        }
+    }
 
     function initializeLightbox() {
         const lightbox = document.getElementById('lightbox');

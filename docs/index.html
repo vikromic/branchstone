@@ -28,7 +28,13 @@
 <body>
     <header>
         <nav>
-            <ul>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <span class="mobile-page-title" id="mobile-page-title" data-translate="nav.home">Home</span>
+            <ul id="mobile-nav-menu">
                 <li><a href="index.html" data-translate="nav.home">Home</a></li>
                 <li><a href="gallery.html" data-translate="nav.gallery">Gallery</a></li>
                 <li><a href="about.html" data-translate="nav.about">About</a></li>
@@ -43,6 +49,7 @@
             </div>
         </nav>
     </header>
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
 
     <main class="home-main">
         <!-- Full-Viewport Immersive Hero -->
