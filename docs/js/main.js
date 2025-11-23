@@ -151,27 +151,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Touch/swipe support for mobile
-        function handleTouchStart(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        }
-
-        function handleTouchEnd(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }
-
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
-                // Swipe left - next image
-                showNext();
-            }
-            if (touchEndX > touchStartX + 50) {
-                // Swipe right - previous image
-                showPrev();
-            }
-        }
-
         galleryItems.forEach(item => {
             item.addEventListener('click', () => {
                 // Get images array from dataset or use single image
@@ -218,7 +197,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Pinch-to-zoom handling
+        // Close with ESC key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && lightbox.style.display === 'flex') {
+                close();
+            } else if (e.key === 'ArrowLeft' && lightbox.style.display === 'flex') {
+                showPrev();
+            } else if (e.key === 'ArrowRight' && lightbox.style.display === 'flex') {
+                showNext();
+            }
+        });
+
+        // Unified Touch Handling
         function handleTouchStart(e) {
             if (e.touches.length === 2) {
                 e.preventDefault();
@@ -262,11 +252,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (scale < 1.1) {
                     resetZoom();
                 }
-            } else {
+            }
+
+            // Handle Swipe (only if not zoomed)
+            if (e.changedTouches.length > 0 && scale === 1) {
                 touchEndX = e.changedTouches[0].clientX;
-                if (scale === 1) {
-                    handleSwipe();
-                }
+                handleSwipe();
+            }
+        }
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Swipe left - next image
+                showNext();
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // Swipe right - previous image
+                showPrev();
             }
         }
 
@@ -296,23 +299,18 @@ document.addEventListener('DOMContentLoaded', function () {
         // Close with X button
         if (closeLightbox) closeLightbox.addEventListener('click', close);
 
-        // Close with ESC key
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && lightbox.style.display === 'flex') {
-                close();
-            } else if (e.key === 'ArrowLeft' && lightbox.style.display === 'flex') {
-                showPrev();
-            } else if (e.key === 'ArrowRight' && lightbox.style.display === 'flex') {
-                showNext();
-            }
-        });
-
+        // Attach events
         if (lightbox) {
             lightbox.addEventListener('click', (e) => {
                 if (e.target === lightbox) close();
             });
 
-            // Touch events for pinch-to-zoom and swipe
+            // Attach touch events to the lightbox container for broader swipe area
+            // But we need to be careful not to interfere with pinch-zoom on the image
+            // So we'll keep pinch-zoom on the image, but maybe swipe can be on the container?
+            // Actually, let's keep it on the image for consistency with the existing logic, 
+            // but ensure the handlers are correct.
+
             if (lightboxImg) {
                 lightboxImg.addEventListener('touchstart', handleTouchStart, { passive: false });
                 lightboxImg.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -321,6 +319,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 lightboxImg.style.touchAction = 'none';
                 lightboxImg.style.userSelect = 'none';
             }
+
+            // Also allow swiping on the container itself (if clicking outside image)
+            lightbox.addEventListener('touchstart', (e) => {
+                if (e.target === lightbox) {
+                    touchStartX = e.touches[0].clientX;
+                }
+            }, { passive: true });
+
+            lightbox.addEventListener('touchend', (e) => {
+                if (e.target === lightbox) {
+                    touchEndX = e.changedTouches[0].clientX;
+                    handleSwipe();
+                }
+            }, { passive: true });
         }
 
         // Slider buttons
