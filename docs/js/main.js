@@ -571,76 +571,77 @@ document.addEventListener('DOMContentLoaded', function() {
         const galleryGrid = document.querySelector('.gallery-grid');
         if (!galleryGrid) return;
 
-        // Create progress dots container
-        const progressContainer = document.createElement('div');
-        progressContainer.className = 'gallery-progress';
+        // Vertical scroll: Observe gallery items for fade-in animation
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -10% 0px'
+        };
 
-        // Create dots
-        for (let i = 0; i < itemCount; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'gallery-progress-dot';
-            if (i === 0) dot.classList.add('active');
-            progressContainer.appendChild(dot);
-        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
 
-        galleryGrid.parentNode.appendChild(progressContainer);
+        // Observe all gallery items
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            observer.observe(item);
+        });
 
-        // Update active dot on scroll
-        let scrollTimeout;
-        galleryGrid.addEventListener('scroll', () => {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                const scrollLeft = galleryGrid.scrollLeft;
-                const itemWidth = galleryGrid.querySelector('.gallery-item').offsetWidth + 24; // item + gap
-                const activeIndex = Math.round(scrollLeft / itemWidth);
-
-                document.querySelectorAll('.gallery-progress-dot').forEach((dot, index) => {
-                    dot.classList.toggle('active', index === activeIndex);
-                });
-            }, 50);
-        }, { passive: true });
-
-        // Add swipe hint
+        // Add subtle scroll hint
         setTimeout(() => {
-            addSwipeHint(galleryGrid);
-        }, 1000);
+            addScrollHint();
+        }, 800);
     }
 
-    function addSwipeHint(container) {
+    function addScrollHint() {
         const hint = document.createElement('div');
         hint.style.cssText = `
             position: fixed;
-            bottom: 50%;
-            right: 1rem;
-            transform: translateY(50%);
-            color: var(--accent-color);
-            font-size: 2rem;
-            animation: swipeHint 2s ease-in-out infinite;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(139, 120, 93, 0.6);
+            font-size: 1.5rem;
+            animation: scrollHint 2s ease-in-out infinite;
             pointer-events: none;
             z-index: 100;
-            opacity: 0.7;
+            opacity: 0.8;
         `;
-        hint.innerHTML = '→';
+        hint.innerHTML = '↓';
         document.body.appendChild(hint);
 
         // Add animation
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes swipeHint {
-                0%, 100% { transform: translateY(50%) translateX(0); opacity: 0.7; }
-                50% { transform: translateY(50%) translateX(10px); opacity: 1; }
+            @keyframes scrollHint {
+                0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+                50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
             }
         `;
         document.head.appendChild(style);
 
-        // Remove hint after first interaction
-        container.addEventListener('scroll', () => {
-            hint.style.display = 'none';
-        }, { once: true });
+        // Remove hint after scroll
+        let scrolled = false;
+        window.addEventListener('scroll', () => {
+            if (!scrolled && window.scrollY > 50) {
+                hint.style.transition = 'opacity 0.4s ease';
+                hint.style.opacity = '0';
+                setTimeout(() => hint.remove(), 400);
+                scrolled = true;
+            }
+        }, { once: true, passive: true });
 
-        container.addEventListener('touchstart', () => {
-            hint.style.display = 'none';
-        }, { once: true });
+        // Auto-remove after 4 seconds
+        setTimeout(() => {
+            if (hint.parentNode) {
+                hint.style.transition = 'opacity 0.4s ease';
+                hint.style.opacity = '0';
+                setTimeout(() => hint.remove(), 400);
+            }
+        }, 4000);
     }
 
     function initializeImageOverlays() {

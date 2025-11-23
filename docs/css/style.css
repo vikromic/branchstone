@@ -46,7 +46,7 @@ body {
     position: relative;
 }
 
-/* Film Grain Overlay - Creates tactile, organic atmosphere */
+/* Enhanced Film Grain Overlay - More visible organic texture */
 body::before {
     content: '';
     position: fixed;
@@ -54,11 +54,12 @@ body::before {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.04;
     pointer-events: none;
     z-index: 9999;
     animation: grainSubtle 12s ease-in-out infinite;
+    mix-blend-mode: overlay;
 }
 
 /* Organic Artwork Animation Layer */
@@ -808,6 +809,23 @@ section {
     height: 100%;
     max-width: 900px;
     margin: 0 auto;
+    position: relative;
+}
+
+/* Add subtle noise to cards */
+.content-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 16px;
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
 }
 
 .content-card:hover {
@@ -1142,7 +1160,7 @@ section {
 }
 
 
-/* Lightbox Styles - Private Viewing Room */
+/* Lightbox Styles - Premium Viewing Experience */
 .lightbox {
     display: none;
     position: fixed;
@@ -1151,11 +1169,21 @@ section {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.96);
+    background-color: rgba(0, 0, 0, 0.97);
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+}
+
+/* Add noise to lightbox background */
+.lightbox::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
 }
 
 .lightbox-content {
@@ -1166,16 +1194,15 @@ section {
     max-height: 90vh;
     display: flex;
     box-shadow:
-        0 5px 10px rgba(0, 0, 0, 0.05),
-        0 10px 20px rgba(0, 0, 0, 0.07),
-        0 20px 40px rgba(0, 0, 0, 0.09),
-        0 40px 80px rgba(0, 0, 0, 0.12),
-        0 80px 160px rgba(0, 0, 0, 0.15);
+        0 8px 16px rgba(0, 0, 0, 0.08),
+        0 16px 32px rgba(0, 0, 0, 0.1),
+        0 32px 64px rgba(0, 0, 0, 0.12);
     position: relative;
     animation: fadeIn 0.5s;
-    border-radius: 20px;
+    border-radius: 24px;
     overflow: hidden;
     transition: background-color 0.3s ease;
+    z-index: 2;
 }
 
 @keyframes fadeIn {
@@ -1227,10 +1254,12 @@ section {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.9);
-    border: none;
-    width: 48px;
-    height: 48px;
+    background-color: rgba(139, 120, 93, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -1238,25 +1267,31 @@ section {
     justify-content: center;
     z-index: 10;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0.3;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    opacity: 0;
 }
 
-.lightbox-image-container:hover .slider-btn,
+.lightbox-image-container:hover .slider-btn {
+    opacity: 0.9;
+}
+
 .slider-btn:hover {
+    background-color: rgba(139, 120, 93, 0.35);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-50%) scale(1.12);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     opacity: 1;
 }
 
-.slider-btn:hover {
-    background-color: rgba(255, 255, 255, 1);
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+.slider-btn:active {
+    transform: translateY(-50%) scale(1.05);
 }
 
 .slider-btn svg {
-    width: 24px;
-    height: 24px;
-    color: #2B2B2B;
+    width: 26px;
+    height: 26px;
+    color: #ffffff;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 .slider-btn-prev {
@@ -1283,37 +1318,56 @@ section {
 }
 
 #lightbox-caption {
-    padding: 3.5rem;
+    padding: 3rem 3rem 3rem 3.5rem;
     width: 40%;
     overflow-y: auto;
     text-align: left;
     color: var(--text-color);
     transition: color 0.3s ease;
+    position: relative;
+}
+
+/* Add subtle noise to caption area */
+#lightbox-caption::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.015'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+}
+
+#lightbox-caption > * {
+    position: relative;
+    z-index: 1;
 }
 
 #lightbox-title {
-    font-size: 2.5rem;
-    margin: 0 0 1.5rem 0;
+    font-size: 2.25rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    margin: 0 0 1.75rem 0;
     color: var(--text-color);
-    letter-spacing: 0.01em;
+    letter-spacing: 0.015em;
+    line-height: 1.2;
 }
+
 #lightbox-size, #lightbox-materials {
-    margin: 0 0 0.75rem 0;
+    margin: 0 0 0.65rem 0;
     font-family: 'Inter', sans-serif;
-    color: var(--secondary-text);
-    font-size: 0.75rem;
+    color: rgba(139, 120, 93, 0.85);
+    font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 500;
-    opacity: 0.8;
+    letter-spacing: 2.5px;
+    font-weight: 600;
 }
 
 #lightbox-description {
-    margin: 2rem 0 1.5rem 0;
+    margin: 2.25rem 0 2rem 0;
     font-family: 'Inter', sans-serif;
-    color: var(--text-color);
-    font-size: 1rem;
-    line-height: 1.6;
+    color: var(--secondary-text);
+    font-size: 0.95rem;
+    line-height: 1.7;
 }
 
 .close-lightbox {
@@ -1340,29 +1394,38 @@ section {
 }
 
 .inquire-btn {
-    background-color: var(--button-color);
-    color: var(--button-text);
+    background: linear-gradient(135deg, rgba(139, 120, 93, 1) 0%, rgba(139, 120, 93, 0.9) 100%);
+    color: #ffffff;
     border: none;
-    padding: 1rem 2rem;
+    padding: 1.125rem 2.5rem;
     font-family: 'Inter', sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    border-radius: 8px;
-    font-size: 0.875rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
     box-shadow:
-        0 2px 4px rgba(0, 102, 204, 0.1),
-        0 4px 8px rgba(0, 102, 204, 0.08);
+        0 4px 12px rgba(139, 120, 93, 0.25),
+        0 2px 6px rgba(139, 120, 93, 0.15);
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
 .inquire-btn:hover {
-    opacity: 0.92;
-    transform: translateY(-3px);
+    background: linear-gradient(135deg, rgba(139, 120, 93, 0.95) 0%, rgba(139, 120, 93, 0.85) 100%);
+    transform: translateY(-2px);
     box-shadow:
-        0 4px 8px rgba(0, 102, 204, 0.15),
-        0 8px 16px rgba(0, 102, 204, 0.12);
+        0 6px 16px rgba(139, 120, 93, 0.3),
+        0 3px 8px rgba(139, 120, 93, 0.2);
+}
+
+.inquire-btn:active {
+    transform: translateY(0);
+    box-shadow:
+        0 2px 8px rgba(139, 120, 93, 0.2),
+        0 1px 4px rgba(139, 120, 93, 0.15);
 }
 
 /* Contact Page Styles */
@@ -2057,14 +2120,10 @@ section {
     }
 
 
-    /* Mobile Gallery - Premium Immersive Experience */
+    /* Mobile Gallery - Apple-Inspired Vertical Experience */
     .gallery-main {
-        padding: 4rem 0 3rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: calc(100vh - 4rem);
+        padding: 5rem 0 2rem;
+        min-height: 100vh;
     }
 
     .gallery-main h2 {
@@ -2073,170 +2132,148 @@ section {
 
     .gallery-grid {
         display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        gap: 1.5rem;
-        padding: 2rem 1rem 3rem;
+        flex-direction: column;
+        gap: 3rem;
+        padding: 1rem 1.25rem 4rem;
         grid-template-columns: none;
         width: 100%;
-
-        /* Hide scrollbar but keep functionality */
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .gallery-grid::-webkit-scrollbar {
-        display: none;
+        box-sizing: border-box;
     }
 
     .gallery-item {
-        flex: 0 0 92vw;
-        max-width: 92vw;
-        scroll-snap-align: center;
-        scroll-snap-stop: always;
-        height: 75vh;
-        max-height: 75vh;
-        min-height: 500px;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 3/4;
         position: relative;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        border-radius: 20px;
+        border-radius: 24px;
         box-shadow: 
-            0 15px 45px rgba(0, 0, 0, 0.2),
-            0 8px 20px rgba(0, 0, 0, 0.15),
-            0 3px 8px rgba(0, 0, 0, 0.1);
+            0 20px 60px rgba(0, 0, 0, 0.15),
+            0 10px 30px rgba(0, 0, 0, 0.1),
+            0 4px 12px rgba(0, 0, 0, 0.08);
         overflow: hidden;
+        opacity: 0;
+        transform: translateY(40px) scale(0.96);
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform, opacity;
     }
 
-    /* Premium touch feedback */
+    /* Fade in on scroll */
+    .gallery-item.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    /* Alternate card sizes for organic rhythm */
+    .gallery-item:nth-child(3n+1) {
+        aspect-ratio: 4/5;
+    }
+
+    .gallery-item:nth-child(4n+2) {
+        aspect-ratio: 1/1;
+    }
+
+    /* Elegant tap feedback */
     .gallery-item:active {
-        transform: scale(0.98);
+        transform: scale(0.97);
         box-shadow: 
-            0 8px 25px rgba(0, 0, 0, 0.15),
-            0 4px 12px rgba(0, 0, 0, 0.1);
+            0 12px 40px rgba(0, 0, 0, 0.12),
+            0 6px 20px rgba(0, 0, 0, 0.08);
+        transition-duration: 0.15s;
     }
 
+    /* Remove old layout classes */
     .gallery-item.wide, .gallery-item.tall {
-        flex: 0 0 92vw;
-        max-width: 92vw;
+        aspect-ratio: 3/4;
     }
 
     .gallery-item img {
         height: 100%;
         width: 100%;
         object-fit: cover;
-        border-radius: 20px;
-        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        border-radius: 24px;
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Subtle zoom on scroll snap */
-    .gallery-item img {
-        transform: scale(1.02);
+    /* Subtle parallax on scroll */
+    .gallery-item:hover img {
+        transform: scale(1.03);
     }
 
-    /* Add shimmer effect on active card */
+    /* Natural texture overlay */
     .gallery-item::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: -100%;
-        width: 50%;
-        height: 100%;
+        inset: 0;
         background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.1) 50%,
-            transparent 100%
+            135deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            transparent 40%,
+            rgba(0, 0, 0, 0.1) 100%
         );
+        opacity: 0;
+        transition: opacity 0.4s ease;
         pointer-events: none;
         z-index: 1;
+        border-radius: 24px;
     }
 
-    /* Premium text overlay with strong gradient */
+    .gallery-item:active::before {
+        opacity: 1;
+    }
+
+    /* Refined text overlay */
     .gallery-item-info {
-        padding: 3rem 2rem 2rem;
+        padding: 2.5rem 1.75rem 1.75rem;
         background: linear-gradient(
             to top, 
-            rgba(0,0,0,0.95) 0%,
-            rgba(0,0,0,0.85) 30%,
-            rgba(0,0,0,0.6) 60%,
-            rgba(0,0,0,0.2) 85%,
-            rgba(0,0,0,0) 100%
+            rgba(0,0,0,0.92) 0%,
+            rgba(0,0,0,0.75) 35%,
+            rgba(0,0,0,0.45) 65%,
+            rgba(0,0,0,0.15) 90%,
+            transparent 100%
         );
     }
 
     .gallery-item-info h3 {
-        font-size: 1.85rem;
+        font-size: 1.75rem;
         font-family: 'Cormorant Garamond', serif;
         font-weight: 600;
-        margin-bottom: 0.6rem;
-        line-height: 1.15;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
         color: #ffffff;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-        letter-spacing: 0.02em;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+        letter-spacing: 0.01em;
     }
 
     .gallery-item-info p {
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.95);
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-        letter-spacing: 0.5px;
+        color: rgba(255, 255, 255, 0.92);
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+        letter-spacing: 0.8px;
     }
 
-    /* Optimal peek effect */
+    /* Remove peek effects (not needed for vertical) */
     .gallery-grid::before,
     .gallery-grid::after {
-        content: '';
-        flex: 0 0 4vw;
-        height: 1px;
+        display: none;
     }
 
-    /* Premium progress dots */
+    /* Hide progress dots for vertical scroll */
     .gallery-progress {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 2.5rem 1rem 2rem;
-        position: sticky;
-        bottom: 0;
-        background: linear-gradient(
-            to top, 
-            var(--background-color) 60%, 
-            rgba(var(--text-rgb), 0.02) 90%,
-            transparent
-        );
-        z-index: 10;
+        display: none;
     }
 
-    .gallery-progress-dot {
-        width: 8px;
-        height: 8px;
+    /* Refined unavailable dot */
+    .unavailable-dot {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        background-color: rgba(139, 120, 93, 0.8);
         border-radius: 50%;
-        background: rgba(139, 120, 93, 0.3);
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        cursor: pointer;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .gallery-progress-dot.active {
-        width: 36px;
-        height: 8px;
-        border-radius: 4px;
-        background: rgba(139, 120, 93, 1);
-        box-shadow: 
-            0 2px 8px rgba(139, 120, 93, 0.4),
-            0 4px 16px rgba(139, 120, 93, 0.2);
-    }
-
-    .gallery-progress-dot:not(.active):active {
-        transform: scale(1.3);
-        background: rgba(139, 120, 93, 0.5);
+        margin-left: 0.5rem;
+        border: 1.5px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     /* Lightbox */
