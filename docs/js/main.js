@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Add a class to the body to indicate that JS is active and animations can be applied.
     document.body.classList.add('js-animations-active');
 
@@ -26,7 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
             mobileMenuToggle.classList.toggle('active');
             mobileNavMenu.classList.toggle('active');
             mobileMenuOverlay.classList.toggle('active');
-            body.style.overflow = mobileNavMenu.classList.contains('active') ? 'hidden' : '';
+
+            const isActive = mobileNavMenu.classList.contains('active');
+            body.style.overflow = isActive ? 'hidden' : '';
+            if (isActive) {
+                body.classList.add('menu-open');
+            } else {
+                body.classList.remove('menu-open');
+            }
         }
 
         function closeMobileMenu() {
@@ -34,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mobileNavMenu.classList.remove('active');
             mobileMenuOverlay.classList.remove('active');
             body.style.overflow = '';
+            body.classList.remove('menu-open');
         }
 
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
@@ -59,6 +67,24 @@ document.addEventListener('DOMContentLoaded', function() {
             const title = pageTitles[currentPage] || 'Home';
             mobilePageTitle.textContent = title;
             mobilePageTitle.setAttribute('data-translate', `nav.${title.toLowerCase()}`);
+        }
+
+        // Hover Reveal Effect
+        const hoverBg = document.getElementById('menu-hover-bg');
+        if (hoverBg) {
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', () => {
+                    const img = link.getAttribute('data-hover-img');
+                    if (img) {
+                        hoverBg.style.backgroundImage = `url('${img}')`;
+                        hoverBg.classList.add('visible');
+                    }
+                });
+
+                link.addEventListener('mouseleave', () => {
+                    hoverBg.classList.remove('visible');
+                });
+            });
         }
     }
 
@@ -94,14 +120,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function updateSlider() {
             if (currentImages.length === 0) return;
-            
+
             lightboxImg.src = currentImages[currentIndex];
             lightboxImg.alt = lightboxTitle.textContent || '';
-            
+
             // Update slider buttons visibility
             if (prevBtn) prevBtn.style.display = currentImages.length > 1 ? 'flex' : 'none';
             if (nextBtn) nextBtn.style.display = currentImages.length > 1 ? 'flex' : 'none';
-            
+
             // Update indicator
             if (sliderIndicator && currentImages.length > 1) {
                 sliderIndicator.textContent = `${currentIndex + 1} / ${currentImages.length}`;
@@ -152,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const imagesJson = item.dataset.images;
                 currentImages = imagesJson ? JSON.parse(imagesJson) : [item.dataset.img];
                 currentIndex = 0;
-                
+
                 lightboxTitle.textContent = item.dataset.title;
                 // Use translations for labels if available
                 const sizeLabel = window.getTranslation ? window.getTranslation('lightbox.size') : 'Size:';
@@ -160,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 lightboxSize.textContent = `${sizeLabel} ${item.dataset.size}`;
                 lightboxMaterials.textContent = `${materialsLabel} ${item.dataset.materials}`;
                 lightboxDescription.textContent = item.dataset.description;
-                
+
                 updateSlider();
                 lightbox.style.display = 'flex';
             });
@@ -269,9 +295,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Close with X button
         if (closeLightbox) closeLightbox.addEventListener('click', close);
-        
+
         // Close with ESC key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape' && lightbox.style.display === 'flex') {
                 close();
             } else if (e.key === 'ArrowLeft' && lightbox.style.display === 'flex') {
@@ -280,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showNext();
             }
         });
-        
+
         if (lightbox) {
             lightbox.addEventListener('click', (e) => {
                 if (e.target === lightbox) close();
@@ -302,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
             showPrev();
         });
-        
+
         if (nextBtn) nextBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             showNext();
@@ -313,13 +339,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Get the artwork details to include in the inquiry
                 const artworkTitle = lightboxTitle.textContent || 'this artwork';
                 const artworkSize = lightboxSize.textContent.replace('Size: ', '') || '';
-                
+
                 // Create a pre-filled message template
                 const message = `I'm interested in "${artworkTitle}" (${artworkSize}). Please provide more information about availability and pricing.`;
-                
+
                 // Store the message in localStorage to access it on the contact page
                 localStorage.setItem('inquiryMessage', message);
-                
+
                 // Navigate to the contact page
                 window.location.href = 'contact.html';
             });
@@ -421,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function initMagneticHover() {
         // Magnetic hover effect for gallery items
         function addMagneticEffect(element) {
-            element.addEventListener('mousemove', function(e) {
+            element.addEventListener('mousemove', function (e) {
                 const rect = element.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
@@ -432,7 +458,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 element.style.transform = `translate(${moveX}px, ${moveY}px)`;
             });
 
-            element.addEventListener('mouseleave', function() {
+            element.addEventListener('mouseleave', function () {
                 element.style.transform = '';
             });
         }
@@ -467,14 +493,14 @@ document.addEventListener('DOMContentLoaded', function() {
         function getSystemThemePreference() {
             return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
-        
+
         // Check if user has set a theme preference, otherwise use system preference
         const userPreference = localStorage.getItem('theme');
         const currentTheme = userPreference || getSystemThemePreference();
-        
+
         // Apply the current theme
         document.documentElement.setAttribute('data-theme', currentTheme);
-        
+
         // Listen for system theme changes
         if (!userPreference && window.matchMedia) {
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
@@ -482,15 +508,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.documentElement.setAttribute('data-theme', newTheme);
             });
         }
-        
+
         // Add click event to toggle theme
-        themeToggle.addEventListener('click', function() {
+        themeToggle.addEventListener('click', function () {
             let newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme); // Store user preference
         });
     }
-    
+
     // --- Page Specific Logic ---
 
     // Load featured artworks on home page
@@ -656,7 +682,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Add event listener for images to ensure they're properly loaded
-document.addEventListener('load', function(e) {
+document.addEventListener('load', function (e) {
     if (e.target.tagName === 'IMG') {
         e.target.classList.add('image-loaded');
     }
