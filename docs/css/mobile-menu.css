@@ -1,0 +1,142 @@
+/**
+ * Mobile Menu - Isolated Styles
+ * This file contains ALL mobile menu styles, completely isolated
+ */
+
+/* Only apply on mobile */
+@media (max-width: 768px) {
+
+    /* ========================================
+       MOBILE MENU CONTAINER
+       ======================================== */
+
+    #mobile-nav-menu {
+        /* Positioning */
+        position: fixed !important;
+        top: 60px !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        /* Layout */
+        display: none !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 1rem !important;
+
+        /* Reset list styles */
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 2rem 1rem !important;
+
+        /* Appearance */
+        background-color: var(--background-color) !important;
+
+        /* Layering */
+        z-index: 10000 !important;
+
+        /* Scrolling */
+        overflow-y: auto !important;
+    }
+
+    /* Show when active */
+    #mobile-nav-menu.active {
+        display: flex !important;
+    }
+
+    /* ========================================
+       MENU ITEMS (LI)
+       ======================================== */
+
+    #mobile-nav-menu > li {
+        display: block !important;
+        width: 80% !important;
+        max-width: 300px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+
+    /* ========================================
+       MENU LINKS (A)
+       ======================================== */
+
+    #mobile-nav-menu > li > a {
+        /* Layout */
+        display: block !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+
+        /* Spacing */
+        padding: 1rem 1.5rem !important;
+        margin: 0 !important;
+
+        /* Text */
+        text-align: center !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        text-decoration: none !important;
+
+        /* Colors */
+        color: var(--text-color) !important;
+        background-color: var(--card-background) !important;
+
+        /* Border */
+        border: 1px solid var(--border-color) !important;
+        border-radius: 14px !important;
+
+        /* Interaction */
+        pointer-events: auto !important;
+        cursor: pointer !important;
+
+        /* Visibility */
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* Active page */
+    #mobile-nav-menu > li > a.active {
+        background-color: var(--accent-color) !important;
+        color: #ffffff !important;
+        border-color: var(--accent-color) !important;
+    }
+
+    /* Remove any pseudo-elements */
+    #mobile-nav-menu > li > a::before,
+    #mobile-nav-menu > li > a::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    /* ========================================
+       MOBILE MENU OVERLAY
+       ======================================== */
+
+    .mobile-menu-overlay {
+        display: none !important;
+        position: fixed !important;
+        top: 60px !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        z-index: 9999 !important;
+    }
+
+    .mobile-menu-overlay.active {
+        display: block !important;
+    }
+
+    /* ========================================
+       HEADER Z-INDEX FIX
+       ======================================== */
+
+    body.menu-open header {
+        z-index: 10001 !important;
+    }
+}
