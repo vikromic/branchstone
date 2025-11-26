@@ -457,27 +457,17 @@
    MOBILE MENU CONTROLS FIX
    ======================================== */
 
-/* Ensure controls remain clickable when menu is open */
-.header-controls {
-  position: relative;
-  z-index: 10001;
-  pointer-events: auto;
-}
+/* Mobile-only: ensure header controls remain clickable above menu */
+@media (max-width: 768px) {
+  .header-controls {
+    position: relative;
+    z-index: var(--z-mobile-controls);
+    pointer-events: auto;
+  }
 
-.header-controls > * {
-  pointer-events: auto;
-}
-
-.mobile-menu-overlay {
-  z-index: 9999;
-}
-
-#mobile-nav-menu {
-  z-index: 10000;
-}
-
-.mobile-menu-toggle {
-  z-index: 10002;
+  .header-controls > * {
+    pointer-events: auto;
+  }
 }
 
 /* ========================================

@@ -57,13 +57,26 @@ export class Menu {
    */
   attachEventListeners() {
     this.cleanupFunctions.push(
-      on(this.toggleButton, 'click', () => this.toggleMenu()),
-      on(this.overlay, 'click', () => this.close()),
+      on(this.toggleButton, 'click', (e) => {
+        e.stopPropagation();
+        this.toggleMenu();
+      }),
+      on(this.overlay, 'click', (e) => {
+        // Only close if clicking directly on overlay, not on menu items
+        if (e.target === this.overlay) {
+          this.close();
+        }
+      }),
       on(document, 'keydown', (e) => {
         if (e.key === 'Escape' && this.isOpen) {
           this.close();
         }
       })
+    );
+
+    // Prevent clicks on menu from bubbling to overlay
+    this.cleanupFunctions.push(
+      on(this.menu, 'click', (e) => e.stopPropagation())
     );
 
     // Close when clicking nav links
