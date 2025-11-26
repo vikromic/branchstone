@@ -38,7 +38,7 @@ export const CONFIG = {
       { href: 'index.html', key: 'nav.home', image: 'img/artist.jpeg' },
       { href: 'gallery.html', key: 'nav.gallery', image: 'img/galleries.jpeg' },
       { href: 'about.html', key: 'nav.about', image: 'img/about-me.jpeg' },
-      { href: 'contact.html', key: 'nav.contact', image: 'img/contact-bg.jpg' },
+      { href: 'contact.html', key: 'nav.contact', image: 'img/about-me.jpeg' },
     ],
   },
 
