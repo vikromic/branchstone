@@ -1,0 +1,378 @@
+/**
+ * Main Application
+ * Orchestrates all components and initializes the application
+ * @module app
+ */
+
+import Menu from './components/Menu.js';
+import ThemeManager from './components/Theme.js';
+import Lightbox from './components/Lightbox.js';
+import Gallery from './components/Gallery.js';
+import AnimationManager from './components/Animations.js';
+import FormValidator from './components/FormValidator.js';
+import Carousel from './components/Carousel.js';
+import ScrollToTop from './components/ScrollToTop.js';
+import { getStorageItem, setStorageItem, removeStorageItem } from './utils/storage.js';
+import CONFIG from './config.js';
+
+class App {
+  constructor() {
+    this.components = new Map();
+    this.init();
+  }
+
+  /**
+   * Initialize application
+   * @private
+   */
+  async init() {
+    // Add animation ready class
+    document.body.classList.add('js-animations-active');
+
+    // Initialize core components
+    this.initializeCore();
+
+    // Initialize page-specific components
+    await this.initializePageSpecific();
+
+    // Initialize global features
+    this.initializeGlobalFeatures();
+  }
+
+  /**
+   * Initialize core components (always needed)
+   * @private
+   */
+  initializeCore() {
+    // Mobile menu
+    const menu = new Menu();
+    this.components.set('menu', menu);
+
+    // Theme manager
+    const theme = new ThemeManager();
+    this.components.set('theme', theme);
+
+    // Animation manager
+    const animations = new AnimationManager();
+    this.components.set('animations', animations);
+  }
+
+  /**
+   * Initialize page-specific components
+   * @private
+   */
+  async initializePageSpecific() {
+    const path = window.location.pathname;
+
+    // Home page - Featured gallery
+    if (path.endsWith('index.html') || path.endsWith('/')) {
+      await this.initHomePage();
+    }
+
+    // Gallery page - Full gallery + lightbox
+    if (path.includes('gallery.html')) {
+      await this.initGalleryPage();
+    }
+
+    // Contact page - Form validation
+    if (path.includes('contact.html')) {
+      this.initContactPage();
+    }
+
+    // About page - Carousels
+    if (path.includes('about.html')) {
+      this.initAboutPage();
+    }
+  }
+
+  /**
+   * Initialize home page components
+   * @private
+   */
+  async initHomePage() {
+    const featuredGrid = document.getElementById('featured-artworks');
+    if (!featuredGrid) return;
+
+    const gallery = new Gallery({
+      containerSelector: '#featured-artworks',
+      type: 'featured',
+      onLoad: () => {
+        const animations = this.components.get('animations');
+        if (animations) animations.refresh();
+
+        // Initialize carousel for featured works
+        const carousel = new Carousel({
+          containerSelector: '#featured-carousel',
+          itemSelector: '.carousel-item',
+          autoplayDelay: 4000,
+          loop: true,
+          pauseOnHover: true,
+        });
+        this.components.set('featuredCarousel', carousel);
+      },
+    });
+
+    this.components.set('featuredGallery', gallery);
+  }
+
+  /**
+   * Initialize gallery page components
+   * @private
+   */
+  async initGalleryPage() {
+    const galleryGrid = document.querySelector('.gallery-grid');
+    if (!galleryGrid) return;
+
+    const gallery = new Gallery({
+      containerSelector: '.gallery-grid',
+      type: 'full',
+      onLoad: () => {
+        // Refresh animations after gallery loads
+        const animations = this.components.get('animations');
+        if (animations) animations.refresh();
+
+        // Initialize lightbox after gallery loads
+        const lightbox = new Lightbox();
+        this.components.set('lightbox', lightbox);
+
+        // Mobile gallery enhancements
+        if (window.innerWidth <= CONFIG.ui.breakpoints.mobile) {
+          this.initMobileGallery();
+        }
+      },
+    });
+
+    this.components.set('gallery', gallery);
+
+    // Add scroll-to-top button (mobile only via CSS)
+    const scrollToTop = new ScrollToTop();
+    this.components.set('scrollToTop', scrollToTop);
+  }
+
+  /**
+   * Initialize about page components
+   * @private
+   */
+  initAboutPage() {
+    // Experience carousel
+    const experienceCarousel = new Carousel({
+      containerSelector: '#experience-carousel',
+      itemSelector: '.carousel-item',
+      autoplayDelay: 5000,
+      loop: true,
+      pauseOnHover: true,
+    });
+    this.components.set('experienceCarousel', experienceCarousel);
+
+    // Feedback carousel
+    const feedbackCarousel = new Carousel({
+      containerSelector: '#feedback-carousel',
+      itemSelector: '.carousel-item',
+      autoplayDelay: 6000,
+      loop: true,
+      pauseOnHover: true,
+    });
+    this.components.set('feedbackCarousel', feedbackCarousel);
+  }
+
+  /**
+   * Initialize contact page components
+   * @private
+   */
+  initContactPage() {
+    // Pre-fill inquiry message if exists
+    this.prefillInquiryMessage();
+
+    // Initialize form validator
+    const validator = new FormValidator({
+      formSelector: '#contact-form',
+    });
+
+    this.components.set('formValidator', validator);
+  }
+
+  /**
+   * Pre-fill contact form with inquiry message from lightbox
+   * @private
+   */
+  prefillInquiryMessage() {
+    const messageField = document.getElementById('message');
+    if (!messageField) return;
+
+    const inquiryMessage = getStorageItem(CONFIG.storage.inquiryMessage);
+    if (inquiryMessage) {
+      messageField.value = inquiryMessage;
+      document.getElementById('name')?.focus();
+      removeStorageItem(CONFIG.storage.inquiryMessage);
+    }
+  }
+
+  /**
+   * Initialize mobile-specific gallery features
+   * @private
+   */
+  initMobileGallery() {
+    const galleryGrid = document.querySelector('.gallery-grid');
+    if (!galleryGrid) return;
+
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -10% 0px',
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      observer.observe(item);
+    });
+
+    // Add scroll hint
+    setTimeout(() => this.addScrollHint(), 800);
+  }
+
+  /**
+   * Add scroll hint for mobile users
+   * @private
+   */
+  addScrollHint() {
+    const hint = document.createElement('div');
+    hint.style.cssText = `
+      position: fixed;
+      bottom: 4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(139, 120, 93, 0.6);
+      font-size: 1.5rem;
+      animation: scrollHint 2s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.8;
+    `;
+    hint.innerHTML = '↓';
+    hint.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(hint);
+
+    // Add animation
+    if (!document.getElementById('scroll-hint-style')) {
+      const style = document.createElement('style');
+      style.id = 'scroll-hint-style';
+      style.textContent = `
+        @keyframes scrollHint {
+          0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+          50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Remove hint after scroll
+    let scrolled = false;
+    const removeHint = () => {
+      if (!scrolled && window.scrollY > CONFIG.ui.scrollHint.fadeDelay) {
+        hint.style.transition = 'opacity 0.4s ease';
+        hint.style.opacity = '0';
+        setTimeout(() => hint.remove(), 400);
+        scrolled = true;
+        window.removeEventListener('scroll', removeHint);
+      }
+    };
+
+    window.addEventListener('scroll', removeHint, { passive: true });
+
+    // Auto-remove after delay
+    setTimeout(() => {
+      if (hint.parentNode) {
+        hint.style.transition = 'opacity 0.4s ease';
+        hint.style.opacity = '0';
+        setTimeout(() => hint.remove(), 400);
+      }
+    }, CONFIG.ui.scrollHint.autoRemoveDelay);
+  }
+
+  /**
+   * Initialize global features
+   * @private
+   */
+  initializeGlobalFeatures() {
+    // Smooth scroll
+    this.initSmoothScroll();
+
+    // Failsafe animation trigger
+    this.failsafeAnimations();
+  }
+
+  /**
+   * Initialize smooth scroll for anchor links
+   * @private
+   */
+  initSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const href = anchor.getAttribute('href');
+        if (href === '#') return;
+
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      });
+    });
+
+    // CSS smooth scrolling
+    document.documentElement.style.scrollBehavior = 'smooth';
+  }
+
+  /**
+   * Failsafe to trigger animations if observer doesn't fire
+   * @private
+   */
+  failsafeAnimations() {
+    setTimeout(() => {
+      const elements = document.querySelectorAll('.animate-on-scroll:not(.is-visible)');
+      elements.forEach(element => {
+        element.classList.add('is-visible');
+      });
+    }, 1000);
+  }
+
+  /**
+   * Get component by name
+   * @param {string} name - Component name
+   * @returns {*} Component instance
+   */
+  getComponent(name) {
+    return this.components.get(name);
+  }
+
+  /**
+   * Destroy app and cleanup
+   */
+  destroy() {
+    this.components.forEach(component => {
+      if (component.destroy) {
+        component.destroy();
+      }
+    });
+    this.components.clear();
+  }
+}
+
+// Initialize app when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => new App());
+} else {
+  new App();
+}
+
+// Export for debugging/testing
+export default App;

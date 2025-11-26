@@ -28,6 +28,7 @@
     <link rel="preload" href="css/style.css" as="style">
     <link rel="preload" href="img/artist.jpeg" as="image">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/enhancements.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -121,8 +122,23 @@
                 <h2 class="animate-on-scroll">Featured Works</h2>
                 <a href="gallery.html" class="view-all-link">View All</a>
             </div>
-            <div class="featured-grid" id="featured-artworks">
-                <!-- Dynamically loaded from artworks.json -->
+            <div class="carousel" id="featured-carousel">
+                <div class="carousel-track" id="featured-artworks">
+                    <!-- Dynamically loaded from artworks.json -->
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-prev" aria-label="Previous artwork">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-next" aria-label="Next artwork">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="carousel-indicators"></div>
             </div>
         </section>
 

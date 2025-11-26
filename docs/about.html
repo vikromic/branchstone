@@ -11,6 +11,7 @@
     <!-- Preload critical assets -->
     <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/enhancements.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,30 +100,88 @@
 
         <!-- We don't need the image overlay anymore as we've extracted the text -->
 
-        <section id="experience" class="animate-on-scroll">
+        <section id="experience" class="animate-on-scroll about-carousel-section">
             <h2 data-translate="about.experienceTitle">Gallery Experience & Media</h2>
-            <p data-translate="about.experienceContent">Space for exhibitions, press mentions, and interviews will go
-                here.</p>
-            <!-- Example:
-            <ul>
-                <li>2023 - Solo Exhibition, Art Gallery, Santa Rosa, CA</li>
-                <li>2022 - Group Show, Modern Art Museum, San Francisco, CA</li>
-            </ul>
-            -->
+            <div class="carousel" id="experience-carousel">
+                <div class="carousel-track">
+                    <div class="carousel-item">
+                        <div class="experience-card">
+                            <h3>Solo Exhibition</h3>
+                            <p class="experience-venue">Art Gallery, Santa Rosa, CA</p>
+                            <p class="experience-year">2023</p>
+                            <p data-translate="about.experienceContent">Space for exhibitions, press mentions, and interviews will go here.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="experience-card">
+                            <h3>Group Exhibition</h3>
+                            <p class="experience-venue">Modern Art Museum, San Francisco, CA</p>
+                            <p class="experience-year">2022</p>
+                            <p>Participating artist in mixed media collective showcase.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="experience-card">
+                            <h3>Press Feature</h3>
+                            <p class="experience-venue">Art Magazine</p>
+                            <p class="experience-year">2023</p>
+                            <p>Featured in "Emerging Artists Working with Natural Materials"</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-prev" aria-label="Previous experience">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-next" aria-label="Next experience">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="carousel-indicators"></div>
+            </div>
         </section>
 
-        <section id="feedback" class="animate-on-scroll">
+        <section id="feedback" class="animate-on-scroll about-carousel-section">
             <h2 data-translate="about.feedbackTitle">Customer Feedback</h2>
-            <blockquote>
-                <p data-translate="about.feedback1">"The piece is absolutely stunning. It brings a sense of calm to our
-                    home."</p>
-                <cite data-translate="about.feedback1Cite">- A Collector</cite>
-            </blockquote>
-            <blockquote>
-                <p data-translate="about.feedback2">"Working with Viktoria was a pleasure. She is a true professional
-                    and a talented artist."</p>
-                <cite data-translate="about.feedback2Cite">- Gallery Owner</cite>
-            </blockquote>
+            <div class="carousel" id="feedback-carousel">
+                <div class="carousel-track">
+                    <div class="carousel-item">
+                        <blockquote class="feedback-card">
+                            <p data-translate="about.feedback1">"The piece is absolutely stunning. It brings a sense of calm to our home."</p>
+                            <cite data-translate="about.feedback1Cite">- A Collector</cite>
+                        </blockquote>
+                    </div>
+                    <div class="carousel-item">
+                        <blockquote class="feedback-card">
+                            <p data-translate="about.feedback2">"Working with Viktoria was a pleasure. She is a true professional and a talented artist."</p>
+                            <cite data-translate="about.feedback2Cite">- Gallery Owner</cite>
+                        </blockquote>
+                    </div>
+                    <div class="carousel-item">
+                        <blockquote class="feedback-card">
+                            <p>"Viktoria's work has a unique ability to capture the essence of nature in unexpected ways."</p>
+                            <cite>- Art Curator</cite>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-prev" aria-label="Previous feedback">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-next" aria-label="Next feedback">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="carousel-indicators"></div>
+            </div>
         </section>
     </main>
 
