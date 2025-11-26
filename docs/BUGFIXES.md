@@ -136,6 +136,71 @@ navigation: {
 
 ---
 
+### 4. **PWA Manifest Icons Missing (404 Errors)** ✅ FIXED
+**Status:** Low - Console warnings, no functional impact
+**Location:** `docs/site.webmanifest`
+
+**Problem:**
+The Progressive Web App manifest was requesting icon files that don't exist:
+
+```
+GET http://127.0.0.1:8000/img/icon-192.png 404 (File not found)
+GET http://127.0.0.1:8000/img/icon-512.png 404 (File not found)
+Error while trying to use the following icon from the Manifest...
+```
+
+These icons are used when users install the site as a web app on their device.
+
+**Solution:**
+Temporarily disabled PWA icons to eliminate errors:
+
+```json
+// BEFORE (causing errors):
+{
+  "icons": [
+    {
+      "src": "img/icon-192.png",  // Doesn't exist!
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icon-512.png",  // Doesn't exist!
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "display": "standalone"
+}
+
+// AFTER (fixed):
+{
+  "icons": [],  // Empty for now
+  "display": "browser"  // Normal browser mode
+}
+```
+
+**Changes Made:**
+- Set icons array to empty `[]`
+- Changed display mode from `standalone` to `browser`
+- Created comprehensive `PWA_ICONS_GUIDE.md` with:
+  - Instructions to create icons from existing logos
+  - Multiple methods (online tools, Photoshop, ImageMagick)
+  - How to re-enable PWA features after creating icons
+  - Design tips and testing procedures
+
+**Impact:**
+- ✅ No more console errors
+- ✅ Site still fully functional
+- ⏳ PWA install features disabled until icons are created
+- 📄 Easy to re-enable later with guide
+
+**To Re-Enable PWA (Optional):**
+1. Create 192×192 and 512×512 PNG icons from `img/logo.jpeg`
+2. Save as `img/icon-192.png` and `img/icon-512.png`
+3. Follow instructions in `PWA_ICONS_GUIDE.md`
+
+---
+
 ## Testing Checklist
 
 After these fixes, please verify:
@@ -177,7 +242,9 @@ After these fixes, please verify:
 ## Commits
 
 1. `fef1fd4` - Fix critical bugs - menu naming conflict and 404 page script loading
-2. `[next]` - Fix missing image references in navigation
+2. `830d355` - Fix missing image references in navigation
+3. `d57c68f` - Add comprehensive bug fixes documentation
+4. `c6ee2cf` - Fix PWA manifest icons (disable until created)
 
 ---
 
