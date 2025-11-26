@@ -504,19 +504,9 @@
    RESPONSIVE UTILITIES
    ======================================== */
 
-/* Show/hide on mobile/desktop */
+/* Show/hide utilities - !important needed for utility override pattern */
 .mobile-only {
   display: none !important;
-}
-
-@media (max-width: 768px) {
-  .mobile-only {
-    display: block !important;
-  }
-
-  .desktop-only {
-    display: none !important;
-  }
 }
 
 .desktop-only {
@@ -524,6 +514,10 @@
 }
 
 @media (max-width: 768px) {
+  .mobile-only {
+    display: block !important;
+  }
+
   .desktop-only {
     display: none !important;
   }
