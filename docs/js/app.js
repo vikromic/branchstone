@@ -233,7 +233,7 @@ class App {
     });
 
     // Add scroll hint
-    setTimeout(() => this.addScrollHint(), 800);
+    setTimeout(() => this.addScrollHint(), CONFIG.ui.scrollHint.showDelay);
   }
 
   /**
@@ -273,11 +273,12 @@ class App {
 
     // Remove hint after scroll
     let scrolled = false;
+    const fadeDuration = CONFIG.ui.scrollHint.fadeAnimationDuration;
     const removeHint = () => {
-      if (!scrolled && window.scrollY > CONFIG.ui.scrollHint.fadeDelay) {
-        hint.style.transition = 'opacity 0.4s ease';
+      if (!scrolled && window.scrollY > CONFIG.ui.scrollHint.fadeThreshold) {
+        hint.style.transition = `opacity ${fadeDuration}ms ease`;
         hint.style.opacity = '0';
-        setTimeout(() => hint.remove(), 400);
+        setTimeout(() => hint.remove(), fadeDuration);
         scrolled = true;
         window.removeEventListener('scroll', removeHint);
       }
@@ -288,9 +289,9 @@ class App {
     // Auto-remove after delay
     setTimeout(() => {
       if (hint.parentNode) {
-        hint.style.transition = 'opacity 0.4s ease';
+        hint.style.transition = `opacity ${fadeDuration}ms ease`;
         hint.style.opacity = '0';
-        setTimeout(() => hint.remove(), 400);
+        setTimeout(() => hint.remove(), fadeDuration);
       }
     }, CONFIG.ui.scrollHint.autoRemoveDelay);
   }

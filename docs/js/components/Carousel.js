@@ -19,11 +19,11 @@ export class Carousel {
   constructor(options = {}) {
     this.container = $(options.containerSelector);
     this.itemSelector = options.itemSelector || '.carousel-item';
-    this.autoplayDelay = options.autoplayDelay || CONFIG.carousel.autoplayDelay;
-    this.loop = options.loop !== undefined ? options.loop : CONFIG.carousel.loop;
+    this.autoplayDelay = options.autoplayDelay || CONFIG.ui.carousel.autoplayDelay;
+    this.loop = options.loop !== undefined ? options.loop : CONFIG.ui.carousel.loop;
     this.pauseOnHover = options.pauseOnHover !== undefined
       ? options.pauseOnHover
-      : CONFIG.carousel.pauseOnHover;
+      : CONFIG.ui.carousel.pauseOnHover;
 
     if (!this.container) return;
 

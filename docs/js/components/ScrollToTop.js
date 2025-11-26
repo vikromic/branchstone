@@ -15,6 +15,7 @@ export class ScrollToTop {
   constructor(options = {}) {
     this.showAfterScroll = options.showAfterScroll || CONFIG.ui.scrollToTop.showAfterScroll;
     this.button = null;
+    this.cleanupFunctions = [];
 
     this.init();
   }
@@ -54,18 +55,18 @@ export class ScrollToTop {
   attachEventListeners() {
     // Show/hide based on scroll position
     let ticking = false;
-    on(window, 'scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          this.updateVisibility();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
-
-    // Scroll to top on click
-    on(this.button, 'click', () => this.scrollToTop());
+    this.cleanupFunctions.push(
+      on(window, 'scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            this.updateVisibility();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true }),
+      on(this.button, 'click', () => this.scrollToTop())
+    );
 
     // Initial visibility check
     this.updateVisibility();
@@ -94,8 +95,11 @@ export class ScrollToTop {
    * Destroy component
    */
   destroy() {
+    this.cleanupFunctions.forEach(cleanup => cleanup?.());
+    this.cleanupFunctions = [];
     if (this.button) {
       this.button.remove();
+      this.button = null;
     }
   }
 }

@@ -1,27 +1,56 @@
 /* Theme Color Variables */
 :root {
-    /* Light Theme */
+    /* Light Theme Colors */
     --background-color: #F8F8F8;
-    /* Light grey color as specified */
     --text-color: #2B2B2B;
-    /* Dark coal grey for better contrast */
     --text-rgb: 43, 43, 43;
-    /* RGB values for text color */
     --secondary-text: #555555;
-    /* Dark grey for secondary text */
     --accent-color: hsl(40, 38%, 47%);
-    /* Earthy bronze/gold for a premium art feel - increased saturation for better contrast */
     --card-background: #ffffff;
     --header-background: rgba(248, 248, 248, 0.8);
-    /* Light grey with opacity */
     --border-color: #e0e0e0;
     --shadow-color: rgba(0, 0, 0, 0.1);
 
     /* Theme-independent colors */
     --button-color: #8B785D;
-    /* Earthy bronze/gold - matches accent color */
     --button-text: #ffffff;
-    /* White text on buttons */
+
+    /* Z-index scale */
+    --z-base: 1;
+    --z-header: 100;
+    --z-scroll-hint: 100;
+    --z-scroll-top: 1000;
+    --z-lightbox: 1000;
+    --z-overlay: 9999;
+    --z-mobile-menu: 10000;
+    --z-mobile-controls: 10001;
+    --z-mobile-toggle: 10002;
+    --z-grain: 9999;
+    --z-skip-link: 10000;
+
+    /* Border radius */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 50%;
+
+    /* Transitions */
+    --ease-out-back: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: 0.2s;
+    --transition-normal: 0.3s;
+    --transition-slow: 0.6s;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.02);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+                 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+                 0 12.5px 10px rgba(0, 0, 0, 0.035),
+                 0 22.3px 17.9px rgba(0, 0, 0, 0.042),
+                 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+                 0 100px 80px rgba(0, 0, 0, 0.07);
 }
 
 /* Smooth Scrolling Optimization for All Devices */
@@ -115,9 +144,9 @@ section,
     padding: 0.5rem 1rem;
     text-decoration: none;
     font-weight: 600;
-    z-index: 10000;
-    border-radius: 0 0 0.25rem 0;
-    transition: top 0.3s ease;
+    z-index: var(--z-skip-link);
+    border-radius: 0 0 var(--radius-sm) 0;
+    transition: top var(--transition-normal) ease;
 }
 
 .skip-link:focus {
@@ -279,13 +308,13 @@ header {
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
-    z-index: 100;
-    transition: all 0.3s ease;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+    z-index: var(--z-header);
+    transition: all var(--transition-normal) ease;
+    box-shadow: var(--shadow-sm);
 }
 
 header:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-md);
 }
 
 nav {
@@ -770,7 +799,6 @@ main {
     }
 }
 
-/* Button Styles */
 /* Button Styles */
 .btn-primary,
 .btn-secondary,
@@ -1550,19 +1578,11 @@ section {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Asymmetrical Layout Adjustments - REMOVED */
-.gallery-item.tall,
-.gallery-item.wide {
-    grid-row: auto;
-    grid-column: auto;
-}
-
-
 /* Lightbox Styles - Premium Viewing Experience */
 .lightbox {
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: var(--z-lightbox);
     left: 0;
     top: 0;
     width: 100%;

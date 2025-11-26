@@ -105,7 +105,9 @@ export const CONFIG = {
 
     // Scroll hint
     scrollHint: {
-      fadeDelay: 50,
+      showDelay: 800,
+      fadeThreshold: 50,
+      fadeAnimationDuration: 400,
       autoRemoveDelay: 4000,
     },
   },
