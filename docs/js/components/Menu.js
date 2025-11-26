@@ -19,6 +19,7 @@ export class Menu {
     this.overlay = $(options.overlaySelector || '#mobile-menu-overlay');
     this.body = document.body;
     this.isOpen = false;
+    this.cleanupFunctions = [];
 
     if (!this.toggleButton || !this.menu || !this.overlay) {
       return;
@@ -55,19 +56,21 @@ export class Menu {
    * @private
    */
   attachEventListeners() {
-    on(this.toggleButton, 'click', () => this.toggleMenu());
-    on(this.overlay, 'click', () => this.close());
-
-    // Close on Escape key
-    on(document, 'keydown', (e) => {
-      if (e.key === 'Escape' && this.isOpen) {
-        this.close();
-      }
-    });
+    this.cleanupFunctions.push(
+      on(this.toggleButton, 'click', () => this.toggleMenu()),
+      on(this.overlay, 'click', () => this.close()),
+      on(document, 'keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen) {
+          this.close();
+        }
+      })
+    );
 
     // Close when clicking nav links
     const navLinks = this.menu.querySelectorAll('a');
-    navLinks.forEach(link => on(link, 'click', () => this.close()));
+    navLinks.forEach(link => {
+      this.cleanupFunctions.push(on(link, 'click', () => this.close()));
+    });
 
     // Setup hover effects if hover background exists
     this.setupHoverEffects(navLinks);
@@ -83,17 +86,18 @@ export class Menu {
     if (!hoverBg) return;
 
     navLinks.forEach(link => {
-      on(link, 'mouseenter', () => {
-        const img = link.getAttribute('data-hover-img');
-        if (img) {
-          hoverBg.style.backgroundImage = `url('${img}')`;
-          hoverBg.classList.add('visible');
-        }
-      });
-
-      on(link, 'mouseleave', () => {
-        hoverBg.classList.remove('visible');
-      });
+      this.cleanupFunctions.push(
+        on(link, 'mouseenter', () => {
+          const img = link.getAttribute('data-hover-img');
+          if (img) {
+            hoverBg.style.backgroundImage = `url('${img}')`;
+            hoverBg.classList.add('visible');
+          }
+        }),
+        on(link, 'mouseleave', () => {
+          hoverBg.classList.remove('visible');
+        })
+      );
     });
   }
 
@@ -172,6 +176,17 @@ export class Menu {
     const title = pageTitles[currentPage] || 'Home';
     mobilePageTitle.textContent = title;
     mobilePageTitle.setAttribute('data-translate', `nav.${title.toLowerCase()}`);
+  }
+
+  /**
+   * Destroy menu and cleanup event listeners
+   */
+  destroy() {
+    this.cleanupFunctions.forEach(cleanup => cleanup?.());
+    this.cleanupFunctions = [];
+    if (this.isOpen) {
+      this.close();
+    }
   }
 }
 

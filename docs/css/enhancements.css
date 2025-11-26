@@ -332,11 +332,6 @@
   }
 }
 
-/* Remove old unavailable dot */
-.unavailable-dot {
-  display: none;
-}
-
 /* ========================================
    LIGHTBOX ENHANCEMENTS
    ======================================== */

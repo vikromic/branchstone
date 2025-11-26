@@ -12,6 +12,7 @@ export class AnimationManager {
     this.observers = new Map();
     this.rafId = null;
     this.ticking = false;
+    this.scrollHandler = null;
 
     this.init();
   }
@@ -106,14 +107,14 @@ export class AnimationManager {
       this.ticking = false;
     };
 
-    const requestTick = () => {
+    this.scrollHandler = () => {
       if (!this.ticking) {
         this.rafId = requestFrame(updateParallax);
         this.ticking = true;
       }
     };
 
-    window.addEventListener('scroll', requestTick, { passive: true });
+    window.addEventListener('scroll', this.scrollHandler, { passive: true });
     updateParallax(); // Initial call
   }
 
@@ -139,6 +140,11 @@ export class AnimationManager {
     if (this.rafId) {
       cancelAnimationFrame(this.rafId);
       this.rafId = null;
+    }
+
+    if (this.scrollHandler) {
+      window.removeEventListener('scroll', this.scrollHandler);
+      this.scrollHandler = null;
     }
   }
 }
