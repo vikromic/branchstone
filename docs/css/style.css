@@ -411,63 +411,58 @@ nav {
     stroke-width: 2;
 }
 
-nav a {
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--secondary-text);
-    padding: 0.5rem 0;
-    position: relative;
-    font-weight: 500;
-    transition: color 0.3s ease, opacity 0.3s ease;
-}
+/* Desktop nav link styles only */
+@media (min-width: 769px) {
+    nav a {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--secondary-text);
+        padding: 0.5rem 0;
+        position: relative;
+        font-weight: 500;
+        transition: color 0.3s ease, opacity 0.3s ease;
+    }
 
-nav a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--accent-color);
-    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
+    nav a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--accent-color);
+        transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-nav a:hover {
-    color: var(--accent-color);
-    opacity: 1;
-}
+    nav a:hover {
+        color: var(--accent-color);
+        opacity: 1;
+    }
 
-nav a:hover::after {
-    width: 100%;
-    animation: slideIn 0.6s ease-out;
+    nav a:hover::after {
+        width: 100%;
+        animation: slideIn 0.6s ease-out;
+    }
+
+    nav a.active {
+        color: var(--text-color);
+        font-weight: 600;
+        letter-spacing: 2px;
+        opacity: 1;
+    }
+
+    nav a.active::after {
+        width: 100%;
+        height: 3px;
+        background: var(--accent-color);
+        box-shadow: 0 0 8px rgba(139, 120, 93, 0.6);
+    }
 }
 
 @keyframes slideIn {
-    from {
-        width: 0;
-        opacity: 0;
-    }
-
-    to {
-        width: 100%;
-        opacity: 1;
-    }
-}
-
-/* Active page indicator - Enhanced visibility */
-nav a.active {
-    color: var(--text-color);
-    font-weight: 600;
-    letter-spacing: 2px;
-    opacity: 1;
-}
-
-nav a.active::after {
-    width: 100%;
-    height: 3px;
-    background: var(--accent-color);
-    box-shadow: 0 0 8px rgba(139, 120, 93, 0.6);
+    from { width: 0; opacity: 0; }
+    to { width: 100%; opacity: 1; }
 }
 
 /* Language Toggle */
@@ -2204,30 +2199,8 @@ textarea:focus-visible {
         display: block;
     }
 
-    /* Hover Reveal Background */
-    .menu-hover-bg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        opacity: 0;
-        transition: opacity 0.6s ease, transform 6s ease;
-        z-index: -1;
-        transform: scale(1.1);
-        filter: brightness(0.6) sepia(0.2);
-    }
-
-    .menu-hover-bg.visible {
-        opacity: 0.4;
-        transform: scale(1);
-    }
-
     /* ==========================================
        MOBILE NAVIGATION MENU
-       Clean, simple implementation
        ========================================== */
 
     /* Mobile menu container */
@@ -2241,15 +2214,14 @@ textarea:focus-visible {
         display: none;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
-        gap: 0.75rem;
+        justify-content: center;
+        gap: 1rem;
         list-style: none;
         margin: 0;
-        padding: 2rem 0;
+        padding: 2rem 1rem;
         background: var(--background-color);
         z-index: var(--z-mobile-menu);
         overflow-y: auto;
-        grid-column: unset;
     }
 
     #mobile-nav-menu.active {
