@@ -4,7 +4,7 @@
  * @module components/Carousel
  */
 
-import { $, $$, on, setAttributes } from '../utils/dom.js';
+import { $, $$, on, setAttributes, announceToScreenReader } from '../utils/dom.js';
 import CONFIG from '../config.js';
 
 export class Carousel {
@@ -133,12 +133,16 @@ export class Carousel {
     let touchEndX = 0;
 
     on(this.container, 'touchstart', (e) => {
-      touchStartX = e.touches[0].clientX;
+      if (e.touches && e.touches.length > 0) {
+        touchStartX = e.touches[0].clientX;
+      }
     }, { passive: true });
 
     on(this.container, 'touchend', (e) => {
-      touchEndX = e.changedTouches[0].clientX;
-      this.handleSwipe(touchStartX, touchEndX);
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        touchEndX = e.changedTouches[0].clientX;
+        this.handleSwipe(touchStartX, touchEndX);
+      }
     }, { passive: true });
   }
 
@@ -263,15 +267,7 @@ export class Carousel {
    * @private
    */
   announceSlide() {
-    const announcement = document.createElement('div');
-    announcement.setAttribute('role', 'status');
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'sr-only';
-    announcement.textContent = `Slide ${this.currentIndex + 1} of ${this.items.length}`;
-
-    document.body.appendChild(announcement);
-    setTimeout(() => announcement.remove(), 1000);
+    announceToScreenReader(`Slide ${this.currentIndex + 1} of ${this.items.length}`);
   }
 
   /**
