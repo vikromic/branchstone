@@ -41,6 +41,17 @@
         "lightbox": {
             "size": "Size:",
             "materials": "Materials:"
+        },
+        "artwork": {
+            "sold": "Sold"
+        },
+        "carousel": {
+            "previous": "Previous",
+            "next": "Next",
+            "slideOf": "Slide {current} of {total}"
+        },
+        "scrollToTop": {
+            "label": "Scroll to top"
         }
     },
     "ua": {
@@ -85,6 +96,17 @@
         "lightbox": {
             "size": "Розмір:",
             "materials": "Матеріали:"
+        },
+        "artwork": {
+            "sold": "Продано"
+        },
+        "carousel": {
+            "previous": "Попередній",
+            "next": "Наступний",
+            "slideOf": "Слайд {current} з {total}"
+        },
+        "scrollToTop": {
+            "label": "Прокрутити вгору"
         }
     }
 }
