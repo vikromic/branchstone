@@ -355,23 +355,23 @@
   }
 }
 
-/* Calmer close button */
-.close-lightbox {
-  background: rgba(var(--text-rgb), 0.1) !important;
-  border: 1px solid rgba(var(--text-rgb), 0.2) !important;
+/* Calmer close button - use higher specificity selector */
+.lightbox .close-lightbox {
+  background: rgba(var(--text-rgb), 0.1);
+  border: 1px solid rgba(var(--text-rgb), 0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition: all 0.3s ease !important;
+  transition: all 0.3s ease;
 }
 
-.close-lightbox:hover {
-  background: rgba(var(--text-rgb), 0.2) !important;
-  border-color: rgba(var(--text-rgb), 0.3) !important;
-  transform: scale(1.05) !important;
+.lightbox .close-lightbox:hover {
+  background: rgba(var(--text-rgb), 0.2);
+  border-color: rgba(var(--text-rgb), 0.3);
+  transform: scale(1.05);
 }
 
-.close-lightbox:active {
-  transform: scale(0.95) !important;
+.lightbox .close-lightbox:active {
+  transform: scale(0.95);
 }
 
 /* ========================================
@@ -442,21 +442,6 @@
 /* ========================================
    BACKGROUND TEXTURES
    ======================================== */
-
-/* Subtle noise texture */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.015;
-  pointer-events: none;
-  z-index: 10000;
-  mix-blend-mode: overlay;
-}
 
 /* Logo watermark pattern */
 .logo-pattern {
@@ -557,4 +542,23 @@ body::before {
   .desktop-only {
     display: none !important;
   }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Hidden state for dynamic visibility toggling */
+.hidden {
+  display: none;
+}
+
+/* Honeypot field for spam protection - visually hidden but accessible to bots */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  overflow: hidden;
 }

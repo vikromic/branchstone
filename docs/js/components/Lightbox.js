@@ -169,9 +169,17 @@ export class Lightbox {
   openFromTrigger(trigger) {
     this.state.previousFocus = document.activeElement;
 
-    // Get images from data attributes
+    // Get images from data attributes with safe JSON parsing
     const imagesJson = trigger.dataset.images;
-    this.state.images = imagesJson ? JSON.parse(imagesJson) : [trigger.dataset.img];
+    if (imagesJson) {
+      try {
+        this.state.images = JSON.parse(imagesJson);
+      } catch {
+        this.state.images = [trigger.dataset.img];
+      }
+    } else {
+      this.state.images = [trigger.dataset.img];
+    }
     this.state.currentIndex = 0;
 
     // Set content
@@ -213,7 +221,7 @@ export class Lightbox {
     // Handle availability display (sold items)
     if (this.elements.availability) {
       const isAvailable = data.available === 'true' || data.available === true;
-      this.elements.availability.style.display = isAvailable ? 'none' : 'block';
+      this.elements.availability.classList.toggle('hidden', isAvailable);
     }
   }
 
@@ -343,6 +351,8 @@ export class Lightbox {
    * @private
    */
   handleTouchStart(e) {
+    if (!e.touches || e.touches.length === 0) return;
+
     if (e.touches.length === 2) {
       e.preventDefault();
       this.state.lastScale = this.state.scale;
@@ -357,6 +367,8 @@ export class Lightbox {
    * @private
    */
   handleTouchMove(e) {
+    if (!e.touches || e.touches.length === 0) return;
+
     if (e.touches.length === 2) {
       e.preventDefault();
       const touch1 = e.touches[0];
@@ -386,6 +398,8 @@ export class Lightbox {
    * @private
    */
   handleTouchEnd(e) {
+    if (!e.touches) return;
+
     if (e.touches.length === 0) {
       this.initialDist = null;
       this.state.lastTranslateX = this.state.translateX;
@@ -398,7 +412,7 @@ export class Lightbox {
     }
 
     // Handle swipe (only if not zoomed)
-    if (e.changedTouches.length > 0 && this.state.scale === 1) {
+    if (e.changedTouches && e.changedTouches.length > 0 && this.state.scale === 1) {
       this.state.touchEndX = e.changedTouches[0].clientX;
       this.handleSwipe();
     }

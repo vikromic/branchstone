@@ -14,6 +14,8 @@ js/
 │   ├── Theme.js             # Theme manager (light/dark)
 │   ├── Lightbox.js          # Gallery lightbox with zoom
 │   ├── Gallery.js           # Artwork gallery renderer
+│   ├── Carousel.js          # Image carousel with autoplay
+│   ├── ScrollToTop.js       # Scroll-to-top button
 │   ├── Animations.js        # Scroll & parallax animations
 │   └── FormValidator.js     # Form validation with accessibility
 │
@@ -28,10 +30,7 @@ js/
 ├── translations.json        # i18n translations
 │
 ├── .eslintrc.json           # ESLint configuration (Google style)
-├── .prettierrc.json         # Prettier configuration
-│
-├── main.js.backup           # Backup of old monolithic file
-└── translations.js.backup   # Backup of old translations file
+└── .prettierrc.json         # Prettier configuration
 ```
 
 ## 🚀 Quick Start
@@ -313,13 +312,6 @@ Global APIs preserved for compatibility:
 - `window.getTranslation(key)`
 - `window.switchLanguage(lang)`
 - `window.currentLang`
-
-### File Backups
-Old files backed up with `.backup` extension:
-- `main.js.backup`
-- `translations.js.backup`
-
-Safe to delete after verifying everything works.
 
 ## 🚀 Next Steps
 
