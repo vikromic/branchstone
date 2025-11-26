@@ -4,46 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Viktoria Branchstone - Mixed media artist inspired by natural textures and quiet resilience">
-    <meta name="keywords" content="art, artist, mixed media, natural materials, wood, moss, bark, resin">
-    <meta property="og:title" content="Viktoria Branchstone - Art">
+    <meta name="description" content="Viktoria Branchstone - Mixed media artist inspired by natural textures and quiet resilience. Discover abstract compositions using wood, moss, bark, and organic materials.">
+    <meta name="keywords" content="art, artist, mixed media, natural materials, wood, moss, bark, resin, contemporary art, abstract art, organic materials">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Viktoria Branchstone - Mixed Media Artist">
     <meta property="og:description" content="Mixed media art inspired by natural textures and quiet resilience">
-    <meta property="og:image" content="img/artist.jpeg">
+    <meta property="og:image" content="https://branchstone.art/img/artist.jpeg">
     <meta property="og:url" content="https://branchstone.art">
+    <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Viktoria Branchstone - Mixed Media Artist">
+    <meta name="twitter:description" content="Mixed media art inspired by natural textures and quiet resilience">
+    <meta name="twitter:image" content="https://branchstone.art/img/artist.jpeg">
+
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="#F8F8F8" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#2B2D30" media="(prefers-color-scheme: dark)">
 
-    <title>Viktoria Branchstone - Art</title>
+    <title>Viktoria Branchstone - Mixed Media Artist</title>
 
     <!-- Preload critical assets -->
     <link rel="preload" href="css/style.css" as="style">
     <link rel="preload" href="img/artist.jpeg" as="image">
+    <link rel="stylesheet" href="css/style.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link rel="stylesheet" href="css/style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap"
-        rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
     <!-- Initialize theme as early as possible to avoid flickering -->
-    <script>
-        (function () {
-            // Check system or user preference for theme
-            const userPreference = localStorage.getItem('theme');
-            const systemPreference = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            const currentTheme = userPreference || systemPreference;
-
-            // Apply theme immediately
-            document.documentElement.setAttribute('data-theme', currentTheme);
-        })();
-    </script>
+    <script src="js/theme-init.js"></script>
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
         <nav>
             <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
@@ -92,7 +87,7 @@
     </header>
     <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
 
-    <main class="home-main">
+    <main class="home-main" id="main-content">
         <!-- Full-Viewport Immersive Hero -->
         <section class="hero-fullscreen">
             <div class="hero-background">
@@ -155,19 +150,8 @@
         </section>
     </main>
 
-    <script src="js/translations.js"></script>
-    <script src="js/main.js"></script>
-    <!-- Initialize theme as early as possible to avoid flickering -->
-
-    <script>
-        // Failsafe animation trigger for better user experience
-        setTimeout(function () {
-            var elements = document.querySelectorAll('.animate-on-scroll');
-            elements.forEach(function (element) {
-                element.classList.add('is-visible');
-            });
-        }, 1000);
-    </script>
+    <script type="module" src="js/i18n.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 
 </html>

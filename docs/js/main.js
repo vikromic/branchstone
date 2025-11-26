@@ -22,17 +22,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!mobileMenuToggle || !mobileNavMenu || !mobileMenuOverlay) return;
 
+        // Set initial ARIA attributes
+        mobileMenuToggle.setAttribute('aria-expanded', 'false');
+        mobileNavMenu.setAttribute('aria-hidden', 'true');
+
         function toggleMobileMenu() {
+            const isActive = mobileNavMenu.classList.contains('active');
+            const willBeActive = !isActive;
+
             mobileMenuToggle.classList.toggle('active');
             mobileNavMenu.classList.toggle('active');
             mobileMenuOverlay.classList.toggle('active');
 
-            const isActive = mobileNavMenu.classList.contains('active');
-            body.style.overflow = isActive ? 'hidden' : '';
-            if (isActive) {
+            // Update ARIA attributes
+            mobileMenuToggle.setAttribute('aria-expanded', willBeActive);
+            mobileNavMenu.setAttribute('aria-hidden', !willBeActive);
+
+            body.style.overflow = willBeActive ? 'hidden' : '';
+            if (willBeActive) {
                 body.classList.add('menu-open');
+                // Focus first menu item for keyboard navigation
+                const firstLink = mobileNavMenu.querySelector('a');
+                if (firstLink) {
+                    setTimeout(() => firstLink.focus(), 100);
+                }
             } else {
                 body.classList.remove('menu-open');
+                // Return focus to toggle button
+                mobileMenuToggle.focus();
             }
         }
 
@@ -40,12 +57,27 @@ document.addEventListener('DOMContentLoaded', function () {
             mobileMenuToggle.classList.remove('active');
             mobileNavMenu.classList.remove('active');
             mobileMenuOverlay.classList.remove('active');
+
+            // Update ARIA attributes
+            mobileMenuToggle.setAttribute('aria-expanded', 'false');
+            mobileNavMenu.setAttribute('aria-hidden', 'true');
+
             body.style.overflow = '';
             body.classList.remove('menu-open');
+
+            // Return focus to toggle button
+            mobileMenuToggle.focus();
         }
 
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
         mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+
+        // Close menu on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileNavMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
 
         // Close menu when clicking a nav link
         const navLinks = mobileNavMenu.querySelectorAll('a');
@@ -108,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let currentIndex = 0;
         let touchStartX = 0;
         let touchEndX = 0;
+        let previousFocusedElement = null;
 
         // Pinch-to-zoom variables
         let scale = 1;
@@ -132,8 +165,17 @@ document.addEventListener('DOMContentLoaded', function () {
             if (sliderIndicator && currentImages.length > 1) {
                 sliderIndicator.textContent = `${currentIndex + 1} / ${currentImages.length}`;
                 sliderIndicator.style.display = 'block';
+                // Add screen reader announcement
+                sliderIndicator.setAttribute('role', 'status');
+                sliderIndicator.setAttribute('aria-live', 'polite');
             } else if (sliderIndicator) {
                 sliderIndicator.style.display = 'none';
+            }
+
+            // Announce image change to screen readers
+            if (lightboxTitle) {
+                const announcement = `Image ${currentIndex + 1} of ${currentImages.length}: ${lightboxTitle.textContent}`;
+                announceToScreenReader(announcement);
             }
         }
 
@@ -153,6 +195,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         galleryItems.forEach(item => {
             item.addEventListener('click', () => {
+                // Store currently focused element to restore later
+                previousFocusedElement = document.activeElement;
+
                 // Get images array from dataset or use single image
                 const imagesJson = item.dataset.images;
                 currentImages = imagesJson ? JSON.parse(imagesJson) : [item.dataset.img];
@@ -168,14 +213,81 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 updateSlider();
                 lightbox.style.display = 'flex';
+                lightbox.setAttribute('aria-hidden', 'false');
+
+                // Focus close button for accessibility
+                setTimeout(() => {
+                    if (closeLightbox) closeLightbox.focus();
+                }, 100);
+
+                // Trap focus within lightbox
+                enableFocusTrap();
             });
         });
 
         function close() {
             lightbox.style.display = 'none';
+            lightbox.setAttribute('aria-hidden', 'true');
             currentImages = [];
             currentIndex = 0;
             resetZoom();
+
+            // Disable focus trap
+            disableFocusTrap();
+
+            // Restore focus to previously focused element
+            if (previousFocusedElement) {
+                previousFocusedElement.focus();
+                previousFocusedElement = null;
+            }
+        }
+
+        // Screen reader announcement helper
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('role', 'status');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.className = 'sr-only';
+            announcement.textContent = message;
+            document.body.appendChild(announcement);
+            setTimeout(() => announcement.remove(), 1000);
+        }
+
+        // Focus trap helpers
+        let focusTrapHandler = null;
+
+        function enableFocusTrap() {
+            const focusableElements = lightbox.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstFocusable = focusableElements[0];
+            const lastFocusable = focusableElements[focusableElements.length - 1];
+
+            focusTrapHandler = (e) => {
+                if (e.key !== 'Tab') return;
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstFocusable) {
+                        lastFocusable.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastFocusable) {
+                        firstFocusable.focus();
+                        e.preventDefault();
+                    }
+                }
+            };
+
+            document.addEventListener('keydown', focusTrapHandler);
+        }
+
+        function disableFocusTrap() {
+            if (focusTrapHandler) {
+                document.removeEventListener('keydown', focusTrapHandler);
+                focusTrapHandler = null;
+            }
         }
 
         function resetZoom() {
@@ -546,7 +658,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const featuredGrid = document.getElementById('featured-artworks');
     if (featuredGrid) {
         fetch('js/artworks.json')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 // Take first 6 artworks for featured section
                 const featuredArtworks = data.slice(0, 6);
@@ -555,6 +672,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const item = document.createElement('a');
                     item.href = 'gallery.html';
                     item.className = 'featured-item animate-on-scroll';
+                    item.setAttribute('aria-label', `View ${artwork.title} in gallery`);
 
                     item.innerHTML = `
                         <img src="${artwork.image}" alt="${artwork.title}" loading="${index < 3 ? 'eager' : 'lazy'}">
@@ -570,18 +688,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Re-initialize animations for featured items
                 initializeAnimations();
             })
-            .catch(error => console.error('Error loading featured artworks:', error));
+            .catch(error => {
+                console.error('Error loading featured artworks:', error);
+                // Show user-friendly error message
+                featuredGrid.innerHTML = '<p style="text-align: center; padding: 2rem;">Unable to load artworks. Please refresh the page.</p>';
+            });
     }
 
     const galleryGrid = document.querySelector('.gallery-grid');
     if (galleryGrid) {
         // This is the Gallery page
         fetch('js/artworks.json')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 data.forEach(artwork => {
                     const item = document.createElement('div');
                     item.className = `gallery-item ${artwork.layout || ''} animate-on-scroll`;
+                    item.setAttribute('role', 'button');
+                    item.setAttribute('tabindex', '0');
+                    item.setAttribute('aria-label', `View ${artwork.title}, ${artwork.size}`);
                     item.dataset.title = artwork.title;
                     item.dataset.size = artwork.size;
                     item.dataset.materials = artwork.materials;
@@ -592,7 +722,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         item.dataset.images = JSON.stringify(artwork.images);
                     }
 
-                    const unavailableDot = !artwork.available ? '<span class="unavailable-dot"></span>' : '';
+                    const unavailableDot = !artwork.available ? '<span class="unavailable-dot" aria-label="Currently unavailable"></span>' : '';
 
                     item.innerHTML = `
                         <img src="${artwork.image}" alt="${artwork.title}">
@@ -601,6 +731,15 @@ document.addEventListener('DOMContentLoaded', function () {
                             <p>${artwork.size}</p>
                         </div>
                     `;
+
+                    // Add keyboard support for gallery items
+                    item.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            item.click();
+                        }
+                    });
+
                     galleryGrid.appendChild(item);
                 });
 
@@ -613,7 +752,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     initMobileGallery(data.length);
                 }
             })
-            .catch(error => console.error('Error fetching artworks:', error));
+            .catch(error => {
+                console.error('Error fetching artworks:', error);
+                // Show user-friendly error message
+                galleryGrid.innerHTML = '<p style="text-align: center; padding: 4rem 2rem;">Unable to load gallery. Please refresh the page.</p>';
+            });
     }
 
     function initMobileGallery(itemCount) {
@@ -693,15 +836,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 4000);
     }
 
-    function initializeImageOverlays() {
-        // We've replaced the image overlay with responsive text content cards
-        // This function remains for backwards compatibility but doesn't do anything
-    }
 
     // Language toggle functionality
     function initializeLanguageToggle() {
         const langToggle = document.getElementById('lang-toggle');
         if (!langToggle) return;
+
+        // Update ARIA label based on current language
+        function updateLanguageLabel() {
+            const currentLang = window.currentLang || 'en';
+            const langName = currentLang === 'en' ? 'English' : 'Ukrainian';
+            langToggle.setAttribute('aria-label', `Switch language (current: ${langName})`);
+        }
+
+        updateLanguageLabel();
 
         langToggle.addEventListener('click', function() {
             const langOptions = this.querySelectorAll('.lang-option');
@@ -709,15 +857,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 option.classList.toggle('active-lang');
             });
 
-            // Here you would typically trigger translation logic
-            // For now, just toggle the visual state
+            // Update ARIA label after language switch
+            setTimeout(updateLanguageLabel, 100);
+
+            // Translation logic is handled in translations.js
         });
     }
 
     // --- Global Initializers ---
     initializeThemeToggle();
     initializeAnimations();
-    initializeImageOverlays();
     initializeLanguageToggle();
 });
 
