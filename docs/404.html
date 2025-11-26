@@ -9,6 +9,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+    <!-- Initialize theme as early as possible to avoid flickering -->
+    <script src="js/theme-init.js"></script>
+
     <style>
         .error-container {
             max-width: 600px;
@@ -70,27 +74,7 @@
         </div>
     </main>
 
-    <script src="js/main.js"></script>
-    <!-- Initialize theme as early as possible to avoid flickering -->
-    <script>
-        (function() {
-            // Check system or user preference for theme
-            const userPreference = localStorage.getItem('theme');
-            const systemPreference = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            const currentTheme = userPreference || systemPreference;
-            
-            // Apply theme immediately
-            document.documentElement.setAttribute('data-theme', currentTheme);
-        })();
-    </script>
-    <script>
-        // Failsafe animation trigger for better user experience
-        setTimeout(function() {
-            var elements = document.querySelectorAll('.animate-on-scroll');
-            elements.forEach(function(element) {
-                element.classList.add('is-visible');
-            });
-        }, 1000);
-    </script>
+    <script type="module" src="js/i18n.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>

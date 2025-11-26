@@ -14,13 +14,13 @@ export class Menu {
    * @param {string} options.overlaySelector - Overlay element selector
    */
   constructor(options = {}) {
-    this.toggle = $(options.toggleSelector || '#mobile-menu-toggle');
+    this.toggleButton = $(options.toggleSelector || '#mobile-menu-toggle');
     this.menu = $(options.menuSelector || '#mobile-nav-menu');
     this.overlay = $(options.overlaySelector || '#mobile-menu-overlay');
     this.body = document.body;
     this.isOpen = false;
 
-    if (!this.toggle || !this.menu || !this.overlay) {
+    if (!this.toggleButton || !this.menu || !this.overlay) {
       return;
     }
 
@@ -42,7 +42,7 @@ export class Menu {
    * @private
    */
   setInitialAttributes() {
-    setAttributes(this.toggle, {
+    setAttributes(this.toggleButton, {
       'aria-expanded': 'false',
     });
     setAttributes(this.menu, {
@@ -55,7 +55,7 @@ export class Menu {
    * @private
    */
   attachEventListeners() {
-    on(this.toggle, 'click', () => this.toggle());
+    on(this.toggleButton, 'click', () => this.toggleMenu());
     on(this.overlay, 'click', () => this.close());
 
     // Close on Escape key
@@ -100,7 +100,7 @@ export class Menu {
   /**
    * Toggle menu open/close
    */
-  toggle() {
+  toggleMenu() {
     this.isOpen ? this.close() : this.open();
   }
 
@@ -109,11 +109,11 @@ export class Menu {
    */
   open() {
     this.isOpen = true;
-    this.toggle.classList.add('active');
+    this.toggleButton.classList.add('active');
     this.menu.classList.add('active');
     this.overlay.classList.add('active');
 
-    setAttributes(this.toggle, { 'aria-expanded': 'true' });
+    setAttributes(this.toggleButton, { 'aria-expanded': 'true' });
     setAttributes(this.menu, { 'aria-hidden': 'false' });
 
     this.body.style.overflow = 'hidden';
@@ -128,18 +128,18 @@ export class Menu {
    */
   close() {
     this.isOpen = false;
-    this.toggle.classList.remove('active');
+    this.toggleButton.classList.remove('active');
     this.menu.classList.remove('active');
     this.overlay.classList.remove('active');
 
-    setAttributes(this.toggle, { 'aria-expanded': 'false' });
+    setAttributes(this.toggleButton, { 'aria-expanded': 'false' });
     setAttributes(this.menu, { 'aria-hidden': 'true' });
 
     this.body.style.overflow = '';
     this.body.classList.remove('menu-open');
 
     // Return focus to toggle button
-    this.toggle.focus();
+    this.toggleButton.focus();
   }
 
   /**
