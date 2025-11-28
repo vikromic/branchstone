@@ -137,13 +137,20 @@ export class Lightbox {
   }
 
   /**
-   * Attach lightbox to trigger elements
+   * Attach lightbox via event delegation on gallery container
+   * Single listener instead of per-item (better memory, works with dynamic content)
    * @private
    */
   attachToTriggers() {
-    const triggers = $$(this.triggerSelector);
-    triggers.forEach(trigger => {
-      on(trigger, 'click', () => this.openFromTrigger(trigger));
+    const galleryContainer = $('.gallery-grid');
+    if (!galleryContainer) return;
+
+    // Use event delegation - single listener handles all gallery items
+    on(galleryContainer, 'click', (e) => {
+      const trigger = e.target.closest(this.triggerSelector);
+      if (trigger) {
+        this.openFromTrigger(trigger);
+      }
     });
   }
 
@@ -563,10 +570,13 @@ export class Lightbox {
   }
 
   /**
-   * Refresh trigger attachments (call after dynamically adding gallery items)
+   * Refresh trigger attachments
+   * Note: With event delegation, this is no longer needed for dynamic content
+   * Kept for backwards compatibility
+   * @deprecated Event delegation handles dynamic content automatically
    */
   refresh() {
-    this.attachToTriggers();
+    // No-op - event delegation handles dynamic content
   }
 }
 

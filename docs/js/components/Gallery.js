@@ -22,7 +22,26 @@ export class Gallery {
 
     if (!this.container) return;
 
+    // Setup delegated keyboard handler once
+    this.setupKeyboardNavigation();
     this.init();
+  }
+
+  /**
+   * Setup delegated keyboard navigation for gallery items
+   * Single listener on container instead of per-item listeners
+   * @private
+   */
+  setupKeyboardNavigation() {
+    this.container.addEventListener('keydown', (e) => {
+      const item = e.target.closest('.gallery-item');
+      if (!item) return;
+
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        item.click();
+      }
+    });
   }
 
   /**
@@ -77,17 +96,22 @@ export class Gallery {
 
   /**
    * Render gallery items
+   * Uses DocumentFragment for batched DOM insertion (single reflow)
    * @private
    * @param {Array} artworks - Artworks to render
    */
   render(artworks) {
-    const items = artworks.map((artwork, index) => {
-      return this.type === 'featured'
+    const fragment = document.createDocumentFragment();
+
+    artworks.forEach((artwork, index) => {
+      const item = this.type === 'featured'
         ? this.createFeaturedItem(artwork, index)
         : this.createGalleryItem(artwork);
+      fragment.appendChild(item);
     });
 
-    items.forEach(item => this.container.appendChild(item));
+    // Single DOM operation instead of N operations
+    this.container.appendChild(fragment);
   }
 
   /**
@@ -112,15 +136,16 @@ export class Gallery {
       src: artwork.image,
       alt: artwork.title,
       loading: index < CONFIG.ui.gallery.lazyLoadThreshold ? 'eager' : 'lazy',
+      // Explicit dimensions prevent CLS
+      width: artwork.width || 800,
+      height: artwork.height || 1000,
     };
 
-    // Add srcset if available, otherwise add placeholder for future optimization
+    // Add srcset if available
     if (artwork.srcset) {
       imgAttributes.srcset = artwork.srcset;
       imgAttributes.sizes = artwork.sizes || '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
     } else {
-      // TODO: Generate multiple image sizes (400w, 800w, 1200w) for optimal responsive loading
-      // When available, add srcset like: "img/artwork-400.jpg 400w, img/artwork-800.jpg 800w, img/artwork.jpg 1200w"
       imgAttributes.sizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
     }
 
@@ -169,14 +194,16 @@ export class Gallery {
       src: artwork.image,
       alt: artwork.title,
       loading: 'lazy', // Gallery items are below the fold
+      // Explicit dimensions prevent CLS (Cumulative Layout Shift)
+      width: artwork.width || 800,
+      height: artwork.height || 1000,
     };
 
-    // Add srcset if available, otherwise add placeholder for future optimization
+    // Add srcset if available
     if (artwork.srcset) {
       imgAttributes.srcset = artwork.srcset;
       imgAttributes.sizes = artwork.sizes || '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
     } else {
-      // TODO: Generate multiple image sizes (400w, 800w, 1200w) for optimal responsive loading
       imgAttributes.sizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
     }
 
@@ -199,13 +226,7 @@ export class Gallery {
 
     const info = createElement('div', { className: 'gallery-item-info' }, [title, size]);
 
-    // Keyboard support
-    item.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        item.click();
-      }
-    });
+    // Keyboard support handled via event delegation in setupKeyboardNavigation()
 
     item.appendChild(img);
     item.appendChild(info);

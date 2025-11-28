@@ -7,7 +7,8 @@
             "contact": "Contact"
         },
         "home": {
-            "title": "BRANCHSTONE\nVIKTORIA",
+            "title": "VIKTORIA",
+            "subtitle": "BRANCHSTONE",
             "subtext": "Art inspired by natural textures and quiet resilience."
         },
         "gallery": {
@@ -62,7 +63,8 @@
             "contact": "Контакти"
         },
         "home": {
-            "title": "BRANCHSTONE\nVIKTORIA",
+            "title": "VIKTORIA",
+            "subtitle": "BRANCHSTONE",
             "subtext": "Мистецтво, натхненне природними текстурами та тихою стійкістю."
         },
         "gallery": {
