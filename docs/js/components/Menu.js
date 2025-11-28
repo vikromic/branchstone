@@ -79,10 +79,21 @@ export class Menu {
       on(this.menu, 'click', (e) => e.stopPropagation())
     );
 
-    // Close when clicking nav links
+    // Close menu when clicking nav links, then navigate
     const navLinks = this.menu.querySelectorAll('a');
     navLinks.forEach(link => {
-      this.cleanupFunctions.push(on(link, 'click', () => this.close()));
+      this.cleanupFunctions.push(on(link, 'click', (e) => {
+        // Get the href before closing
+        const href = link.getAttribute('href');
+        // Close the menu
+        this.close();
+        // If href exists, navigate after a small delay to allow menu close animation
+        if (href && href !== '#') {
+          setTimeout(() => {
+            window.location.href = href;
+          }, 50);
+        }
+      }));
     });
 
     // Setup hover effects if hover background exists
