@@ -73,8 +73,8 @@ export class AnimationManager {
    * @private
    */
   initParallax() {
+    // Note: hero-bg-image excluded - parallax causes inconsistent positioning on page load
     const elements = [
-      { selector: '.hero-bg-image', speed: CONFIG.ui.parallax.speeds.heroImage },
       { selector: '.featured-item', speed: CONFIG.ui.parallax.speeds.featuredItem },
       { selector: '.home-about-image', speed: CONFIG.ui.parallax.speeds.aboutImage },
       { selector: '.gallery-item', speed: CONFIG.ui.parallax.speeds.galleryItem },
