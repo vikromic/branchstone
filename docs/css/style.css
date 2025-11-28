@@ -5,7 +5,7 @@
     --text-color: #2B2B2B;
     --text-rgb: 43, 43, 43;
     --secondary-text: #555555;
-    --accent-color: hsl(40, 38%, 47%);
+    --accent-color: hsl(40, 38%, 38%);
     --card-background: #ffffff;
     --header-background: rgba(248, 248, 248, 0.8);
     --border-color: #e0e0e0;
@@ -51,6 +51,30 @@
                  0 22.3px 17.9px rgba(0, 0, 0, 0.042),
                  0 41.8px 33.4px rgba(0, 0, 0, 0.05),
                  0 100px 80px rgba(0, 0, 0, 0.07);
+
+    /* Spacing Scale */
+    --spacing-xs: 0.25rem;   /* 4px */
+    --spacing-sm: 0.5rem;    /* 8px */
+    --spacing-md: 1rem;      /* 16px */
+    --spacing-lg: 1.5rem;    /* 24px */
+    --spacing-xl: 2rem;      /* 32px */
+    --spacing-2xl: 3rem;     /* 48px */
+    --spacing-3xl: 4rem;     /* 64px */
+
+    /* Typography Scale */
+    --text-xs: 0.75rem;      /* 12px */
+    --text-sm: 0.875rem;     /* 14px */
+    --text-base: 1rem;       /* 16px */
+    --text-lg: 1.125rem;     /* 18px */
+    --text-xl: 1.25rem;      /* 20px */
+    --text-2xl: 1.5rem;      /* 24px */
+    --text-3xl: 1.875rem;    /* 30px */
+    --text-4xl: 2.25rem;     /* 36px */
+
+    /* Line Heights */
+    --leading-tight: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.75;
 }
 
 /* Smooth Scrolling Optimization for All Devices */
@@ -164,7 +188,7 @@ section,
 
 /* General Body Styles */
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
     margin: 0;
@@ -274,7 +298,7 @@ body::after {
 h1,
 h2,
 h3 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
     font-weight: 600;
     letter-spacing: 0.01em;
 }
@@ -376,7 +400,7 @@ nav {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-color);
@@ -551,7 +575,7 @@ body.menu-open header { z-index: 10001; }
     border: 1px solid var(--border-color);
     cursor: pointer;
     padding: 0.4rem 0.8rem;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 0.85rem;
     color: var(--secondary-text);
     border-radius: 8px;
@@ -756,7 +780,8 @@ main {
 }
 
 .hero-cta .btn-secondary {
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
     border: 1px solid #ffffff;
     color: #ffffff;
 }
@@ -836,7 +861,7 @@ main {
 }
 
 .hero-tagline {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: clamp(1.125rem, 2.5vw, 1.75rem);
     color: rgba(255, 255, 255, 0.9);
     margin: 2rem auto;
@@ -889,7 +914,7 @@ main {
 .btn-secondary-large,
 .submit-btn,
 .inquire-btn {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -913,7 +938,7 @@ main {
 .btn-secondary-large:focus-visible,
 .submit-btn:focus-visible,
 .inquire-btn:focus-visible {
-    outline: 3px solid var(--accent-color);
+    outline: 3px solid var(--text-color);
     outline-offset: 4px;
 }
 
@@ -965,7 +990,7 @@ main {
     background: none;
     text-transform: none;
     letter-spacing: 0.5px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     text-decoration: none;
     display: inline-block;
     font-weight: 500;
@@ -1038,7 +1063,7 @@ section {
 }
 
 .view-all-link {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color: var(--text-color);
     text-decoration: none;
     font-size: 0.95rem;
@@ -1116,7 +1141,7 @@ section {
 }
 
 .featured-item:focus-visible {
-    outline: 3px solid var(--accent-color);
+    outline: 3px solid var(--text-color);
     outline-offset: 4px;
 }
 
@@ -1505,7 +1530,7 @@ section {
     padding-left: 0;
     margin: 0 auto 2.5rem auto;
     font-style: normal;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
     font-size: 1.8rem;
     color: var(--text-color);
     max-width: 600px;
@@ -1516,7 +1541,7 @@ section {
     margin-top: 1rem;
     font-style: normal;
     font-weight: 400;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color: var(--secondary-text);
 }
 
@@ -1633,7 +1658,7 @@ section {
 .gallery-item-info h3 {
     margin: 0 0 0.25rem 0;
     font-size: 1.5rem;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 600;
     color: #fff;
     text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
@@ -1783,7 +1808,7 @@ section {
 }
 
 .slider-btn:focus-visible {
-    outline: 3px solid var(--accent-color);
+    outline: 3px solid var(--text-color);
     outline-offset: 4px;
 }
 
@@ -1824,7 +1849,7 @@ section {
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-size: 0.9rem;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     z-index: 10;
     display: none;
 }
@@ -1856,7 +1881,7 @@ section {
 
 #lightbox-title {
     font-size: 2.25rem;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
     font-weight: 600;
     margin: 0 0 1.75rem 0;
     color: var(--text-color);
@@ -1867,7 +1892,7 @@ section {
 #lightbox-size,
 #lightbox-materials {
     margin: 0 0 0.65rem 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color: rgba(139, 120, 93, 0.85);
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -1877,7 +1902,7 @@ section {
 
 #lightbox-description {
     margin: 2.25rem 0 2rem 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color: var(--secondary-text);
     font-size: 0.95rem;
     line-height: 1.7;
@@ -1907,7 +1932,7 @@ section {
 }
 
 .close-lightbox:focus-visible {
-    outline: 3px solid var(--accent-color);
+    outline: 3px solid var(--text-color);
     outline-offset: 4px;
 }
 
@@ -1921,7 +1946,7 @@ section {
     color: #ffffff;
     border: none;
     padding: 1.125rem 2.5rem;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2033,7 +2058,7 @@ section {
     padding: 0.8rem;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 1rem;
     box-sizing: border-box;
     background-color: #ffffff;
@@ -2099,12 +2124,60 @@ section {
     box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.1);
 }
 
+/* Required field indicator */
+.required-indicator {
+    color: #d32f2f;
+    margin-left: 0.25rem;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .required-indicator {
+    color: #ff6b6b;
+}
+
+/* Form success/error message container */
+.form-message {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    display: none;
+}
+
+.form-message.show {
+    display: block;
+}
+
+.form-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.form-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+[data-theme="dark"] .form-message.success {
+    background-color: #1e4620;
+    color: #8fd892;
+    border-color: #2d5a2e;
+}
+
+[data-theme="dark"] .form-message.error {
+    background-color: #4a1a1a;
+    color: #ff9999;
+    border-color: #6b2525;
+}
+
 /* Accessibility - focus indicators */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-    outline: 3px solid var(--accent-color);
+    outline: 3px solid var(--text-color);
     outline-offset: 2px;
 }
 
@@ -2113,7 +2186,7 @@ textarea:focus-visible {
     color: var(--button-text);
     border: none;
     padding: 1.1rem 2rem;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2152,6 +2225,11 @@ textarea:focus-visible {
         border-bottom: 1px solid rgba(var(--text-rgb), 0.05);
     }
 
+    /* Compensate for fixed header on mobile */
+    body {
+        padding-top: 56px;
+    }
+
     /* Header Controls - Consolidated */
     .header-controls {
         display: flex;
@@ -2186,10 +2264,12 @@ textarea:focus-visible {
 
     .hero-content {
         padding: 1.5rem;
+        padding-left: max(1.5rem, env(safe-area-inset-left));
+        padding-right: max(1.5rem, env(safe-area-inset-right));
+        padding-bottom: max(3rem, env(safe-area-inset-bottom));
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
-        padding-bottom: 3rem;
         min-height: auto;
         height: 100%;
     }
@@ -2562,7 +2642,7 @@ textarea:focus-visible {
 
     .gallery-item-info h3 {
         font-size: 1.75rem;
-        font-family: 'Cormorant Garamond', serif;
+        font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
         font-weight: 600;
         margin-bottom: 0.5rem;
         line-height: 1.2;
@@ -2714,10 +2794,12 @@ textarea:focus-visible {
     transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Hero and featured items get blur effect */
-.hero-content.animate-on-scroll,
-.featured-item.animate-on-scroll {
-    filter: blur(4px);
+/* Hero and featured items get blur effect - desktop only for better mobile performance */
+@media (min-width: 769px) {
+    .hero-content.animate-on-scroll,
+    .featured-item.animate-on-scroll {
+        filter: blur(4px);
+    }
 }
 
 /* Reveal with focus and smooth entry */
@@ -3274,4 +3356,153 @@ textarea:focus-visible {
   height: 0;
   width: 0;
   overflow: hidden;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+
+.site-footer {
+  background-color: var(--card-background);
+  border-top: 1px solid var(--border-color);
+  margin-top: 4rem;
+  padding: 3rem 0 1.5rem;
+  font-size: 0.95rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.footer-section h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+}
+
+.footer-section h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.footer-section p {
+  color: var(--secondary-text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Footer Brand Section */
+.footer-brand {
+  grid-column: span 1;
+}
+
+/* Footer Navigation */
+.footer-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-nav li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-nav a {
+  color: var(--secondary-text);
+  text-decoration: none;
+  transition: color var(--transition-fast) ease;
+  display: inline-block;
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus {
+  color: var(--accent-color);
+}
+
+/* Footer Social Link */
+.footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--secondary-text);
+  text-decoration: none;
+  padding: 0.5rem 0;
+  transition: color var(--transition-fast) ease, transform var(--transition-fast) ease;
+}
+
+.footer-social-link:hover,
+.footer-social-link:focus {
+  color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.footer-social-link svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 0;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.footer-bottom p {
+  color: var(--secondary-text);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 2rem 0 1rem;
+    margin-top: 3rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  .footer-brand {
+    grid-column: span 1;
+    text-align: center;
+  }
+
+  .footer-nav,
+  .footer-connect {
+    text-align: center;
+  }
+
+  .footer-social-link {
+    justify-content: center;
+  }
+
+  .footer-bottom {
+    padding: 1.5rem 1.5rem 0;
+  }
+}
+
+/* Ensure main content has proper spacing from footer */
+main {
+  min-height: calc(100vh - 200px);
 }
