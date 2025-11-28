@@ -74,25 +74,16 @@ export class Menu {
       })
     );
 
-    // Handle nav link clicks/taps - navigate explicitly for mobile compatibility
+    // Handle nav link clicks - close menu and allow default navigation
     const navLinks = this.menu.querySelectorAll('a');
     navLinks.forEach(link => {
-      const handleNavClick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const href = link.getAttribute('href');
-        this.close();
-        // Navigate after brief delay
-        if (href) {
-          setTimeout(() => {
-            window.location.href = href;
-          }, 100);
-        }
-      };
-
-      // Handle both click and touchend for mobile
-      link.addEventListener('click', handleNavClick);
-      link.addEventListener('touchend', handleNavClick, { passive: false });
+      this.cleanupFunctions.push(
+        on(link, 'click', (e) => {
+          // Don't prevent default - let the browser navigate naturally
+          // Just close the menu before navigation occurs
+          this.close();
+        })
+      );
     });
 
     // Setup hover effects if hover background exists
