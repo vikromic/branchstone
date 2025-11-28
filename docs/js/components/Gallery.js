@@ -158,6 +158,7 @@ export class Gallery {
         img: artwork.image,
         available: artwork.available.toString(),
         category: artwork.category || 'uncategorized',
+        ...(artwork.price && { price: artwork.price }),
         ...(artwork.images && artwork.images.length > 0 && {
           images: JSON.stringify(artwork.images),
         }),
