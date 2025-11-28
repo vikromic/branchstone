@@ -74,26 +74,25 @@ export class Menu {
       })
     );
 
-    // Prevent clicks on menu from bubbling to overlay
-    this.cleanupFunctions.push(
-      on(this.menu, 'click', (e) => e.stopPropagation())
-    );
-
-    // Close menu when clicking nav links, then navigate
+    // Handle nav link clicks/taps - navigate explicitly for mobile compatibility
     const navLinks = this.menu.querySelectorAll('a');
     navLinks.forEach(link => {
-      this.cleanupFunctions.push(on(link, 'click', (e) => {
-        // Get the href before closing
+      const handleNavClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const href = link.getAttribute('href');
-        // Close the menu
         this.close();
-        // If href exists, navigate after a small delay to allow menu close animation
-        if (href && href !== '#') {
+        // Navigate after brief delay
+        if (href) {
           setTimeout(() => {
             window.location.href = href;
-          }, 50);
+          }, 100);
         }
-      }));
+      };
+
+      // Handle both click and touchend for mobile
+      link.addEventListener('click', handleNavClick);
+      link.addEventListener('touchend', handleNavClick, { passive: false });
     });
 
     // Setup hover effects if hover background exists
