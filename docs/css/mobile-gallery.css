@@ -37,7 +37,7 @@
     display: block !important;
   }
 
-  /* Gallery Item Info: Ensure visibility */
+  /* Gallery Item Info: Enhanced readability with stronger contrast */
   .gallery-item-info {
     display: block !important;
     visibility: visible !important;
@@ -49,7 +49,8 @@
     padding: 1rem !important;
     background: linear-gradient(
       to top,
-      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.92) 0%,
+      rgba(0, 0, 0, 0.75) 40%,
       rgba(0, 0, 0, 0.4) 70%,
       transparent 100%
     ) !important;
@@ -57,19 +58,25 @@
     transform: none !important;
   }
 
-  /* Gallery Item Title */
+  /* Gallery Item Title - Enhanced shadow for WCAG contrast */
   .gallery-item-info h3 {
     font-size: 1.125rem !important;
     font-weight: 600 !important;
     margin: 0 0 0.25rem 0 !important;
     color: white !important;
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.8),
+      0 1px 3px rgba(0, 0, 0, 0.9) !important;
   }
 
-  /* Gallery Item Metadata */
+  /* Gallery Item Metadata - Enhanced shadow for WCAG contrast */
   .gallery-item-info p {
     font-size: 0.875rem !important;
     margin: 0 !important;
-    opacity: 0.9 !important;
-    color: rgba(255, 255, 255, 0.9) !important;
+    opacity: 0.95 !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow:
+      0 1px 6px rgba(0, 0, 0, 0.8),
+      0 1px 2px rgba(0, 0, 0, 0.9) !important;
   }
 }

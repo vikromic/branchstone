@@ -803,8 +803,9 @@
     }
 
     .filter-btn {
-        padding: 0.5rem 1.25rem;
+        padding: 0.625rem 1.25rem;
         font-size: var(--text-xs);
+        min-height: 44px; /* WCAG 2.1 AA touch target */
     }
 
     .gallery-grid {
