@@ -5,14 +5,19 @@
  */
 
 @media (max-width: 768px) {
-  /* Gallery Main: Reduce top padding */
+  /* Gallery Main: Compact top padding for more artwork visibility */
   .gallery-main {
-    padding: 1.5rem 0 3rem !important;
+    padding: 1rem 0 3rem !important;
+  }
+
+  /* Gallery Header: Compact on mobile */
+  .gallery-header {
+    margin-bottom: 0.75rem !important;
   }
 
   /* Gallery Filter: Tighter spacing */
   .gallery-filter {
-    margin-bottom: 1.5rem !important;
+    margin-bottom: 1rem !important;
   }
 
   /* Gallery Grid: Force flex column layout */
