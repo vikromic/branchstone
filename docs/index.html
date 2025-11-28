@@ -91,7 +91,13 @@
         <!-- Full-Viewport Immersive Hero -->
         <section class="hero-fullscreen">
             <div class="hero-background">
-                <img src="img/artist.jpeg" alt="Viktoria Branchstone" class="hero-bg-image" loading="eager">
+                <!-- TODO: Generate responsive image sizes (800w, 1200w, 1920w) for optimal loading -->
+                <!-- Hero image eager loaded for LCP optimization -->
+                <img src="img/artist.jpeg"
+                     alt="Viktoria Branchstone"
+                     class="hero-bg-image"
+                     loading="eager"
+                     sizes="100vw">
                 <div class="hero-overlay"></div>
             </div>
             <div class="hero-content">
@@ -150,7 +156,11 @@
                 <a href="about.html" class="btn-text">Read My Story <span aria-hidden="true">→</span></a>
             </div>
             <div class="home-about-image animate-on-scroll">
-                <img src="img/about-me.jpeg" alt="Artist at work" loading="lazy">
+                <!-- TODO: Generate responsive sizes (600w, 1200w, 1920w) -->
+                <img src="img/about-me.jpeg"
+                     alt="Artist at work"
+                     loading="lazy"
+                     sizes="(max-width: 768px) 100vw, 50vw">
             </div>
         </section>
 

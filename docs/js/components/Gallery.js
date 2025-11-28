@@ -32,13 +32,35 @@ export class Gallery {
   async init() {
     try {
       const artworks = await this.fetchArtworks();
+      this.hideSkeletons();
       this.render(artworks);
+      this.markGalleryLoaded();
       if (this.onLoadCallback) {
         this.onLoadCallback();
       }
     } catch (error) {
+      this.hideSkeletons();
       this.renderError();
     }
+  }
+
+  /**
+   * Hide skeleton loading placeholders
+   * @private
+   */
+  hideSkeletons() {
+    const skeletons = this.container.querySelectorAll('.skeleton-item');
+    skeletons.forEach(skeleton => {
+      skeleton.remove();
+    });
+  }
+
+  /**
+   * Mark gallery as loaded
+   * @private
+   */
+  markGalleryLoaded() {
+    this.container.classList.add('gallery-loaded');
   }
 
   /**
@@ -86,11 +108,23 @@ export class Gallery {
       'aria-label': `View ${artwork.title} in gallery`,
     });
 
-    const img = createElement('img', {
+    const imgAttributes = {
       src: artwork.image,
       alt: artwork.title,
       loading: index < CONFIG.ui.gallery.lazyLoadThreshold ? 'eager' : 'lazy',
-    });
+    };
+
+    // Add srcset if available, otherwise add placeholder for future optimization
+    if (artwork.srcset) {
+      imgAttributes.srcset = artwork.srcset;
+      imgAttributes.sizes = artwork.sizes || '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
+    } else {
+      // TODO: Generate multiple image sizes (400w, 800w, 1200w) for optimal responsive loading
+      // When available, add srcset like: "img/artwork-400.jpg 400w, img/artwork-800.jpg 800w, img/artwork.jpg 1200w"
+      imgAttributes.sizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
+    }
+
+    const img = createElement('img', imgAttributes);
 
     const info = createElement('div', { className: 'featured-item-info' }, [
       createElement('h3', {}, artwork.title),
@@ -123,16 +157,29 @@ export class Gallery {
         description: artwork.description,
         img: artwork.image,
         available: artwork.available.toString(),
+        category: artwork.category || 'uncategorized',
         ...(artwork.images && artwork.images.length > 0 && {
           images: JSON.stringify(artwork.images),
         }),
       },
     });
 
-    const img = createElement('img', {
+    const imgAttributes = {
       src: artwork.image,
       alt: artwork.title,
-    });
+      loading: 'lazy', // Gallery items are below the fold
+    };
+
+    // Add srcset if available, otherwise add placeholder for future optimization
+    if (artwork.srcset) {
+      imgAttributes.srcset = artwork.srcset;
+      imgAttributes.sizes = artwork.sizes || '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
+    } else {
+      // TODO: Generate multiple image sizes (400w, 800w, 1200w) for optimal responsive loading
+      imgAttributes.sizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
+    }
+
+    const img = createElement('img', imgAttributes);
 
     const soldDot = !artwork.available
       ? createElement('span', {
@@ -171,15 +218,25 @@ export class Gallery {
    */
   renderError() {
     const message = this.type === 'featured'
-      ? 'Unable to load artworks. Please refresh the page.'
-      : 'Unable to load gallery. Please refresh the page.';
+      ? 'Unable to load artworks. Please try again.'
+      : 'Unable to load gallery. Please try again.';
 
-    const errorElement = createElement('p', {
-      style: 'text-align: center; padding: 4rem 2rem;',
-    }, message);
+    const errorContainer = createElement('div', {
+      className: 'gallery-error',
+    });
+
+    const errorText = createElement('p', {}, message);
+
+    const retryButton = createElement('button', {}, 'Retry');
+    retryButton.addEventListener('click', () => {
+      this.reload();
+    });
+
+    errorContainer.appendChild(errorText);
+    errorContainer.appendChild(retryButton);
 
     this.container.innerHTML = '';
-    this.container.appendChild(errorElement);
+    this.container.appendChild(errorContainer);
   }
 
   /**
@@ -194,7 +251,49 @@ export class Gallery {
    */
   async reload() {
     this.clear();
+    this.showSkeletons();
     await this.init();
+  }
+
+  /**
+   * Show skeleton loading placeholders
+   * @private
+   */
+  showSkeletons() {
+    // Remove gallery-loaded class to show skeletons
+    this.container.classList.remove('gallery-loaded');
+
+    // Add 8 skeleton items
+    const skeletonCount = 8;
+    for (let i = 0; i < skeletonCount; i++) {
+      const skeletonItem = createElement('div', {
+        className: 'skeleton-item',
+        'aria-hidden': 'true',
+      });
+
+      const skeletonImage = createElement('div', {
+        className: 'skeleton-image',
+      });
+
+      const skeletonInfo = createElement('div', {
+        className: 'skeleton-info',
+      });
+
+      const skeletonTitle = createElement('div', {
+        className: 'skeleton-title',
+      });
+
+      const skeletonSubtitle = createElement('div', {
+        className: 'skeleton-subtitle',
+      });
+
+      skeletonInfo.appendChild(skeletonTitle);
+      skeletonInfo.appendChild(skeletonSubtitle);
+      skeletonItem.appendChild(skeletonImage);
+      skeletonItem.appendChild(skeletonInfo);
+
+      this.container.appendChild(skeletonItem);
+    }
   }
 }
 

@@ -290,10 +290,16 @@ export class Lightbox {
   updateSlider() {
     if (this.state.images.length === 0) return;
 
-    // Update image
+    // Update image with responsive srcset if available
     if (this.elements.image) {
-      this.elements.image.src = this.state.images[this.state.currentIndex];
+      const currentImage = this.state.images[this.state.currentIndex];
+      this.elements.image.src = currentImage;
       this.elements.image.alt = this.elements.title?.textContent || '';
+
+      // TODO: Add srcset support for lightbox images
+      // When multiple sizes are generated, update artworks.json to include srcset arrays
+      // Example: { image: "img/art.jpg", srcset: ["img/art-800.jpg 800w", "img/art-1200.jpg 1200w", "img/art-1920.jpg 1920w"] }
+      // For now, lightbox displays full-size images for optimal quality
     }
 
     // Update navigation buttons
