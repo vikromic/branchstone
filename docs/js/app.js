@@ -8,6 +8,7 @@ import Menu from './components/Menu.js';
 import ThemeManager from './components/Theme.js';
 import Lightbox from './components/Lightbox.js';
 import Gallery from './components/Gallery.js';
+import GalleryFilter from './components/GalleryFilter.js';
 import AnimationManager from './components/Animations.js';
 import FormValidator from './components/FormValidator.js';
 import Carousel from './components/Carousel.js';
@@ -130,6 +131,26 @@ class App {
         // Refresh animations after gallery loads
         const animations = this.components.get('animations');
         if (animations) animations.refresh();
+
+        // Initialize gallery filter
+        const galleryFilter = new GalleryFilter({
+          containerSelector: '#gallery-filter',
+          gallerySelector: '.gallery-grid',
+          categories: [
+            { id: 'nature', label: 'Nature' },
+            { id: 'blue', label: 'Blue Tones' },
+            { id: 'fire', label: 'Fire & Transformation' },
+            { id: 'ethereal', label: 'Ethereal' },
+            { id: 'seasonal', label: 'Seasonal' }
+          ],
+          onFilter: (category) => {
+            // Re-trigger animations for visible items
+            if (animations) {
+              setTimeout(() => animations.refresh(), 350);
+            }
+          }
+        });
+        this.components.set('galleryFilter', galleryFilter);
 
         // Initialize lightbox after gallery loads
         const lightbox = new Lightbox();

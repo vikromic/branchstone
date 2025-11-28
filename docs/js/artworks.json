@@ -15,7 +15,8 @@
             "img/born_of_burn/C6493BDD-DE14-41D9-935D-947568942729_4_5005_c.jpeg"
         ],
         "description": "A piece that captures the quiet, mystical energy of transformation through fire and renewal.",
-        "available": true
+        "available": true,
+        "category": "fire"
     },
     {
         "id": 2,
@@ -32,7 +33,8 @@
             "img/by_marks_and_fire/8BFB6E59-C7D7-4EA3-A87D-F934124B7C07_4_5005_c.jpeg"
         ],
         "description": "Inspired by the marks left by time and the transformative power of fire.",
-        "available": true
+        "available": true,
+        "category": "fire"
     },
     {
         "id": 3,
@@ -46,7 +48,8 @@
             "img/christmass_joy/8BC1728D-88EE-452A-91E8-9DD2ECCA69A7_4_5005_c.jpeg"
         ],
         "description": "A celebration of warmth and joy, capturing the essence of the holiday season.",
-        "available": true
+        "available": true,
+        "category": "seasonal"
     },
     {
         "id": 4,
@@ -61,7 +64,8 @@
             "img/core/6B16E5A6-ECFC-4865-9992-50D5D48FE301_4_5005_c.jpeg"
         ],
         "description": "An exploration of the essence and foundation of natural forms.",
-        "available": true
+        "available": true,
+        "category": "nature"
     },
     {
         "id": 5,
@@ -75,7 +79,8 @@
             "img/july_pines/D4676BF9-BA0C-4911-A527-9A67A4425394_1_201_a.jpeg"
         ],
         "description": "A tribute to the quiet passage of time, using elements weathered by sun and water.",
-        "available": true
+        "available": true,
+        "category": "nature"
     },
     {
         "id": 6,
@@ -97,7 +102,8 @@
             "img/moonglow/FBECA3CE-4DA3-4BCE-9344-985A45527189_4_5005_c.jpeg"
         ],
         "description": "Capturing the ethereal beauty of moonlight on natural textures.",
-        "available": true
+        "available": true,
+        "category": "ethereal"
     },
     {
         "id": 7,
@@ -113,7 +119,8 @@
             "img/navy_of_the_dreamland/E0822BBA-E6D7-44A3-AE59-CE45560D9D5D_4_5005_c.jpeg"
         ],
         "description": "A deep exploration of dreamlike landscapes in rich navy tones.",
-        "available": true
+        "available": true,
+        "category": "blue"
     },
     {
         "id": 8,
@@ -128,7 +135,8 @@
             "img/of_ash_and_flowers/DD083F12-ECE6-4898-8C71-943A217FA0CB_4_5005_c.jpeg"
         ],
         "description": "The contrast between destruction and renewal, ash and blossoms.",
-        "available": true
+        "available": true,
+        "category": "nature"
     },
     {
         "id": 9,
@@ -145,7 +153,8 @@
             "img/prolisok/E79D544D-2EC3-453B-B9A2-B86E7BD3CA63_4_5005_c.jpeg"
         ],
         "description": "A delicate exploration of early spring blooms and new beginnings.",
-        "available": true
+        "available": true,
+        "category": "nature"
     },
     {
         "id": 10,
@@ -166,7 +175,8 @@
             "img/rise_in_blue/FABFDD02-2220-4B40-BB7F-46D2BBDEECC1_1_105_c.jpeg"
         ],
         "description": "An ascent through layers of blue, evoking sky and sea.",
-        "available": true
+        "available": true,
+        "category": "blue"
     },
     {
         "id": 11,
@@ -181,7 +191,8 @@
             "img/spectral/F6727605-B0CE-447D-96E4-839A2A5D7E50_4_5005_c.jpeg"
         ],
         "description": "Ethereal forms that seem to exist between worlds.",
-        "available": true
+        "available": true,
+        "category": "ethereal"
     },
     {
         "id": 12,
@@ -200,7 +211,8 @@
             "img/whales/C2F1DF36-7335-4F72-8F76-0EAD4746CE4B_4_5005_c.jpeg"
         ],
         "description": "A tribute to the majestic creatures of the deep, their grace and power.",
-        "available": true
+        "available": true,
+        "category": "blue"
     },
     {
         "id": 13,
@@ -216,6 +228,7 @@
             "img/winds/A721FF06-2F31-4B8B-AB9E-240A1213C8A7_4_5005_c.jpeg"
         ],
         "description": "Capturing the invisible force of wind through texture and movement.",
-        "available": true
+        "available": true,
+        "category": "nature"
     }
 ]
