@@ -7,12 +7,12 @@
 @media (max-width: 768px) {
   /* Gallery Main: Reduce top padding */
   .gallery-main {
-    padding: 1rem 0 2rem !important;
+    padding: 1.5rem 0 3rem !important;
   }
 
   /* Gallery Filter: Tighter spacing */
   .gallery-filter {
-    margin-bottom: 1rem !important;
+    margin-bottom: 1.5rem !important;
   }
 
   /* Gallery Grid: Force flex column layout */
@@ -28,7 +28,7 @@
   .gallery-item {
     width: 100% !important;
     max-width: 100% !important;
-    aspect-ratio: 3/4 !important;
+    aspect-ratio: 4/5 !important;
     overflow: hidden !important;
     border-radius: 12px !important;
 
