@@ -9,4 +9,7 @@ node_modules/
 
 # Build files
 *.log
-*.lock.ssh/
+*.lock
+
+# SSH keys
+.ssh/
