@@ -551,6 +551,11 @@ body.menu-open header { z-index: 10001; }
         padding: 0;
         background: transparent;
         grid-column: 2;
+        /* Reset mobile animation styles */
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition: none;
     }
 
     #mobile-nav-menu li {
@@ -2875,7 +2880,8 @@ textarea:focus-visible {
         flex-wrap: nowrap;
         justify-content: flex-start;
         padding: 0 1.25rem;
-        min-width: min-content;
+        min-width: max-content;
+        gap: 0.5rem;
     }
 
     .filter-btn {
