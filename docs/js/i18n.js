@@ -98,6 +98,16 @@ class I18n {
       }
     });
 
+    // Handle placeholder translations separately
+    const placeholderElements = $$('[data-translate-placeholder]');
+    placeholderElements.forEach(element => {
+      const key = element.getAttribute('data-translate-placeholder');
+      const translation = this.get(key);
+      if (translation) {
+        element.placeholder = translation;
+      }
+    });
+
     // Update HTML lang attribute
     document.documentElement.lang = this.currentLang;
   }
