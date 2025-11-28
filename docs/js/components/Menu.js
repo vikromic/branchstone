@@ -74,32 +74,11 @@ export class Menu {
       })
     );
 
-    // DEBUG: Add capture-phase listener on document to see ALL clicks
-    document.addEventListener('click', (e) => {
-      console.log('[DEBUG] Document click captured:', {
-        target: e.target,
-        tagName: e.target.tagName,
-        href: e.target.href,
-        className: e.target.className,
-        defaultPrevented: e.defaultPrevented,
-        path: e.composedPath().map(el => el.tagName || el.toString()).slice(0, 5)
-      });
-    }, true); // true = capture phase
-
     // Handle nav link clicks - close menu and allow default navigation
     const navLinks = this.menu.querySelectorAll('a');
-    console.log('[Menu] Found nav links:', navLinks.length);
-
-    navLinks.forEach((link, index) => {
-      console.log(`[Menu] Setting up link ${index}:`, link.href, link.textContent.trim());
-
+    navLinks.forEach(link => {
       this.cleanupFunctions.push(
-        on(link, 'click', (e) => {
-          console.log('[Menu] Link clicked!', {
-            href: link.href,
-            text: link.textContent.trim(),
-            defaultPrevented: e.defaultPrevented
-          });
+        on(link, 'click', () => {
           this.close();
         })
       );
