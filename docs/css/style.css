@@ -2850,14 +2850,32 @@ textarea:focus-visible {
     }
 
 
-    /* Mobile Gallery - Apple-Inspired Vertical Experience */
+    /* ========================================
+       MOBILE GALLERY - CRITICAL FIX
+
+       Issues Fixed:
+       - Images overflowing viewport width
+       - Incorrect aspect-ratio rendering
+       - Conflicting height/width rules
+       - Multiple @media blocks overriding each other
+
+       Solution:
+       - Single-column flex layout with !important
+       - Strict width/max-width constraints
+       - Proper aspect-ratio enforcement
+       - No horizontal padding on .gallery-main (padding in .gallery-grid instead)
+       ======================================== */
     .gallery-main {
-        padding: 7rem 0 2rem;
-        min-height: 100vh;
+        padding: 7rem 0 2rem !important;
+        min-height: 100vh !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
     }
 
     .gallery-main h2 {
-        display: none;
+        display: none !important;
         /* Hide on mobile, shown in header */
     }
 
@@ -2890,40 +2908,46 @@ textarea:focus-visible {
     }
 
     .gallery-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        padding: 1rem 1rem 4rem;
-        width: 100%;
-        box-sizing: border-box;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+        padding: 1rem 1rem 4rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .gallery-item {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 3/4;
-        position: relative;
-        border-radius: 16px;
-        box-shadow:
-            0 4px 12px rgba(0, 0, 0, 0.1),
-            0 2px 4px rgba(0, 0, 0, 0.08);
-        overflow: hidden;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 3/4 !important;
+        position: relative !important;
+        border-radius: 16px !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+        overflow: hidden !important;
         /* Always visible on mobile - no JS animation dependency */
-        opacity: 1;
-        transform: none;
+        opacity: 1 !important;
+        transform: none !important;
+        /* Critical: Ensure container establishes proper bounds */
+        display: block !important;
+        max-width: 100% !important;
     }
 
     /* Elegant tap feedback */
     .gallery-item:active {
-        transform: scale(0.98);
-        transition: transform 0.15s ease;
+        transform: scale(0.98) !important;
+        transition: transform 0.15s ease !important;
     }
 
     .gallery-item img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        border-radius: 16px;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+        display: block !important;
+        border-radius: 16px !important;
+        /* Critical: Prevent image overflow */
+        max-width: 100% !important;
+        max-height: 100% !important;
     }
 
     /* Always show gallery info on mobile since hover doesn't work */
@@ -2948,14 +2972,19 @@ textarea:focus-visible {
 
     /* Mobile skeleton styles */
     .skeleton-item {
-        width: 100%;
-        aspect-ratio: 3/4;
-        border-radius: 16px;
-        min-height: auto;
+        width: 100% !important;
+        aspect-ratio: 3/4 !important;
+        border-radius: 16px !important;
+        min-height: auto !important;
+        max-width: 100% !important;
+        display: block !important;
     }
 
     .skeleton-image {
-        height: 100%;
+        height: 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
     }
 
     /* Lightbox */
@@ -3037,9 +3066,13 @@ textarea:focus-visible {
         padding: 2.5rem 1rem;
     }
 
-    .about-main,
-    .gallery-main {
+    .about-main {
         padding: 7rem 1rem 2.5rem;
+    }
+
+    /* Gallery-main padding is handled separately above - DO NOT override */
+    .gallery-main {
+        padding: 7rem 0 2rem !important;
     }
 
     .card-media {
