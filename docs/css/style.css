@@ -3057,11 +3057,21 @@ textarea:focus-visible {
 
 /* Advanced Animation Styles with Blur-to-Focus */
 
-/* Start with elements invisible and blurred */
-.animate-on-scroll {
-    opacity: 0;
-    transform: translateY(40px) scale(0.95);
-    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+/* Start with elements invisible and blurred - DESKTOP ONLY */
+@media (min-width: 769px) {
+    .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+        transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+}
+
+/* Mobile: no scroll animations, always visible */
+@media (max-width: 768px) {
+    .animate-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+    }
 }
 
 /* Hero and featured items get blur effect - desktop only for better mobile performance */
