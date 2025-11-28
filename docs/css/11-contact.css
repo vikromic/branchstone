@@ -81,49 +81,32 @@
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #2B2B2B;
-    /* Dark coal grey for labels */
+    color: var(--text-color);
     font-size: 0.9rem;
-}
-
-[data-theme="dark"] .form-group label {
-    color: #CED0D3;
+    font-weight: 500;
 }
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 1rem;
     box-sizing: border-box;
-    background-color: #ffffff;
-    color: #2B2B2B;
-    /* Dark coal grey for text */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Dark mode form inputs */
-[data-theme="dark"] .form-group input,
-[data-theme="dark"] .form-group textarea {
-    background-color: #383A3E;
-    border-color: #45474a;
-    color: #F9F9F9;
-}
-
-[data-theme="dark"] .form-group input::placeholder,
-[data-theme="dark"] .form-group textarea::placeholder {
-    color: #CED0D3;
-    opacity: 1;
+    background-color: var(--card-background);
+    color: var(--text-color);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: border-color var(--transition-fast) ease,
+                box-shadow var(--transition-fast) ease,
+                background-color var(--transition-fast) ease;
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: #2B2B2B;
-    opacity: 0.6;
+    color: var(--secondary-text);
+    opacity: 0.7;
 }
 
 .form-group input:focus,
@@ -216,6 +199,18 @@
     background-color: #4a1a1a;
     color: #ff9999;
     border-color: #6b2525;
+}
+
+/* ========================================
+   HONEYPOT (SPAM PROTECTION)
+   ======================================== */
+
+.honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
 }
 
 /* ========================================
