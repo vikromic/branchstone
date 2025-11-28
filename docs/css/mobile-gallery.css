@@ -5,6 +5,16 @@
  */
 
 @media (max-width: 768px) {
+  /* Gallery Main: Reduce top padding */
+  .gallery-main {
+    padding: 1rem 0 2rem !important;
+  }
+
+  /* Gallery Filter: Tighter spacing */
+  .gallery-filter {
+    margin-bottom: 1rem !important;
+  }
+
   /* Gallery Grid: Force flex column layout */
   .gallery-grid {
     display: flex !important;
