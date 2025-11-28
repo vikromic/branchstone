@@ -28,7 +28,7 @@
     border-radius: 20px;
     font-weight: 500;
     font-size: 0.95rem;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     text-transform: uppercase;
     letter-spacing: 1.5px;
     cursor: pointer;
@@ -61,7 +61,7 @@
 .btn-primary-large:hover,
 .submit-btn:hover,
 .inquire-btn:hover {
-    transform: translateY(-3px);
+    transform: translateY(-1px);
     box-shadow:
         0 4px 12px rgba(139, 120, 93, 0.25),
         0 12px 40px rgba(139, 120, 93, 0.15),
@@ -81,7 +81,7 @@
 .btn-secondary-large:hover {
     background-color: var(--card-background);
     border-color: var(--text-color);
-    transform: translateY(-3px);
+    transform: translateY(-1px);
 }
 
 /* Large button variants */

@@ -9,10 +9,22 @@
         "home": {
             "title": "VIKTORIA",
             "subtitle": "BRANCHSTONE",
-            "subtext": "Art inspired by natural textures and quiet resilience."
+            "subtext": "Art inspired by natural textures and quiet resilience.",
+            "exploreGallery": "Explore Gallery",
+            "aboutArtist": "About the Artist",
+            "featuredWorks": "Featured Works",
+            "viewAll": "View All",
+            "aboutSnippetTitle": "Creating Art from Nature's Imperfections",
+            "aboutSnippetText": "I work with found materials like wood, moss, bark, algae to create abstract compositions that preserve the raw beauty of nature. Each piece begins with something I couldn't leave behind.",
+            "readMyStory": "Read My Story",
+            "ctaTitle": "Ready to Find Your Piece?",
+            "ctaDescription": "Explore the full collection or get in touch to discuss commissions.",
+            "browseGallery": "Browse Gallery",
+            "getInTouch": "Get in Touch"
         },
         "gallery": {
-            "title": "Gallery"
+            "title": "Gallery",
+            "tagline": "Explore mixed media art inspired by nature"
         },
         "about": {
             "title": "ABOUT ME",
@@ -32,10 +44,15 @@
             "description": "For acquisition inquiries, collaborations, or just to say hello, please use the form or contact me directly.",
             "email": "Email:",
             "location": "Location:",
+            "locationCity": "Santa Rosa, California",
             "instagram": "Instagram:",
             "nameLabel": "Name",
             "emailLabel": "Email",
             "messageLabel": "Message",
+            "namePlaceholder": "Your full name",
+            "emailPlaceholder": "your@email.com",
+            "messagePlaceholder": "Tell us about your inquiry...",
+            "formHelper": "Interested in purchasing or commissioning? I typically respond within 24 hours.",
             "submit": "Send Message",
             "inquire": "Inquire for details"
         },
@@ -53,6 +70,25 @@
         },
         "scrollToTop": {
             "label": "Scroll to top"
+        },
+        "footer": {
+            "tagline": "Mixed media art inspired by natural textures and quiet resilience",
+            "navigate": "Navigate",
+            "connect": "Connect",
+            "followText": "Follow for studio updates @branchstone.art",
+            "copyright": "© 2024 Branchstone Art. All rights reserved."
+        },
+        "error": {
+            "title": "404",
+            "message": "The page you're looking for cannot be found.",
+            "submessage": "Perhaps this piece has moved to a different exhibition.",
+            "returnHome": "Return to Gallery"
+        },
+        "accessibility": {
+            "skipToContent": "Skip to main content",
+            "closeLightbox": "Close lightbox",
+            "previousImage": "Previous image",
+            "nextImage": "Next image"
         }
     },
     "ua": {
@@ -65,10 +101,22 @@
         "home": {
             "title": "VIKTORIA",
             "subtitle": "BRANCHSTONE",
-            "subtext": "Мистецтво, натхненне природними текстурами та тихою стійкістю."
+            "subtext": "Мистецтво, натхненне природними текстурами та тихою стійкістю.",
+            "exploreGallery": "Переглянути галерею",
+            "aboutArtist": "Про художницю",
+            "featuredWorks": "Обрані роботи",
+            "viewAll": "Переглянути все",
+            "aboutSnippetTitle": "Створення мистецтва з недосконалостей природи",
+            "aboutSnippetText": "Я працюю зі знайденими матеріалами — дерево, мох, кора, водорості — щоб створювати абстрактні композиції, які зберігають сиру красу природи. Кожна робота починається з чогось, від чого я не змогла пройти повз.",
+            "readMyStory": "Читати мою історію",
+            "ctaTitle": "Готові знайти свою роботу?",
+            "ctaDescription": "Досліджуйте повну колекцію або зв'яжіться зі мною для обговорення замовлень.",
+            "browseGallery": "Переглянути галерею",
+            "getInTouch": "Зв'язатися"
         },
         "gallery": {
-            "title": "Галерея"
+            "title": "Галерея",
+            "tagline": "Досліджуйте мистецтво змішаної техніки, натхненне природою"
         },
         "about": {
             "title": "ПРО МЕНЕ",
@@ -88,10 +136,15 @@
             "description": "Для запитів про придбання, співпраці або просто привітатися, будь ласка, використовуйте форму або зв'яжіться зі мною безпосередньо.",
             "email": "Email:",
             "location": "Місцезнаходження:",
+            "locationCity": "Санта-Роза, Каліфорнія",
             "instagram": "Instagram:",
             "nameLabel": "Ім'я",
             "emailLabel": "Email",
             "messageLabel": "Повідомлення",
+            "namePlaceholder": "Ваше повне ім'я",
+            "emailPlaceholder": "your@email.com",
+            "messagePlaceholder": "Розкажіть про ваш запит...",
+            "formHelper": "Зацікавлені в покупці або замовленні? Зазвичай відповідаю протягом 24 годин.",
             "submit": "Відправити повідомлення",
             "inquire": "Запитати деталі"
         },
@@ -109,6 +162,25 @@
         },
         "scrollToTop": {
             "label": "Прокрутити вгору"
+        },
+        "footer": {
+            "tagline": "Мистецтво змішаної техніки, натхненне природними текстурами та тихою стійкістю",
+            "navigate": "Навігація",
+            "connect": "Зв'язок",
+            "followText": "Слідкуйте за оновленнями студії @branchstone.art",
+            "copyright": "© 2024 Branchstone Art. Всі права захищені."
+        },
+        "error": {
+            "title": "404",
+            "message": "Сторінку, яку ви шукаєте, не знайдено.",
+            "submessage": "Можливо, ця робота переїхала на іншу виставку.",
+            "returnHome": "Повернутися до галереї"
+        },
+        "accessibility": {
+            "skipToContent": "Перейти до основного вмісту",
+            "closeLightbox": "Закрити лайтбокс",
+            "previousImage": "Попереднє зображення",
+            "nextImage": "Наступне зображення"
         }
     }
 }
