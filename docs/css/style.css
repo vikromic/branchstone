@@ -865,10 +865,11 @@ main {
 }
 
 .hero-cta .btn-secondary {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
-    border: 1px solid #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.8);
     color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .hero-cta .btn-secondary:hover {
