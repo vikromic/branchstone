@@ -125,8 +125,9 @@ body.menu-open .mobile-page-title {
 /* Mobile menu list items */
 #mobile-nav-menu.active li {
     width: 100% !important;
-    max-width: 400px !important;
+    max-width: 100% !important;
     pointer-events: auto !important;
+    text-align: center !important;
 }
 
 /* Mobile menu links - elegant typography */
