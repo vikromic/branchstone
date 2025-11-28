@@ -1,0 +1,102 @@
+/**
+ * Design Tokens
+ *
+ * CSS custom properties (variables) defining the design system foundation.
+ * Includes color palettes, spacing scale, typography scale, z-index hierarchy,
+ * transitions, shadows, and other reusable design tokens.
+ *
+ * These tokens ensure consistency across the application and enable
+ * easy theme switching (light/dark mode).
+ */
+
+/* Theme Color Variables */
+:root {
+    /* Light Theme Colors */
+    --background-color: #F8F8F8;
+    --text-color: #2B2B2B;
+    --text-rgb: 43, 43, 43;
+    --secondary-text: #4A4A4A; /* Improved contrast from #555555 - 7:1 ratio */
+    --accent-color: hsl(40, 38%, 38%);
+    --card-background: #ffffff;
+    --header-background: rgba(248, 248, 248, 0.8);
+    --border-color: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+
+    /* Theme-independent colors */
+    --button-color: #8B785D;
+    --button-text: #ffffff;
+
+    /* Z-index scale - ordered hierarchy */
+    --z-base: 1;
+    --z-header: 100;
+    --z-scroll-hint: 100;
+    --z-scroll-top: 1000;
+    --z-lightbox: 1000;
+    --z-grain: 5000;        /* Decorative layer - below interactive elements */
+    --z-overlay: 9999;      /* Mobile menu backdrop */
+    --z-mobile-menu: 10000; /* Mobile navigation */
+    --z-mobile-controls: 10001;
+    --z-mobile-toggle: 10002;
+    --z-skip-link: 10003;   /* Highest for accessibility */
+
+    /* Border radius */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 50%;
+
+    /* Transitions */
+    --ease-out-back: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: 0.2s;
+    --transition-normal: 0.3s;
+    --transition-slow: 0.6s;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.02);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+                 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+                 0 12.5px 10px rgba(0, 0, 0, 0.035),
+                 0 22.3px 17.9px rgba(0, 0, 0, 0.042),
+                 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+                 0 100px 80px rgba(0, 0, 0, 0.07);
+
+    /* Spacing Scale */
+    --spacing-xs: 0.25rem;   /* 4px */
+    --spacing-sm: 0.5rem;    /* 8px */
+    --spacing-md: 1rem;      /* 16px */
+    --spacing-lg: 1.5rem;    /* 24px */
+    --spacing-xl: 2rem;      /* 32px */
+    --spacing-2xl: 3rem;     /* 48px */
+    --spacing-3xl: 4rem;     /* 64px */
+
+    /* Typography Scale */
+    --text-xs: 0.75rem;      /* 12px */
+    --text-sm: 0.875rem;     /* 14px */
+    --text-base: 1rem;       /* 16px */
+    --text-lg: 1.125rem;     /* 18px */
+    --text-xl: 1.25rem;      /* 20px */
+    --text-2xl: 1.5rem;      /* 24px */
+    --text-3xl: 1.875rem;    /* 30px */
+    --text-4xl: 2.25rem;     /* 36px */
+
+    /* Line Heights */
+    --leading-tight: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.75;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    --background-color: #2B2D30;
+    --text-color: #F9F9F9;
+    --text-rgb: 249, 249, 249;
+    --secondary-text: #D4D6D9; /* Improved contrast from #CED0D3 - 10:1 ratio */
+    --accent-color: #C2B280;
+    --card-background: #3F4145;
+    --header-background: rgba(43, 45, 48, 0.8);
+    --border-color: #45474a;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}

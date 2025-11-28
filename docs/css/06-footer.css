@@ -1,0 +1,183 @@
+/**
+ * 06-footer.css
+ * Footer Component Styles
+ *
+ * Includes:
+ * - Site footer layout and structure
+ * - Footer sections (brand, navigation, social)
+ * - Footer bottom bar
+ * - Responsive footer layouts
+ */
+
+/* ========================================
+   SITE FOOTER
+   ======================================== */
+
+.site-footer {
+  background-color: var(--card-background);
+  border-top: 1px solid var(--border-color);
+  margin-top: 4rem;
+  padding: 3rem 0 1.5rem;
+  font-size: 0.95rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+/* Footer sections */
+.footer-section h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+}
+
+.footer-section h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.footer-section p {
+  color: var(--secondary-text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Footer Brand Section */
+.footer-brand {
+  grid-column: span 1;
+}
+
+/* Footer Navigation */
+.footer-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-nav li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-nav a {
+  color: var(--secondary-text);
+  text-decoration: none;
+  transition: color var(--transition-fast) ease, transform var(--transition-fast) ease;
+  display: inline-block;
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus {
+  color: var(--accent-color);
+  transform: translateX(4px);
+}
+
+/* Footer Social Link */
+.footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--secondary-text);
+  text-decoration: none;
+  padding: 0.5rem 0;
+  transition: color var(--transition-fast) ease, transform var(--transition-fast) ease;
+}
+
+.footer-social-link:hover,
+.footer-social-link:focus {
+  color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.footer-social-link svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast) ease;
+}
+
+.footer-social-link:hover svg {
+  transform: scale(1.1);
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 0;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.footer-bottom p {
+  color: var(--secondary-text);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* ========================================
+   RESPONSIVE FOOTER
+   ======================================== */
+
+/* Mobile: Single column layout */
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 2rem 0 1rem;
+    margin-top: 3rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1.5rem;
+  }
+
+  .footer-brand {
+    grid-column: span 1;
+    text-align: center;
+  }
+
+  .footer-nav,
+  .footer-connect {
+    text-align: center;
+  }
+
+  .footer-social-link {
+    justify-content: center;
+  }
+
+  .footer-bottom {
+    padding: 1.5rem 1.5rem 0;
+  }
+}
+
+/* Tablet: 2 column layout */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+
+  .footer-brand {
+    grid-column: span 2;
+    text-align: center;
+  }
+}
+
+/* Ensure main content has proper spacing from footer */
+main {
+  min-height: calc(100vh - 200px);
+}

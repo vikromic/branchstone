@@ -1,0 +1,416 @@
+/* ========================================
+   03-HEADER.CSS
+   ========================================
+
+   Contains all header and navigation styles:
+   - Header container with sticky positioning
+   - Mobile-first navigation (hamburger menu)
+   - Desktop navigation (horizontal menu bar)
+   - Mobile menu toggle button with animations
+   - Mobile fullscreen overlay menu
+   - Mobile page title (center)
+   - Header controls (language toggle, theme toggle, social links)
+   - Desktop navigation grid layout
+   - Tablet-specific navigation adjustments
+   - Mobile z-index fixes for clickable controls
+
+   Mobile-first approach: Base styles = mobile,
+   Desktop overrides at @media (min-width: 769px)
+   ======================================== */
+
+/* ========================================
+   HEADER CONTAINER
+   ======================================== */
+
+header {
+    padding: 1rem 2rem;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--header-background);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    transition: all var(--transition-normal) ease;
+    box-shadow: var(--shadow-sm);
+}
+
+header:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* ========================================
+   NAVIGATION - MOBILE FIRST
+   Base = Mobile, Desktop = @media min-width
+   ======================================== */
+
+/* --- BASE/MOBILE: Nav container --- */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+/* --- BASE/MOBILE: Menu toggle button (hamburger) --- */
+.mobile-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 10002;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background-color: rgba(var(--text-rgb), 0.08);
+}
+
+.mobile-menu-toggle:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--text-color);
+    transition: all 0.3s ease;
+    border-radius: 2px;
+    position: absolute;
+}
+
+.mobile-menu-toggle span:nth-child(1) { transform: translateY(-7px); }
+.mobile-menu-toggle span:nth-child(2) { transform: translateY(0); }
+.mobile-menu-toggle span:nth-child(3) { transform: translateY(7px); }
+
+.mobile-menu-toggle.active span:nth-child(1) { transform: rotate(45deg); }
+.mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
+.mobile-menu-toggle.active span:nth-child(3) { transform: rotate(-45deg); }
+
+/* --- BASE/MOBILE: Page title (center) --- */
+.mobile-page-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+body.menu-open .mobile-page-title {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- BASE/MOBILE: Nav menu (hidden, fullscreen when active) --- */
+#mobile-nav-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 2rem;
+    padding-top: 80px;
+    background: var(--background-color);
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+#mobile-nav-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+#mobile-nav-menu li {
+    width: 100%;
+    max-width: 280px;
+}
+
+#mobile-nav-menu a {
+    display: block;
+    padding: 1rem;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-color);
+    text-decoration: none;
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+#mobile-nav-menu a.active {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+/* --- BASE/MOBILE: Overlay --- */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9999;
+}
+
+.mobile-menu-overlay.active { display: block; }
+
+/* --- BASE/MOBILE: Header when menu open --- */
+body.menu-open header { z-index: 10001; }
+
+/* --- BASE/MOBILE: Header controls --- */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header-controls .social-links-minimal { display: none; }
+
+/* Hide menu footer on mobile by default */
+.menu-footer-mobile { display: none; }
+
+/* ========================================
+   HEADER CONTROLS - LANGUAGE & THEME TOGGLES
+   ======================================== */
+
+/* Language Toggle */
+.lang-toggle {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    padding: 0.4rem 0.8rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.85rem;
+    color: var(--secondary-text);
+    border-radius: 8px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-right: 0.5rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.lang-toggle .active-lang {
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.lang-toggle:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 120, 93, 0.25);
+}
+
+.lang-toggle:active {
+    transform: translateY(0);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    padding: 0.3rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.15) rotate(10deg);
+    background-color: rgba(var(--text-rgb), 0.12);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95) rotate(0deg);
+}
+
+.theme-toggle svg {
+    width: 100%;
+    height: 100%;
+    color: var(--text-color);
+    fill: var(--text-color);
+}
+
+.theme-toggle svg {
+    position: absolute;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.theme-toggle .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle .sun-icon {
+    opacity: 0;
+    transform: rotate(180deg) scale(0);
+}
+
+[data-theme="dark"] .theme-toggle .moon-icon {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0);
+}
+
+[data-theme="dark"] .theme-toggle .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+/* ========================================
+   DESKTOP OVERRIDES (min-width: 769px)
+   ======================================== */
+@media (min-width: 769px) {
+    /* Desktop nav: 3-column grid */
+    nav {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+    }
+
+    /* Hide mobile-only elements */
+    .mobile-menu-toggle,
+    .mobile-page-title,
+    .mobile-menu-overlay { display: none; }
+
+    /* Desktop nav menu: horizontal, always visible */
+    #mobile-nav-menu {
+        position: static;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 2.5rem;
+        padding: 0;
+        background: transparent;
+        grid-column: 2;
+        /* Reset mobile animation styles */
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition: none;
+    }
+
+    #mobile-nav-menu li {
+        width: auto;
+        max-width: none;
+    }
+
+    #mobile-nav-menu a {
+        padding: 0.5rem 0;
+        font-size: 0.875rem;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        color: var(--secondary-text);
+        position: relative;
+    }
+
+    #mobile-nav-menu a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--accent-color);
+        transition: width 0.3s ease;
+    }
+
+    #mobile-nav-menu a:hover {
+        color: var(--accent-color);
+    }
+
+    #mobile-nav-menu a:hover::after {
+        width: 100%;
+    }
+
+    #mobile-nav-menu a.active {
+        color: var(--text-color);
+        background: transparent;
+        border: none;
+    }
+
+    #mobile-nav-menu a.active::after {
+        width: 100%;
+        height: 3px;
+    }
+
+    /* Desktop header controls */
+    .header-controls {
+        grid-column: 3;
+        gap: 1rem;
+    }
+
+    .header-controls .social-links-minimal {
+        display: flex;
+        gap: 0.5rem;
+    }
+}
+
+/* ========================================
+   TABLET LANDSCAPE (769px - 1024px)
+   ======================================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* Navigation: Reduce spacing for tablet */
+    #mobile-nav-menu {
+        gap: 1.5rem;
+    }
+
+    #mobile-nav-menu a {
+        font-size: 0.8rem;
+    }
+}
+
+/* ========================================
+   MOBILE MENU CONTROLS FIX
+   ======================================== */
+
+/* Mobile-only: ensure header controls remain clickable above menu */
+@media (max-width: 768px) {
+  .header-controls {
+    position: relative;
+    z-index: var(--z-mobile-controls);
+    pointer-events: auto;
+  }
+
+  .header-controls > * {
+    pointer-events: auto;
+  }
+}

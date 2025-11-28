@@ -1,0 +1,43 @@
+/**
+ * Main CSS Entry Point
+ * Imports all modular CSS files in correct cascade order
+ *
+ * Architecture:
+ * 01 - Design tokens (CSS variables, colors, spacing)
+ * 02 - Base styles (reset, typography, body)
+ * 03 - Header & Navigation
+ * 04 - Gallery component
+ * 05 - Buttons
+ * 06 - Footer
+ * 07 - Utilities (scroll-to-top, animations)
+ * 08 - Hero section
+ * 09 - Featured section & carousel
+ * 10 - About page
+ * 11 - Contact page
+ * 12 - Misc sections
+ *
+ * Mobile overrides loaded last for highest specificity
+ */
+
+/* Foundation */
+@import url('01-tokens.css');
+@import url('02-base.css');
+
+/* Layout Components */
+@import url('03-header.css');
+@import url('06-footer.css');
+@import url('12-sections.css');
+
+/* UI Components */
+@import url('05-buttons.css');
+@import url('07-utilities.css');
+
+/* Page-Specific Sections */
+@import url('08-hero.css');
+@import url('09-featured.css');
+@import url('04-gallery.css');
+@import url('10-about.css');
+@import url('11-contact.css');
+
+/* Mobile Overrides - MUST be last */
+@import url('mobile-gallery.css');

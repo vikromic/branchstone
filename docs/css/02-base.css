@@ -1,0 +1,267 @@
+/**
+ * Base Styles & Reset
+ *
+ * Global HTML element styles, typography defaults, accessibility utilities,
+ * smooth scrolling settings, and decorative background effects.
+ *
+ * This file provides the foundation layer that all other styles build upon,
+ * including base typographic settings, scroll behavior optimizations,
+ * and the film grain/organic texture visual effects.
+ */
+
+/* Smooth Scrolling Optimization for All Devices */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Account for sticky header on anchor jumps */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimize for 120Hz displays (iPhone 13 Pro+, iPad Pro, high-end Android) */
+@media (prefers-reduced-motion: no-preference) {
+    * {
+        scroll-behavior: smooth;
+    }
+
+    /* Use hardware acceleration for smoother 120Hz rendering */
+    main,
+    section {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+    }
+}
+
+/* Enhanced momentum scrolling for iOS devices */
+body {
+    -webkit-overflow-scrolling: touch;
+    /* Momentum scrolling on iOS */
+    overscroll-behavior-y: none;
+    /* Prevent pull-to-refresh while maintaining smooth scroll */
+}
+
+/* Performance optimization hints for scrolling elements */
+main,
+section,
+.featured-grid,
+.gallery-grid {
+    will-change: scroll-position;
+    /* Hint browser to optimize for scrolling */
+}
+
+/* Smooth out scroll animations */
+@supports (scroll-timeline: --scroll) {
+    html {
+        scroll-timeline: --scroll block;
+    }
+}
+
+/* Accessibility: Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Accessibility: Skip navigation link */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    background: var(--accent-color);
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    font-weight: 600;
+    z-index: var(--z-skip-link);
+    border-radius: 0 0 var(--radius-sm) 0;
+}
+
+.skip-link:focus {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    outline: 3px solid var(--text-color);
+    outline-offset: 2px;
+}
+
+/* General Body Styles */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative;
+}
+
+/* Enhanced Film Grain Overlay - More visible organic texture */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: var(--z-grain);
+    animation: grainSubtle 40s ease-in-out infinite;
+    mix-blend-mode: overlay;
+}
+
+/* Organic Artwork Animation Layer */
+body::after {
+    content: '';
+    position: fixed;
+    top: -10%;
+    left: -10%;
+    width: 120vw;
+    height: 120vh;
+    background-image: url("data:image/svg+xml,%3Csvg width='1200' height='1200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3CradialGradient id='g1'%3E%3Cstop offset='0%25' style='stop-color:rgba(139,120,93,0.04)'/%3E%3Cstop offset='100%25' style='stop-color:rgba(139,120,93,0)'/%3E%3C/radialGradient%3E%3CradialGradient id='g2'%3E%3Cstop offset='0%25' style='stop-color:rgba(87,108,115,0.03)'/%3E%3Cstop offset='100%25' style='stop-color:rgba(87,108,115,0)'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='200' cy='300' r='180' fill='url(%23g1)'/%3E%3Cellipse cx='800' cy='500' rx='220' ry='180' fill='url(%23g2)' opacity='0.7'/%3E%3Ccircle cx='600' cy='800' r='150' fill='url(%23g1)' opacity='0.5'/%3E%3Cellipse cx='300' cy='900' rx='200' ry='140' fill='url(%23g2)' opacity='0.6'/%3E%3C/svg%3E");
+    opacity: 1;
+    pointer-events: none;
+    z-index: calc(var(--z-grain) - 1);
+    animation: organicFloat 60s ease-in-out infinite;
+    mix-blend-mode: multiply;
+}
+
+[data-theme="dark"] body::after {
+    mix-blend-mode: screen;
+    opacity: 0.4;
+}
+
+@keyframes grainSubtle {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+        opacity: 0.025;
+    }
+
+    20% {
+        transform: translate(-2%, -3%);
+        opacity: 0.03;
+    }
+
+    40% {
+        transform: translate(1%, 2%);
+        opacity: 0.022;
+    }
+
+    60% {
+        transform: translate(-1%, 1%);
+        opacity: 0.028;
+    }
+
+    80% {
+        transform: translate(2%, -1%);
+        opacity: 0.026;
+    }
+}
+
+/* Disable grain animation on mobile to save battery */
+@media (max-width: 768px) {
+    body::before {
+        animation: none;
+    }
+
+    body::after {
+        animation: none;
+    }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    body::before,
+    body::after {
+        animation: none !important;
+    }
+
+    .scroll-indicator {
+        animation: none !important;
+    }
+}
+
+@keyframes organicFloat {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: translate(3%, -2%) rotate(2deg) scale(1.05);
+    }
+
+    50% {
+        transform: translate(-2%, 3%) rotate(-1deg) scale(0.98);
+    }
+
+    75% {
+        transform: translate(2%, 1%) rotate(1deg) scale(1.02);
+    }
+}
+
+/* Typography Base Styles */
+h1,
+h2,
+h3 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+h1,
+h2 {
+    line-height: 1.25;
+}
+
+h3 {
+    line-height: 1.3;
+}
+
+p,
+li {
+    letter-spacing: 0.015em;
+}
+
+/* Link Styles */
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-color);
+    opacity: 0.8;
+}

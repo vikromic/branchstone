@@ -1,0 +1,203 @@
+/* ============================================
+   12. SECTIONS & PAGE LAYOUT
+   ============================================
+   Main content area, section animations,
+   gradient dividers, CTA sections, and
+   responsive utilities
+   ============================================ */
+
+/* ========================================
+   MAIN CONTENT AREA
+   ======================================== */
+
+main {
+    flex-grow: 1;
+}
+
+/* Ensure main content has proper spacing from footer */
+main {
+  min-height: calc(100vh - 200px);
+}
+
+/* Large Desktop: Constrain max width for very large screens */
+@media (min-width: 1440px) {
+    main {
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+}
+
+.home-main {
+    padding: 0;
+}
+
+/* ========================================
+   SECTION TRANSITIONS & ANIMATIONS
+   ======================================== */
+
+/* Section Transitions & Polish */
+section {
+    position: relative;
+    isolation: isolate;
+    animation: sectionFadeIn 1s ease-out;
+}
+
+@keyframes sectionFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   GRADIENT SECTION DIVIDERS
+   ======================================== */
+
+/* Gradient section dividers */
+.featured-works::before,
+.home-about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--border-color) 20%,
+            var(--border-color) 80%,
+            transparent 100%);
+    opacity: 0.5;
+}
+
+/* ========================================
+   HOME CTA SECTION
+   ======================================== */
+
+/* Home CTA Section */
+.home-cta {
+    text-align: center;
+    padding: 8rem 2rem;
+    background: linear-gradient(135deg, var(--card-background) 0%, var(--background-color) 100%);
+}
+
+.home-cta h2 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin: 0 0 1rem 0;
+    color: var(--text-color);
+}
+
+.home-cta p {
+    font-size: 1.25rem;
+    color: var(--secondary-text);
+    margin-bottom: 3rem;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Mobile: Home CTA - Mobile Optimized */
+@media (max-width: 768px) {
+    .home-cta {
+        padding: 4rem 1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0 0.5rem;
+        box-sizing: border-box;
+    }
+
+    .btn-primary-large,
+    .btn-secondary-large {
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+        padding: 1.125rem 1.5rem;
+    }
+}
+
+/* ========================================
+   BACKGROUND TEXTURES
+   ======================================== */
+
+/* Logo watermark pattern */
+.logo-pattern {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 600px;
+  height: auto;
+  opacity: 0.008;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: soft-light;
+}
+
+/* ========================================
+   ARTWORK AVAILABILITY DISPLAY
+   ======================================== */
+
+.artwork-availability {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.artwork-availability .sold-label {
+  color: #d32f2f;
+  font-weight: 600;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.artwork-availability .custom-message {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--secondary-text);
+  font-style: italic;
+}
+
+[data-theme="dark"] .artwork-availability .sold-label {
+  color: #ff6b6b;
+}
+
+/* ========================================
+   RESPONSIVE UTILITIES
+   ======================================== */
+
+/* Show/hide utilities - !important needed for utility override pattern */
+.mobile-only {
+  display: none !important;
+}
+
+.desktop-only {
+  display: block !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block !important;
+  }
+
+  .desktop-only {
+    display: none !important;
+  }
+}
