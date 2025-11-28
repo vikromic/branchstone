@@ -61,10 +61,10 @@ export class Menu {
         e.stopPropagation();
         this.toggleMenu();
       }),
-      on(this.overlay, 'click', (e) => {
-        // Only close if clicking directly on overlay, not on menu items
-        if (e.target === this.overlay) {
-          this.close();
+      on(this.menu, 'click', (e) => {
+        // Close if clicking the menu background (not a link)
+        if (e.target === this.menu) {
+          this.close(true);
         }
       }),
       on(document, 'keydown', (e) => {
@@ -74,13 +74,32 @@ export class Menu {
       })
     );
 
+    // DEBUG: Add capture-phase listener on document to see ALL clicks
+    document.addEventListener('click', (e) => {
+      console.log('[DEBUG] Document click captured:', {
+        target: e.target,
+        tagName: e.target.tagName,
+        href: e.target.href,
+        className: e.target.className,
+        defaultPrevented: e.defaultPrevented,
+        path: e.composedPath().map(el => el.tagName || el.toString()).slice(0, 5)
+      });
+    }, true); // true = capture phase
+
     // Handle nav link clicks - close menu and allow default navigation
     const navLinks = this.menu.querySelectorAll('a');
-    navLinks.forEach(link => {
+    console.log('[Menu] Found nav links:', navLinks.length);
+
+    navLinks.forEach((link, index) => {
+      console.log(`[Menu] Setting up link ${index}:`, link.href, link.textContent.trim());
+
       this.cleanupFunctions.push(
         on(link, 'click', (e) => {
-          // Don't prevent default - let the browser navigate naturally
-          // Just close the menu before navigation occurs
+          console.log('[Menu] Link clicked!', {
+            href: link.href,
+            text: link.textContent.trim(),
+            defaultPrevented: e.defaultPrevented
+          });
           this.close();
         })
       );
