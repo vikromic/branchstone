@@ -1,0 +1,551 @@
+/**
+ * About Page Styles
+ * Styles for the about page, home about section, and related components
+ * Including content cards, carousels, image overlays, and responsive layouts
+ */
+
+/* ========================================
+   HOME ABOUT SECTION
+   ======================================== */
+
+/* Gradient section divider for home about */
+.home-about::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--border-color) 20%,
+            var(--border-color) 80%,
+            transparent 100%);
+    opacity: 0.5;
+}
+
+.home-about {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10rem 2rem;
+    align-items: center;
+    position: relative;
+}
+
+.home-about::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            var(--border-color) 20%,
+            var(--border-color) 80%,
+            transparent 100%);
+    opacity: 0.5;
+}
+
+.home-about-content h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin: 0 0 1.5rem 0;
+    color: var(--text-color);
+    line-height: 1.2;
+}
+
+.home-about-content p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+}
+
+.home-about-image {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    transform: translateY(80px);
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.042),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+}
+
+.home-about-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Tablet: Home about section - adjust spacing and layout */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .home-about {
+        gap: 3rem;
+        padding: 8rem 2rem;
+    }
+
+    .home-about-content h2 {
+        font-size: clamp(1.75rem, 4vw, 2.5rem);
+    }
+
+    .home-about-content p {
+        font-size: 1rem;
+    }
+
+    .home-about-image {
+        transform: translateY(40px);
+    }
+}
+
+/* ========================================
+   ABOUT PAGE MAIN LAYOUT
+   ======================================== */
+
+.about-main {
+    padding: 6rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.about-section {
+    margin-bottom: 7rem;
+}
+
+/* ========================================
+   CONTENT CARD COMPONENT
+   ======================================== */
+
+.content-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.042),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    background-color: var(--card-background);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    height: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Add subtle noise to cards */
+.content-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 16px;
+}
+
+/* Subtle artistic border */
+.content-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(135deg,
+            rgba(139, 120, 93, 0.1) 0%,
+            transparent 40%,
+            transparent 60%,
+            rgba(139, 120, 93, 0.05) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.content-card:hover {
+    transform: translateY(-8px);
+    box-shadow:
+        0 3.5px 2.7px rgba(0, 0, 0, 0.024),
+        0 8.4px 6.7px rgba(0, 0, 0, 0.035),
+        0 15.8px 12.5px rgba(0, 0, 0, 0.042),
+        0 28.2px 22.3px rgba(0, 0, 0, 0.05),
+        0 52.8px 41.8px rgba(0, 0, 0, 0.06),
+        0 126px 100px rgba(0, 0, 0, 0.085);
+}
+
+.card-media {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.card-background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.content-card:hover .card-background-image {
+    transform: scale(1.05);
+}
+
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to top, var(--card-background) 10%, transparent);
+}
+
+.card-content {
+    padding: 2rem 2.5rem 2.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.card-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.card-text {
+    color: var(--text-color);
+}
+
+/* ========================================
+   IMAGE OVERLAY (ZOOM FUNCTIONALITY)
+   ======================================== */
+
+.image-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: var(--z-lightbox);
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.image-overlay img {
+    max-width: 95%;
+    max-height: 95vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+}
+
+.close-overlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: calc(var(--z-lightbox) + 1);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+}
+
+.close-overlay:hover {
+    background-color: rgba(30, 30, 30, 0.8);
+}
+
+/* Zoom controls */
+#image-zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+#image-zoom-controls button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#image-zoom-controls button:hover {
+    background-color: rgba(30, 30, 30, 0.8);
+}
+
+/* ========================================
+   ABOUT TEXT SECTION
+   ======================================== */
+
+.about-text {
+    flex: 1.2;
+}
+
+.about-text h2 {
+    font-size: 3rem;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+/* ========================================
+   EXPERIENCE AND FEEDBACK SECTIONS
+   ======================================== */
+
+#experience,
+#feedback {
+    padding: 4rem 0;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+#experience h2,
+#feedback h2 {
+    text-align: center;
+    font-size: 3rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 3rem;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    font-weight: 700;
+}
+
+#feedback blockquote {
+    border-left: none;
+    padding-left: 0;
+    margin: 0 auto 2.5rem auto;
+    font-style: normal;
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 1.8rem;
+    color: var(--text-color);
+    max-width: 600px;
+}
+
+#feedback cite {
+    display: block;
+    margin-top: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--secondary-text);
+}
+
+/* ========================================
+   ABOUT PAGE CAROUSEL
+   ======================================== */
+
+.about-carousel-section {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+}
+
+.about-carousel-section h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.experience-card,
+.feedback-card {
+    background: var(--card-background);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.experience-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: var(--accent-color);
+}
+
+.experience-card .experience-venue {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-color);
+}
+
+.experience-card .experience-year {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    margin: 0 0 1.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.experience-card p:last-child {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.feedback-card {
+    text-align: center;
+}
+
+.feedback-card p {
+    font-size: 1.25rem;
+    font-style: italic;
+    line-height: 1.8;
+    margin: 0 0 1.5rem 0;
+    color: var(--text-color);
+}
+
+.feedback-card cite {
+    font-size: 1rem;
+    font-style: normal;
+    color: var(--secondary-text);
+    font-weight: 500;
+}
+
+/* ========================================
+   RESPONSIVE STYLES - MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* Home About - Stack on Mobile */
+    .home-about {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 4rem 1.5rem;
+    }
+
+    .home-about-content {
+        order: 1;
+    }
+
+    .home-about-image {
+        order: 2;
+        transform: translateY(0);
+    }
+
+    /* About Page */
+    .about-main {
+        padding-top: 7rem;
+    }
+
+    .about-main>h2:first-of-type,
+    .card-content>h2:first-child {
+        display: none;
+        /* Hide main title on mobile, shown in header */
+    }
+
+    .about-section {
+        margin-bottom: 3rem;
+    }
+
+    .card-content h2 {
+        font-size: 2rem;
+    }
+
+    .card-media {
+        height: 200px;
+    }
+
+    #experience h2,
+    #feedback h2 {
+        font-size: 2.5rem;
+    }
+
+    /* About carousel mobile styles */
+    .about-carousel-section {
+        padding: 0 1rem;
+    }
+
+    .experience-card,
+    .feedback-card {
+        padding: 2rem 1.5rem;
+        min-height: 240px;
+    }
+
+    .feedback-card p {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Finer adjustments for small phones */
+    h2,
+    .card-content h2,
+    #experience h2,
+    #feedback h2 {
+        font-size: 1.8rem;
+    }
+
+    .about-main {
+        padding: 7rem 1rem 2.5rem;
+    }
+
+    .card-media {
+        height: 180px;
+    }
+
+    .card-content {
+        padding: 1rem 1.5rem 1.5rem;
+    }
+
+    .content-card {
+        border-radius: 12px;
+    }
+}

@@ -1,0 +1,297 @@
+/**
+ * Contact Page Styles
+ * Styles for the contact page including form inputs, validation, and responsive layouts
+ */
+
+/* ========================================
+   CONTACT PAGE MAIN LAYOUT
+   ======================================== */
+
+.contact-main {
+    padding: 4rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.contact-container {
+    display: flex;
+    max-width: 1100px;
+    width: 100%;
+    background: var(--card-background);
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.042),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ========================================
+   CONTACT INFO SECTION
+   ======================================== */
+
+.contact-info {
+    flex: 1;
+    padding: 4rem;
+    background-color: var(--background-color);
+    transition: background-color 0.3s ease;
+}
+
+.contact-info h2 {
+    font-size: 3rem;
+    letter-spacing: 1px;
+    color: var(--text-color);
+}
+
+.contact-info p {
+    color: var(--secondary-text);
+    margin-bottom: 2rem;
+    max-width: 400px;
+}
+
+.contact-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.contact-info li {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+/* ========================================
+   CONTACT FORM
+   ======================================== */
+
+.contact-form {
+    flex: 1.2;
+    padding: 4rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2B2B2B;
+    /* Dark coal grey for labels */
+    font-size: 0.9rem;
+}
+
+[data-theme="dark"] .form-group label {
+    color: #CED0D3;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    color: #2B2B2B;
+    /* Dark coal grey for text */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode form inputs */
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea {
+    background-color: #383A3E;
+    border-color: #45474a;
+    color: #F9F9F9;
+}
+
+[data-theme="dark"] .form-group input::placeholder,
+[data-theme="dark"] .form-group textarea::placeholder {
+    color: #CED0D3;
+    opacity: 1;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #2B2B2B;
+    opacity: 0.6;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px rgba(139, 120, 93, 0.15);
+}
+
+/* ========================================
+   FORM VALIDATION STYLES
+   ======================================== */
+
+/* Form validation error styles */
+.form-group input[aria-invalid="true"],
+.form-group textarea[aria-invalid="true"] {
+    border-color: #d32f2f;
+    box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.1);
+}
+
+.error-message {
+    display: block;
+    color: #d32f2f;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    min-height: 1.2rem;
+}
+
+.error-message:empty {
+    display: none;
+}
+
+[data-theme="dark"] .error-message {
+    color: #ff6b6b;
+}
+
+[data-theme="dark"] .form-group input[aria-invalid="true"],
+[data-theme="dark"] .form-group textarea[aria-invalid="true"] {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.1);
+}
+
+/* Required field indicator */
+.required-indicator {
+    color: #d32f2f;
+    margin-left: 0.25rem;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .required-indicator {
+    color: #ff6b6b;
+}
+
+/* ========================================
+   FORM MESSAGE (SUCCESS/ERROR)
+   ======================================== */
+
+/* Form success/error message container */
+.form-message {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    display: none;
+}
+
+.form-message.show {
+    display: block;
+}
+
+.form-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.form-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+[data-theme="dark"] .form-message.success {
+    background-color: #1e4620;
+    color: #8fd892;
+    border-color: #2d5a2e;
+}
+
+[data-theme="dark"] .form-message.error {
+    background-color: #4a1a1a;
+    color: #ff9999;
+    border-color: #6b2525;
+}
+
+/* ========================================
+   SUBMIT BUTTON
+   ======================================== */
+
+.submit-btn {
+    background-color: var(--button-color);
+    color: var(--button-text);
+    border: none;
+    padding: 1.1rem 2rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.875rem;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow:
+        0 2px 4px rgba(0, 102, 204, 0.1),
+        0 4px 8px rgba(0, 102, 204, 0.08);
+}
+
+.submit-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-3px);
+    box-shadow:
+        0 4px 8px rgba(0, 102, 204, 0.15),
+        0 8px 16px rgba(0, 102, 204, 0.12);
+}
+
+/* ========================================
+   RESPONSIVE STYLES - MOBILE
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* Contact Page */
+    .contact-main {
+        padding-top: 7rem;
+    }
+
+    .contact-info h2 {
+        display: none;
+        /* Hide on mobile, shown in header */
+    }
+
+    .contact-container {
+        flex-direction: column;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .contact-info,
+    .contact-form {
+        padding: 2.5rem 1.5rem;
+        border-radius: 18px;
+    }
+
+    .contact-info {
+        background-color: var(--card-background);
+        box-shadow: 0 10px 30px var(--shadow-color);
+        margin-bottom: 2rem;
+    }
+
+    .contact-form {
+        background-color: var(--card-background);
+        box-shadow: 0 10px 30px var(--shadow-color);
+    }
+}
+
+@media (max-width: 480px) {
+    /* Finer adjustments for small phones */
+    .contact-info,
+    .contact-form {
+        padding: 2.5rem 1rem;
+    }
+}

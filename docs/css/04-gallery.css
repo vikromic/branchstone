@@ -1,0 +1,944 @@
+/**
+ * Gallery Component Styles
+ *
+ * This file contains ALL gallery-related styles including:
+ * - Gallery main layout and container
+ * - Filter buttons with animations
+ * - Gallery grid (responsive, mobile-first)
+ * - Gallery items with hover effects and info overlays
+ * - Skeleton loading states
+ * - Error states
+ * - Lightbox modal with image viewer and slider controls
+ * - Status indicators (unavailable/sold dots)
+ * - Inquire button
+ *
+ * Mobile-first approach:
+ * - Base styles = mobile (320px+)
+ * - @media (min-width: 769px) = tablet+
+ * - @media (min-width: 1025px) = desktop
+ */
+
+/* ========================================
+   GALLERY MAIN CONTAINER
+   ======================================== */
+
+.gallery-main {
+    padding: 2rem 2rem 8rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* H2 hidden - styling kept for backwards compatibility if needed */
+.gallery-main h2 {
+    display: none;
+}
+
+/* ========================================
+   GALLERY FILTER
+   ======================================== */
+
+.gallery-filter {
+    margin-bottom: 3rem;
+    padding: 0 1rem;
+}
+
+.gallery-filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-btn {
+    padding: 0.75rem 1.5rem;
+    min-height: 44px;
+    background: var(--card-background);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-family: 'Inter', sans-serif;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast) var(--ease-smooth);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: var(--accent-color);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s var(--ease-out-back), height 0.4s var(--ease-out-back);
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.filter-btn:hover::before {
+    width: 200%;
+    height: 200%;
+}
+
+.filter-btn:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.filter-btn:active {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+}
+
+.filter-btn.active {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-btn.active:hover {
+    background: var(--accent-color);
+    filter: brightness(1.1);
+}
+
+.filter-btn:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* ========================================
+   SKELETON LOADING STATES
+   ======================================== */
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.02),
+        0 4px 8px rgba(0, 0, 0, 0.03),
+        0 8px 16px rgba(0, 0, 0, 0.04),
+        0 16px 32px rgba(0, 0, 0, 0.05);
+    min-height: 320px;
+}
+
+.skeleton-image {
+    width: 100%;
+    height: 280px;
+    background: linear-gradient(90deg, var(--card-background) 25%, var(--border-color) 50%, var(--card-background) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+}
+
+.skeleton-info {
+    padding: 1rem 1.5rem;
+    background: var(--card-background);
+}
+
+.skeleton-title {
+    width: 70%;
+    height: 1.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, var(--border-color) 25%, var(--card-background) 50%, var(--border-color) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 4px;
+}
+
+.skeleton-subtitle {
+    width: 40%;
+    height: 0.875rem;
+    background: linear-gradient(90deg, var(--border-color) 25%, var(--card-background) 50%, var(--border-color) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 4px;
+}
+
+/* Hide skeletons when gallery is loaded */
+.gallery-loaded .skeleton-item {
+    display: none;
+}
+
+/* ========================================
+   ERROR STATE
+   ======================================== */
+
+.gallery-error {
+    text-align: center;
+    padding: 4rem 2rem;
+    grid-column: 1 / -1;
+    color: var(--secondary-text);
+}
+
+.gallery-error p {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+}
+
+.gallery-error button {
+    background: var(--button-color);
+    color: var(--button-text);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+}
+
+.gallery-error button:hover {
+    opacity: 0.9;
+}
+
+/* ========================================
+   GALLERY GRID
+   ======================================== */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem 2.5rem;
+    grid-auto-flow: dense;
+    will-change: scroll-position;
+}
+
+/* Organic layout variations - creates natural asymmetry */
+.gallery-item:nth-child(3n+1) {
+    grid-row: span 1;
+}
+
+.gallery-item:nth-child(5n+2) {
+    grid-column: span 1;
+}
+
+/* ========================================
+   GALLERY ITEMS
+   ======================================== */
+
+.gallery-item {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.02),
+        0 4px 8px rgba(0, 0, 0, 0.03),
+        0 8px 16px rgba(0, 0, 0, 0.04),
+        0 16px 32px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+.gallery-item:hover {
+    box-shadow:
+        0 3px 6px rgba(0, 0, 0, 0.03),
+        0 6px 12px rgba(0, 0, 0, 0.04),
+        0 12px 24px rgba(0, 0, 0, 0.05),
+        0 24px 48px rgba(0, 0, 0, 0.08),
+        0 48px 96px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.3s ease;
+    will-change: transform, filter;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.08);
+    filter: brightness(1.08) contrast(1.02);
+}
+
+/* Image loading animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.image-loaded {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Gallery item info overlay */
+.gallery-item-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    text-align: left;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+}
+
+.gallery-item:hover .gallery-item-info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.gallery-item-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.5rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-item-info p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #f5f5f7;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+/* Scroll animation for gallery items */
+.gallery-item.animate-on-scroll {
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ========================================
+   STATUS INDICATORS
+   ======================================== */
+
+.unavailable-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: rgba(139, 120, 93, 0.6);
+    border-radius: 50%;
+    margin-left: 0.5rem;
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sold-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d32f2f;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    box-shadow: 0 0 8px rgba(211, 47, 47, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+}
+
+/* ========================================
+   LIGHTBOX MODAL
+   ======================================== */
+
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: var(--z-lightbox);
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.97);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+}
+
+/* Add noise to lightbox background */
+.lightbox::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+}
+
+.lightbox-content {
+    background-color: var(--card-background);
+    margin: auto;
+    max-width: 1000px;
+    width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.08),
+        0 16px 32px rgba(0, 0, 0, 0.1),
+        0 32px 64px rgba(0, 0, 0, 0.12);
+    position: relative;
+    animation: fadeInScale 0.5s;
+    border-radius: 24px;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+    z-index: 2;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.lightbox-image-container {
+    position: relative;
+    max-width: 60%;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Spotlight effect for private viewing atmosphere */
+.lightbox-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center,
+            transparent 30%,
+            rgba(0, 0, 0, 0.3) 60%,
+            rgba(0, 0, 0, 0.6) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.lightbox-image-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#lightbox-img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    display: block;
+}
+
+/* ========================================
+   LIGHTBOX SLIDER CONTROLS
+   ======================================== */
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(139, 120, 93, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    opacity: 0.3;
+}
+
+.lightbox-image-container:hover .slider-btn {
+    opacity: 0.9;
+}
+
+.slider-btn:focus-visible {
+    outline: 3px solid var(--text-color);
+    outline-offset: 4px;
+}
+
+.slider-btn:hover {
+    background-color: rgba(139, 120, 93, 0.35);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-50%) scale(1.12);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    opacity: 1;
+}
+
+.slider-btn:active {
+    transform: translateY(-50%) scale(1.05);
+}
+
+.slider-btn svg {
+    width: 26px;
+    height: 26px;
+    color: #ffffff;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.slider-btn-prev {
+    left: 1rem;
+}
+
+.slider-btn-next {
+    right: 1rem;
+}
+
+.slider-indicator {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    z-index: 10;
+    display: none;
+}
+
+/* ========================================
+   LIGHTBOX CAPTION AREA
+   ======================================== */
+
+#lightbox-caption {
+    padding: 3rem 3rem 3rem 3.5rem;
+    width: 40%;
+    overflow-y: auto;
+    text-align: left;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+/* Add subtle noise to caption area */
+#lightbox-caption::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.015'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+}
+
+#lightbox-caption > * {
+    position: relative;
+    z-index: 1;
+}
+
+#lightbox-title {
+    font-size: 2.25rem;
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-weight: 600;
+    margin: 0 0 1.75rem 0;
+    color: var(--text-color);
+    letter-spacing: 0.015em;
+    line-height: 1.2;
+}
+
+#lightbox-size,
+#lightbox-materials {
+    margin: 0 0 0.65rem 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: rgba(139, 120, 93, 0.85);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 600;
+}
+
+#lightbox-description {
+    margin: 2.25rem 0 2rem 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--secondary-text);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* ========================================
+   LIGHTBOX CLOSE BUTTON
+   ======================================== */
+
+.close-lightbox {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-lightbox svg {
+    width: 24px;
+    height: 24px;
+}
+
+.lightbox-content:hover .close-lightbox {
+    opacity: 1;
+}
+
+.close-lightbox:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.close-lightbox:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* Calmer close button styling override */
+.lightbox .close-lightbox {
+    background: rgba(var(--text-rgb), 0.1);
+    border: 1px solid rgba(var(--text-rgb), 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.lightbox .close-lightbox:hover {
+    background: rgba(var(--text-rgb), 0.2);
+    border-color: rgba(var(--text-rgb), 0.3);
+    transform: scale(1.05);
+}
+
+.lightbox .close-lightbox:active {
+    transform: scale(0.95);
+}
+
+/* ========================================
+   INQUIRE BUTTON
+   ======================================== */
+
+.inquire-btn {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    border: none;
+    line-height: 1;
+    background: linear-gradient(135deg, rgba(139, 120, 93, 1) 0%, rgba(139, 120, 93, 0.9) 100%);
+    color: #ffffff;
+    box-shadow:
+        0 4px 12px rgba(139, 120, 93, 0.25),
+        0 2px 6px rgba(139, 120, 93, 0.15);
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.inquire-btn:focus-visible {
+    outline: 3px solid var(--text-color);
+    outline-offset: 4px;
+}
+
+.inquire-btn:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, rgba(139, 120, 93, 0.95) 0%, rgba(139, 120, 93, 0.85) 100%);
+    box-shadow:
+        0 4px 12px rgba(139, 120, 93, 0.25),
+        0 12px 40px rgba(139, 120, 93, 0.15),
+        inset 0 -2px 8px rgba(0, 0, 0, 0.1),
+        0 6px 16px rgba(139, 120, 93, 0.3),
+        0 3px 8px rgba(139, 120, 93, 0.2);
+    opacity: 0.95;
+}
+
+.inquire-btn:active {
+    transform: translateY(0);
+    box-shadow:
+        0 2px 8px rgba(139, 120, 93, 0.2),
+        0 1px 4px rgba(139, 120, 93, 0.15);
+}
+
+/* ========================================
+   TABLET BREAKPOINT (769px - 1024px)
+   ======================================== */
+
+@media (min-width: 769px) {
+    /* Add subtle height variations for organic feel */
+    .gallery-grid {
+        grid-auto-rows: minmax(300px, auto);
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        grid-auto-flow: dense;
+    }
+
+    .gallery-item {
+        width: 100%;
+        height: auto;
+        min-height: 300px;
+    }
+
+    /* Prevent floating issues */
+    .gallery-grid::after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+
+    /* Larger image on desktop */
+    .lightbox-image-wrapper {
+        max-width: 85vw;
+        max-height: 85vh;
+    }
+
+    .lightbox-image-wrapper img {
+        max-width: 100%;
+        max-height: 85vh;
+        object-fit: contain;
+    }
+}
+
+/* Tablet: Gallery grid - 2 columns for better layout */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem 2rem;
+    }
+}
+
+/* ========================================
+   MOBILE BREAKPOINT (max-width: 768px)
+   ======================================== */
+
+@media (max-width: 768px) {
+    .gallery-main {
+        padding: 7rem 0 2rem;
+        min-height: 100vh;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .gallery-main h2 {
+        display: none;
+    }
+
+    /* Gallery Filter Mobile Styles */
+    .gallery-filter {
+        margin-bottom: 2rem;
+        padding: 0;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .gallery-filter::-webkit-scrollbar {
+        display: none;
+    }
+
+    .gallery-filter-buttons {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding: 0 1.25rem;
+        min-width: max-content;
+        gap: 0.5rem;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1.25rem;
+        font-size: var(--text-xs);
+    }
+
+    .gallery-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 1rem 1rem 4rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .gallery-item {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 3/4;
+        position: relative;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        opacity: 1;
+        transform: none;
+        display: block;
+        max-width: 100%;
+    }
+
+    /* Elegant tap feedback */
+    .gallery-item:active {
+        transform: scale(0.98);
+        transition: transform 0.15s ease;
+    }
+
+    .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        border-radius: 16px;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* Always show gallery info on mobile since hover doesn't work */
+    .gallery-item-info {
+        opacity: 1;
+        transform: translateY(0);
+        padding: 1.5rem 1rem 1rem;
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.85) 0%,
+                rgba(0, 0, 0, 0.5) 50%,
+                transparent 100%);
+    }
+
+    .gallery-item-info h3 {
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .gallery-item-info p {
+        font-size: 0.8rem;
+    }
+
+    /* Mobile skeleton styles */
+    .skeleton-item {
+        width: 100%;
+        aspect-ratio: 3/4;
+        border-radius: 16px;
+        min-height: auto;
+        max-width: 100%;
+        display: block;
+    }
+
+    .skeleton-image {
+        height: 100%;
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* Lightbox mobile styles */
+    .lightbox-content {
+        flex-direction: column;
+        max-height: 95vh;
+        max-width: 95vw;
+    }
+
+    .lightbox-image-container {
+        max-width: 100%;
+        max-height: 50vh;
+    }
+
+    #lightbox-img {
+        max-width: 100%;
+        max-height: 50vh;
+    }
+
+    #lightbox-caption {
+        width: auto;
+        padding: 1.5rem;
+        max-height: 40vh;
+    }
+
+    .close-lightbox {
+        color: #333;
+        top: 0.5rem;
+        right: 1rem;
+        font-size: 1.8rem;
+    }
+
+    .slider-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .slider-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .slider-btn-prev {
+        left: 0.5rem;
+    }
+
+    .slider-btn-next {
+        right: 0.5rem;
+    }
+}
+
+/* ========================================
+   SMALL MOBILE BREAKPOINT (max-width: 480px)
+   ======================================== */
+
+@media (max-width: 480px) {
+    .gallery-main {
+        padding: 7rem 0 2rem;
+    }
+}
