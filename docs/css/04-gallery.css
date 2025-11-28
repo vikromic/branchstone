@@ -836,17 +836,17 @@
         display: none;
     }
 
-    /* Scroll indicator - subtle gradient fade on right edge */
+    /* Scroll indicator - enhanced gradient fade on right edge for better visibility */
     .gallery-filter::after {
         content: '';
         position: absolute;
         right: 0;
         top: 0;
         height: 100%;
-        width: 24px;
+        width: 32px;
         background: linear-gradient(to right, transparent, var(--background-color));
         pointer-events: none;
-        opacity: 0.8;
+        opacity: 0.95;
     }
 
     .gallery-filter-buttons {
@@ -856,12 +856,14 @@
         padding-right: 2rem; /* Extra space for scroll fade */
         min-width: max-content;
         gap: 0.5rem;
+        scroll-snap-type: x mandatory;
     }
 
     .filter-btn {
         padding: 0.625rem 1.25rem;
         font-size: var(--text-sm);
         min-height: 44px; /* WCAG 2.1 AA touch target */
+        scroll-snap-align: start;
     }
 
     .gallery-grid {
@@ -950,18 +952,20 @@
 
     .lightbox-image-container {
         max-width: 100%;
-        max-height: 50vh;
+        max-height: 65vh;
     }
 
     #lightbox-img {
         max-width: 100%;
-        max-height: 50vh;
+        max-height: 65vh;
     }
 
     #lightbox-caption {
         width: auto;
         padding: 2rem 1.75rem;
-        max-height: 40vh;
+        max-height: 25vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .close-lightbox {
