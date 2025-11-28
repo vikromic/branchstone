@@ -31,7 +31,8 @@
     min-height: 600px;
     max-height: 100vh;
     object-fit: cover;
-    object-position: center;
+    /* Fixed focal point on artist's face (60% from left, 30% from top) */
+    object-position: 60% 30%;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     position: relative;
