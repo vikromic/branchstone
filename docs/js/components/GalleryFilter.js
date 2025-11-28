@@ -36,6 +36,50 @@ export class GalleryFilter {
 
     // Update URL if there's a filter in the hash
     this.handleURLFilter();
+
+    // Listen for language changes
+    this.setupLanguageListener();
+  }
+
+  /**
+   * Setup language change listener to update button labels
+   * @private
+   */
+  setupLanguageListener() {
+    const langToggle = document.getElementById('lang-toggle');
+    if (langToggle) {
+      langToggle.addEventListener('click', () => {
+        // Delay to allow i18n to update first
+        setTimeout(() => this.updateButtonLabels(), 50);
+      });
+    }
+  }
+
+  /**
+   * Update all filter button labels with current translations
+   * @private
+   */
+  updateButtonLabels() {
+    const buttons = this.container.querySelectorAll('.filter-btn');
+    buttons.forEach(button => {
+      const categoryId = button.dataset.category;
+      button.textContent = this.getLabel(categoryId);
+    });
+  }
+
+  /**
+   * Get translated label for category
+   * @private
+   * @param {string} categoryId - Category ID
+   * @returns {string} Translated label
+   */
+  getLabel(categoryId) {
+    if (categoryId === 'all') {
+      return window.getTranslation?.('gallery.filterAll') || 'All Works';
+    }
+    return window.getTranslation?.(`gallery.filters.${categoryId}`)
+      || this.categories.find(cat => cat.id === categoryId)?.label
+      || categoryId;
   }
 
   /**
@@ -50,20 +94,23 @@ export class GalleryFilter {
     });
 
     // Add "All Works" button
-    const allButton = this.createFilterButton('all', 'All Works', true);
+    const allLabel = this.getLabel('all');
+    const allButton = this.createFilterButton('all', allLabel, true);
     filterButtons.appendChild(allButton);
 
     // Add category buttons
     this.categories.forEach(category => {
+      const label = this.getLabel(category.id);
       const button = this.createFilterButton(
         category.id,
-        category.label,
+        label,
         false
       );
       filterButtons.appendChild(button);
     });
 
     this.container.appendChild(filterButtons);
+    this.filterButtonsContainer = filterButtons;
 
     // Add screen reader live region for filter announcements
     const liveRegion = createElement('div', {
@@ -222,9 +269,7 @@ export class GalleryFilter {
     const liveRegion = $('#filter-announcement');
     if (!liveRegion) return;
 
-    const categoryLabel = category === 'all'
-      ? 'All Works'
-      : this.categories.find(cat => cat.id === category)?.label || category;
+    const categoryLabel = this.getLabel(category);
 
     const visibleCount = this.galleryContainer.querySelectorAll(
       '.gallery-item[aria-hidden="false"]'

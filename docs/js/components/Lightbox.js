@@ -204,6 +204,18 @@ export class Lightbox {
   }
 
   /**
+   * Get artwork key from title for translations
+   * @private
+   * @param {string} title - Artwork title
+   * @returns {string} Key for translations
+   */
+  getArtworkKey(title) {
+    if (!title) return null;
+    // Convert title to snake_case key: "Born of Burn" -> "born_of_burn"
+    return title.toLowerCase().replace(/\s+/g, '_');
+  }
+
+  /**
    * Set lightbox content
    * @private
    * @param {Object} data - Content data
@@ -224,7 +236,10 @@ export class Lightbox {
     }
 
     if (this.elements.description) {
-      this.elements.description.textContent = data.description || '';
+      // Try to get translated description
+      const artworkKey = this.getArtworkKey(data.title);
+      const translatedDesc = artworkKey ? window.getTranslation?.(`artworks.${artworkKey}`) : null;
+      this.elements.description.textContent = translatedDesc || data.description || '';
     }
 
     // Handle price display

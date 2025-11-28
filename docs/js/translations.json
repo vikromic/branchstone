@@ -24,7 +24,30 @@
         },
         "gallery": {
             "title": "Gallery",
-            "tagline": "Explore mixed media art inspired by nature"
+            "tagline": "Explore mixed media art inspired by nature",
+            "filterAll": "All Works",
+            "filters": {
+                "nature": "Nature",
+                "blue": "Blue Tones",
+                "fire": "Fire & Transformation",
+                "ethereal": "Ethereal",
+                "seasonal": "Seasonal"
+            }
+        },
+        "artworks": {
+            "born_of_burn": "A piece that captures the quiet, mystical energy of transformation through fire and renewal.",
+            "by_marks_and_fire": "Inspired by the marks left by time and the transformative power of fire.",
+            "christmas_joy": "A celebration of warmth and joy, capturing the essence of the holiday season.",
+            "core": "An exploration of the essence and foundation of natural forms.",
+            "july_pines": "A tribute to the quiet passage of time, using elements weathered by sun and water.",
+            "moonglow": "Capturing the ethereal beauty of moonlight on natural textures.",
+            "navy_of_the_dreamland": "A deep exploration of dreamlike landscapes in rich navy tones.",
+            "of_ash_and_flowers": "The contrast between destruction and renewal, ash and blossoms.",
+            "prolisok": "A delicate exploration of early spring blooms and new beginnings.",
+            "rise_in_blue": "An ascent through layers of blue, evoking sky and sea.",
+            "spectral": "Ethereal forms that seem to exist between worlds.",
+            "whales": "A tribute to the majestic creatures of the deep, their grace and power.",
+            "winds": "Capturing the invisible force of wind through texture and movement."
         },
         "about": {
             "title": "ABOUT ME",
@@ -116,7 +139,30 @@
         },
         "gallery": {
             "title": "Галерея",
-            "tagline": "Досліджуйте мистецтво змішаної техніки, натхненне природою"
+            "tagline": "Досліджуйте мистецтво змішаної техніки, натхненне природою",
+            "filterAll": "Усі роботи",
+            "filters": {
+                "nature": "Природа",
+                "blue": "Сині тони",
+                "fire": "Вогонь і трансформація",
+                "ethereal": "Ефірне",
+                "seasonal": "Сезонне"
+            }
+        },
+        "artworks": {
+            "born_of_burn": "Робота, що передає тиху, містичну енергію трансформації через вогонь та оновлення.",
+            "by_marks_and_fire": "Натхнення слідами, залишеними часом, та перетворювальною силою вогню.",
+            "christmas_joy": "Святкування тепла та радості, що передає сутність святкового сезону.",
+            "core": "Дослідження сутності та основи природних форм.",
+            "july_pines": "Данина тихому плину часу, з використанням елементів, вивітрених сонцем і водою.",
+            "moonglow": "Передача ефірної краси місячного світла на природних текстурах.",
+            "navy_of_the_dreamland": "Глибоке дослідження мрійливих пейзажів у насичених темно-синіх тонах.",
+            "of_ash_and_flowers": "Контраст між руйнуванням та оновленням, попелом та квітами.",
+            "prolisok": "Делікатне дослідження ранніх весняних квітів та нових початків.",
+            "rise_in_blue": "Підйом крізь шари синього, що викликає образи неба та моря.",
+            "spectral": "Ефірні форми, що здаються існуючими між світами.",
+            "whales": "Данина величним створінням глибин, їхній грації та силі.",
+            "winds": "Передача невидимої сили вітру через текстуру та рух."
         },
         "about": {
             "title": "ПРО МЕНЕ",
