@@ -792,24 +792,25 @@
         display: none;
     }
 
-    /* Gallery Header Mobile Styles */
+    /* Gallery Header Mobile Styles - Compact for more artwork visibility */
     .gallery-header {
-        margin-bottom: 1.5rem;
-        padding: 0 1.25rem;
+        margin-bottom: 1rem;
+        padding: 0 1rem;
     }
 
     .gallery-header h1 {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
     }
 
     .gallery-tagline {
-        font-size: 0.875rem;
+        font-size: 0.8rem;
+        opacity: 0.85;
     }
 
     /* Gallery Filter Mobile Styles */
     .gallery-filter {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         padding: 0;
         overflow-x: auto;
         overflow-y: hidden;
@@ -823,22 +824,24 @@
         display: none;
     }
 
-    /* Scroll indicator - gradient fade on right edge */
+    /* Scroll indicator - subtle gradient fade on right edge */
     .gallery-filter::after {
         content: '';
         position: absolute;
         right: 0;
         top: 0;
         height: 100%;
-        width: 40px;
+        width: 24px;
         background: linear-gradient(to right, transparent, var(--background-color));
         pointer-events: none;
+        opacity: 0.8;
     }
 
     .gallery-filter-buttons {
         flex-wrap: nowrap;
         justify-content: flex-start;
-        padding: 0 1.25rem;
+        padding: 0 1rem 0 1rem;
+        padding-right: 2rem; /* Extra space for scroll fade */
         min-width: max-content;
         gap: 0.5rem;
     }
