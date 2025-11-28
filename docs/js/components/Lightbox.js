@@ -38,6 +38,7 @@ export class Lightbox {
       size: $('#lightbox-size', this.lightbox),
       materials: $('#lightbox-materials', this.lightbox),
       description: $('#lightbox-description', this.lightbox),
+      price: $('#lightbox-price', this.lightbox),
       availability: $('#lightbox-availability', this.lightbox),
       closeBtn: $('.close-lightbox', this.lightbox),
       prevBtn: $('#prev-btn', this.lightbox),
@@ -188,6 +189,7 @@ export class Lightbox {
       size: trigger.dataset.size,
       materials: trigger.dataset.materials,
       description: trigger.dataset.description,
+      price: trigger.dataset.price,
       available: trigger.dataset.available,
     });
 
@@ -216,6 +218,16 @@ export class Lightbox {
 
     if (this.elements.description) {
       this.elements.description.textContent = data.description || '';
+    }
+
+    // Handle price display
+    if (this.elements.price) {
+      if (data.price) {
+        this.elements.price.textContent = data.price;
+      } else {
+        const priceOnRequestLabel = window.getTranslation?.('lightbox.priceOnRequest') || 'Price on Request';
+        this.elements.price.textContent = priceOnRequestLabel;
+      }
     }
 
     // Handle availability display (sold items)
