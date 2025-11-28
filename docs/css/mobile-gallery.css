@@ -10,9 +10,9 @@
     padding: 1rem 0 3rem !important;
   }
 
-  /* Gallery Header: Compact on mobile */
+  /* Gallery Header: Hide on mobile - nav already shows page title */
   .gallery-header {
-    margin-bottom: 0.75rem !important;
+    display: none !important;
   }
 
   /* Gallery Filter: Tighter spacing */
