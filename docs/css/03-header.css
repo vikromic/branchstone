@@ -172,6 +172,7 @@ body.menu-open .mobile-page-title {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     z-index: 9999;
+    pointer-events: none; /* Let clicks pass through to menu */
 }
 
 .mobile-menu-overlay.active {
