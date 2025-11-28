@@ -156,36 +156,30 @@ export class GalleryFilter {
 
   /**
    * Animate filter transition
+   * Optimized to avoid layout thrashing (batched reads/writes)
    * @private
    * @param {string} category - Category to show
    */
   animateFilterTransition(category) {
     const items = this.galleryContainer.querySelectorAll('.gallery-item');
 
-    // Fade out all items
-    items.forEach(item => {
-      item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-      item.style.opacity = '0';
-      item.style.transform = 'scale(0.95)';
-    });
+    // Phase 1: Add CSS class for fade-out (single style recalc)
+    this.galleryContainer.classList.add('filtering');
 
-    // After fade out, show/hide items and fade in visible ones
+    // Phase 2: After transition, batch all visibility changes
     setTimeout(() => {
-      items.forEach(item => {
-        const itemCategory = item.dataset.category;
-        const shouldShow = category === 'all' || itemCategory === category;
+      requestAnimationFrame(() => {
+        // Batch all DOM writes together (no reads in between)
+        items.forEach(item => {
+          const itemCategory = item.dataset.category;
+          const shouldShow = category === 'all' || itemCategory === category;
 
-        if (shouldShow) {
-          item.style.display = '';
-          // Trigger reflow to ensure transition works
-          item.offsetHeight;
-          item.style.opacity = '1';
-          item.style.transform = 'scale(1)';
-          item.setAttribute('aria-hidden', 'false');
-        } else {
-          item.style.display = 'none';
-          item.setAttribute('aria-hidden', 'true');
-        }
+          item.classList.toggle('filtered-out', !shouldShow);
+          item.setAttribute('aria-hidden', (!shouldShow).toString());
+        });
+
+        // Single reflow point after all changes
+        this.galleryContainer.classList.remove('filtering');
       });
     }, 300);
   }
