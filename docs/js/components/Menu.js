@@ -69,7 +69,7 @@ export class Menu {
       }),
       on(document, 'keydown', (e) => {
         if (e.key === 'Escape' && this.isOpen) {
-          this.close();
+          this.close(true); // Return focus to toggle button on Escape
         }
       })
     );
@@ -143,8 +143,9 @@ export class Menu {
 
   /**
    * Close menu
+   * @param {boolean} returnFocus - Whether to return focus to toggle button
    */
-  close() {
+  close(returnFocus = false) {
     this.isOpen = false;
     this.toggleButton.classList.remove('active');
     this.menu.classList.remove('active');
@@ -156,8 +157,10 @@ export class Menu {
     this.body.style.overflow = '';
     this.body.classList.remove('menu-open');
 
-    // Return focus to toggle button
-    this.toggleButton.focus();
+    // Only return focus if explicitly requested (e.g., Escape key)
+    if (returnFocus) {
+      this.toggleButton.focus();
+    }
   }
 
   /**
