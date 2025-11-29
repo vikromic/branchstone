@@ -27,11 +27,9 @@
             "tagline": "Explore mixed media art inspired by nature",
             "filterAll": "All Works",
             "filters": {
-                "nature": "Nature",
-                "blue": "Blue Tones",
-                "fire": "Fire & Transformation",
-                "ethereal": "Ethereal",
-                "seasonal": "Seasonal"
+                "available": "Available",
+                "small": "Small Items",
+                "prints": "Prints Only"
             }
         },
         "artworks": {
@@ -82,7 +80,11 @@
         "lightbox": {
             "size": "Size:",
             "materials": "Materials:",
+            "price": "Price:",
             "priceOnRequest": "Price on Request",
+            "printsAvailable": "Prints Available",
+            "emailMockup": "Email me to see a mockup of this painting on your wall.",
+            "colorNote": "Please note that colours may vary slightly on different screens.",
             "doubleTapToReset": "Double-tap to reset"
         },
         "artwork": {
@@ -144,11 +146,9 @@
             "tagline": "Досліджуйте мистецтво змішаної техніки, натхненне природою",
             "filterAll": "Усі роботи",
             "filters": {
-                "nature": "Природа",
-                "blue": "Сині тони",
-                "fire": "Вогонь і трансформація",
-                "ethereal": "Ефірне",
-                "seasonal": "Сезонне"
+                "available": "Доступні",
+                "small": "Малі роботи",
+                "prints": "Лише принти"
             }
         },
         "artworks": {
@@ -199,7 +199,11 @@
         "lightbox": {
             "size": "Розмір:",
             "materials": "Матеріали:",
+            "price": "Ціна:",
             "priceOnRequest": "Ціна за запитом",
+            "printsAvailable": "Доступні принти",
+            "emailMockup": "Напишіть мені, щоб побачити макет цієї картини на вашій стіні.",
+            "colorNote": "Зверніть увагу, що кольори можуть трохи відрізнятися на різних екранах.",
             "doubleTapToReset": "Подвійне торкання для скидання"
         },
         "artwork": {

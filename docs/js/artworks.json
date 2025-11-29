@@ -15,7 +15,11 @@
             "img/born_of_burn/C6493BDD-DE14-41D9-935D-947568942729_4_5005_c.jpeg"
         ],
         "description": "A piece that captures the quiet, mystical energy of transformation through fire and renewal.",
+        "price": "$2,500",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": true,
+        "filterTags": "",
         "category": "fire"
     },
     {
@@ -33,7 +37,11 @@
             "img/by_marks_and_fire/8BFB6E59-C7D7-4EA3-A87D-F934124B7C07_4_5005_c.jpeg"
         ],
         "description": "Inspired by the marks left by time and the transformative power of fire.",
+        "price": "$3,200",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": true,
+        "filterTags": "",
         "category": "fire"
     },
     {
@@ -48,7 +56,11 @@
             "img/christmass_joy/8BC1728D-88EE-452A-91E8-9DD2ECCA69A7_4_5005_c.jpeg"
         ],
         "description": "A celebration of warmth and joy, capturing the essence of the holiday season.",
+        "price": "$1,200",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": false,
+        "filterTags": "small",
         "category": "seasonal"
     },
     {
@@ -64,7 +76,10 @@
             "img/core/6B16E5A6-ECFC-4865-9992-50D5D48FE301_4_5005_c.jpeg"
         ],
         "description": "An exploration of the essence and foundation of natural forms.",
-        "available": true,
+        "available": false,
+        "soldOut": true,
+        "printsAvailable": true,
+        "filterTags": "",
         "category": "nature"
     },
     {
@@ -79,7 +94,11 @@
             "img/july_pines/D4676BF9-BA0C-4911-A527-9A67A4425394_1_201_a.jpeg"
         ],
         "description": "A tribute to the quiet passage of time, using elements weathered by sun and water.",
+        "price": "$1,800",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": true,
+        "filterTags": "small",
         "category": "nature",
         "thumb": "img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-400w.webp",
         "srcset": {
@@ -122,6 +141,9 @@
         ],
         "description": "Capturing the ethereal beauty of moonlight on natural textures.",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": false,
+        "filterTags": "",
         "category": "ethereal"
     },
     {
@@ -139,6 +161,9 @@
         ],
         "description": "A deep exploration of dreamlike landscapes in rich navy tones.",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": true,
+        "filterTags": "",
         "category": "blue"
     },
     {
@@ -155,6 +180,9 @@
         ],
         "description": "The contrast between destruction and renewal, ash and blossoms.",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": false,
+        "filterTags": "",
         "category": "nature"
     },
     {
@@ -173,6 +201,9 @@
         ],
         "description": "A delicate exploration of early spring blooms and new beginnings.",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": true,
+        "filterTags": "",
         "category": "nature"
     },
     {
@@ -195,6 +226,9 @@
         ],
         "description": "An ascent through layers of blue, evoking sky and sea.",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": true,
+        "filterTags": "",
         "category": "blue",
         "imagesSrcset": [
             null,
@@ -219,6 +253,9 @@
         ],
         "description": "Ethereal forms that seem to exist between worlds.",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": false,
+        "filterTags": "",
         "category": "ethereal"
     },
     {
@@ -239,6 +276,9 @@
         ],
         "description": "A tribute to the majestic creatures of the deep, their grace and power.",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": true,
+        "filterTags": "",
         "category": "blue"
     },
     {
@@ -256,6 +296,9 @@
         ],
         "description": "Capturing the invisible force of wind through texture and movement.",
         "available": true,
+        "soldOut": false,
+        "printsAvailable": false,
+        "filterTags": "",
         "category": "nature",
         "imagesSrcset": [
             null,

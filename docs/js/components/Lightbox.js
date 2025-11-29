@@ -40,6 +40,7 @@ export class Lightbox {
       description: $('#lightbox-description', this.lightbox),
       price: $('#lightbox-price', this.lightbox),
       availability: $('#lightbox-availability', this.lightbox),
+      prints: $('#lightbox-prints', this.lightbox),
       closeBtn: $('.close-lightbox', this.lightbox),
       prevBtn: $('#prev-btn', this.lightbox),
       nextBtn: $('#next-btn', this.lightbox),
@@ -225,6 +226,8 @@ export class Lightbox {
       description: trigger.dataset.description,
       price: trigger.dataset.price,
       available: trigger.dataset.available,
+      soldOut: trigger.dataset.soldout,
+      printsAvailable: trigger.dataset.printsavailable,
     });
 
     this.open();
@@ -273,16 +276,24 @@ export class Lightbox {
     if (this.elements.price) {
       if (data.price) {
         this.elements.price.textContent = data.price;
+        this.elements.price.classList.remove('hidden');
       } else {
         const priceOnRequestLabel = window.getTranslation?.('lightbox.priceOnRequest') || 'Price on Request';
         this.elements.price.textContent = priceOnRequestLabel;
+        this.elements.price.classList.remove('hidden');
       }
     }
 
     // Handle availability display (sold items)
     if (this.elements.availability) {
-      const isAvailable = data.available === 'true' || data.available === true;
-      this.elements.availability.classList.toggle('hidden', isAvailable);
+      const isSoldOut = data.soldOut === 'true' || data.soldOut === true;
+      this.elements.availability.classList.toggle('hidden', !isSoldOut);
+    }
+
+    // Handle prints availability display
+    if (this.elements.prints) {
+      const printsAvailable = data.printsAvailable === 'true' || data.printsAvailable === true;
+      this.elements.prints.classList.toggle('hidden', !printsAvailable);
     }
   }
 
