@@ -69,6 +69,7 @@ docs/
 │   │
 │   ├── theme-init.js            # Early theme initialization (blocks FOUC)
 │   ├── artworks.json            # Artwork data
+│   ├── highlights.json          # Gallery Experience carousel data
 │   └── translations.json        # i18n translations
 │
 ├── css/
@@ -78,7 +79,8 @@ docs/
 │
 ├── index.html                   # Home page
 ├── gallery.html                 # Gallery page
-├── about.html                   # About page
+├── about.html                   # About page (+ shipping policies, experience carousel)
+├── commissions.html             # Commissions page with inquiry form
 ├── contact.html                 # Contact page
 │
 ├── robots.txt                   # SEO
@@ -621,5 +623,5 @@ All components follow WCAG 2.1 AA:
 
 ---
 
-**Last Updated**: 2025-01-09
-**Version**: 2.0.0 (Clean Architecture Refactor)
+**Last Updated**: 2025-01-14
+**Version**: 2.1.0 (Commissions, Shipping, Video Support)
