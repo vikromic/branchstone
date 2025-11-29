@@ -220,15 +220,8 @@ class App {
     // Dynamically import Carousel component
     const { default: Carousel } = await import('./components/Carousel.js');
 
-    // Experience carousel
-    const experienceCarousel = new Carousel({
-      containerSelector: '#experience-carousel',
-      itemSelector: '.carousel-item',
-      autoplayDelay: 5000,
-      loop: true,
-      pauseOnHover: true,
-    });
-    this.components.set('experienceCarousel', experienceCarousel);
+    // Load and render experience/highlights carousel from JSON
+    await this.initExperienceCarousel(Carousel);
 
     // Feedback carousel
     const feedbackCarousel = new Carousel({
@@ -239,6 +232,63 @@ class App {
       pauseOnHover: true,
     });
     this.components.set('feedbackCarousel', feedbackCarousel);
+  }
+
+  /**
+   * Initialize experience carousel from highlights.json
+   * @private
+   * @param {Function} Carousel - Carousel class
+   */
+  async initExperienceCarousel(Carousel) {
+    const section = document.getElementById('experience');
+    const track = document.querySelector('#experience-carousel .carousel-track');
+    if (!section || !track) return;
+
+    try {
+      // Fetch highlights data
+      const response = await fetch('js/highlights.json');
+      if (!response.ok) return;
+
+      const highlights = await response.json();
+      if (!highlights || highlights.length === 0) return;
+
+      // Clear placeholder items and render from JSON
+      track.innerHTML = '';
+
+      highlights.forEach((item, index) => {
+        const carouselItem = document.createElement('div');
+        carouselItem.className = 'carousel-item';
+        carouselItem.innerHTML = `
+          <figure class="experience-figure">
+            <img src="${item.image}"
+                 alt="${item.alt || 'Gallery exhibition'}"
+                 class="experience-image"
+                 loading="${index < 2 ? 'eager' : 'lazy'}">
+            <figcaption class="experience-caption">
+              <span class="experience-caption-text">${item.caption}</span>
+            </figcaption>
+          </figure>
+        `;
+        track.appendChild(carouselItem);
+      });
+
+      // Show the section (remove display:none)
+      section.style.display = '';
+
+      // Initialize carousel
+      const experienceCarousel = new Carousel({
+        containerSelector: '#experience-carousel',
+        itemSelector: '.carousel-item',
+        autoplayDelay: 5000,
+        loop: true,
+        pauseOnHover: true,
+      });
+      this.components.set('experienceCarousel', experienceCarousel);
+
+    } catch (error) {
+      // Silently fail - section stays hidden if no highlights
+      console.debug('No highlights to display');
+    }
   }
 
   /**
