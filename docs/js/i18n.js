@@ -66,9 +66,16 @@ class I18n {
 
       // Handle different element types
       if (key === 'home.title') {
-        // Multi-line title
+        // Multi-line title - use safe DOM methods to prevent XSS
         const lines = translation.split('\n');
-        element.innerHTML = lines.map(line => line.trim()).join('<br>');
+        element.textContent = ''; // Clear existing content
+        lines.forEach((line, index) => {
+          const textNode = document.createTextNode(line.trim());
+          element.appendChild(textNode);
+          if (index < lines.length - 1) {
+            element.appendChild(document.createElement('br'));
+          }
+        });
       } else if (element.tagName === 'INPUT' && element.type === 'submit') {
         element.value = translation;
       } else if (element.tagName === 'BUTTON' && !element.querySelector('svg')) {
@@ -88,9 +95,14 @@ class I18n {
               }
             });
           } else {
-            element.innerHTML = translation.split('\n')
-              .map(p => `<p>${p.trim()}</p>`)
-              .join('');
+            // Use safe DOM methods to create paragraphs - prevent XSS
+            element.textContent = ''; // Clear existing content
+            const paragraphs = translation.split('\n').filter(p => p.trim());
+            paragraphs.forEach(text => {
+              const p = document.createElement('p');
+              p.textContent = text.trim();
+              element.appendChild(p);
+            });
           }
         } else {
           element.textContent = translation;
