@@ -115,6 +115,52 @@ export class Gallery {
   }
 
   /**
+   * Create video element for gallery items
+   * @private
+   * @param {Object} artwork - Artwork data
+   * @param {Object} options - Video options
+   * @returns {Element|null} Video element or null if no video
+   */
+  createVideoElement(artwork, options = {}) {
+    if (!artwork.video) return null;
+
+    const video = createElement('video', {
+      className: 'gallery-video',
+      src: artwork.video.webm || artwork.video.mp4,
+      autoplay: true,
+      loop: true,
+      muted: true,
+      playsinline: true, // Important for iOS
+      preload: 'metadata',
+      'aria-label': `Video preview of ${artwork.title}`,
+    });
+
+    // Add poster if available
+    if (artwork.video.poster || artwork.image) {
+      video.setAttribute('poster', artwork.video.poster || artwork.image);
+    }
+
+    // Add WebM and MP4 sources for cross-browser support
+    if (artwork.video.webm) {
+      const webmSource = createElement('source', {
+        src: artwork.video.webm,
+        type: 'video/webm',
+      });
+      video.appendChild(webmSource);
+    }
+
+    if (artwork.video.mp4) {
+      const mp4Source = createElement('source', {
+        src: artwork.video.mp4,
+        type: 'video/mp4',
+      });
+      video.appendChild(mp4Source);
+    }
+
+    return video;
+  }
+
+  /**
    * Create responsive picture element with WebP and JPEG fallback
    * @private
    * @param {Object} artwork - Artwork data
@@ -275,8 +321,15 @@ export class Gallery {
    * @returns {Element} Gallery item element
    */
   createGalleryItem(artwork, index = 0) {
+    // Prepare media array (images + videos) for lightbox
+    const media = artwork.images ? [...artwork.images] : [];
+    if (artwork.video) {
+      // Add video to media array with special marker
+      media.push({ type: 'video', ...artwork.video });
+    }
+
     const item = createElement('div', {
-      className: `gallery-item ${artwork.layout || ''} animate-on-scroll`,
+      className: `gallery-item ${artwork.layout || ''} animate-on-scroll ${artwork.video ? 'has-video' : ''}`,
       role: 'button',
       tabindex: '0',
       'aria-label': `View ${artwork.title}, ${artwork.size}`,
@@ -289,9 +342,11 @@ export class Gallery {
         available: artwork.available.toString(),
         category: artwork.category || 'uncategorized',
         ...(artwork.price && { price: artwork.price }),
-        ...(artwork.images && artwork.images.length > 0 && {
-          images: JSON.stringify(artwork.images),
+        ...(media.length > 0 && {
+          images: JSON.stringify(media),
         }),
+        // Store video info for thumbnail display
+        ...(artwork.video && { hasVideo: 'true' }),
       },
     });
 

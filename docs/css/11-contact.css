@@ -308,3 +308,160 @@
         padding: 2.5rem 1rem;
     }
 }
+
+/* ========================================
+   COMMISSIONS PAGE
+   ======================================== */
+
+.commissions-main {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.commissions-container {
+    background: var(--card-background);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.02),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.042),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+}
+
+.commissions-hero {
+    padding: 3rem 3rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.commissions-hero h1 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: var(--text-color);
+    letter-spacing: 0.01em;
+}
+
+.commissions-intro {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--secondary-text);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.commissions-content {
+    padding: 2.5rem 3rem;
+}
+
+.commission-section {
+    margin-bottom: 2.5rem;
+}
+
+.commission-section:last-child {
+    margin-bottom: 0;
+}
+
+.commission-section h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.75rem 0;
+    color: var(--accent-color);
+}
+
+.commission-section p {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0 0 0.75rem 0;
+    color: var(--text-color);
+}
+
+.commission-section p:last-child {
+    margin-bottom: 0;
+}
+
+.commission-section strong {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.commission-section a {
+    color: var(--accent-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.2s ease;
+}
+
+.commission-section a:hover {
+    opacity: 0.8;
+}
+
+.commission-cta {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.commission-form-container {
+    padding: 2.5rem 3rem 3rem;
+    background: var(--background-color);
+    border-top: 1px solid var(--border-color);
+}
+
+.commission-form-container h2 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0 0 2rem 0;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.commission-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Responsive Commissions */
+@media (max-width: 768px) {
+    .commissions-main {
+        padding: 7rem 1.5rem 2rem;
+    }
+
+    .commissions-hero {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+
+    .commissions-hero h1 {
+        font-size: 2rem;
+    }
+
+    .commissions-content {
+        padding: 2rem 1.5rem;
+    }
+
+    .commission-form-container {
+        padding: 2rem 1.5rem 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .commissions-main {
+        padding: 7rem 1rem 2rem;
+    }
+
+    .commissions-hero,
+    .commissions-content,
+    .commission-form-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}

@@ -113,6 +113,15 @@
   transform: scale(1.1);
 }
 
+/* Footer Email Link */
+.footer-email-link {
+  margin-bottom: 0.75rem;
+}
+
+.footer-connect .footer-social-link + .footer-social-link {
+  margin-top: 0.5rem;
+}
+
 /* Footer Bottom */
 .footer-bottom {
   max-width: 1200px;

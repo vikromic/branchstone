@@ -356,22 +356,101 @@ export class Lightbox {
   }
 
   /**
+   * Show image in lightbox
+   * @private
+   * @param {string} imageSrc - Image source URL
+   * @param {Element} container - Container element
+   */
+  showImage(imageSrc, container) {
+    // Remove any existing video
+    const existingVideo = $('.lightbox-video', container);
+    if (existingVideo) existingVideo.remove();
+
+    // Show image element
+    if (this.elements.image) {
+      this.elements.image.style.display = 'block';
+      this.elements.image.src = imageSrc;
+      this.elements.image.alt = this.elements.title?.textContent || '';
+    }
+  }
+
+  /**
+   * Show video in lightbox
+   * @private
+   * @param {Object} videoData - Video data object with webm/mp4 sources
+   * @param {Element} container - Container element
+   */
+  showVideo(videoData, container) {
+    // Hide image element
+    if (this.elements.image) {
+      this.elements.image.style.display = 'none';
+    }
+
+    // Remove any existing video
+    const existingVideo = $('.lightbox-video', container);
+    if (existingVideo) existingVideo.remove();
+
+    // Create video element
+    const video = document.createElement('video');
+    video.className = 'lightbox-video';
+    video.controls = true;
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = false; // Allow sound in lightbox (user clicked to view)
+    video.playsInline = true;
+    video.setAttribute('aria-label', `Video of ${this.elements.title?.textContent || 'artwork'}`);
+
+    // Add poster if available
+    if (videoData.poster) {
+      video.poster = videoData.poster;
+    }
+
+    // Add sources (WebM first for better compression, MP4 as fallback)
+    if (videoData.webm) {
+      const webmSource = document.createElement('source');
+      webmSource.src = videoData.webm;
+      webmSource.type = 'video/webm';
+      video.appendChild(webmSource);
+    }
+
+    if (videoData.mp4) {
+      const mp4Source = document.createElement('source');
+      mp4Source.src = videoData.mp4;
+      mp4Source.type = 'video/mp4';
+      video.appendChild(mp4Source);
+    }
+
+    // Fallback text
+    video.textContent = 'Your browser does not support the video tag.';
+
+    // Insert before zoom indicator
+    const zoomIndicator = this.elements.zoomIndicator;
+    if (zoomIndicator) {
+      container.insertBefore(video, zoomIndicator);
+    } else {
+      container.appendChild(video);
+    }
+  }
+
+  /**
    * Update slider display
    * @private
    */
   updateSlider() {
     if (this.state.images.length === 0) return;
 
-    // Update image with responsive srcset if available
-    if (this.elements.image) {
-      const currentImage = this.state.images[this.state.currentIndex];
-      this.elements.image.src = currentImage;
-      this.elements.image.alt = this.elements.title?.textContent || '';
+    const container = $('.lightbox-image-container', this.lightbox);
+    const currentMedia = this.state.images[this.state.currentIndex];
 
-      // TODO: Add srcset support for lightbox images
-      // When multiple sizes are generated, update artworks.json to include srcset arrays
-      // Example: { image: "img/art.jpg", srcset: ["img/art-800.jpg 800w", "img/art-1200.jpg 1200w", "img/art-1920.jpg 1920w"] }
-      // For now, lightbox displays full-size images for optimal quality
+    // Check if current media is a video
+    const isVideo = typeof currentMedia === 'object' && currentMedia.type === 'video';
+
+    if (isVideo) {
+      // Handle video display
+      this.showVideo(currentMedia, container);
+    } else {
+      // Handle image display
+      this.showImage(currentMedia, container);
     }
 
     // Update navigation buttons

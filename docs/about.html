@@ -64,6 +64,7 @@
                 <li><a href="index.html" data-translate="nav.home">Home</a></li>
                 <li><a href="gallery.html" data-translate="nav.gallery">Gallery</a></li>
                 <li><a href="about.html" class="active" data-translate="nav.about">About</a></li>
+                <li><a href="commissions.html" data-translate="nav.commissions">Commissions</a></li>
                 <li><a href="contact.html" data-translate="nav.contact">Contact</a></li>
             </ul>
             <div class="header-controls">
@@ -137,50 +138,51 @@
             </div>
         </section>
 
+        <section id="shipping" class="about-section policies-section animate-on-scroll">
+            <h2 data-translate="about.shippingTitle">Shipping & Policies</h2>
+
+            <div class="policy-block">
+                <h3 data-translate="about.worldwideShipping">Worldwide Shipping</h3>
+                <p data-translate="about.shippingInfo">All artworks are shipped worldwide from Santa Rosa, CA with a reliable courier and insurance. <strong>FREE shipping in California.</strong> Local pickup is available from Santa Rosa, California — <a href="contact.html?subject=pickup" class="policy-link">contact me</a> to arrange.</p>
+            </div>
+
+            <div class="policy-block">
+                <h3 data-translate="about.packagingTitle">Packaging with Care</h3>
+                <p data-translate="about.packagingInfo">Every artwork is wrapped with care using several layers of different protective materials. I add a gentle drop of lavender oil and a small branch for extra protection — a simple gesture to send a piece of nature along with your artwork.</p>
+            </div>
+
+            <div class="policy-block">
+                <h3 data-translate="about.deliveryTitle">Delivery & Tracking</h3>
+                <p data-translate="about.deliveryInfo">Art is shipped within 1–2 weeks. Let me know if you need it sooner. Insurance is included, and I'll send you a tracking number once shipped.</p>
+            </div>
+
+            <div class="policy-block">
+                <h3 data-translate="about.returnsTitle">Returns & Exchanges</h3>
+                <p data-translate="about.returnsInfo">I know that buying original art online can feel risky. Please always ask for more photos or a video if you wish. I'm confident that you will love my artwork in your space. But if for any reason you wish to return an artwork, you can do so within 14 days from when you received it for a full refund, an exchange, or a gift card to use at another time. To return art, simply <a href="contact.html?subject=return" class="policy-link">contact me</a> to arrange it.</p>
+            </div>
+
+            <div class="policy-block">
+                <h3 data-translate="about.paymentPlansTitle">Payment Plans</h3>
+                <p data-translate="about.paymentPlansInfo">You can secure an original painting by putting a small downpayment and pay the balance in your own time. I will keep the painting for you for as long as needed. Once the payment is complete, I'll ship it to you.</p>
+            </div>
+        </section>
+
         <!-- We don't need the image overlay anymore as we've extracted the text -->
 
-        <section id="experience" class="animate-on-scroll about-carousel-section" style="display: none;">
+        <section id="experience" class="about-section experience-section animate-on-scroll" style="display: none;">
             <h2 data-translate="about.experienceTitle">Gallery Experience & Media</h2>
-            <div class="carousel" id="experience-carousel">
-                <div class="carousel-track">
-                    <div class="carousel-item">
-                        <div class="experience-card">
-                            <h3>Solo Exhibition</h3>
-                            <p class="experience-venue">Art Gallery, Santa Rosa, CA</p>
-                            <p class="experience-year">2023</p>
-                            <p data-translate="about.experienceContent">Space for exhibitions, press mentions, and interviews will go here.</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="experience-card">
-                            <h3>Group Exhibition</h3>
-                            <p class="experience-venue">Modern Art Museum, San Francisco, CA</p>
-                            <p class="experience-year">2022</p>
-                            <p>Participating artist in mixed media collective showcase.</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="experience-card">
-                            <h3>Press Feature</h3>
-                            <p class="experience-venue">Art Magazine</p>
-                            <p class="experience-year">2023</p>
-                            <p>Featured in "Emerging Artists Working with Natural Materials"</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-controls">
-                    <button class="carousel-prev" aria-label="Previous experience">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M15 18l-6-6 6-6"/>
-                        </svg>
-                    </button>
-                    <button class="carousel-next" aria-label="Next experience">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <path d="M9 18l6-6-6-6"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="carousel-indicators"></div>
+            <div class="experience-highlight">
+                <!-- Add your highlight image from img/highlight/ folder -->
+                <figure class="experience-figure">
+                    <img src="img/highlight/gallery-experience.jpg"
+                         alt="Gallery exhibition"
+                         class="experience-image"
+                         loading="lazy">
+                    <figcaption class="experience-caption">
+                        <!-- Format: Place – Exhibition – Date -->
+                        <span class="experience-caption-text">Gallery Name – Exhibition Title – 2024</span>
+                    </figcaption>
+                </figure>
             </div>
         </section>
 
@@ -237,12 +239,20 @@
                     <li><a href="index.html" data-translate="nav.home">Home</a></li>
                     <li><a href="gallery.html" data-translate="nav.gallery">Gallery</a></li>
                     <li><a href="about.html" data-translate="nav.about">About</a></li>
+                    <li><a href="commissions.html" data-translate="nav.commissions">Commissions</a></li>
                     <li><a href="contact.html" data-translate="nav.contact">Contact</a></li>
                 </ul>
             </div>
 
             <div class="footer-section footer-connect">
                 <h4 data-translate="footer.connect">Connect</h4>
+                <a href="mailto:thebranchstone@gmail.com" class="footer-social-link footer-email-link" aria-label="Email Viktoria">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                    <span>thebranchstone@gmail.com</span>
+                </a>
                 <a href="https://www.instagram.com/branchstone.art" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Follow on Instagram">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
