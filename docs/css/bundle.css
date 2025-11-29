@@ -439,6 +439,36 @@ nav {
 .mobile-menu-toggle.active span:nth-child(3) { transform: rotate(-45deg); }
 
 /* ========================================
+   LOGO (Desktop Only)
+   ======================================== */
+.header-logo {
+    display: none; /* Hidden on mobile */
+    align-items: center;
+    text-decoration: none;
+    z-index: 10001;
+}
+
+.header-logo .logo-image {
+    height: 48px;
+    width: auto;
+    max-width: 48px;
+    object-fit: contain;
+    display: block;
+    /* Crisp rendering for small sizes */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    /* Ensure no background */
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Dark theme: switch to dark logo */
+:root[data-theme="dark"] .header-logo .logo-image,
+html[data-theme="dark"] .header-logo .logo-image {
+    content: url('../img/logo-dark.png?v=1764448781');
+}
+
+/* ========================================
    MOBILE PAGE TITLE (Center of header)
    ======================================== */
 .mobile-page-title {
@@ -683,6 +713,13 @@ body.menu-open .mobile-page-title {
     .mobile-page-title,
     .mobile-menu-overlay {
         display: none !important;
+    }
+
+    /* Desktop logo positioning - show only on desktop */
+    .header-logo {
+        display: flex;
+        grid-column: 1;
+        justify-self: start;
     }
 
     /* Desktop nav menu: horizontal, always visible */
@@ -1506,6 +1543,57 @@ body.menu-open .mobile-page-title {
     display: none;
 }
 
+.lightbox-price.hidden {
+    display: none;
+}
+
+/* ========================================
+   PRINTS AVAILABILITY BADGE
+   ======================================== */
+
+.prints-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #4caf50;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 1rem 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.prints-badge svg {
+    width: 16px;
+    height: 16px;
+    stroke: white;
+}
+
+.prints-badge.hidden {
+    display: none;
+}
+
+/* ========================================
+   LIGHTBOX NOTES
+   ======================================== */
+
+.lightbox-notes {
+    margin: 1.5rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.lightbox-note {
+    font-size: 0.85rem;
+    color: var(--secondary-text);
+    line-height: 1.6;
+    margin: 0.5rem 0;
+    font-style: italic;
+}
+
 /* ========================================
    LIGHTBOX CLOSE BUTTON
    ======================================== */
@@ -1618,26 +1706,25 @@ body.menu-open .mobile-page-title {
    ======================================== */
 
 @media (min-width: 769px) {
-    /* Add subtle height variations for organic feel */
+    /* Properly constrained grid for desktop/tablet */
     .gallery-grid {
-        grid-auto-rows: minmax(300px, auto);
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2rem;
-        grid-auto-flow: dense;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2.5rem 2rem;
+        grid-auto-flow: row;
+        align-items: start;
     }
 
     .gallery-item {
         width: 100%;
         height: auto;
-        min-height: 300px;
+        align-self: start;
     }
 
-    /* Prevent floating issues */
-    .gallery-grid::after {
-        content: '';
+    .gallery-item img {
+        width: 100%;
+        height: auto;
         display: block;
-        clear: both;
     }
 
     /* Larger image on desktop */
@@ -2892,6 +2979,7 @@ main {
 .carousel-track {
   display: flex;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 2.5rem;
 }
 
 .carousel-item {
@@ -2908,21 +2996,62 @@ main {
   display: block;
 }
 
-/* Featured carousel specific styles */
+.carousel-clone {
+  /* Clone items inherit styles from parent carousel-item */
+}
+
+/* Featured carousel specific styles - Multi-item horizontal layout */
+#featured-carousel .carousel-track {
+  overflow: visible;
+}
+
 #featured-carousel .carousel-item {
-  width: 100%;
+  flex: 0 0 calc((100% - 5rem) / 3);
+  opacity: 1;
+  transform: none;
+  display: block;
+  transition: none;
 }
 
 #featured-carousel .featured-item {
   display: block;
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
+/* Desktop: 3 items per row */
+@media (min-width: 1025px) {
+  #featured-carousel .carousel-item {
+    flex: 0 0 calc((100% - 5rem) / 3);
+  }
+
+  .carousel-track {
+    gap: 2.5rem;
+  }
+}
+
+/* Tablet: 2 items per row */
+@media (min-width: 769px) and (max-width: 1024px) {
+  #featured-carousel .carousel-item {
+    flex: 0 0 calc((100% - 2.5rem) / 2);
+  }
+
+  .carousel-track {
+    gap: 2.5rem;
+  }
+}
+
+/* Mobile: 1 item per row */
 @media (max-width: 768px) {
+  #featured-carousel .carousel-item {
+    flex: 0 0 100%;
+  }
+
   #featured-carousel .featured-item {
     max-width: 80vw;
+  }
+
+  .carousel-track {
+    gap: 1.5rem;
   }
 }
 
