@@ -114,14 +114,33 @@ class App {
         if (animations) animations.refresh();
 
         // Initialize carousel for featured works
+        // Responsive configuration: 3 items on desktop, 2 on tablet, 1 on mobile
+        let itemsPerView = 3;
+        if (window.innerWidth <= 768) {
+          itemsPerView = 1;
+        } else if (window.innerWidth <= 1024) {
+          itemsPerView = 2;
+        }
+
         const carousel = new Carousel({
           containerSelector: '#featured-carousel',
           itemSelector: '.carousel-item',
-          autoplayDelay: 4000,
+          autoplayDelay: 5000,
           loop: true,
           pauseOnHover: true,
+          itemsPerView: itemsPerView,
+          itemsPerRow: itemsPerView,
         });
         this.components.set('featuredCarousel', carousel);
+
+        // Handle window resize to recalculate carousel layout
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            carousel.recalculate();
+          }, 250);
+        });
       },
     });
 
@@ -162,11 +181,9 @@ class App {
           containerSelector: '#gallery-filter',
           gallerySelector: '.gallery-grid',
           categories: [
-            { id: 'nature', label: 'Nature' },
-            { id: 'blue', label: 'Blue Tones' },
-            { id: 'fire', label: 'Fire & Transformation' },
-            { id: 'ethereal', label: 'Ethereal' },
-            { id: 'seasonal', label: 'Seasonal' }
+            { id: 'available', label: 'Available' },
+            { id: 'small', label: 'Small Items' },
+            { id: 'prints', label: 'Prints Only' }
           ],
           onFilter: (category) => {
             // Re-trigger animations for visible items
