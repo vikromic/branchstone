@@ -120,6 +120,18 @@ body.menu-open .mobile-page-title {
     z-index: 10000 !important;
     overflow-y: auto !important;
     pointer-events: auto !important;
+    animation: menuFadeSlideIn 0.3s ease-out;
+}
+
+@keyframes menuFadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Mobile menu list items */

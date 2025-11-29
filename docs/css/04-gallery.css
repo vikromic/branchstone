@@ -223,6 +223,8 @@
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem 2.5rem;
     grid-auto-flow: dense;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
 }
 
 /* Filter animation states - CSS-driven for performance */
@@ -230,6 +232,7 @@
     opacity: 0;
     transform: scale(0.95);
     transition: opacity 0.3s ease, transform 0.3s ease;
+    contain: layout style paint;
 }
 
 .gallery-item.filtered-out {
@@ -262,6 +265,7 @@
     transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
                 opacity 0.3s ease,
                 transform 0.3s ease;
+    contain: layout style paint;
     /* Removed will-change to save GPU memory */
 }
 
@@ -280,8 +284,21 @@
     object-fit: cover;
     display: block;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                opacity 0.3s ease;
-    /* Removed will-change and filter for better performance */
+                opacity 0.3s ease,
+                filter 0.5s ease-out;
+    /* Removed will-change for better performance */
+}
+
+/* LQIP (Low-Quality Image Placeholder) styles */
+.gallery-item img.lqip-loading {
+    filter: blur(20px);
+    transform: scale(1.1);
+    will-change: filter, transform;
+}
+
+.gallery-item img.lqip-loaded {
+    filter: blur(0);
+    transform: scale(1);
 }
 
 .gallery-item:hover img {
@@ -344,10 +361,7 @@
     opacity: 0.9;
 }
 
-/* Scroll animation for gallery items */
-.gallery-item.animate-on-scroll {
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* Scroll animation for gallery items - see 07-utilities.css */
 
 /* ========================================
    STATUS INDICATORS
@@ -482,6 +496,51 @@
     max-height: 90vh;
     object-fit: contain;
     display: block;
+}
+
+/* ========================================
+   ZOOM INDICATOR
+   ======================================== */
+
+.zoom-indicator {
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 24px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    z-index: 15;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    min-width: 140px;
+}
+
+.zoom-indicator.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.zoom-level {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.02em;
+}
+
+.zoom-hint {
+    font-size: 0.75rem;
+    opacity: 0.85;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-weight: 500;
 }
 
 /* ========================================
@@ -843,7 +902,7 @@
         right: 0;
         top: 0;
         height: 100%;
-        width: 32px;
+        width: 48px;
         background: linear-gradient(to right, transparent, var(--background-color));
         pointer-events: none;
         opacity: 0.95;
@@ -878,7 +937,7 @@
     .gallery-item {
         width: 100%;
         height: auto;
-        aspect-ratio: 3/4;
+        aspect-ratio: 4/5;
         position: relative;
         border-radius: 16px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
@@ -929,7 +988,7 @@
     /* Mobile skeleton styles */
     .skeleton-item {
         width: 100%;
-        aspect-ratio: 3/4;
+        aspect-ratio: 4/5;
         border-radius: 16px;
         min-height: auto;
         max-width: 100%;
@@ -963,7 +1022,7 @@
     #lightbox-caption {
         width: auto;
         padding: 2rem 1.75rem;
-        max-height: 25vh;
+        max-height: 35vh;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
@@ -976,8 +1035,8 @@
     }
 
     .slider-btn {
-        width: 40px;
-        height: 40px;
+        width: 48px;
+        height: 48px;
     }
 
     .slider-btn svg {
@@ -991,6 +1050,21 @@
 
     .slider-btn-next {
         right: 0.5rem;
+    }
+
+    /* Zoom indicator mobile adjustments */
+    .zoom-indicator {
+        padding: 0.625rem 1rem;
+        min-width: 120px;
+    }
+
+    .zoom-level {
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .zoom-hint {
+        font-size: 0.7rem;
     }
 }
 

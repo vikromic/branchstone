@@ -37,69 +37,68 @@ export class AnimationManager {
     const elements = $$('.animate-on-scroll');
     if (elements.length === 0) return;
 
+    const viewportHeight = window.innerHeight;
+
+    // Only animate elements that are BELOW the initial viewport
+    // Elements in viewport on load stay visible immediately (no animation delay)
+    const elementsToAnimate = [];
+
+    elements.forEach(element => {
+      const rect = element.getBoundingClientRect();
+      // Element is below viewport - mark for deferred animation
+      if (rect.top > viewportHeight) {
+        element.classList.add('animate-deferred');
+        elementsToAnimate.push(element);
+      }
+      // Elements in viewport stay visible (no class added = instant visible via CSS)
+    });
+
+    if (elementsToAnimate.length === 0) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry, index) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Performance hint
-            entry.target.style.willChange = 'transform, opacity, filter';
-
-            // Staggered animation
-            setTimeout(() => {
+            requestAnimationFrame(() => {
               entry.target.classList.add('is-visible');
-
-              // Remove will-change after animation
-              setTimeout(() => {
-                entry.target.style.willChange = 'auto';
-              }, 1000);
-            }, index * 100);
-
+            });
             observer.unobserve(entry.target);
           }
         });
       },
       {
-        threshold: CONFIG.ui.gallery.observerThreshold,
-        rootMargin: CONFIG.ui.gallery.observerRootMargin,
+        threshold: 0.1,
+        rootMargin: '50px',
       }
     );
 
-    elements.forEach(element => observer.observe(element));
+    elementsToAnimate.forEach(element => observer.observe(element));
     this.observers.set('scroll', observer);
   }
 
   /**
-   * Initialize parallax effects
+   * Initialize parallax effects for featured items and about image
    * @private
    */
   initParallax() {
-    // Note: hero-bg-image excluded - parallax causes inconsistent positioning on page load
     const elements = [
       { selector: '.featured-item', speed: CONFIG.ui.parallax.speeds.featuredItem },
       { selector: '.home-about-image', speed: CONFIG.ui.parallax.speeds.aboutImage },
-      { selector: '.gallery-item', speed: CONFIG.ui.parallax.speeds.galleryItem },
     ];
 
     const updateParallax = () => {
       const scrolled = window.pageYOffset;
+      const viewportHeight = window.innerHeight;
 
-      elements.forEach(item => {
-        const targets = $$(item.selector);
-        targets.forEach((el, index) => {
+      elements.forEach(({ selector, speed }) => {
+        $$(selector).forEach(el => {
           const rect = el.getBoundingClientRect();
-          const elementTop = rect.top + scrolled;
-          const viewportHeight = window.innerHeight;
 
           // Only apply parallax when element is in viewport
           if (rect.top < viewportHeight && rect.bottom > 0) {
+            const elementTop = rect.top + scrolled;
             const distance = scrolled - elementTop + viewportHeight;
-            const movement = distance * item.speed;
-
-            // Add slight variation for gallery items
-            const variation = item.selector === '.gallery-item' ? (index % 3 - 1) * 0.05 : 0;
-            const finalMovement = movement + (movement * variation);
-
-            el.style.transform = `translateY(${finalMovement}px)`;
+            el.style.transform = `translateY(${distance * speed}px)`;
           }
         });
       });
@@ -120,14 +119,26 @@ export class AnimationManager {
 
   /**
    * Refresh animations (call after dynamic content load)
+   * Only animates elements below current viewport
    */
   refresh() {
-    // Re-observe new elements
     const observer = this.observers.get('scroll');
-    if (observer) {
-      const elements = $$('.animate-on-scroll:not(.is-visible)');
-      elements.forEach(element => observer.observe(element));
-    }
+    const viewportHeight = window.innerHeight;
+
+    // Find new elements not yet processed
+    const elements = $$('.animate-on-scroll:not(.is-visible):not(.animate-deferred)');
+
+    elements.forEach(element => {
+      const rect = element.getBoundingClientRect();
+      // Only animate elements below viewport
+      if (rect.top > viewportHeight) {
+        element.classList.add('animate-deferred');
+        if (observer) {
+          observer.observe(element);
+        }
+      }
+      // Elements in viewport stay visible immediately
+    });
   }
 
   /**

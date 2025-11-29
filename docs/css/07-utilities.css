@@ -81,44 +81,34 @@
    SCROLL ANIMATIONS
    ======================================== */
 
-/* Start with elements invisible and blurred - DESKTOP ONLY */
+/* Desktop scroll animations - only for elements entering viewport AFTER load */
 @media (min-width: 769px) {
+    /* Initially all visible - no delay */
     .animate-on-scroll {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Only elements marked for deferred animation get the effect */
+    .animate-on-scroll.animate-deferred {
         opacity: 0;
-        transform: translateY(40px) scale(0.95);
-        transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        transform: translateY(20px);
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    }
+
+    .animate-on-scroll.animate-deferred.is-visible {
+        opacity: 1;
+        transform: none;
     }
 }
 
-/* Mobile: no scroll animations, always visible */
+/* Mobile: no scroll animations */
 @media (max-width: 768px) {
     .animate-on-scroll {
         opacity: 1 !important;
         transform: none !important;
     }
 }
-
-/* Hero and featured items get blur effect - desktop only for better mobile performance */
-@media (min-width: 769px) {
-    .hero-content.animate-on-scroll,
-    .featured-item.animate-on-scroll {
-        filter: blur(4px);
-    }
-}
-
-/* Reveal with focus and smooth entry */
-.animate-on-scroll.is-visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-}
-
-/* Faster animation for smaller elements */
-.gallery-item.animate-on-scroll {
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Will-change managed dynamically via JS for better performance */
 
 /* ========================================
    SCROLL INDICATOR
@@ -152,17 +142,11 @@
     }
 }
 
-/* Hide scroll indicator on mobile */
+/* Mobile: hide and disable animation */
 @media (max-width: 768px) {
     .scroll-indicator {
         display: none;
-    }
-}
-
-/* Disable scroll indicator animation on mobile for performance */
-@media (max-width: 768px) {
-    .scroll-indicator {
-        animation: none !important;
+        animation: none;
     }
 }
 

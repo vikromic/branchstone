@@ -81,7 +81,9 @@
         },
         "lightbox": {
             "size": "Size:",
-            "materials": "Materials:"
+            "materials": "Materials:",
+            "priceOnRequest": "Price on Request",
+            "doubleTapToReset": "Double-tap to reset"
         },
         "artwork": {
             "sold": "Sold"
@@ -196,7 +198,9 @@
         },
         "lightbox": {
             "size": "Розмір:",
-            "materials": "Матеріали:"
+            "materials": "Матеріали:",
+            "priceOnRequest": "Ціна за запитом",
+            "doubleTapToReset": "Подвійне торкання для скидання"
         },
         "artwork": {
             "sold": "Продано"

@@ -106,12 +106,129 @@ export class Gallery {
     artworks.forEach((artwork, index) => {
       const item = this.type === 'featured'
         ? this.createFeaturedItem(artwork, index)
-        : this.createGalleryItem(artwork);
+        : this.createGalleryItem(artwork, index);
       fragment.appendChild(item);
     });
 
     // Single DOM operation instead of N operations
     this.container.appendChild(fragment);
+  }
+
+  /**
+   * Create responsive picture element with WebP and JPEG fallback
+   * @private
+   * @param {Object} artwork - Artwork data
+   * @param {Object} options - Picture options
+   * @param {string} options.loading - Loading attribute (lazy/eager)
+   * @param {string} options.sizes - Sizes attribute for responsive images
+   * @param {boolean} options.useThumbnail - Use thumbnail for src (grid view)
+   * @returns {Element} Picture element
+   */
+  createResponsivePicture(artwork, options = {}) {
+    const {
+      loading = 'lazy',
+      sizes = '(max-width: 768px) 100vw, 50vw',
+      useThumbnail = false,
+      priority = false // fetchpriority="high" for above-fold images
+    } = options;
+
+    const picture = createElement('picture');
+
+    // Helper: convert JPEG path to WebP path
+    const toWebP = (jpegPath) => jpegPath.replace(/\.(jpg|jpeg)$/i, '.webp');
+
+    // Final fallback img element source
+    // Use thumbnail for grid view, full image for featured/lightbox
+    const imgSrc = useThumbnail ? (artwork.thumb || artwork.image) : artwork.image;
+
+    // WebP source (preferred format) - auto-generate from JPEG if not provided
+    if (artwork.srcset?.webp) {
+      const webpSource = createElement('source', {
+        type: 'image/webp',
+        srcset: artwork.srcset.webp,
+        sizes,
+      });
+      picture.appendChild(webpSource);
+    } else if (imgSrc && /\.(jpg|jpeg)$/i.test(imgSrc)) {
+      // Auto-generate WebP source from JPEG path
+      const webpSource = createElement('source', {
+        type: 'image/webp',
+        srcset: toWebP(imgSrc),
+      });
+      picture.appendChild(webpSource);
+    }
+
+    // JPEG source (fallback for browsers without WebP support)
+    if (artwork.srcset?.jpeg) {
+      const jpegSource = createElement('source', {
+        type: 'image/jpeg',
+        srcset: artwork.srcset.jpeg,
+        sizes,
+      });
+      picture.appendChild(jpegSource);
+    }
+
+    const imgAttributes = {
+      src: imgSrc,
+      alt: artwork.title,
+      loading,
+      decoding: 'async', // Don't block main thread
+      // Explicit dimensions prevent CLS (Cumulative Layout Shift)
+      width: artwork.width || 400,
+      height: artwork.height || 500,
+    };
+
+    // Prioritize above-fold images
+    if (priority) {
+      imgAttributes.fetchpriority = 'high';
+    }
+
+    // Add srcset to img as additional fallback if no separate sources provided
+    if (artwork.srcset?.jpeg && !useThumbnail) {
+      imgAttributes.srcset = artwork.srcset.jpeg;
+      imgAttributes.sizes = sizes;
+    } else if (artwork.srcset && typeof artwork.srcset === 'string') {
+      // Backwards compatibility: if srcset is a string (old format)
+      imgAttributes.srcset = artwork.srcset;
+      imgAttributes.sizes = sizes;
+    }
+
+    const img = createElement('img', imgAttributes);
+
+    // LQIP (Low-Quality Image Placeholder) support
+    // If base64 placeholder exists, show it first with blur effect
+    if (artwork.lqip) {
+      // Set initial blurred placeholder
+      img.classList.add('lqip-loading');
+      img.src = artwork.lqip;
+
+      // Load full-quality image in background
+      const fullImg = new Image();
+      fullImg.onload = () => {
+        // Replace with full image and trigger fade-in transition
+        img.src = fullImg.src;
+        img.classList.remove('lqip-loading');
+        img.classList.add('lqip-loaded');
+
+        // Clean up class after transition completes
+        setTimeout(() => {
+          img.classList.remove('lqip-loaded');
+        }, 500);
+      };
+
+      // Set full image source based on options
+      fullImg.src = imgSrc;
+
+      // If image has srcset, use it for responsive loading
+      if (imgAttributes.srcset) {
+        fullImg.srcset = imgAttributes.srcset;
+        fullImg.sizes = sizes;
+      }
+    }
+
+    picture.appendChild(img);
+
+    return picture;
   }
 
   /**
@@ -132,31 +249,18 @@ export class Gallery {
       'aria-label': `View ${artwork.title} in gallery`,
     });
 
-    const imgAttributes = {
-      src: artwork.image,
-      alt: artwork.title,
+    // Use picture element for responsive images with WebP support
+    const picture = this.createResponsivePicture(artwork, {
       loading: index < CONFIG.ui.gallery.lazyLoadThreshold ? 'eager' : 'lazy',
-      // Explicit dimensions prevent CLS
-      width: artwork.width || 800,
-      height: artwork.height || 1000,
-    };
-
-    // Add srcset if available
-    if (artwork.srcset) {
-      imgAttributes.srcset = artwork.srcset;
-      imgAttributes.sizes = artwork.sizes || '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
-    } else {
-      imgAttributes.sizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
-    }
-
-    const img = createElement('img', imgAttributes);
+      sizes: artwork.sizes || '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw',
+    });
 
     const info = createElement('div', { className: 'featured-item-info' }, [
       createElement('h3', {}, artwork.title),
       createElement('p', {}, artwork.size),
     ]);
 
-    item.appendChild(img);
+    item.appendChild(picture);
     item.appendChild(info);
     wrapper.appendChild(item);
 
@@ -167,9 +271,10 @@ export class Gallery {
    * Create gallery item
    * @private
    * @param {Object} artwork - Artwork data
+   * @param {number} index - Item index for priority loading
    * @returns {Element} Gallery item element
    */
-  createGalleryItem(artwork) {
+  createGalleryItem(artwork, index = 0) {
     const item = createElement('div', {
       className: `gallery-item ${artwork.layout || ''} animate-on-scroll`,
       role: 'button',
@@ -190,24 +295,15 @@ export class Gallery {
       },
     });
 
-    const imgAttributes = {
-      src: artwork.image,
-      alt: artwork.title,
-      loading: 'lazy', // Gallery items are below the fold
-      // Explicit dimensions prevent CLS (Cumulative Layout Shift)
-      width: artwork.width || 800,
-      height: artwork.height || 1000,
-    };
-
-    // Add srcset if available
-    if (artwork.srcset) {
-      imgAttributes.srcset = artwork.srcset;
-      imgAttributes.sizes = artwork.sizes || '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
-    } else {
-      imgAttributes.sizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw';
-    }
-
-    const img = createElement('img', imgAttributes);
+    // Above fold: 8 on desktop (4×2 grid), 4 on mobile (2×2 grid)
+    const aboveFoldCount = window.innerWidth >= 768 ? 8 : 4;
+    const isAboveFold = index < aboveFoldCount;
+    const picture = this.createResponsivePicture(artwork, {
+      loading: isAboveFold ? 'eager' : 'lazy',
+      sizes: artwork.sizes || '(max-width: 768px) 50vw, 25vw',
+      useThumbnail: true,
+      priority: isAboveFold,
+    });
 
     const soldDot = !artwork.available
       ? createElement('span', {
@@ -228,7 +324,7 @@ export class Gallery {
 
     // Keyboard support handled via event delegation in setupKeyboardNavigation()
 
-    item.appendChild(img);
+    item.appendChild(picture);
     item.appendChild(info);
 
     return item;
@@ -285,8 +381,8 @@ export class Gallery {
     // Remove gallery-loaded class to show skeletons
     this.container.classList.remove('gallery-loaded');
 
-    // Add 8 skeleton items
-    const skeletonCount = 8;
+    // Add 4 skeleton items (reduced from 8 for better performance)
+    const skeletonCount = 4;
     for (let i = 0; i < skeletonCount; i++) {
       const skeletonItem = createElement('div', {
         className: 'skeleton-item',

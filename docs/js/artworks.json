@@ -80,7 +80,26 @@
         ],
         "description": "A tribute to the quiet passage of time, using elements weathered by sun and water.",
         "available": true,
-        "category": "nature"
+        "category": "nature",
+        "thumb": "img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-400w.webp",
+        "srcset": {
+            "webp": "img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-400w.webp 400w, img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-800w.webp 800w",
+            "jpeg": "img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-400w.jpeg 400w, img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-800w.jpeg 800w"
+        },
+        "imagesSrcset": [
+            {
+                "webp": "img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-400w.webp 400w, img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-800w.webp 800w",
+                "jpeg": "img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-400w.jpeg 400w, img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-800w.jpeg 800w"
+            },
+            {
+                "webp": "img/july_pines/521D5378-61B1-4136-8BA1-8BC25F9ED336_1_201_a-400w.webp 400w, img/july_pines/521D5378-61B1-4136-8BA1-8BC25F9ED336_1_201_a-800w.webp 800w",
+                "jpeg": "img/july_pines/521D5378-61B1-4136-8BA1-8BC25F9ED336_1_201_a-400w.jpeg 400w, img/july_pines/521D5378-61B1-4136-8BA1-8BC25F9ED336_1_201_a-800w.jpeg 800w"
+            },
+            {
+                "webp": "img/july_pines/D4676BF9-BA0C-4911-A527-9A67A4425394_1_201_a-400w.webp 400w, img/july_pines/D4676BF9-BA0C-4911-A527-9A67A4425394_1_201_a-800w.webp 800w",
+                "jpeg": "img/july_pines/D4676BF9-BA0C-4911-A527-9A67A4425394_1_201_a-400w.jpeg 400w, img/july_pines/D4676BF9-BA0C-4911-A527-9A67A4425394_1_201_a-800w.jpeg 800w"
+            }
+        ]
     },
     {
         "id": 6,
@@ -176,7 +195,15 @@
         ],
         "description": "An ascent through layers of blue, evoking sky and sea.",
         "available": true,
-        "category": "blue"
+        "category": "blue",
+        "imagesSrcset": [
+            null,
+            null,
+            {
+                "webp": "img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-400w.webp 400w, img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-800w.webp 800w",
+                "jpeg": "img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-400w.jpeg 400w, img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-800w.jpeg 800w"
+            }
+        ]
     },
     {
         "id": 11,
@@ -229,6 +256,15 @@
         ],
         "description": "Capturing the invisible force of wind through texture and movement.",
         "available": true,
-        "category": "nature"
+        "category": "nature",
+        "imagesSrcset": [
+            null,
+            null,
+            null,
+            {
+                "webp": "img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-400w.webp 400w, img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-800w.webp 800w",
+                "jpeg": "img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-400w.jpeg 400w, img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-800w.jpeg 800w"
+            }
+        ]
     }
 ]
