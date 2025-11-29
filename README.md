@@ -2,54 +2,143 @@
 
 A minimalist, elegant artist portfolio website for mixed-media artist Viktoria Branchstone.
 
-## About the Project
+## Live Site
 
-This portfolio showcases the artwork of Viktoria Branchstone, featuring a clean, modern design inspired by natural textures and tones. The website follows Apple-like design principles with generous whitespace, bold typography, and subtle animations.
+**URL**: [branchstone.art](https://branchstone.art)
 
 ## Features
 
-- Responsive design optimized for all device sizes
-- Dynamic gallery with lightbox functionality
-- Light/dark theme that respects user system preferences
-- Optimized performance with lazy loading images
-- Contact form with artwork inquiry pre-filling
-- Modern, accessibility-focused interface
+- **Gallery** with filters (Available, Small Items, Prints), lightbox with price/availability
+- **Commissions** page with custom inquiry form
+- **About** page with artist statement, shipping policies, customer feedback carousel
+- **Gallery Experience** carousel (auto-loaded from `highlights.json`)
+- **Video support** in gallery/lightbox (autoplay muted loop)
+- **Responsive design** optimized for all devices
+- **Light/dark theme** respecting system preferences
+- **Bilingual** (English/Ukrainian)
+- **PWA** with offline support
 
-## Setup and Deployment
+## Quick Start
 
-### Local Development
-
-1. Clone this repository
-2. Navigate to the `public` directory
-3. Run a local server:
-   ```bash
-   python -m http.server
-   ```
-   or any other local server of your choice
-4. Visit `http://localhost:8000` in your browser
-
-### Deployment on GitHub Pages
-
-This site is optimized for GitHub Pages deployment. To deploy:
-
-1. Push this repository to GitHub
-2. Go to repository Settings > Pages
-3. Select the `main` branch and `/docs` folder as the source
-4. (Optional) Configure a custom domain
+```bash
+# Local development
+cd docs
+python -m http.server 8000
+# Visit http://localhost:8000
+```
 
 ## Project Structure
 
-- `/docs` - Contains all website files (GitHub Pages will serve from here)
-  - `/css` - Stylesheets
-  - `/js` - JavaScript files and JSON data
-  - `/img` - Images and artwork
-  - `*.html` - HTML pages
+```
+docs/                     # Website files (GitHub Pages root)
+├── css/
+│   ├── 01-tokens.css    # Design tokens
+│   ├── ...              # Component CSS
+│   └── bundle.css       # Concatenated CSS (generated)
+├── js/
+│   ├── app.js           # Main application
+│   ├── components/      # UI components
+│   ├── artworks.json    # Gallery data
+│   ├── highlights.json  # Experience carousel data
+│   └── translations.json
+├── img/                 # Images
+│   ├── artwork/         # Gallery images
+│   └── highlight/       # Experience images
+└── *.html               # Pages
+
+scripts/                 # Build scripts
+├── optimize-images.js   # Image optimization (Sharp)
+└── README.md
+```
+
+## Content Management
+
+### Adding Artworks
+
+Edit `docs/js/artworks.json`:
+
+```json
+{
+  "id": 14,
+  "title": "New Artwork",
+  "size": "24x30 in",
+  "materials": "Mixed media on canvas",
+  "image": "img/artwork/main.jpeg",
+  "images": ["img/artwork/main.jpeg", "img/artwork/detail.jpeg"],
+  "description": "Description here",
+  "price": "$2,000",
+  "available": true,
+  "soldOut": false,
+  "printsAvailable": true,
+  "video": {                    // Optional
+    "webm": "img/artwork/preview.webm",
+    "mp4": "img/artwork/preview.mp4"
+  }
+}
+```
+
+### Adding Experience/Gallery Images
+
+Edit `docs/js/highlights.json`:
+
+```json
+[
+  {
+    "image": "img/highlight/exhibition.jpg",
+    "alt": "Gallery exhibition",
+    "caption": "Gallery Name – Exhibition Title – 2024"
+  }
+]
+```
+
+Section auto-appears when entries exist. No code changes needed.
+
+### Optimizing Images
+
+```bash
+cd scripts
+npm install
+npm run optimize
+```
+
+Generates 400w/800w variants in WebP + JPEG.
+
+### Rebuilding CSS
+
+After editing any CSS file in `docs/css/`:
+
+```bash
+cd docs/css
+cat 01-tokens.css 02-base.css 03-header.css 04-gallery.css 05-buttons.css 06-footer.css 07-utilities.css 08-hero.css 09-featured.css 10-about.css 11-contact.css 12-sections.css > bundle.css
+```
+
+## Deployment
+
+Site deploys automatically via GitHub Pages from `/docs` folder on `main` branch.
+
+```bash
+git checkout main
+git merge optimization
+git push origin main
+```
+
+## Documentation
+
+- `docs/ARCHITECTURE.md` - Code architecture and component APIs
+- `docs/js/README.md` - JavaScript module documentation
+- `scripts/README.md` - Image optimization scripts
+
+## Tech Stack
+
+- **Frontend**: Vanilla JS (ES6 modules), CSS custom properties
+- **Hosting**: GitHub Pages
+- **Forms**: Formspree
+- **Images**: Sharp for optimization
 
 ## Browser Support
 
-- Chrome, Firefox, Safari, Edge (latest versions)
-- Mobile browsers on iOS and Android
+Chrome, Firefox, Safari, Edge (latest versions), iOS Safari 14+, Chrome Mobile
 
 ## License
 
-All rights reserved. The code structure is provided for demonstration purposes only. The artwork, design, and content are property of Viktoria Branchstone.
+All rights reserved. Artwork, design, and content are property of Viktoria Branchstone.
