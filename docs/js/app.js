@@ -4,17 +4,20 @@
  * @module app
  */
 
+// Core components (always needed)
 import Menu from './components/Menu.js';
 import ThemeManager from './components/Theme.js';
-import Lightbox from './components/Lightbox.js';
-import Gallery from './components/Gallery.js';
-import GalleryFilter from './components/GalleryFilter.js';
 import AnimationManager from './components/Animations.js';
-import FormValidator from './components/FormValidator.js';
-import Carousel from './components/Carousel.js';
-import ScrollToTop from './components/ScrollToTop.js';
 import { getStorageItem, setStorageItem, removeStorageItem } from './utils/storage.js';
 import CONFIG from './config.js';
+
+// Page-specific components loaded dynamically on-demand:
+// - Gallery.js (gallery page, home page)
+// - GalleryFilter.js (gallery page)
+// - Lightbox.js (gallery page)
+// - Carousel.js (home page, about page)
+// - FormValidator.js (contact page)
+// - ScrollToTop.js (gallery page)
 
 class App {
   constructor() {
@@ -77,12 +80,12 @@ class App {
 
     // Contact page - Form validation
     if (path.includes('contact.html')) {
-      this.initContactPage();
+      await this.initContactPage();
     }
 
     // About page - Carousels
     if (path.includes('about.html')) {
-      this.initAboutPage();
+      await this.initAboutPage();
     }
   }
 
@@ -93,6 +96,15 @@ class App {
   async initHomePage() {
     const featuredGrid = document.getElementById('featured-artworks');
     if (!featuredGrid) return;
+
+    // Dynamically import Gallery and Carousel components
+    const [
+      { default: Gallery },
+      { default: Carousel }
+    ] = await Promise.all([
+      import('./components/Gallery.js'),
+      import('./components/Carousel.js')
+    ]);
 
     const gallery = new Gallery({
       containerSelector: '#featured-artworks',
@@ -123,6 +135,19 @@ class App {
   async initGalleryPage() {
     const galleryGrid = document.querySelector('.gallery-grid');
     if (!galleryGrid) return;
+
+    // Dynamically import Gallery, GalleryFilter, Lightbox, and ScrollToTop components
+    const [
+      { default: Gallery },
+      { default: GalleryFilter },
+      { default: Lightbox },
+      { default: ScrollToTop }
+    ] = await Promise.all([
+      import('./components/Gallery.js'),
+      import('./components/GalleryFilter.js'),
+      import('./components/Lightbox.js'),
+      import('./components/ScrollToTop.js')
+    ]);
 
     const gallery = new Gallery({
       containerSelector: '.gallery-grid',
@@ -174,7 +199,10 @@ class App {
    * Initialize about page components
    * @private
    */
-  initAboutPage() {
+  async initAboutPage() {
+    // Dynamically import Carousel component
+    const { default: Carousel } = await import('./components/Carousel.js');
+
     // Experience carousel
     const experienceCarousel = new Carousel({
       containerSelector: '#experience-carousel',
@@ -200,9 +228,12 @@ class App {
    * Initialize contact page components
    * @private
    */
-  initContactPage() {
+  async initContactPage() {
     // Pre-fill inquiry message if exists
     this.prefillInquiryMessage();
+
+    // Dynamically import FormValidator component
+    const { default: FormValidator } = await import('./components/FormValidator.js');
 
     // Initialize form validator
     const validator = new FormValidator({

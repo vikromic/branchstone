@@ -45,6 +45,7 @@ export class Lightbox {
       nextBtn: $('#next-btn', this.lightbox),
       indicator: $('#slider-indicator', this.lightbox),
       inquireBtn: $('.inquire-btn', this.lightbox),
+      zoomIndicator: null, // Created dynamically
     };
   }
 
@@ -70,6 +71,8 @@ export class Lightbox {
       lastTranslateX: 0,
       lastTranslateY: 0,
       lastTap: 0,
+      // Zoom indicator state
+      zoomIndicatorTimeout: null,
     };
   }
 
@@ -79,6 +82,7 @@ export class Lightbox {
    */
   init() {
     this.setInitialAttributes();
+    this.createZoomIndicator();
     this.attachEventListeners();
   }
 
@@ -88,6 +92,29 @@ export class Lightbox {
    */
   setInitialAttributes() {
     setAttributes(this.lightbox, { 'aria-hidden': 'true' });
+  }
+
+  /**
+   * Create zoom indicator element
+   * @private
+   */
+  createZoomIndicator() {
+    const container = $('.lightbox-image-container', this.lightbox);
+    if (!container) return;
+
+    const indicator = document.createElement('div');
+    indicator.className = 'zoom-indicator';
+    indicator.setAttribute('role', 'status');
+    indicator.setAttribute('aria-live', 'polite');
+    indicator.innerHTML = `
+      <div class="zoom-level"></div>
+      <div class="zoom-hint"></div>
+    `;
+    container.appendChild(indicator);
+
+    this.elements.zoomIndicator = indicator;
+    this.elements.zoomLevel = indicator.querySelector('.zoom-level');
+    this.elements.zoomHint = indicator.querySelector('.zoom-hint');
   }
 
   /**
@@ -507,6 +534,8 @@ export class Lightbox {
     this.elements.image.style.transform =
       `scale(${this.state.scale}) translate(${this.state.translateX}px, ${this.state.translateY}px)`;
     this.elements.image.style.transition = this.state.scale === 1 ? 'transform 0.3s ease' : 'none';
+
+    this.updateZoomIndicator();
   }
 
   /**
@@ -521,6 +550,48 @@ export class Lightbox {
     this.state.lastTranslateX = 0;
     this.state.lastTranslateY = 0;
     this.applyZoom();
+  }
+
+  /**
+   * Update zoom indicator display
+   * @private
+   */
+  updateZoomIndicator() {
+    if (!this.elements.zoomIndicator || !this.elements.zoomLevel || !this.elements.zoomHint) return;
+
+    const scale = this.state.scale;
+    const isZoomed = scale > 1.05;
+
+    if (isZoomed) {
+      // Show zoom level
+      this.elements.zoomLevel.textContent = `${scale.toFixed(1)}x`;
+
+      // Show hint message
+      const hintText = window.getTranslation?.('lightbox.doubleTapToReset') || 'Double-tap to reset';
+      this.elements.zoomHint.textContent = hintText;
+
+      // Show indicator
+      this.elements.zoomIndicator.classList.add('visible');
+
+      // Clear existing timeout
+      if (this.state.zoomIndicatorTimeout) {
+        clearTimeout(this.state.zoomIndicatorTimeout);
+      }
+
+      // Auto-hide after 2 seconds of no interaction
+      this.state.zoomIndicatorTimeout = setTimeout(() => {
+        if (this.elements.zoomIndicator) {
+          this.elements.zoomIndicator.classList.remove('visible');
+        }
+      }, 2000);
+    } else {
+      // Hide indicator when not zoomed
+      this.elements.zoomIndicator.classList.remove('visible');
+      if (this.state.zoomIndicatorTimeout) {
+        clearTimeout(this.state.zoomIndicatorTimeout);
+        this.state.zoomIndicatorTimeout = null;
+      }
+    }
   }
 
   /**

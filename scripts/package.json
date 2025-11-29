@@ -1,0 +1,21 @@
+{
+  "name": "branchstone-image-optimizer",
+  "version": "1.0.0",
+  "description": "Image optimization script for Branchstone gallery",
+  "main": "optimize-images.js",
+  "type": "module",
+  "scripts": {
+    "optimize": "node optimize-images.js"
+  },
+  "keywords": [
+    "image",
+    "optimization",
+    "webp",
+    "responsive"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "sharp": "^0.33.1"
+  }
+}

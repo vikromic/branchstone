@@ -27,12 +27,15 @@
     <title>Contact - Viktoria Branchstone</title>
 
     <!-- Preload critical assets -->
-    <link rel="preload" href="css/main.css" as="style">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="preload" href="css/bundle.css" as="style">
+    <link rel="modulepreload" href="js/app.js">
+    <link rel="modulepreload" href="js/config.js">
+    <link rel="preload" href="css/bundle.css" as="style">
+    <link rel="stylesheet" href="css/bundle.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
     <!-- Initialize theme as early as possible to avoid flickering -->
     <script src="js/theme-init.js"></script>
@@ -93,17 +96,17 @@
                 <form action="https://formspree.io/f/xgvbwebq" method="POST" id="contact-form" novalidate>
                     <div class="form-group">
                         <label for="name" data-translate="contact.nameLabel">Name<span class="required-indicator" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                        <input type="text" id="name" name="name" placeholder="Your full name" data-translate-placeholder="contact.namePlaceholder" required aria-required="true" aria-describedby="name-error">
+                        <input type="text" id="name" name="name" placeholder="Your full name" data-translate-placeholder="contact.namePlaceholder" autocomplete="name" required aria-required="true" aria-describedby="name-error">
                         <span class="error-message" id="name-error" role="alert" aria-live="assertive" aria-atomic="true"></span>
                     </div>
                     <div class="form-group">
                         <label for="email" data-translate="contact.emailLabel">Email<span class="required-indicator" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                        <input type="email" id="email" name="email" placeholder="your@email.com" data-translate-placeholder="contact.emailPlaceholder" required aria-required="true" aria-describedby="email-error">
+                        <input type="email" id="email" name="email" placeholder="your@email.com" data-translate-placeholder="contact.emailPlaceholder" autocomplete="email" required aria-required="true" aria-describedby="email-error">
                         <span class="error-message" id="email-error" role="alert" aria-live="assertive" aria-atomic="true"></span>
                     </div>
                     <div class="form-group">
                         <label for="message" data-translate="contact.messageLabel">Message<span class="required-indicator" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                        <textarea id="message" name="message" rows="6" placeholder="Tell us about your inquiry..." data-translate-placeholder="contact.messagePlaceholder" required aria-required="true" aria-describedby="message-error"></textarea>
+                        <textarea id="message" name="message" rows="6" placeholder="Tell us about your inquiry..." data-translate-placeholder="contact.messagePlaceholder" autocomplete="off" required aria-required="true" aria-describedby="message-error"></textarea>
                         <span class="error-message" id="message-error" role="alert" aria-live="assertive" aria-atomic="true"></span>
                     </div>
                     <!-- Honeypot for spam protection -->
@@ -151,6 +154,11 @@
 
     <script type="module" src="js/i18n.js"></script>
     <script type="module" src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+    </script>
 </body>
 
 </html>

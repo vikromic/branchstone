@@ -26,13 +26,404 @@
 
     <title>Gallery - Viktoria Branchstone</title>
 
+    <!-- Critical CSS for above-the-fold content -->
+    <style>
+        /* CSS Variables - Light Theme */
+        :root {
+            --background-color: #F8F8F8;
+            --text-color: #2B2B2B;
+            --text-rgb: 43, 43, 43;
+            --secondary-text: #4A4A4A;
+            --accent-color: hsl(40, 38%, 38%);
+            --card-background: #ffffff;
+            --header-background: rgba(248, 248, 248, 0.8);
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --button-color: #8B785D;
+            --button-text: #ffffff;
+            --z-header: 100;
+            --z-mobile-menu: 10000;
+            --z-mobile-controls: 10001;
+            --z-mobile-toggle: 10002;
+            --z-skip-link: 10003;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: 0.2s;
+            --transition-normal: 0.3s;
+            --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.02);
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-2xl: 1.5rem;
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --background-color: #2A2622;
+            --text-color: #F9F9F9;
+            --text-rgb: 249, 249, 249;
+            --secondary-text: #D4D6D9;
+            --accent-color: #C2B280;
+            --card-background: #353230;
+            --header-background: rgba(42, 38, 34, 0.8);
+            --border-color: #45474a;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Base Styles */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            line-height: 1.6;
+            letter-spacing: 0.01em;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: none;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            background: var(--accent-color);
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: var(--z-skip-link);
+            border-radius: 0 0 var(--radius-sm) 0;
+        }
+
+        .skip-link:focus {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: auto;
+            height: auto;
+            overflow: visible;
+            outline: 3px solid var(--text-color);
+            outline-offset: 2px;
+        }
+
+        /* Header */
+        header {
+            padding: 1rem 1.5rem;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: var(--header-background);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 48px;
+            height: 48px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 10002;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-color);
+            border-radius: 2px;
+            position: absolute;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .mobile-menu-toggle span:nth-child(1) { transform: translateY(-7px); }
+        .mobile-menu-toggle span:nth-child(2) { transform: translateY(0); }
+        .mobile-menu-toggle span:nth-child(3) { transform: translateY(7px); }
+
+        .mobile-page-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-color);
+            pointer-events: none;
+        }
+
+        #mobile-nav-menu {
+            display: none;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header Controls */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 10002;
+        }
+
+        .lang-toggle {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--secondary-text);
+            border-radius: 20px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lang-toggle .lang-option {
+            transition: color 0.2s ease;
+        }
+
+        .lang-toggle .active-lang {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .lang-toggle .lang-divider {
+            width: 1px;
+            height: 12px;
+            background: var(--border-color);
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-color);
+            fill: var(--text-color);
+            position: absolute;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .theme-toggle .moon-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .theme-toggle .sun-icon {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        [data-theme="dark"] .theme-toggle .moon-icon {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        [data-theme="dark"] .theme-toggle .sun-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Gallery Main */
+        main {
+            flex-grow: 1;
+            min-height: calc(100vh - 200px);
+        }
+
+        .gallery-main {
+            padding: 2rem 2rem 8rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Gallery Header */
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 2rem;
+        }
+
+        .gallery-header h1 {
+            font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 0 0 0.75rem 0;
+            letter-spacing: 0.01em;
+            line-height: 1.25;
+        }
+
+        .gallery-tagline {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: var(--secondary-text);
+            margin: 0;
+            letter-spacing: 0.02em;
+        }
+
+        /* Gallery Filter */
+        .gallery-filter {
+            margin-bottom: 3rem;
+            padding: 0 1rem;
+        }
+
+        .gallery-filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            min-height: 44px;
+            background: var(--card-background);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            font-family: 'Inter', sans-serif;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-normal) var(--ease-smooth);
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.02em;
+        }
+
+        .filter-btn.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 12px rgba(139, 120, 93, 0.25);
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem 2.5rem;
+            grid-auto-flow: dense;
+            content-visibility: auto;
+            contain-intrinsic-size: auto 500px;
+        }
+
+        /* Skeleton Loading */
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.03), 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.05);
+            min-height: 320px;
+        }
+
+        .skeleton-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(90deg, var(--card-background) 25%, var(--border-color) 50%, var(--card-background) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite ease-in-out;
+        }
+
+        .skeleton-info {
+            padding: 1rem 1.5rem;
+            background: var(--card-background);
+        }
+
+        .skeleton-title {
+            width: 70%;
+            height: 1.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--border-color) 25%, var(--card-background) 50%, var(--border-color) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite ease-in-out;
+            border-radius: 4px;
+        }
+
+        .skeleton-subtitle {
+            width: 40%;
+            height: 0.875rem;
+            background: linear-gradient(90deg, var(--border-color) 25%, var(--card-background) 50%, var(--border-color) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite ease-in-out;
+            border-radius: 4px;
+        }
+
+        .gallery-loaded .skeleton-item {
+            display: none;
+        }
+    </style>
+
     <!-- Preload critical assets -->
-    <link rel="preload" href="css/main.css" as="style">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="preload" href="js/artworks.json" as="fetch" crossorigin>
+    <link rel="modulepreload" href="js/app.js">
+    <link rel="modulepreload" href="js/config.js">
+
+    <!-- Load full CSS asynchronously -->
+    <link rel="stylesheet" href="css/bundle.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="css/bundle.css"></noscript>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
     <!-- Initialize theme as early as possible to avoid flickering -->
     <script src="js/theme-init.js"></script>
@@ -88,34 +479,6 @@
 
         <div class="gallery-grid">
             <!-- Skeleton Loading Placeholders -->
-            <div class="skeleton-item" aria-hidden="true">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-subtitle"></div>
-                </div>
-            </div>
-            <div class="skeleton-item" aria-hidden="true">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-subtitle"></div>
-                </div>
-            </div>
-            <div class="skeleton-item" aria-hidden="true">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-subtitle"></div>
-                </div>
-            </div>
-            <div class="skeleton-item" aria-hidden="true">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-subtitle"></div>
-                </div>
-            </div>
             <div class="skeleton-item" aria-hidden="true">
                 <div class="skeleton-image"></div>
                 <div class="skeleton-info">
@@ -225,6 +588,11 @@
 
     <script type="module" src="js/i18n.js"></script>
     <script type="module" src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+    </script>
 
 </body>
 
