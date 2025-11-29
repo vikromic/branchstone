@@ -218,8 +218,7 @@ export class GalleryFilter {
       requestAnimationFrame(() => {
         // Batch all DOM writes together (no reads in between)
         items.forEach(item => {
-          const itemCategory = item.dataset.category;
-          const shouldShow = category === 'all' || itemCategory === category;
+          const shouldShow = this.shouldShowItem(item, category);
 
           item.classList.toggle('filtered-out', !shouldShow);
           item.setAttribute('aria-hidden', (!shouldShow).toString());
@@ -229,6 +228,33 @@ export class GalleryFilter {
         this.galleryContainer.classList.remove('filtering');
       });
     }, 300);
+  }
+
+  /**
+   * Determine if item should be shown based on filter
+   * @private
+   * @param {Element} item - Gallery item element
+   * @param {string} category - Active filter category
+   * @returns {boolean} Whether item should be shown
+   */
+  shouldShowItem(item, category) {
+    if (category === 'all') return true;
+
+    const available = item.dataset.available === 'true';
+    const soldOut = item.dataset.soldout === 'true';
+    const filterTags = item.dataset.filterTags || '';
+    const printsAvailable = item.dataset.printsavailable === 'true';
+
+    switch (category) {
+      case 'available':
+        return available && !soldOut;
+      case 'small':
+        return filterTags.includes('small');
+      case 'prints':
+        return printsAvailable;
+      default:
+        return true;
+    }
   }
 
   /**
