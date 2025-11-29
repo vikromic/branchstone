@@ -408,7 +408,7 @@
 }
 
 /* ========================================
-   GALLERY EXPERIENCE SECTION (Single Image)
+   GALLERY EXPERIENCE SECTION (Carousel)
    ======================================== */
 
 .experience-section {
@@ -431,9 +431,23 @@
     text-align: center;
 }
 
-.experience-highlight {
+.experience-carousel-wrapper {
     max-width: 700px;
     margin: 0 auto;
+}
+
+.experience-carousel {
+    position: relative;
+}
+
+.experience-carousel .carousel-track {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.experience-carousel .carousel-item {
+    flex: 0 0 100%;
+    min-width: 100%;
 }
 
 .experience-figure {
@@ -448,6 +462,8 @@
 .experience-image {
     width: 100%;
     height: auto;
+    aspect-ratio: 4/3;
+    object-fit: cover;
     display: block;
     transition: transform 0.4s ease;
 }
@@ -470,6 +486,77 @@
     letter-spacing: 0.02em;
 }
 
+/* Experience carousel controls */
+.experience-carousel .carousel-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-100%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0.5rem;
+    pointer-events: none;
+}
+
+.experience-carousel .carousel-prev,
+.experience-carousel .carousel-next {
+    pointer-events: auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    color: var(--text-color);
+}
+
+.experience-carousel .carousel-prev:hover,
+.experience-carousel .carousel-next:hover {
+    background: #fff;
+    transform: scale(1.1);
+}
+
+[data-theme="dark"] .experience-carousel .carousel-prev,
+[data-theme="dark"] .experience-carousel .carousel-next {
+    background: rgba(50, 50, 50, 0.9);
+}
+
+[data-theme="dark"] .experience-carousel .carousel-prev:hover,
+[data-theme="dark"] .experience-carousel .carousel-next:hover {
+    background: rgba(70, 70, 70, 1);
+}
+
+/* Experience carousel indicators (dots) */
+.experience-carousel .carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+}
+
+.experience-carousel .carousel-indicators .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.experience-carousel .carousel-indicators .dot.active,
+.experience-carousel .carousel-indicators .dot:hover {
+    background: var(--accent-color);
+    transform: scale(1.2);
+}
+
 /* Responsive experience section */
 @media (max-width: 768px) {
     .experience-section {
@@ -487,6 +574,16 @@
 
     .experience-caption-text {
         font-size: 0.875rem;
+    }
+
+    .experience-carousel .carousel-prev,
+    .experience-carousel .carousel-next {
+        width: 36px;
+        height: 36px;
+    }
+
+    .experience-carousel .carousel-controls {
+        padding: 0 0.25rem;
     }
 }
 
