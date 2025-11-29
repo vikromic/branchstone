@@ -498,6 +498,52 @@
     display: block;
 }
 
+/* Lightbox Video */
+.lightbox-video {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    display: block;
+    border-radius: 4px;
+}
+
+/* Gallery Video (thumbnail/preview) */
+.gallery-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Video indicator badge on gallery items */
+.gallery-item.has-video::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    /* Play icon using CSS */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E");
+    background-size: 16px 16px;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-item.has-video:hover::after {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
 /* ========================================
    ZOOM INDICATOR
    ======================================== */
@@ -1064,7 +1110,8 @@
         max-height: 65vh;
     }
 
-    #lightbox-img {
+    #lightbox-img,
+    .lightbox-video {
         max-width: 100%;
         max-height: 65vh;
     }

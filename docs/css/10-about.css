@@ -340,7 +340,158 @@
 }
 
 /* ========================================
-   EXPERIENCE AND FEEDBACK SECTIONS
+   SHIPPING & POLICIES SECTION
+   ======================================== */
+
+.policies-section {
+    background: var(--card-background);
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.02),
+        0 4px 8px rgba(0, 0, 0, 0.03),
+        0 8px 16px rgba(0, 0, 0, 0.04);
+}
+
+.policies-section h2 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0 0 2.5rem 0;
+    color: var(--text-color);
+    letter-spacing: 0.01em;
+}
+
+.policy-block {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.policy-block:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.policy-block h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.75rem 0;
+    color: var(--accent-color);
+}
+
+.policy-block p {
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0;
+    color: var(--text-color);
+}
+
+.policy-block strong {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.policy-link {
+    color: var(--accent-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.2s ease;
+}
+
+.policy-link:hover {
+    opacity: 0.8;
+}
+
+/* ========================================
+   GALLERY EXPERIENCE SECTION (Single Image)
+   ======================================== */
+
+.experience-section {
+    background: var(--card-background);
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.02),
+        0 4px 8px rgba(0, 0, 0, 0.03),
+        0 8px 16px rgba(0, 0, 0, 0.04);
+}
+
+.experience-section h2 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0 0 2rem 0;
+    color: var(--text-color);
+    letter-spacing: 0.01em;
+    text-align: center;
+}
+
+.experience-highlight {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.experience-figure {
+    margin: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.05),
+        0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.experience-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.experience-figure:hover .experience-image {
+    transform: scale(1.02);
+}
+
+.experience-caption {
+    background: var(--background-color);
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+}
+
+.experience-caption-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--secondary-text);
+    letter-spacing: 0.02em;
+}
+
+/* Responsive experience section */
+@media (max-width: 768px) {
+    .experience-section {
+        padding: 2rem 1.5rem;
+    }
+
+    .experience-section h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .experience-caption {
+        padding: 1rem;
+    }
+
+    .experience-caption-text {
+        font-size: 0.875rem;
+    }
+}
+
+/* ========================================
+   EXPERIENCE AND FEEDBACK SECTIONS (Carousels)
    ======================================== */
 
 #experience,
@@ -521,6 +672,29 @@
 
     .feedback-card p {
         font-size: 1.1rem;
+    }
+
+    /* Policies section mobile */
+    .policies-section {
+        padding: 2rem 1.5rem;
+    }
+
+    .policies-section h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .policy-block {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .policy-block h3 {
+        font-size: 1rem;
+    }
+
+    .policy-block p {
+        font-size: 0.95rem;
     }
 }
 

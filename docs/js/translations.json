@@ -4,6 +4,7 @@
             "home": "Home",
             "gallery": "Gallery",
             "about": "About",
+            "commissions": "Commissions",
             "contact": "Contact"
         },
         "home": {
@@ -111,6 +112,33 @@
             "submessage": "Perhaps this piece has moved to a different exhibition.",
             "returnHome": "Return to Gallery"
         },
+        "commissions": {
+            "title": "Commission a Custom Artwork",
+            "intro": "I love working on commissions — it's a chance to create something deeply personal, whether it's tied to a memory, a place, or simply a feeling you want to keep close.",
+            "whatsPossible": "What's Possible",
+            "whatsPossibleText": "I work in an intuitive, abstract style using natural textures like bark, sand, dried leaves, or lichen. You're welcome to suggest a color palette, a mood, or a story you'd like the piece to reflect.",
+            "sizeInfo": "Any size or shape is possible — from tiny keepsakes to large wall pieces. Each artwork is made with acrylic and cast materials on canvas, board, or another surface that fits your vision.",
+            "whatToExpect": "What to Expect",
+            "whatToExpectText": "After we chat and agree on the direction, I'll share a sketch or mockup in 1–2 weeks. Once you love it, I'll need another 1–3 weeks to bring the piece to life, frame it, and prepare it for shipping. If you're nearby, we can talk about pickup or delivery too.",
+            "pricingPayment": "Pricing & Payment",
+            "pricingText": "Each piece is unique, so I'll share a custom quote after we talk about size, materials, and time.",
+            "depositInfo": "To begin the process, I ask for a <strong>$50 deposit</strong> — this helps cover the prep and design stage and goes toward the final cost. The rest is due once your piece is finished and ready to send.",
+            "aNote": "Just a Note",
+            "aNotText": "While I don't do portraits or realistic work, I'm always open to weaving in your story, symbols, or elements that are meaningful to you — within my natural, abstract style. If you're unsure whether your idea fits, just reach out — we can always talk it through.",
+            "howToBegin": "How to Begin",
+            "howToBeginText": "Fill out the form below or email me directly at thebranchstone@gmail.com. I'd love to hear what you're dreaming of.",
+            "formTitle": "Start Your Commission",
+            "sizeLabel": "Approximate Size",
+            "sizePlaceholder": "e.g., 24x36 inches, small tabletop piece",
+            "colorsLabel": "Color Palette or Mood",
+            "colorsPlaceholder": "e.g., earth tones, calm blues, autumn warmth",
+            "visionLabel": "Your Vision",
+            "visionPlaceholder": "Tell me about your idea — any memories, stories, or feelings you'd like the piece to capture...",
+            "timelineLabel": "Timeline",
+            "timelinePlaceholder": "e.g., no rush, needed by December",
+            "submit": "Send Commission Request",
+            "formHelper": "I typically respond within 24–48 hours to discuss your vision and provide a quote."
+        },
         "accessibility": {
             "skipToContent": "Skip to main content",
             "closeLightbox": "Close lightbox",
@@ -123,6 +151,7 @@
             "home": "Головна",
             "gallery": "Галерея",
             "about": "Про мене",
+            "commissions": "Замовлення",
             "contact": "Контакти"
         },
         "home": {
@@ -229,6 +258,33 @@
             "message": "Сторінку, яку ви шукаєте, не знайдено.",
             "submessage": "Можливо, ця робота переїхала на іншу виставку.",
             "returnHome": "Повернутися до галереї"
+        },
+        "commissions": {
+            "title": "Замовити індивідуальну роботу",
+            "intro": "Я люблю працювати над замовленнями — це можливість створити щось глибоко особисте, пов'язане з пам'яттю, місцем або просто почуттям, яке ви хочете зберегти близько.",
+            "whatsPossible": "Що можливо",
+            "whatsPossibleText": "Я працюю в інтуїтивному, абстрактному стилі, використовуючи природні текстури, такі як кора, пісок, сухе листя або лишайник. Ви можете запропонувати кольорову палітру, настрій або історію, яку хотіли б відобразити.",
+            "sizeInfo": "Будь-який розмір або форма можливі — від крихітних сувенірів до великих настінних робіт. Кожна робота виготовлена з акрилу та литих матеріалів на полотні, дошці або іншій поверхні, яка відповідає вашому баченню.",
+            "whatToExpect": "Чого очікувати",
+            "whatToExpectText": "Після нашої розмови та узгодження напрямку я поділюся ескізом або макетом протягом 1–2 тижнів. Коли він вам сподобається, мені знадобиться ще 1–3 тижні, щоб втілити роботу в життя, оформити та підготувати до відправки. Якщо ви поблизу, можемо обговорити самовивіз або доставку.",
+            "pricingPayment": "Ціни та оплата",
+            "pricingText": "Кожна робота унікальна, тому я поділюся індивідуальною ціною після обговорення розміру, матеріалів і часу.",
+            "depositInfo": "Щоб розпочати процес, я прошу <strong>завдаток $50</strong> — це допомагає покрити підготовку та етап дизайну і зараховується до кінцевої вартості. Решта сплачується, коли ваша робота готова до відправки.",
+            "aNote": "Зверніть увагу",
+            "aNotText": "Хоча я не роблю портрети або реалістичні роботи, я завжди відкрита до того, щоб вплести вашу історію, символи або елементи, які мають для вас значення — в межах мого природного, абстрактного стилю. Якщо ви не впевнені, чи підходить ваша ідея, просто зверніться — ми завжди можемо це обговорити.",
+            "howToBegin": "Як почати",
+            "howToBeginText": "Заповніть форму нижче або напишіть мені на thebranchstone@gmail.com. Я з радістю почую, про що ви мрієте.",
+            "formTitle": "Почати замовлення",
+            "sizeLabel": "Приблизний розмір",
+            "sizePlaceholder": "напр., 60x90 см, невелика настільна робота",
+            "colorsLabel": "Кольорова палітра або настрій",
+            "colorsPlaceholder": "напр., земляні тони, спокійні блакитні, осіння теплота",
+            "visionLabel": "Ваше бачення",
+            "visionPlaceholder": "Розкажіть про свою ідею — які спогади, історії чи почуття ви хотіли б відобразити...",
+            "timelineLabel": "Терміни",
+            "timelinePlaceholder": "напр., не терміново, потрібно до грудня",
+            "submit": "Надіслати запит на замовлення",
+            "formHelper": "Зазвичай відповідаю протягом 24–48 годин, щоб обговорити ваше бачення та надати ціну."
         },
         "accessibility": {
             "skipToContent": "Перейти до основного вмісту",
