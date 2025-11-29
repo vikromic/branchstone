@@ -20,7 +20,17 @@
         "soldOut": false,
         "printsAvailable": true,
         "filterTags": "",
-        "category": "fire"
+        "category": "fire",
+        "imagesSrcset": [
+            null,
+            null,
+            null,
+            null,
+            {
+                "webp": "img/born_of_burn/56982BA8-65C3-44CB-A6DD-3C205669E58C_1_105_c-400w.webp 400w",
+                "jpeg": "img/born_of_burn/56982BA8-65C3-44CB-A6DD-3C205669E58C_1_105_c-400w.jpeg 400w"
+            }
+        ]
     },
     {
         "id": 2,
@@ -42,7 +52,23 @@
         "soldOut": false,
         "printsAvailable": true,
         "filterTags": "",
-        "category": "fire"
+        "category": "fire",
+        "thumb": "img/by_marks_and_fire/1B2EEF46-AE1B-429D-B6B1-D78D25075FF0_1_105_c-400w.webp",
+        "srcset": {
+            "webp": "img/by_marks_and_fire/1B2EEF46-AE1B-429D-B6B1-D78D25075FF0_1_105_c-400w.webp 400w",
+            "jpeg": "img/by_marks_and_fire/1B2EEF46-AE1B-429D-B6B1-D78D25075FF0_1_105_c-400w.jpeg 400w"
+        },
+        "imagesSrcset": [
+            {
+                "webp": "img/by_marks_and_fire/1B2EEF46-AE1B-429D-B6B1-D78D25075FF0_1_105_c-400w.webp 400w",
+                "jpeg": "img/by_marks_and_fire/1B2EEF46-AE1B-429D-B6B1-D78D25075FF0_1_105_c-400w.jpeg 400w"
+            },
+            null,
+            {
+                "webp": "img/by_marks_and_fire/6029788A-0538-4E59-99EE-09FA96633C79_1_105_c-400w.webp 400w",
+                "jpeg": "img/by_marks_and_fire/6029788A-0538-4E59-99EE-09FA96633C79_1_105_c-400w.jpeg 400w"
+            }
+        ]
     },
     {
         "id": 3,
@@ -80,7 +106,15 @@
         "soldOut": true,
         "printsAvailable": true,
         "filterTags": "",
-        "category": "nature"
+        "category": "nature",
+        "imagesSrcset": [
+            null,
+            null,
+            {
+                "webp": "img/core/30D29747-3372-4B45-95E8-9D8B8527C554_1_105_c-400w.webp 400w",
+                "jpeg": "img/core/30D29747-3372-4B45-95E8-9D8B8527C554_1_105_c-400w.jpeg 400w"
+            }
+        ]
     },
     {
         "id": 5,
@@ -164,7 +198,14 @@
         "soldOut": false,
         "printsAvailable": true,
         "filterTags": "",
-        "category": "blue"
+        "category": "blue",
+        "imagesSrcset": [
+            null,
+            {
+                "webp": "img/navy_of_the_dreamland/52FCD2FE-7D05-4EB0-A3D8-BB5B1FF4427E_1_105_c-400w.webp 400w",
+                "jpeg": "img/navy_of_the_dreamland/52FCD2FE-7D05-4EB0-A3D8-BB5B1FF4427E_1_105_c-400w.jpeg 400w"
+            }
+        ]
     },
     {
         "id": 8,
@@ -204,7 +245,17 @@
         "soldOut": false,
         "printsAvailable": true,
         "filterTags": "",
-        "category": "nature"
+        "category": "nature",
+        "imagesSrcset": [
+            null,
+            null,
+            null,
+            null,
+            {
+                "webp": "img/prolisok/E7305B34-6BA3-4A3B-BC66-087606E4F67D_1_105_c-400w.webp 400w",
+                "jpeg": "img/prolisok/E7305B34-6BA3-4A3B-BC66-087606E4F67D_1_105_c-400w.jpeg 400w"
+            }
+        ]
     },
     {
         "id": 10,
@@ -236,6 +287,19 @@
             {
                 "webp": "img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-400w.webp 400w, img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-800w.webp 800w",
                 "jpeg": "img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-400w.jpeg 400w, img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-800w.jpeg 800w"
+            },
+            null,
+            null,
+            {
+                "webp": "img/rise_in_blue/9AA71EB8-D28E-42F6-B011-26D64A21CD61_1_105_c-400w.webp 400w",
+                "jpeg": "img/rise_in_blue/9AA71EB8-D28E-42F6-B011-26D64A21CD61_1_105_c-400w.jpeg 400w"
+            },
+            null,
+            null,
+            null,
+            {
+                "webp": "img/rise_in_blue/FABFDD02-2220-4B40-BB7F-46D2BBDEECC1_1_105_c-400w.webp 400w",
+                "jpeg": "img/rise_in_blue/FABFDD02-2220-4B40-BB7F-46D2BBDEECC1_1_105_c-400w.jpeg 400w"
             }
         ]
     },
@@ -279,7 +343,20 @@
         "soldOut": false,
         "printsAvailable": true,
         "filterTags": "",
-        "category": "blue"
+        "category": "blue",
+        "imagesSrcset": [
+            null,
+            null,
+            null,
+            {
+                "webp": "img/whales/5289B85B-1084-4D50-AF01-8A06C1136352_4_5005_c-400w.webp 400w",
+                "jpeg": "img/whales/5289B85B-1084-4D50-AF01-8A06C1136352_4_5005_c-400w.jpeg 400w"
+            },
+            {
+                "webp": "img/whales/55137885-5B8C-4B9F-8B12-CFBEFBC27867_1_105_c-400w.webp 400w",
+                "jpeg": "img/whales/55137885-5B8C-4B9F-8B12-CFBEFBC27867_1_105_c-400w.jpeg 400w"
+            }
+        ]
     },
     {
         "id": 13,
@@ -302,7 +379,10 @@
         "category": "nature",
         "imagesSrcset": [
             null,
-            null,
+            {
+                "webp": "img/winds/888F1949-45B1-4DAA-88B9-71AC5293C2EB_1_105_c-400w.webp 400w",
+                "jpeg": "img/winds/888F1949-45B1-4DAA-88B9-71AC5293C2EB_1_105_c-400w.jpeg 400w"
+            },
             null,
             {
                 "webp": "img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-400w.webp 400w, img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-800w.webp 800w",
