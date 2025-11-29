@@ -171,18 +171,50 @@
 
         <section id="experience" class="about-section experience-section animate-on-scroll" style="display: none;">
             <h2 data-translate="about.experienceTitle">Gallery Experience & Media</h2>
-            <div class="experience-highlight">
-                <!-- Add your highlight image from img/highlight/ folder -->
-                <figure class="experience-figure">
-                    <img src="img/highlight/gallery-experience.jpg"
-                         alt="Gallery exhibition"
-                         class="experience-image"
-                         loading="lazy">
-                    <figcaption class="experience-caption">
-                        <!-- Format: Place – Exhibition – Date -->
-                        <span class="experience-caption-text">Gallery Name – Exhibition Title – 2024</span>
-                    </figcaption>
-                </figure>
+            <div class="experience-carousel-wrapper">
+                <div class="carousel experience-carousel" id="experience-carousel">
+                    <div class="carousel-track">
+                        <!-- Add images from img/highlight/ folder. Format caption: Place – Exhibition – Date -->
+                        <div class="carousel-item">
+                            <figure class="experience-figure">
+                                <img src="img/highlight/image1.jpg" alt="Gallery exhibition" class="experience-image" loading="lazy">
+                                <figcaption class="experience-caption">
+                                    <span class="experience-caption-text">Gallery Name – Exhibition Title – 2024</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="carousel-item">
+                            <figure class="experience-figure">
+                                <img src="img/highlight/image2.jpg" alt="Gallery exhibition" class="experience-image" loading="lazy">
+                                <figcaption class="experience-caption">
+                                    <span class="experience-caption-text">Gallery Name – Exhibition Title – 2024</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="carousel-item">
+                            <figure class="experience-figure">
+                                <img src="img/highlight/image3.jpg" alt="Gallery exhibition" class="experience-image" loading="lazy">
+                                <figcaption class="experience-caption">
+                                    <span class="experience-caption-text">Gallery Name – Exhibition Title – 2024</span>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <!-- Add more carousel-item blocks as needed for 6+ images -->
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-prev" aria-label="Previous image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <button class="carousel-next" aria-label="Next image">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="carousel-indicators"></div>
+                </div>
             </div>
         </section>
 
