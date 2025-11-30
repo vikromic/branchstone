@@ -61,7 +61,7 @@ Edit `docs/js/artworks.json`:
 {
   "id": 14,
   "title": "New Artwork",
-  "size": "24x30 in",
+  "size": "21 x 16 in",
   "materials": "Mixed media on canvas",
   "image": "img/artwork/main.jpeg",
   "images": ["img/artwork/main.jpeg", "img/artwork/detail.jpeg"],
