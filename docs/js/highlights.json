@@ -1,12 +1,19 @@
 [
     {
-        "image": "img/highlight/art3.jpeg",
-        "alt": "Gallery exhibition",
-        "caption": "Gallery Name – Exhibition Title – 2024"
+        "image": "img/highlight/galleries.webp",
+        "fallback": "img/highlight/galleries.jpeg",
+        "alt": "Branchstone artworks displayed in gallery exhibition space",
+        "caption": "Gallery Exhibition – Mixed Media Installation – 2024"
     },
     {
-        "image": "img/highlight/art8.jpeg",
-        "alt": "Gallery exhibition",
-        "caption": "Gallery Name – Exhibition Title – 2024"
+        "image": "img/highlight/galleries_2.webp",
+        "fallback": "img/highlight/galleries_2.jpeg",
+        "alt": "Close-up view of natural materials artwork in gallery setting",
+        "caption": "Gallery Exhibition – Natural Materials Series – 2024"
+    },
+    {
+        "image": "img/highlight/voyage_dllas.jpg",
+        "alt": "Voyage Dallas magazine feature on mixed media artist",
+        "caption": "Voyage Dallas – Artist Feature Interview – 2024"
     }
 ]
