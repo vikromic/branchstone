@@ -1,10 +1,11 @@
-const CACHE_NAME = 'branchstone-v1';
+const CACHE_NAME = 'branchstone-v2';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './gallery.html',
   './about.html',
   './contact.html',
+  './commissions.html',
   './offline.html',
   './css/bundle.css',
   './js/app.js',
@@ -64,7 +65,8 @@ self.addEventListener('fetch', (event) => {
       url.pathname.endsWith('.js') ||
       url.pathname === '/'
     ) {
-      event.respondWith(cacheFirstWithNetworkFallback(request, CACHE_NAME));
+      // Network-first for HTML/CSS/JS to get fresh content
+      event.respondWith(networkFirstWithCache(request, CACHE_NAME));
     }
   }
 });
