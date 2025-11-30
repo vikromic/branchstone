@@ -232,6 +232,47 @@ class App {
       pauseOnHover: true,
     });
     this.components.set('feedbackCarousel', feedbackCarousel);
+
+    // Initialize section navigation
+    this.initSectionNavigation();
+  }
+
+  /**
+   * Initialize section navigation active state tracking
+   * @private
+   */
+  initSectionNavigation() {
+    const sections = document.querySelectorAll('.about-section[id]');
+    const navLinks = document.querySelectorAll('.section-nav-link');
+
+    if (!sections.length || !navLinks.length) return;
+
+    // Track active section based on scroll position
+    const observerOptions = {
+      root: null,
+      rootMargin: '-100px 0px -66% 0px',
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+
+          // Update active state on navigation links
+          navLinks.forEach((link) => {
+            const href = link.getAttribute('href').substring(1);
+            if (href === id) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((section) => observer.observe(section));
   }
 
   /**
@@ -258,12 +299,33 @@ class App {
       highlights.forEach((item, index) => {
         const carouselItem = document.createElement('div');
         carouselItem.className = 'carousel-item';
-        carouselItem.innerHTML = `
-          <figure class="experience-figure">
+
+        // Build image HTML with WebP support and fallback
+        let imageHTML;
+        if (item.fallback) {
+          // Use picture element for WebP with fallback
+          imageHTML = `
+            <picture>
+              <source srcset="${item.image}" type="image/webp">
+              <img src="${item.fallback}"
+                   alt="${item.alt || 'Gallery exhibition'}"
+                   class="experience-image"
+                   loading="${index < 2 ? 'eager' : 'lazy'}">
+            </picture>
+          `;
+        } else {
+          // Use regular img tag
+          imageHTML = `
             <img src="${item.image}"
                  alt="${item.alt || 'Gallery exhibition'}"
                  class="experience-image"
                  loading="${index < 2 ? 'eager' : 'lazy'}">
+          `;
+        }
+
+        carouselItem.innerHTML = `
+          <figure class="experience-figure">
+            ${imageHTML}
             <figcaption class="experience-caption">
               <span class="experience-caption-text">${item.caption}</span>
             </figcaption>
@@ -440,9 +502,17 @@ class App {
         e.preventDefault();
         const target = document.querySelector(href);
         if (target) {
-          target.scrollIntoView({
+          // Calculate offset for sticky elements (header + section nav on about page)
+          const sectionNav = document.querySelector('.about-section-nav');
+          const headerHeight = document.querySelector('header')?.offsetHeight || 80;
+          const sectionNavHeight = sectionNav?.offsetHeight || 0;
+          const offset = headerHeight + sectionNavHeight + 20; // 20px extra padding
+
+          const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
+
+          window.scrollTo({
+            top: targetPosition,
             behavior: 'smooth',
-            block: 'start',
           });
         }
       });
