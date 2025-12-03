@@ -102,7 +102,8 @@
             "printsAvailable": "Prints Available",
             "emailMockup": "Email me to see a mockup of this painting on your wall.",
             "colorNote": "Please note that colours may vary slightly on different screens.",
-            "doubleTapToReset": "Double-tap to reset"
+            "doubleTapToReset": "Double-tap to reset",
+            "backToGallery": "Back to Gallery"
         },
         "artwork": {
             "sold": "Sold"
@@ -265,7 +266,8 @@
             "printsAvailable": "Доступні принти",
             "emailMockup": "Напишіть мені, щоб побачити макет цієї картини на вашій стіні.",
             "colorNote": "Зверніть увагу, що кольори можуть трохи відрізнятися на різних екранах.",
-            "doubleTapToReset": "Подвійне торкання для скидання"
+            "doubleTapToReset": "Подвійне торкання для скидання",
+            "backToGallery": "Назад до галереї"
         },
         "artwork": {
             "sold": "Продано"

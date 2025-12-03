@@ -51,6 +51,7 @@ export class Lightbox {
       availability: $('#lightbox-availability', this.lightbox),
       prints: $('#lightbox-prints', this.lightbox),
       closeBtn: $('.close-lightbox', this.lightbox),
+      backBtn: $('#back-to-gallery', this.lightbox),
       prevBtn: $('#prev-btn', this.lightbox),
       nextBtn: $('#next-btn', this.lightbox),
       indicator: $('#slider-indicator', this.lightbox),
@@ -210,6 +211,11 @@ export class Lightbox {
     // Close handlers
     if (this.elements.closeBtn) {
       on(this.elements.closeBtn, 'click', () => this.close());
+    }
+
+    // Back to Gallery button (desktop full-screen view)
+    if (this.elements.backBtn) {
+      on(this.elements.backBtn, 'click', () => this.close());
     }
 
     on(this.lightbox, 'click', (e) => {
@@ -401,6 +407,15 @@ export class Lightbox {
   }
 
   /**
+   * Check if viewport is desktop size
+   * @private
+   * @returns {boolean} True if desktop viewport
+   */
+  isDesktop() {
+    return window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  /**
    * Open lightbox with choreographed animation
    */
   open() {
@@ -408,9 +423,11 @@ export class Lightbox {
     this.lightbox.style.display = 'flex';
     setAttributes(this.lightbox, { 'aria-hidden': 'false' });
 
-    // Remove closing class if present, add opening class
+    // Apply animation classes only on mobile (desktop uses instant full-screen)
     this.lightbox.classList.remove('is-closing');
-    this.lightbox.classList.add('is-open');
+    if (!this.isDesktop()) {
+      this.lightbox.classList.add('is-open');
+    }
 
     // Lock body scroll
     document.body.style.overflow = 'hidden';
@@ -422,10 +439,11 @@ export class Lightbox {
     // Show gesture hint for first-time users (mobile only)
     this.showGestureHintIfNeeded();
 
-    // Focus close button after animation starts
+    // Focus appropriate button based on viewport
     setTimeout(() => {
-      if (this.elements.closeBtn) {
-        this.elements.closeBtn.focus();
+      const focusTarget = this.isDesktop() ? this.elements.backBtn : this.elements.closeBtn;
+      if (focusTarget) {
+        focusTarget.focus();
       }
     }, 150);
   }
@@ -480,12 +498,16 @@ export class Lightbox {
     this.state.isOpen = false;
     setAttributes(this.lightbox, { 'aria-hidden': 'true' });
 
-    // Add closing animation class
-    this.lightbox.classList.remove('is-open');
-    this.lightbox.classList.add('is-closing');
+    const isDesktop = this.isDesktop();
 
-    // Wait for animation to complete before hiding
-    const animationDuration = 300; // Match CSS animation duration
+    // Apply closing animation only on mobile
+    this.lightbox.classList.remove('is-open');
+    if (!isDesktop) {
+      this.lightbox.classList.add('is-closing');
+    }
+
+    // Desktop: instant close. Mobile: wait for animation
+    const animationDuration = isDesktop ? 0 : 300;
 
     setTimeout(() => {
       this.lightbox.style.display = 'none';

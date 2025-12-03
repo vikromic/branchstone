@@ -2223,6 +2223,150 @@ body.menu-open .mobile-page-title {
 }
 
 /* ========================================
+   DESKTOP FULL-SCREEN GALLERY VIEW
+   Replaces modal with immersive 65/35 split layout
+   ======================================== */
+
+@media (min-width: 769px) {
+    /* Transform lightbox from modal to full-screen view */
+    .lightbox {
+        background-color: var(--background-color);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .lightbox::before {
+        display: none;
+    }
+
+    .lightbox-content {
+        width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        animation: none;
+        flex-direction: row;
+    }
+
+    .lightbox.is-closing .lightbox-content {
+        animation: none;
+    }
+
+    /* Image container takes 65% width */
+    .lightbox-image-container {
+        max-width: 65%;
+        width: 65%;
+        height: 100vh;
+        background-color: #0a0a0a;
+    }
+
+    /* Reduce spotlight intensity for full-screen */
+    .lightbox-image-container::after {
+        background: radial-gradient(ellipse at center,
+                transparent 40%,
+                rgba(0, 0, 0, 0.15) 70%,
+                rgba(0, 0, 0, 0.3) 100%);
+    }
+
+    .lightbox-image-wrapper {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+    }
+
+    #lightbox-img {
+        max-height: 100vh;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    /* Caption/details sidebar takes 35% width */
+    #lightbox-caption {
+        width: 35%;
+        height: 100vh;
+        padding: 3rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow-y: auto;
+    }
+
+    /* Hide X close button on desktop, use Back to Gallery instead */
+    .close-lightbox {
+        display: none;
+    }
+
+    /* Back to Gallery button styling */
+    .back-to-gallery {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        padding: 0.75rem 0;
+        background: transparent;
+        border: none;
+        color: var(--accent-color);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.875rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        align-self: flex-start;
+    }
+
+    .back-to-gallery:hover {
+        color: var(--text-color);
+        transform: translateX(-4px);
+    }
+
+    .back-to-gallery:focus-visible {
+        outline: 2px solid var(--accent-color);
+        outline-offset: 4px;
+        border-radius: 4px;
+    }
+
+    .back-to-gallery svg {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.2s ease;
+    }
+
+    .back-to-gallery:hover svg {
+        transform: translateX(-2px);
+    }
+
+    /* Slider navigation adjustments for full-screen */
+    .slider-btn {
+        width: 56px;
+        height: 56px;
+    }
+
+    .slider-btn-prev {
+        left: 1.5rem;
+    }
+
+    .slider-btn-next {
+        right: 1.5rem;
+    }
+
+    /* Slider indicator positioning */
+    .slider-indicator {
+        bottom: 1.5rem;
+    }
+}
+
+/* Hide back button on mobile (using X close instead) */
+@media (max-width: 768px) {
+    .back-to-gallery {
+        display: none;
+    }
+}
+
+/* ========================================
    TABLET BREAKPOINT (769px - 1024px)
    ======================================== */
 

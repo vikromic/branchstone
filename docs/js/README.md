@@ -322,6 +322,6 @@ Global APIs preserved for compatibility:
 
 ---
 
-**Version**: 2.0.0
-**Last Updated**: 2025-01-09
+**Version**: 2.2.0
+**Last Updated**: 2025-12-03
 **Architecture**: Clean Architecture + ES6 Modules

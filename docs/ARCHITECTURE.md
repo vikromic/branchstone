@@ -195,17 +195,27 @@ theme.getTheme(); // 'light' | 'dark'
 ```
 
 #### **Lightbox.js**
-Full-featured image gallery lightbox.
+Full-featured image gallery viewer.
 
-**Features**:
-- Multi-image support
-- Swipe navigation (mobile)
-- Pinch-to-zoom (mobile)
-- Double-tap to zoom
-- Keyboard navigation
+**Desktop (≥769px)**: Full-screen 65/35 split layout
+- 65% image container (left)
+- 35% details sidebar (right)
+- "Back to Gallery" button
+- Instant open/close (no animation)
+
+**Mobile (<769px)**: Modal overlay
+- Swipe navigation
+- Pinch-to-zoom, double-tap zoom
+- Bottom sheet details overlay
+- X close button
+
+**Common Features**:
+- Multi-image support with slider
+- Keyboard navigation (arrows, escape)
 - Focus trap
 - Screen reader announcements
 - Inquiry button → contact form
+- Video support (autoplay muted loop)
 
 **API**:
 ```javascript
@@ -623,5 +633,5 @@ All components follow WCAG 2.1 AA:
 
 ---
 
-**Last Updated**: 2025-01-14
-**Version**: 2.1.0 (Commissions, Shipping, Video Support)
+**Last Updated**: 2025-12-03
+**Version**: 2.2.0 (Desktop full-screen gallery, infinite scroll mobile)

@@ -63,9 +63,9 @@ npm run test:ci
 
 ### Summary (Current)
 
-- **Total Tests**: 223 tests across 7 test suites
-- **Pass Rate**: 100% (223/223 passing)
-- **Execution Time**: ~2.5 seconds
+- **Total Tests**: 386 tests across 8 test suites
+- **Pass Rate**: 100% (386/386 passing)
+- **Execution Time**: ~3 seconds
 - **Test Lines**: ~3,000+ lines of test code
 
 ### Critical Path Coverage (Target: >70%)
@@ -279,7 +279,7 @@ const createMockArtwork = (overrides = {}) => ({
 
 ## Test Suite Status
 
-All 223 tests passing with zero known issues. The test suite is deterministic and reliable for production use.
+All 386 tests passing with zero known issues. The test suite is deterministic and reliable for production use.
 
 ## CI/CD Integration
 
@@ -468,10 +468,10 @@ beforeEach(() => {
 
 The testing infrastructure provides:
 
-✅ **223 comprehensive tests** covering all critical paths
-✅ **100% pass rate** (223/223 tests)
+✅ **386 comprehensive tests** covering all critical paths
+✅ **100% pass rate** (386/386 tests)
 ✅ **>80% coverage** on core components
-✅ **Ultra-fast execution** (~2.5s total)
+✅ **Fast execution** (~3s total)
 ✅ **Deterministic tests** with proper isolation
 ✅ **Production-ready** with coverage thresholds
 ✅ **Maintainable** with clear naming and structure

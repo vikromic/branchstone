@@ -22,7 +22,7 @@ A minimalist, elegant artist portfolio website for mixed-media artist Viktoria B
 - **Light/dark theme** respecting system preferences
 - **Bilingual** (English/Ukrainian)
 - **PWA** with offline support
-- **223 unit tests** (100% pass rate) with comprehensive coverage
+- **386 unit tests** (100% pass rate) with comprehensive coverage
 - **CI/CD pipeline** with automated testing, linting, and GitHub Pages deployment
 
 ## Quick Start
@@ -41,7 +41,7 @@ npm run serve
 ### Testing
 
 ```bash
-# Run tests (223 tests)
+# Run tests (386 tests)
 npm test
 
 # Run with coverage report
@@ -158,7 +158,7 @@ Every push and pull request triggers automated quality checks:
 
 - **Linting**: ESLint code quality enforcement
 - **Formatting**: Prettier consistency validation
-- **Testing**: Jest unit tests (223 tests, 100% pass rate)
+- **Testing**: Jest unit tests (386 tests, 100% pass rate)
 - **Build**: CSS bundle and file validation
 - **Security**: npm audit for vulnerabilities
 - **Performance**: Asset size monitoring
@@ -174,7 +174,7 @@ open coverage/index.html
 ## Documentation
 
 ### Getting Started
-- **[TESTING.md](TESTING.md)** - Comprehensive testing guide (223 tests, coverage reports)
+- **[TESTING.md](TESTING.md)** - Comprehensive testing guide (386 tests, coverage reports)
 - **[tests/README.md](tests/README.md)** - Test directory structure and best practices
 - **[.github/SETUP.md](.github/SETUP.md)** - GitHub Actions and CI/CD configuration
 
