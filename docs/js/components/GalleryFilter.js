@@ -21,7 +21,9 @@ export class GalleryFilter {
     this.onFilterCallback = options.onFilter;
     this.activeCategory = 'all';
 
-    if (!this.container || !this.galleryContainer) return;
+    if (!this.container || !this.galleryContainer) {
+      return;
+    }
 
     this.init();
   }
@@ -61,7 +63,7 @@ export class GalleryFilter {
    */
   updateButtonLabels() {
     const buttons = this.container.querySelectorAll('.filter-btn');
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       const categoryId = button.dataset.category;
       button.textContent = this.getLabel(categoryId);
     });
@@ -77,9 +79,11 @@ export class GalleryFilter {
     if (categoryId === 'all') {
       return window.getTranslation?.('gallery.filterAll') || 'All Works';
     }
-    return window.getTranslation?.(`gallery.filters.${categoryId}`)
-      || this.categories.find(cat => cat.id === categoryId)?.label
-      || categoryId;
+    return (
+      window.getTranslation?.(`gallery.filters.${categoryId}`) ||
+      this.categories.find((cat) => cat.id === categoryId)?.label ||
+      categoryId
+    );
   }
 
   /**
@@ -90,7 +94,7 @@ export class GalleryFilter {
     const filterButtons = createElement('div', {
       className: 'gallery-filter-buttons',
       role: 'group',
-      'aria-label': 'Filter artworks by category'
+      'aria-label': 'Filter artworks by category',
     });
 
     // Add "All Works" button
@@ -99,13 +103,9 @@ export class GalleryFilter {
     filterButtons.appendChild(allButton);
 
     // Add category buttons
-    this.categories.forEach(category => {
+    this.categories.forEach((category) => {
       const label = this.getLabel(category.id);
-      const button = this.createFilterButton(
-        category.id,
-        label,
-        false
-      );
+      const button = this.createFilterButton(category.id, label, false);
       filterButtons.appendChild(button);
     });
 
@@ -117,7 +117,7 @@ export class GalleryFilter {
       className: 'sr-only',
       'aria-live': 'polite',
       'aria-atomic': 'true',
-      id: 'filter-announcement'
+      id: 'filter-announcement',
     });
     this.container.appendChild(liveRegion);
   }
@@ -134,7 +134,7 @@ export class GalleryFilter {
     const button = createElement('button', {
       className: `filter-btn ${isActive ? 'active' : ''}`,
       dataset: { category: categoryId },
-      'aria-pressed': isActive.toString()
+      'aria-pressed': isActive.toString(),
     });
     button.textContent = label;
     return button;
@@ -148,7 +148,9 @@ export class GalleryFilter {
     // Filter button clicks
     this.container.addEventListener('click', (e) => {
       const button = e.target.closest('.filter-btn');
-      if (!button) return;
+      if (!button) {
+        return;
+      }
 
       const category = button.dataset.category;
       this.filterGallery(category);
@@ -165,7 +167,9 @@ export class GalleryFilter {
    * @param {string} category - Category to filter by
    */
   filterGallery(category) {
-    if (this.activeCategory === category) return;
+    if (this.activeCategory === category) {
+      return;
+    }
 
     this.activeCategory = category;
 
@@ -194,7 +198,7 @@ export class GalleryFilter {
    */
   updateButtonStates(activeCategory) {
     const buttons = this.container.querySelectorAll('.filter-btn');
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       const isActive = button.dataset.category === activeCategory;
       button.classList.toggle('active', isActive);
       button.setAttribute('aria-pressed', isActive.toString());
@@ -216,16 +220,25 @@ export class GalleryFilter {
     // Phase 2: After transition, batch all visibility changes
     setTimeout(() => {
       requestAnimationFrame(() => {
+        let visibleCount = 0;
+
         // Batch all DOM writes together (no reads in between)
-        items.forEach(item => {
+        items.forEach((item) => {
           const shouldShow = this.shouldShowItem(item, category);
 
           item.classList.toggle('filtered-out', !shouldShow);
           item.setAttribute('aria-hidden', (!shouldShow).toString());
+
+          if (shouldShow) {
+            visibleCount++;
+          }
         });
 
         // Single reflow point after all changes
         this.galleryContainer.classList.remove('filtering');
+
+        // Show/hide empty state based on visible items
+        this.toggleEmptyState(visibleCount === 0, category);
       });
     }, 300);
   }
@@ -238,7 +251,9 @@ export class GalleryFilter {
    * @returns {boolean} Whether item should be shown
    */
   shouldShowItem(item, category) {
-    if (category === 'all') return true;
+    if (category === 'all') {
+      return true;
+    }
 
     const available = item.dataset.available === 'true';
     const soldOut = item.dataset.soldout === 'true';
@@ -281,7 +296,7 @@ export class GalleryFilter {
     const params = new URLSearchParams(hash);
     const category = params.get('category') || 'all';
 
-    if (this.categories.find(cat => cat.id === category) || category === 'all') {
+    if (this.categories.find((cat) => cat.id === category) || category === 'all') {
       this.filterGallery(category);
     }
   }
@@ -293,12 +308,14 @@ export class GalleryFilter {
    */
   announceFilter(category) {
     const liveRegion = $('#filter-announcement');
-    if (!liveRegion) return;
+    if (!liveRegion) {
+      return;
+    }
 
     const categoryLabel = this.getLabel(category);
 
     const visibleCount = this.galleryContainer.querySelectorAll(
-      '.gallery-item[aria-hidden="false"]'
+      '.gallery-item[aria-hidden="false"]',
     ).length;
 
     liveRegion.textContent = `Showing ${visibleCount} ${categoryLabel} artworks`;
@@ -317,6 +334,83 @@ export class GalleryFilter {
    */
   reset() {
     this.filterGallery('all');
+  }
+
+  /**
+   * Toggle empty state display
+   * @private
+   * @param {boolean} show - Whether to show empty state
+   * @param {string} category - Current active category
+   */
+  toggleEmptyState(show, category) {
+    const existingEmptyState = this.galleryContainer.querySelector('.gallery-empty-state');
+
+    if (show) {
+      // Create empty state if it doesn't exist
+      if (!existingEmptyState) {
+        const emptyState = this.createEmptyState(category);
+        this.galleryContainer.appendChild(emptyState);
+      }
+    } else {
+      // Remove empty state if it exists
+      if (existingEmptyState) {
+        existingEmptyState.remove();
+      }
+    }
+  }
+
+  /**
+   * Create empty state element
+   * @private
+   * @param {string} category - Current active category
+   * @returns {Element} Empty state element
+   */
+  createEmptyState(category) {
+    const categoryLabel = this.getLabel(category);
+
+    const emptyState = createElement('div', {
+      className: 'gallery-empty-state',
+      role: 'status',
+      'aria-live': 'polite',
+    });
+
+    const icon = createElement('div', {
+      className: 'empty-state-icon',
+      'aria-hidden': 'true',
+    });
+    icon.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+        <polyline points="21 15 16 10 5 21"></polyline>
+      </svg>
+    `;
+
+    const title = createElement('h3', {
+      className: 'empty-state-title',
+    });
+    title.textContent = window.getTranslation?.('gallery.emptyState.title') || 'No artworks found';
+
+    const message = createElement('p', {
+      className: 'empty-state-message',
+    });
+    message.textContent =
+      window.getTranslation?.('gallery.emptyState.message') ||
+      `No artworks match the "${categoryLabel}" filter. Try selecting a different category.`;
+
+    const resetButton = createElement('button', {
+      className: 'btn-secondary empty-state-button',
+    });
+    resetButton.textContent =
+      window.getTranslation?.('gallery.emptyState.reset') || 'View All Artworks';
+    resetButton.addEventListener('click', () => this.reset());
+
+    emptyState.appendChild(icon);
+    emptyState.appendChild(title);
+    emptyState.appendChild(message);
+    emptyState.appendChild(resetButton);
+
+    return emptyState;
   }
 }
 

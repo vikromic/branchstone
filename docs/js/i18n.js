@@ -58,7 +58,7 @@ class I18n {
   applyTranslations() {
     const elements = $$('[data-translate]');
 
-    elements.forEach(element => {
+    elements.forEach((element) => {
       const key = element.getAttribute('data-translate');
       const translation = this.get(key);
 
@@ -87,7 +87,7 @@ class I18n {
         if (translation.includes('\n')) {
           // For elements with <p> tags, preserve structure
           if (element.querySelector('p')) {
-            const paragraphs = translation.split('\n').filter(p => p.trim());
+            const paragraphs = translation.split('\n').filter((p) => p.trim());
             const existingParagraphs = element.querySelectorAll('p');
             paragraphs.forEach((text, index) => {
               if (existingParagraphs[index]) {
@@ -97,8 +97,8 @@ class I18n {
           } else {
             // Use safe DOM methods to create paragraphs - prevent XSS
             element.textContent = ''; // Clear existing content
-            const paragraphs = translation.split('\n').filter(p => p.trim());
-            paragraphs.forEach(text => {
+            const paragraphs = translation.split('\n').filter((p) => p.trim());
+            paragraphs.forEach((text) => {
               const p = document.createElement('p');
               p.textContent = text.trim();
               element.appendChild(p);
@@ -112,7 +112,7 @@ class I18n {
 
     // Handle placeholder translations separately
     const placeholderElements = $$('[data-translate-placeholder]');
-    placeholderElements.forEach(element => {
+    placeholderElements.forEach((element) => {
       const key = element.getAttribute('data-translate-placeholder');
       const translation = this.get(key);
       if (translation) {
@@ -166,7 +166,7 @@ class I18n {
     toggle.setAttribute('aria-label', `Switch language (current: ${langName})`);
 
     const options = toggle.querySelectorAll('.lang-option');
-    options.forEach(option => {
+    options.forEach((option) => {
       const isActive = option.dataset.lang === this.currentLang;
       option.classList.toggle('active-lang', isActive);
     });

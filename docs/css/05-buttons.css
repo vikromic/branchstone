@@ -36,15 +36,37 @@
     line-height: 1;
 }
 
-/* Focus states for accessibility */
+/* Focus states for accessibility - WCAG 2.1 AA Compliant */
 .btn-primary:focus-visible,
 .btn-secondary:focus-visible,
 .btn-primary-large:focus-visible,
 .btn-secondary-large:focus-visible,
 .submit-btn:focus-visible,
 .inquire-btn:focus-visible {
-    outline: 3px solid var(--text-color);
+    outline: 3px solid var(--accent-color);
     outline-offset: 4px;
+    box-shadow: 0 0 0 2px rgba(139, 120, 93, 0.2);
+}
+
+/* Remove outline for mouse users */
+.btn-primary:focus:not(:focus-visible),
+.btn-secondary:focus:not(:focus-visible),
+.btn-primary-large:focus:not(:focus-visible),
+.btn-secondary-large:focus:not(:focus-visible),
+.submit-btn:focus:not(:focus-visible),
+.inquire-btn:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Dark theme focus indicators */
+[data-theme="dark"] .btn-primary:focus-visible,
+[data-theme="dark"] .btn-secondary:focus-visible,
+[data-theme="dark"] .btn-primary-large:focus-visible,
+[data-theme="dark"] .btn-secondary-large:focus-visible,
+[data-theme="dark"] .submit-btn:focus-visible,
+[data-theme="dark"] .inquire-btn:focus-visible {
+    outline-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(139, 120, 93, 0.3);
 }
 
 /* Primary button variants */
@@ -104,8 +126,20 @@
     font-weight: 500;
     font-size: 1rem;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border: none;
+    cursor: pointer;
 }
 
 .btn-text:hover {
     transform: translateX(5px);
+}
+
+.btn-text:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.btn-text:focus:not(:focus-visible) {
+    outline: none;
 }

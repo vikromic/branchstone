@@ -1,5 +1,10 @@
 # Branchstone Art Portfolio
 
+[![CI Pipeline](https://github.com/username/branchstone/actions/workflows/ci.yml/badge.svg)](https://github.com/username/branchstone/actions/workflows/ci.yml)
+[![Deploy](https://github.com/username/branchstone/actions/workflows/deploy.yml/badge.svg)](https://github.com/username/branchstone/actions/workflows/deploy.yml)
+[![codecov](https://codecov.io/gh/username/branchstone/branch/main/graph/badge.svg)](https://codecov.io/gh/username/branchstone)
+[![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-red.svg)](LICENSE)
+
 A minimalist, elegant artist portfolio website for mixed-media artist Viktoria Branchstone.
 
 ## Live Site
@@ -17,14 +22,50 @@ A minimalist, elegant artist portfolio website for mixed-media artist Viktoria B
 - **Light/dark theme** respecting system preferences
 - **Bilingual** (English/Ukrainian)
 - **PWA** with offline support
+- **223 unit tests** (100% pass rate) with comprehensive coverage
+- **CI/CD pipeline** with automated testing, linting, and GitHub Pages deployment
 
 ## Quick Start
 
+### Local Development
+
 ```bash
-# Local development
-cd docs
-python -m http.server 8000
+# Install dependencies
+npm install
+
+# Serve the site locally
+npm run serve
 # Visit http://localhost:8000
+```
+
+### Testing
+
+```bash
+# Run tests (223 tests)
+npm test
+
+# Run with coverage report
+npm run test:coverage
+
+# Watch mode for development
+npm run test:watch
+
+# Full CI validation locally
+npm run validate
+```
+
+### Code Quality
+
+```bash
+# Lint code
+npm run lint
+
+# Fix linting issues
+npm run lint:fix
+
+# Check/apply formatting
+npm run format
+npm run format:check
 ```
 
 ## Project Structure
@@ -61,7 +102,7 @@ Edit `docs/js/artworks.json`:
 {
   "id": 14,
   "title": "New Artwork",
-  "size": "24x30 in",
+  "size": "21 x 16 in",
   "materials": "Mixed media on canvas",
   "image": "img/artwork/main.jpeg",
   "images": ["img/artwork/main.jpeg", "img/artwork/detail.jpeg"],
@@ -108,25 +149,42 @@ Generates 400w/800w variants in WebP + JPEG.
 After editing any CSS file in `docs/css/`:
 
 ```bash
-cd docs/css
-cat 01-tokens.css 02-base.css 03-header.css 04-gallery.css 05-buttons.css 06-footer.css 07-utilities.css 08-hero.css 09-featured.css 10-about.css 11-contact.css 12-sections.css > bundle.css
+npm run build:css
 ```
 
-## Deployment
+## CI/CD Pipeline
 
-Site deploys automatically via GitHub Pages from `/docs` folder on `main` branch.
+Every push and pull request triggers automated quality checks:
 
+- **Linting**: ESLint code quality enforcement
+- **Formatting**: Prettier consistency validation
+- **Testing**: Jest unit tests (223 tests, 100% pass rate)
+- **Build**: CSS bundle and file validation
+- **Security**: npm audit for vulnerabilities
+- **Performance**: Asset size monitoring
+
+Pushes to `main` automatically deploy to GitHub Pages. See [.github/CICD.md](.github/CICD.md) for detailed pipeline documentation.
+
+**View test coverage:**
 ```bash
-git checkout main
-git merge optimization
-git push origin main
+npm run test:coverage
+open coverage/index.html
 ```
 
 ## Documentation
 
-- `docs/ARCHITECTURE.md` - Code architecture and component APIs
-- `docs/js/README.md` - JavaScript module documentation
-- `scripts/README.md` - Image optimization scripts
+### Getting Started
+- **[TESTING.md](TESTING.md)** - Comprehensive testing guide (223 tests, coverage reports)
+- **[tests/README.md](tests/README.md)** - Test directory structure and best practices
+- **[.github/SETUP.md](.github/SETUP.md)** - GitHub Actions and CI/CD configuration
+
+### Code Quality
+- **[.github/CICD.md](.github/CICD.md)** - CI/CD pipeline documentation
+- **[.github/QUICK_REFERENCE.md](.github/QUICK_REFERENCE.md)** - Common commands and checklist
+
+### Design Reference
+- **[DESIGN_REVIEW_SUMMARY.md](DESIGN_REVIEW_SUMMARY.md)** - UI/UX review (8.2/10 rating)
+- **[DESIGN_METRICS.md](DESIGN_METRICS.md)** - Technical specs (contrast ratios, spacing, etc.)
 
 ## Tech Stack
 

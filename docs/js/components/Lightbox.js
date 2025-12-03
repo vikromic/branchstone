@@ -4,7 +4,14 @@
  * @module components/Lightbox
  */
 
-import { $, $$, on, setAttributes, getFocusableElements, announceToScreenReader } from '../utils/dom.js';
+import {
+  $,
+  on,
+  setAttributes,
+  getFocusableElements,
+  announceToScreenReader,
+} from '../utils/dom.js';
+import { sanitizeText, sanitizeURL, sanitizeJSON } from '../utils/sanitize.js';
 import CONFIG from '../config.js';
 
 export class Lightbox {
@@ -17,7 +24,9 @@ export class Lightbox {
     this.lightbox = $(options.lightboxSelector || '#lightbox');
     this.triggerSelector = options.triggerSelector || '.gallery-item';
 
-    if (!this.lightbox) return;
+    if (!this.lightbox) {
+      return;
+    }
 
     this.elements = this.cacheElements();
     this.state = this.getInitialState();
@@ -64,6 +73,11 @@ export class Lightbox {
       // Touch state
       touchStartX: 0,
       touchEndX: 0,
+      touchStartTime: 0,
+      // Momentum tracking
+      velocityX: 0,
+      lastMoveX: 0,
+      lastMoveTime: 0,
       // Zoom state
       scale: 1,
       lastScale: 1,
@@ -74,6 +88,12 @@ export class Lightbox {
       lastTap: 0,
       // Zoom indicator state
       zoomIndicatorTimeout: null,
+      // First-time user hints
+      hasShownGestureHint: false,
+      // Image loading state
+      isLoading: false,
+      // Image transition state
+      isTransitioning: false,
     };
   }
 
@@ -84,6 +104,8 @@ export class Lightbox {
   init() {
     this.setInitialAttributes();
     this.createZoomIndicator();
+    this.createLoadingIndicator();
+    this.createGestureHint();
     this.attachEventListeners();
   }
 
@@ -101,7 +123,9 @@ export class Lightbox {
    */
   createZoomIndicator() {
     const container = $('.lightbox-image-container', this.lightbox);
-    if (!container) return;
+    if (!container) {
+      return;
+    }
 
     const indicator = document.createElement('div');
     indicator.className = 'zoom-indicator';
@@ -119,6 +143,63 @@ export class Lightbox {
   }
 
   /**
+   * Create loading indicator element
+   * @private
+   */
+  createLoadingIndicator() {
+    const container = $('.lightbox-image-container', this.lightbox);
+    if (!container) {
+      return;
+    }
+
+    const loader = document.createElement('div');
+    loader.className = 'lightbox-loader';
+    loader.setAttribute('role', 'status');
+    loader.setAttribute('aria-label', 'Loading image');
+    loader.innerHTML = `
+      <div class="loader-spinner"></div>
+    `;
+    container.appendChild(loader);
+
+    this.elements.loader = loader;
+  }
+
+  /**
+   * Create gesture hint overlay for first-time users
+   * @private
+   */
+  createGestureHint() {
+    const container = $('.lightbox-image-container', this.lightbox);
+    if (!container) {
+      return;
+    }
+
+    const hint = document.createElement('div');
+    hint.className = 'gesture-hint';
+    hint.setAttribute('role', 'tooltip');
+    hint.innerHTML = `
+      <div class="gesture-hint-content">
+        <div class="gesture-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          <span>Swipe to navigate</span>
+        </div>
+        <div class="gesture-item">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
+          </svg>
+          <span>Pinch to zoom</span>
+        </div>
+      </div>
+    `;
+    container.appendChild(hint);
+
+    this.elements.gestureHint = hint;
+  }
+
+  /**
    * Attach all event listeners
    * @private
    */
@@ -132,7 +213,9 @@ export class Lightbox {
     }
 
     on(this.lightbox, 'click', (e) => {
-      if (e.target === this.lightbox) this.close();
+      if (e.target === this.lightbox) {
+        this.close();
+      }
     });
 
     // Navigation
@@ -171,7 +254,9 @@ export class Lightbox {
    */
   attachToTriggers() {
     const galleryContainer = $('.gallery-grid');
-    if (!galleryContainer) return;
+    if (!galleryContainer) {
+      return;
+    }
 
     // Use event delegation - single listener handles all gallery items
     on(galleryContainer, 'click', (e) => {
@@ -205,26 +290,41 @@ export class Lightbox {
   openFromTrigger(trigger) {
     this.state.previousFocus = document.activeElement;
 
-    // Get images from data attributes with safe JSON parsing
+    // Get images from data attributes with safe JSON parsing and sanitization
     const imagesJson = trigger.dataset.images;
     if (imagesJson) {
-      try {
-        this.state.images = JSON.parse(imagesJson);
-      } catch {
-        this.state.images = [trigger.dataset.img];
+      const parsed = sanitizeJSON(imagesJson, null);
+      if (parsed && Array.isArray(parsed)) {
+        // Sanitize URLs in the images array
+        this.state.images = parsed.map((item) => {
+          if (typeof item === 'string') {
+            return sanitizeURL(item);
+          } else if (item && typeof item === 'object') {
+            // Handle video objects
+            return {
+              ...item,
+              webm: item.webm ? sanitizeURL(item.webm) : '',
+              mp4: item.mp4 ? sanitizeURL(item.mp4) : '',
+              poster: item.poster ? sanitizeURL(item.poster) : '',
+            };
+          }
+          return item;
+        });
+      } else {
+        this.state.images = [sanitizeURL(trigger.dataset.img || '')];
       }
     } else {
-      this.state.images = [trigger.dataset.img];
+      this.state.images = [sanitizeURL(trigger.dataset.img || '')];
     }
     this.state.currentIndex = 0;
 
-    // Set content
+    // Set content with sanitized data
     this.setContent({
-      title: trigger.dataset.title,
-      size: trigger.dataset.size,
-      materials: trigger.dataset.materials,
-      description: trigger.dataset.description,
-      price: trigger.dataset.price,
+      title: sanitizeText(trigger.dataset.title || ''),
+      size: sanitizeText(trigger.dataset.size || ''),
+      materials: sanitizeText(trigger.dataset.materials || ''),
+      description: sanitizeText(trigger.dataset.description || ''),
+      price: sanitizeText(trigger.dataset.price || ''),
       available: trigger.dataset.available,
       soldOut: trigger.dataset.soldout,
       printsAvailable: trigger.dataset.printsavailable,
@@ -240,7 +340,9 @@ export class Lightbox {
    * @returns {string} Key for translations
    */
   getArtworkKey(title) {
-    if (!title) return null;
+    if (!title) {
+      return null;
+    }
     // Convert title to snake_case key: "Born of Burn" -> "born_of_burn"
     return title.toLowerCase().replace(/\s+/g, '_');
   }
@@ -278,7 +380,8 @@ export class Lightbox {
         this.elements.price.textContent = data.price;
         this.elements.price.classList.remove('hidden');
       } else {
-        const priceOnRequestLabel = window.getTranslation?.('lightbox.priceOnRequest') || 'Price on Request';
+        const priceOnRequestLabel =
+          window.getTranslation?.('lightbox.priceOnRequest') || 'Price on Request';
         this.elements.price.textContent = priceOnRequestLabel;
         this.elements.price.classList.remove('hidden');
       }
@@ -298,61 +401,187 @@ export class Lightbox {
   }
 
   /**
-   * Open lightbox
+   * Open lightbox with choreographed animation
    */
   open() {
     this.state.isOpen = true;
     this.lightbox.style.display = 'flex';
     setAttributes(this.lightbox, { 'aria-hidden': 'false' });
 
+    // Remove closing class if present, add opening class
+    this.lightbox.classList.remove('is-closing');
+    this.lightbox.classList.add('is-open');
+
+    // Lock body scroll
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = this.getScrollbarWidth() + 'px';
+
     this.updateSlider();
     this.enableFocusTrap();
 
-    // Focus close button
+    // Show gesture hint for first-time users (mobile only)
+    this.showGestureHintIfNeeded();
+
+    // Focus close button after animation starts
     setTimeout(() => {
-      if (this.elements.closeBtn) this.elements.closeBtn.focus();
-    }, 100);
+      if (this.elements.closeBtn) {
+        this.elements.closeBtn.focus();
+      }
+    }, 150);
   }
 
   /**
-   * Close lightbox
+   * Get scrollbar width to prevent layout shift
+   * @private
+   * @returns {number} Scrollbar width in pixels
+   */
+  getScrollbarWidth() {
+    return window.innerWidth - document.documentElement.clientWidth;
+  }
+
+  /**
+   * Show gesture hint for first-time mobile users
+   * @private
+   */
+  showGestureHintIfNeeded() {
+    // Only show on touch devices, only once per session, only if multiple images
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const hasMultipleImages = this.state.images.length > 1;
+
+    if (
+      isTouchDevice &&
+      hasMultipleImages &&
+      !this.state.hasShownGestureHint &&
+      this.elements.gestureHint
+    ) {
+      this.state.hasShownGestureHint = true;
+
+      // Show hint
+      this.elements.gestureHint.classList.add('visible');
+
+      // Auto-hide after 3 seconds
+      setTimeout(() => {
+        if (this.elements.gestureHint) {
+          this.elements.gestureHint.classList.remove('visible');
+        }
+      }, 3000);
+    }
+  }
+
+  /**
+   * Close lightbox with smooth animation
    */
   close() {
+    // Prevent double-close
+    if (!this.state.isOpen) {
+      return;
+    }
+
     this.state.isOpen = false;
-    this.lightbox.style.display = 'none';
     setAttributes(this.lightbox, { 'aria-hidden': 'true' });
 
-    this.state.images = [];
-    this.state.currentIndex = 0;
-    this.resetZoom();
-    this.disableFocusTrap();
+    // Add closing animation class
+    this.lightbox.classList.remove('is-open');
+    this.lightbox.classList.add('is-closing');
 
-    // Restore focus
-    if (this.state.previousFocus) {
-      this.state.previousFocus.focus();
-      this.state.previousFocus = null;
+    // Wait for animation to complete before hiding
+    const animationDuration = 300; // Match CSS animation duration
+
+    setTimeout(() => {
+      this.lightbox.style.display = 'none';
+      this.lightbox.classList.remove('is-closing');
+
+      // Restore body scroll
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+
+      this.state.images = [];
+      this.state.currentIndex = 0;
+      this.state.isLoading = false;
+      this.resetZoom();
+      this.disableFocusTrap();
+      this.hideLoader();
+
+      // Restore focus
+      if (this.state.previousFocus) {
+        this.state.previousFocus.focus();
+        this.state.previousFocus = null;
+      }
+    }, animationDuration);
+  }
+
+  /**
+   * Show loading indicator
+   * @private
+   */
+  showLoader() {
+    if (this.elements.loader) {
+      this.elements.loader.classList.add('visible');
+      this.state.isLoading = true;
     }
   }
 
   /**
-   * Show next image
+   * Hide loading indicator
+   * @private
+   */
+  hideLoader() {
+    if (this.elements.loader) {
+      this.elements.loader.classList.remove('visible');
+      this.state.isLoading = false;
+    }
+  }
+
+  /**
+   * Show next image with cross-fade transition
    */
   showNext() {
-    if (this.state.images.length > 0) {
-      this.state.currentIndex = (this.state.currentIndex + 1) % this.state.images.length;
-      this.updateSlider();
+    if (this.state.images.length > 0 && !this.state.isTransitioning) {
+      this.transitionToImage((this.state.currentIndex + 1) % this.state.images.length);
     }
   }
 
   /**
-   * Show previous image
+   * Show previous image with cross-fade transition
    */
   showPrevious() {
-    if (this.state.images.length > 0) {
-      this.state.currentIndex =
-        (this.state.currentIndex - 1 + this.state.images.length) % this.state.images.length;
-      this.updateSlider();
+    if (this.state.images.length > 0 && !this.state.isTransitioning) {
+      this.transitionToImage(
+        (this.state.currentIndex - 1 + this.state.images.length) % this.state.images.length,
+      );
     }
+  }
+
+  /**
+   * Transition to a specific image index with cross-fade
+   * @private
+   * @param {number} newIndex - Target image index
+   */
+  transitionToImage(newIndex) {
+    if (newIndex === this.state.currentIndex) {
+      return;
+    }
+
+    this.state.isTransitioning = true;
+
+    // Fade out current image
+    if (this.elements.image) {
+      this.elements.image.classList.add('fading-out');
+    }
+
+    // After fade-out, switch image and fade in
+    setTimeout(() => {
+      this.state.currentIndex = newIndex;
+      this.updateSlider();
+
+      // Remove fade-out class after slider update
+      setTimeout(() => {
+        if (this.elements.image) {
+          this.elements.image.classList.remove('fading-out');
+        }
+        this.state.isTransitioning = false;
+      }, 50);
+    }, 150); // Half of the transition duration
   }
 
   /**
@@ -364,14 +593,90 @@ export class Lightbox {
   showImage(imageSrc, container) {
     // Remove any existing video
     const existingVideo = $('.lightbox-video', container);
-    if (existingVideo) existingVideo.remove();
+    if (existingVideo) {
+      existingVideo.remove();
+    }
 
-    // Show image element
+    // Show image element with sanitized URL
     if (this.elements.image) {
       this.elements.image.style.display = 'block';
-      this.elements.image.src = imageSrc;
+      // URL is already sanitized in openFromTrigger, but double-check for safety
+      const safeURL = sanitizeURL(imageSrc);
+      if (safeURL) {
+        // Check if image is already cached (complete and has natural size)
+        const isCached = this.isImageCached(safeURL);
+
+        if (isCached) {
+          // Image is cached, show immediately
+          this.elements.image.src = safeURL;
+          this.elements.image.style.opacity = '1';
+        } else {
+          // Show loading state for uncached images
+          this.showLoader();
+          this.elements.image.style.opacity = '0.5';
+
+          // Create new image to preload
+          const preloadImg = new Image();
+          preloadImg.onload = () => {
+            if (this.elements.image) {
+              this.elements.image.src = safeURL;
+              this.elements.image.style.opacity = '1';
+            }
+            this.hideLoader();
+          };
+          preloadImg.onerror = () => {
+            if (this.elements.image) {
+              this.elements.image.src = safeURL;
+              this.elements.image.style.opacity = '1';
+            }
+            this.hideLoader();
+          };
+          preloadImg.src = safeURL;
+        }
+      }
       this.elements.image.alt = this.elements.title?.textContent || '';
     }
+
+    // Preload adjacent images for faster navigation
+    this.preloadAdjacentImages();
+  }
+
+  /**
+   * Check if an image is already cached in browser
+   * @private
+   * @param {string} src - Image source URL
+   * @returns {boolean} True if image is cached
+   */
+  isImageCached(src) {
+    const img = new Image();
+    img.src = src;
+    return img.complete && img.naturalWidth > 0;
+  }
+
+  /**
+   * Preload next and previous images for faster navigation
+   * @private
+   */
+  preloadAdjacentImages() {
+    if (this.state.images.length <= 1) {
+      return;
+    }
+
+    const nextIndex = (this.state.currentIndex + 1) % this.state.images.length;
+    const prevIndex =
+      (this.state.currentIndex - 1 + this.state.images.length) % this.state.images.length;
+
+    [nextIndex, prevIndex].forEach((index) => {
+      const media = this.state.images[index];
+      // Only preload images, not videos
+      if (typeof media === 'string') {
+        const safeURL = sanitizeURL(media);
+        if (safeURL) {
+          const img = new Image();
+          img.src = safeURL;
+        }
+      }
+    });
   }
 
   /**
@@ -388,7 +693,9 @@ export class Lightbox {
 
     // Remove any existing video
     const existingVideo = $('.lightbox-video', container);
-    if (existingVideo) existingVideo.remove();
+    if (existingVideo) {
+      existingVideo.remove();
+    }
 
     // Create video element
     const video = document.createElement('video');
@@ -400,24 +707,34 @@ export class Lightbox {
     video.playsInline = true;
     video.setAttribute('aria-label', `Video of ${this.elements.title?.textContent || 'artwork'}`);
 
-    // Add poster if available
+    // Add poster if available (sanitized)
     if (videoData.poster) {
-      video.poster = videoData.poster;
+      const safePoster = sanitizeURL(videoData.poster);
+      if (safePoster) {
+        video.poster = safePoster;
+      }
     }
 
     // Add sources (WebM first for better compression, MP4 as fallback)
+    // URLs are already sanitized in openFromTrigger, but validate again
     if (videoData.webm) {
-      const webmSource = document.createElement('source');
-      webmSource.src = videoData.webm;
-      webmSource.type = 'video/webm';
-      video.appendChild(webmSource);
+      const safeWebm = sanitizeURL(videoData.webm);
+      if (safeWebm) {
+        const webmSource = document.createElement('source');
+        webmSource.src = safeWebm;
+        webmSource.type = 'video/webm';
+        video.appendChild(webmSource);
+      }
     }
 
     if (videoData.mp4) {
-      const mp4Source = document.createElement('source');
-      mp4Source.src = videoData.mp4;
-      mp4Source.type = 'video/mp4';
-      video.appendChild(mp4Source);
+      const safeMp4 = sanitizeURL(videoData.mp4);
+      if (safeMp4) {
+        const mp4Source = document.createElement('source');
+        mp4Source.src = safeMp4;
+        mp4Source.type = 'video/mp4';
+        video.appendChild(mp4Source);
+      }
     }
 
     // Fallback text
@@ -437,7 +754,9 @@ export class Lightbox {
    * @private
    */
   updateSlider() {
-    if (this.state.images.length === 0) return;
+    if (this.state.images.length === 0) {
+      return;
+    }
 
     const container = $('.lightbox-image-container', this.lightbox);
     const currentMedia = this.state.images[this.state.currentIndex];
@@ -465,8 +784,7 @@ export class Lightbox {
     // Update indicator
     if (this.elements.indicator) {
       if (hasMultiple) {
-        this.elements.indicator.textContent =
-          `${this.state.currentIndex + 1} / ${this.state.images.length}`;
+        this.elements.indicator.textContent = `${this.state.currentIndex + 1} / ${this.state.images.length}`;
         this.elements.indicator.style.display = 'block';
         setAttributes(this.elements.indicator, {
           role: 'status',
@@ -488,7 +806,9 @@ export class Lightbox {
    * @param {KeyboardEvent} e - Keyboard event
    */
   handleKeyboard(e) {
-    if (!this.state.isOpen) return;
+    if (!this.state.isOpen) {
+      return;
+    }
 
     switch (e.key) {
       case 'Escape':
@@ -500,6 +820,79 @@ export class Lightbox {
       case 'ArrowRight':
         this.showNext();
         break;
+      case '+':
+      case '=':
+        e.preventDefault();
+        this.zoomIn();
+        break;
+      case '-':
+      case '_':
+        e.preventDefault();
+        this.zoomOut();
+        break;
+      case '0':
+        e.preventDefault();
+        this.resetZoom();
+        break;
+      case 'Home':
+        e.preventDefault();
+        this.goToFirst();
+        break;
+      case 'End':
+        e.preventDefault();
+        this.goToLast();
+        break;
+    }
+  }
+
+  /**
+   * Zoom in by a step
+   * @private
+   */
+  zoomIn() {
+    const newScale = Math.min(CONFIG.ui.lightbox.zoomMax, this.state.scale + 0.5);
+    if (newScale !== this.state.scale) {
+      this.state.scale = newScale;
+      this.applyZoom();
+    }
+  }
+
+  /**
+   * Zoom out by a step
+   * @private
+   */
+  zoomOut() {
+    const newScale = Math.max(CONFIG.ui.lightbox.zoomMin, this.state.scale - 0.5);
+    if (newScale !== this.state.scale) {
+      this.state.scale = newScale;
+      if (this.state.scale < 1.1) {
+        this.resetZoom();
+      } else {
+        this.applyZoom();
+      }
+    }
+  }
+
+  /**
+   * Go to first image
+   * @private
+   */
+  goToFirst() {
+    if (this.state.images.length > 0 && this.state.currentIndex !== 0) {
+      this.state.currentIndex = 0;
+      this.updateSlider();
+    }
+  }
+
+  /**
+   * Go to last image
+   * @private
+   */
+  goToLast() {
+    const lastIndex = this.state.images.length - 1;
+    if (this.state.images.length > 0 && this.state.currentIndex !== lastIndex) {
+      this.state.currentIndex = lastIndex;
+      this.updateSlider();
     }
   }
 
@@ -508,14 +901,22 @@ export class Lightbox {
    * @private
    */
   handleTouchStart(e) {
-    if (!e.touches || e.touches.length === 0) return;
+    if (!e.touches || e.touches.length === 0) {
+      return;
+    }
 
     if (e.touches.length === 2) {
       e.preventDefault();
       this.state.lastScale = this.state.scale;
       this.initialDist = null;
     } else if (e.touches.length === 1) {
-      this.state.touchStartX = e.touches[0].clientX;
+      const touch = e.touches[0];
+      this.state.touchStartX = touch.clientX;
+      this.state.touchStartTime = Date.now();
+      // Reset velocity tracking
+      this.state.velocityX = 0;
+      this.state.lastMoveX = touch.clientX;
+      this.state.lastMoveTime = Date.now();
     }
   }
 
@@ -524,7 +925,9 @@ export class Lightbox {
    * @private
    */
   handleTouchMove(e) {
-    if (!e.touches || e.touches.length === 0) return;
+    if (!e.touches || e.touches.length === 0) {
+      return;
+    }
 
     if (e.touches.length === 2) {
       e.preventDefault();
@@ -537,16 +940,31 @@ export class Lightbox {
       } else {
         this.state.scale = Math.max(
           CONFIG.ui.lightbox.zoomMin,
-          Math.min(CONFIG.ui.lightbox.zoomMax, this.state.lastScale * (dist / this.initialDist))
+          Math.min(CONFIG.ui.lightbox.zoomMax, this.state.lastScale * (dist / this.initialDist)),
         );
         this.applyZoom();
       }
-    } else if (e.touches.length === 1 && this.state.scale > 1) {
-      e.preventDefault();
+    } else if (e.touches.length === 1) {
       const touch = e.touches[0];
-      const deltaX = touch.clientX - this.state.touchStartX;
-      this.state.translateX = this.state.lastTranslateX + deltaX / this.state.scale;
-      this.applyZoom();
+      const now = Date.now();
+
+      // Track velocity for momentum physics
+      const timeDelta = now - this.state.lastMoveTime;
+      if (timeDelta > 0) {
+        const moveDelta = touch.clientX - this.state.lastMoveX;
+        // Exponential moving average for smooth velocity
+        this.state.velocityX = 0.8 * (moveDelta / timeDelta) + 0.2 * this.state.velocityX;
+      }
+      this.state.lastMoveX = touch.clientX;
+      this.state.lastMoveTime = now;
+
+      // If zoomed, allow panning
+      if (this.state.scale > 1) {
+        e.preventDefault();
+        const deltaX = touch.clientX - this.state.touchStartX;
+        this.state.translateX = this.state.lastTranslateX + deltaX / this.state.scale;
+        this.applyZoom();
+      }
     }
   }
 
@@ -555,7 +973,9 @@ export class Lightbox {
    * @private
    */
   handleTouchEnd(e) {
-    if (!e.touches) return;
+    if (!e.touches) {
+      return;
+    }
 
     if (e.touches.length === 0) {
       this.initialDist = null;
@@ -576,13 +996,30 @@ export class Lightbox {
   }
 
   /**
-   * Handle swipe gesture
+   * Handle swipe gesture with momentum physics
+   * Uses velocity tracking for natural, physics-based navigation
    * @private
    */
   handleSwipe() {
     const diff = this.state.touchStartX - this.state.touchEndX;
-    if (Math.abs(diff) > CONFIG.ui.lightbox.swipeThreshold) {
-      if (diff > 0) {
+    const velocity = this.state.velocityX;
+    const elapsedTime = Date.now() - this.state.touchStartTime;
+
+    // Momentum threshold: pixels per millisecond
+    // A quick flick (high velocity) triggers navigation even with small distance
+    const VELOCITY_THRESHOLD = 0.3; // px/ms
+    const DISTANCE_THRESHOLD = CONFIG.ui.lightbox.swipeThreshold;
+
+    // Calculate if swipe should trigger navigation
+    // Either: sufficient distance OR sufficient velocity (quick flick)
+    const hasSufficientDistance = Math.abs(diff) > DISTANCE_THRESHOLD;
+    const hasSufficientVelocity = Math.abs(velocity) > VELOCITY_THRESHOLD && elapsedTime < 300;
+
+    if (hasSufficientDistance || hasSufficientVelocity) {
+      // Direction determined by either distance or velocity
+      const direction = hasSufficientVelocity ? -Math.sign(velocity) : Math.sign(diff);
+
+      if (direction > 0) {
         this.showNext();
       } else {
         this.showPrevious();
@@ -620,12 +1057,30 @@ export class Lightbox {
    * @private
    */
   applyZoom() {
-    if (!this.elements.image) return;
-    this.elements.image.style.transform =
-      `scale(${this.state.scale}) translate(${this.state.translateX}px, ${this.state.translateY}px)`;
+    if (!this.elements.image) {
+      return;
+    }
+    this.elements.image.style.transform = `scale(${this.state.scale}) translate(${this.state.translateX}px, ${this.state.translateY}px)`;
     this.elements.image.style.transition = this.state.scale === 1 ? 'transform 0.3s ease' : 'none';
 
+    // Visual feedback: dim navigation arrows when zoomed (swipe disabled)
+    this.updateNavigationState();
     this.updateZoomIndicator();
+  }
+
+  /**
+   * Update navigation buttons state based on zoom level
+   * @private
+   */
+  updateNavigationState() {
+    const isZoomed = this.state.scale > 1;
+
+    if (this.elements.prevBtn) {
+      this.elements.prevBtn.classList.toggle('disabled-by-zoom', isZoomed);
+    }
+    if (this.elements.nextBtn) {
+      this.elements.nextBtn.classList.toggle('disabled-by-zoom', isZoomed);
+    }
   }
 
   /**
@@ -647,7 +1102,9 @@ export class Lightbox {
    * @private
    */
   updateZoomIndicator() {
-    if (!this.elements.zoomIndicator || !this.elements.zoomLevel || !this.elements.zoomHint) return;
+    if (!this.elements.zoomIndicator || !this.elements.zoomLevel || !this.elements.zoomHint) {
+      return;
+    }
 
     const scale = this.state.scale;
     const isZoomed = scale > 1.05;
@@ -657,7 +1114,8 @@ export class Lightbox {
       this.elements.zoomLevel.textContent = `${scale.toFixed(1)}x`;
 
       // Show hint message
-      const hintText = window.getTranslation?.('lightbox.doubleTapToReset') || 'Double-tap to reset';
+      const hintText =
+        window.getTranslation?.('lightbox.doubleTapToReset') || 'Double-tap to reset';
       this.elements.zoomHint.textContent = hintText;
 
       // Show indicator
@@ -709,13 +1167,17 @@ export class Lightbox {
    */
   enableFocusTrap() {
     const focusableElements = getFocusableElements(this.lightbox);
-    if (focusableElements.length === 0) return;
+    if (focusableElements.length === 0) {
+      return;
+    }
 
     const firstFocusable = focusableElements[0];
     const lastFocusable = focusableElements[focusableElements.length - 1];
 
     this.focusTrapHandler = (e) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== 'Tab') {
+        return;
+      }
 
       if (e.shiftKey) {
         if (document.activeElement === firstFocusable) {

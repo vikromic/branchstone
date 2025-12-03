@@ -71,16 +71,16 @@ export class Menu {
         if (e.key === 'Escape' && this.isOpen) {
           this.close(true); // Return focus to toggle button on Escape
         }
-      })
+      }),
     );
 
     // Handle nav link clicks - close menu and allow default navigation
     const navLinks = this.menu.querySelectorAll('a');
-    navLinks.forEach(link => {
+    navLinks.forEach((link) => {
       this.cleanupFunctions.push(
         on(link, 'click', () => {
           this.close();
-        })
+        }),
       );
     });
 
@@ -95,9 +95,11 @@ export class Menu {
    */
   setupHoverEffects(navLinks) {
     const hoverBg = $('#menu-hover-bg');
-    if (!hoverBg) return;
+    if (!hoverBg) {
+      return;
+    }
 
-    navLinks.forEach(link => {
+    navLinks.forEach((link) => {
       this.cleanupFunctions.push(
         on(link, 'mouseenter', () => {
           const img = link.getAttribute('data-hover-img');
@@ -108,7 +110,7 @@ export class Menu {
         }),
         on(link, 'mouseleave', () => {
           hoverBg.classList.remove('visible');
-        })
+        }),
       );
     });
   }
@@ -178,7 +180,9 @@ export class Menu {
    */
   updatePageTitle() {
     const mobilePageTitle = $('#mobile-page-title');
-    if (!mobilePageTitle) return;
+    if (!mobilePageTitle) {
+      return;
+    }
 
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const pageTitles = {
@@ -197,7 +201,7 @@ export class Menu {
    * Destroy menu and cleanup event listeners
    */
   destroy() {
-    this.cleanupFunctions.forEach(cleanup => cleanup?.());
+    this.cleanupFunctions.forEach((cleanup) => cleanup?.());
     this.cleanupFunctions = [];
     if (this.isOpen) {
       this.close();

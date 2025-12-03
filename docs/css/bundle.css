@@ -367,6 +367,53 @@ a:hover {
     color: var(--accent-color);
     opacity: 0.8;
 }
+
+a:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* ========================================
+   FOCUS INDICATORS - WCAG 2.1 AA COMPLIANT
+   ======================================== */
+
+/* Enhanced focus styles for all interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
+
+/* Remove default focus outline for mouse users */
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Enhanced focus for form controls - keep their box-shadow */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Dark theme focus styles */
+[data-theme="dark"] button:focus-visible,
+[data-theme="dark"] a:focus-visible,
+[data-theme="dark"] [role="button"]:focus-visible,
+[data-theme="dark"] [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline-color: var(--accent-color);
+}
 /* ========================================
    03-HEADER.CSS - COMPLETE REWRITE
    ========================================
@@ -377,7 +424,7 @@ a:hover {
    HEADER CONTAINER
    ======================================== */
 header {
-    padding: 1rem 1.5rem;
+    padding: 0.5rem 1rem;
     width: 100%;
     box-sizing: border-box;
     background-color: var(--header-background);
@@ -409,12 +456,12 @@ nav {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 8px;
+    padding: 6px;
     z-index: 10002;
     border-radius: 4px;
     position: relative;
@@ -438,6 +485,17 @@ nav {
 .mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
 .mobile-menu-toggle.active span:nth-child(3) { transform: rotate(-45deg); }
 
+/* Focus indicator for mobile menu toggle - WCAG 2.1 AA */
+.mobile-menu-toggle:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    background-color: rgba(139, 120, 93, 0.05);
+}
+
+.mobile-menu-toggle:focus:not(:focus-visible) {
+    outline: none;
+}
+
 /* ========================================
    LOGO (Desktop Only)
    ======================================== */
@@ -449,9 +507,9 @@ nav {
 }
 
 .header-logo .logo-image {
-    height: 48px;
+    height: 36px;
     width: auto;
-    max-width: 48px;
+    max-width: 36px;
     object-fit: contain;
     display: block;
     /* Crisp rendering for small sizes */
@@ -476,7 +534,7 @@ html[data-theme="dark"] .header-logo .logo-image {
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--text-color);
     pointer-events: none;
@@ -579,10 +637,16 @@ body.menu-open .mobile-page-title {
     background: transparent !important;
 }
 
-/* Focus state - subtle */
-#mobile-nav-menu.active a:focus {
-    outline: none !important;
+/* Focus state - WCAG 2.1 AA compliant */
+#mobile-nav-menu.active a:focus-visible {
+    outline: 2px solid var(--accent-color) !important;
+    outline-offset: -2px !important;
     color: var(--text-color) !important;
+    background-color: rgba(139, 120, 93, 0.05) !important;
+}
+
+#mobile-nav-menu.active a:focus:not(:focus-visible) {
+    outline: none !important;
 }
 
 /* Active/current page */
@@ -654,6 +718,17 @@ body.menu-open .mobile-page-title {
     color: var(--accent-color);
 }
 
+/* Focus indicator for language toggle - WCAG 2.1 AA */
+.lang-toggle:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+    border-color: var(--accent-color);
+}
+
+.lang-toggle:focus:not(:focus-visible) {
+    outline: none;
+}
+
 /* Theme Toggle */
 .theme-toggle {
     background: transparent;
@@ -698,12 +773,23 @@ body.menu-open .mobile-page-title {
     transform: scale(1);
 }
 
+/* Focus indicator for theme toggle - WCAG 2.1 AA */
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    background-color: rgba(139, 120, 93, 0.1);
+}
+
+.theme-toggle:focus:not(:focus-visible) {
+    outline: none;
+}
+
 /* ========================================
    DESKTOP STYLES (min-width: 769px)
    ======================================== */
 @media (min-width: 769px) {
     header {
-        padding: 1rem 2rem;
+        padding: 0.5rem 2rem;
     }
 
     /* Desktop nav: 3-column grid */
@@ -945,21 +1031,32 @@ body.menu-open .mobile-page-title {
     font-size: var(--text-sm);
     font-weight: 500;
     cursor: pointer;
-    transition: all var(--transition-normal) var(--ease-smooth);
+    transition:
+        transform 0.2s var(--ease-spring),
+        box-shadow 0.25s var(--ease-in-out-smooth),
+        border-color 0.2s ease,
+        color 0.2s ease,
+        background-color 0.2s ease;
     white-space: nowrap;
     position: relative;
     overflow: hidden;
     letter-spacing: 0.02em;
 }
 
+/* Apple-style lift effect on hover */
 .filter-btn:hover {
+    transform: translateY(-2px);
     border-color: var(--accent-color);
     color: var(--accent-color);
-    box-shadow: 0 2px 8px rgba(139, 120, 93, 0.12);
+    box-shadow:
+        0 4px 12px rgba(139, 120, 93, 0.15),
+        0 2px 4px rgba(139, 120, 93, 0.08);
 }
 
+/* Press down effect */
 .filter-btn:active {
-    transform: scale(0.98);
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(139, 120, 93, 0.1);
     transition-duration: 0.1s;
 }
 
@@ -967,18 +1064,27 @@ body.menu-open .mobile-page-title {
     background: var(--accent-color);
     color: white;
     border-color: var(--accent-color);
-    box-shadow: 0 2px 12px rgba(139, 120, 93, 0.25);
+    box-shadow:
+        0 4px 14px rgba(139, 120, 93, 0.3),
+        0 2px 6px rgba(139, 120, 93, 0.15);
 }
 
 .filter-btn.active:hover {
+    transform: translateY(-2px);
     background: var(--accent-color);
     color: white;
-    box-shadow: 0 4px 16px rgba(139, 120, 93, 0.3);
+    box-shadow:
+        0 6px 20px rgba(139, 120, 93, 0.35),
+        0 3px 8px rgba(139, 120, 93, 0.2);
 }
 
+/* Elegant focus state - subtle glow */
 .filter-btn:focus-visible {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 3px;
+    outline: none;
+    box-shadow:
+        0 0 0 2px var(--card-background),
+        0 0 0 4px var(--accent-color),
+        0 4px 12px rgba(139, 120, 93, 0.15);
 }
 
 /* ========================================
@@ -1072,6 +1178,65 @@ body.menu-open .mobile-page-title {
 }
 
 /* ========================================
+   EMPTY STATE
+   ======================================== */
+
+.gallery-empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.empty-state-icon {
+    color: var(--secondary-text);
+    opacity: 0.4;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state-icon svg {
+    width: 64px;
+    height: 64px;
+}
+
+.empty-state-title {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 1rem 0;
+    letter-spacing: 0.01em;
+}
+
+.empty-state-message {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--secondary-text);
+    margin: 0 0 2rem 0;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+.empty-state-button {
+    margin-top: 0.5rem;
+}
+
+/* ========================================
    GALLERY GRID
    ======================================== */
 
@@ -1121,7 +1286,8 @@ body.menu-open .mobile-page-title {
         0 16px 32px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
                 opacity 0.3s ease,
-                transform 0.3s ease;
+                transform 0.3s ease,
+                outline 0.2s ease;
     contain: layout style paint;
     /* Removed will-change to save GPU memory */
 }
@@ -1133,6 +1299,71 @@ body.menu-open .mobile-page-title {
         0 12px 24px rgba(0, 0, 0, 0.05),
         0 24px 48px rgba(0, 0, 0, 0.08),
         0 48px 96px rgba(0, 0, 0, 0.1);
+}
+
+/* Elegant focus state - subtle glow instead of chunky outline */
+.gallery-item:focus-visible {
+    outline: none;
+    box-shadow:
+        0 0 0 2px var(--card-background),
+        0 0 0 4px var(--accent-color),
+        0 8px 24px rgba(139, 120, 93, 0.2),
+        0 24px 48px rgba(0, 0, 0, 0.08);
+}
+
+.gallery-item:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ========================================
+   SCROLL-TRIGGERED ANIMATIONS
+   Apple-style reveal on scroll
+   Coordinates with AnimationManager.js
+   ======================================== */
+
+@keyframes scrollReveal {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/*
+ * Only hide elements marked as deferred (below viewport on page load).
+ * Elements in viewport at load remain visible - no animation needed.
+ * AnimationManager adds .animate-deferred to below-viewport elements.
+ */
+.gallery-item.animate-on-scroll.animate-deferred {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+}
+
+/* Revealed state - triggered by IntersectionObserver when scrolled into view */
+.gallery-item.animate-on-scroll.animate-deferred.is-visible {
+    animation: scrollReveal 0.6s var(--ease-spring) forwards;
+}
+
+/* Staggered reveal - each item delays based on position for wave effect */
+.gallery-item.animate-on-scroll.animate-deferred.is-visible:nth-child(4n+1) { animation-delay: 0ms; }
+.gallery-item.animate-on-scroll.animate-deferred.is-visible:nth-child(4n+2) { animation-delay: 80ms; }
+.gallery-item.animate-on-scroll.animate-deferred.is-visible:nth-child(4n+3) { animation-delay: 160ms; }
+.gallery-item.animate-on-scroll.animate-deferred.is-visible:nth-child(4n+4) { animation-delay: 240ms; }
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .gallery-item.animate-on-scroll.animate-deferred {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+
+    .gallery-item.animate-on-scroll.animate-deferred.is-visible {
+        animation: none;
+    }
 }
 
 .gallery-item img {
@@ -1273,8 +1504,18 @@ body.menu-open .mobile-page-title {
     background-color: rgba(0, 0, 0, 0.97);
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(24px) saturate(120%);
-    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    backdrop-filter: blur(0px) saturate(120%);
+    -webkit-backdrop-filter: blur(0px) saturate(120%);
+}
+
+/* Animated backdrop on open */
+.lightbox.is-open {
+    animation: backdropFadeIn 0.4s var(--ease-spring) forwards;
+}
+
+/* Animated backdrop on close */
+.lightbox.is-closing {
+    animation: backdropFadeOut 0.3s var(--ease-in-out-smooth) forwards;
 }
 
 /* Add noise to lightbox background */
@@ -1297,15 +1538,146 @@ body.menu-open .mobile-page-title {
     box-shadow:
         0 8px 16px rgba(0, 0, 0, 0.08),
         0 16px 32px rgba(0, 0, 0, 0.1),
-        0 32px 64px rgba(0, 0, 0, 0.12);
+        0 32px 64px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
     position: relative;
-    animation: fadeInScale 0.5s;
+    animation: contentSlideUp 0.4s var(--ease-spring) both;
     border-radius: 24px;
     overflow: hidden;
     transition: background-color 0.3s ease;
     z-index: 2;
 }
 
+/* Closing animation for content */
+.lightbox.is-closing .lightbox-content {
+    animation: contentSlideDown 0.25s var(--ease-in-out-smooth) forwards;
+}
+
+/* Staggered caption element animations */
+.lightbox.is-open #lightbox-title {
+    animation: captionTitleIn 0.5s var(--ease-spring) 0.1s both;
+}
+
+.lightbox.is-open #lightbox-size,
+.lightbox.is-open #lightbox-materials {
+    animation: captionMetaIn 0.45s var(--ease-spring) 0.15s both;
+}
+
+.lightbox.is-open #lightbox-description {
+    animation: captionMetaIn 0.45s var(--ease-spring) 0.2s both;
+}
+
+.lightbox.is-open .lightbox-price,
+.lightbox.is-open .artwork-availability {
+    animation: captionMetaIn 0.4s var(--ease-spring) 0.25s both;
+}
+
+.lightbox.is-open .inquire-btn {
+    animation: buttonReveal 0.4s var(--ease-bounce) 0.3s both;
+}
+
+.lightbox.is-open .slider-btn {
+    animation: buttonReveal 0.35s var(--ease-spring) 0.2s both;
+}
+
+/* ========================================
+   APPLE-LEVEL ANIMATION SYSTEM
+   Choreographed, physics-based animations
+   ======================================== */
+
+/* Spring easing curves */
+:root {
+    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Backdrop fade with blur */
+@keyframes backdropFadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+    }
+}
+
+@keyframes backdropFadeOut {
+    from {
+        opacity: 1;
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+    }
+    to {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+    }
+}
+
+/* Content rises with spring physics */
+@keyframes contentSlideUp {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes contentSlideDown {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95) translateY(16px);
+    }
+}
+
+/* Staggered caption animations */
+@keyframes captionTitleIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes captionMetaIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Legacy fallback */
 @keyframes fadeInScale {
     from {
         opacity: 0;
@@ -1353,6 +1725,18 @@ body.menu-open .mobile-page-title {
     max-height: 90vh;
     object-fit: contain;
     display: block;
+    transition: opacity 0.3s var(--ease-in-out-smooth), transform 0.3s var(--ease-spring);
+    cursor: grab;
+}
+
+#lightbox-img:active {
+    cursor: grabbing;
+}
+
+/* Cross-fade transition for image navigation */
+#lightbox-img.fading-out {
+    opacity: 0.15;
+    transform: scale(0.98);
 }
 
 /* Lightbox Video */
@@ -1447,6 +1831,86 @@ body.menu-open .mobile-page-title {
 }
 
 /* ========================================
+   LIGHTBOX LOADING INDICATOR
+   ======================================== */
+
+.lightbox-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.lightbox-loader.visible {
+    opacity: 1;
+}
+
+.loader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top-color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ========================================
+   GESTURE HINT OVERLAY
+   ======================================== */
+
+.gesture-hint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 25;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.gesture-hint.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.gesture-hint-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: white;
+    text-align: center;
+}
+
+.gesture-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.gesture-item svg {
+    opacity: 0.9;
+}
+
+/* ========================================
    LIGHTBOX SLIDER CONTROLS
    ======================================== */
 
@@ -1505,6 +1969,13 @@ body.menu-open .mobile-page-title {
 
 .slider-btn-next {
     right: 1rem;
+}
+
+/* Dim navigation buttons when zoomed (swipe disabled) */
+.slider-btn.disabled-by-zoom {
+    opacity: 0.2 !important;
+    pointer-events: none;
+    transform: translateY(-50%) scale(0.9);
 }
 
 .slider-indicator {
@@ -1955,55 +2426,192 @@ body.menu-open .mobile-page-title {
         max-height: 100%;
     }
 
-    /* Lightbox mobile styles */
+    /* ========================================
+       MOBILE BOTTOM SHEET LIGHTBOX
+       iOS-style modal rising from bottom
+       ======================================== */
+
+    .lightbox {
+        align-items: flex-end;
+    }
+
+    /* Bottom sheet container */
     .lightbox-content {
         flex-direction: column;
         max-height: 95vh;
-        max-width: 95vw;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        border-radius: 24px 24px 0 0;
+        animation: bottomSheetSlideUp 0.4s var(--ease-spring) forwards;
+    }
+
+    /* Closing animation - slide down */
+    .lightbox.is-closing .lightbox-content {
+        animation: bottomSheetSlideDown 0.3s var(--ease-in-out-smooth) forwards;
+    }
+
+    @keyframes bottomSheetSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes bottomSheetSlideDown {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+    }
+
+    /* Drag handle indicator */
+    .lightbox-content::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 5px;
+        background: rgba(var(--text-rgb), 0.2);
+        border-radius: 3px;
+        z-index: 20;
     }
 
     .lightbox-image-container {
         max-width: 100%;
-        max-height: 65vh;
+        max-height: 55vh;
+        min-height: 40vh;
+        border-radius: 16px 16px 0 0;
+    }
+
+    /* Remove spotlight effect on mobile for cleaner look */
+    .lightbox-image-container::after {
+        display: none;
     }
 
     #lightbox-img,
     .lightbox-video {
         max-width: 100%;
-        max-height: 65vh;
+        max-height: 55vh;
     }
 
     #lightbox-caption {
         width: auto;
-        padding: 2rem 1.75rem;
-        max-height: 35vh;
+        padding: 1.5rem 1.5rem 2rem;
+        max-height: 40vh;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        /* Show subtle scroll indicator */
+        scrollbar-width: thin;
+        scrollbar-color: rgba(139, 120, 93, 0.4) transparent;
+        /* Safe area padding for notched devices */
+        padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0));
     }
 
+    /* Compact caption title on mobile */
+    #lightbox-title {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+    }
+
+    #lightbox-size,
+    #lightbox-materials {
+        font-size: 0.7rem;
+        margin-bottom: 0.5rem;
+    }
+
+    #lightbox-description {
+        font-size: 0.9rem;
+        margin: 1rem 0;
+        line-height: 1.6;
+    }
+
+    .lightbox-price {
+        font-size: 1.125rem;
+    }
+
+    /* Webkit scroll indicator for mobile */
+    #lightbox-caption::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    #lightbox-caption::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #lightbox-caption::-webkit-scrollbar-thumb {
+        background: rgba(139, 120, 93, 0.4);
+        border-radius: 2px;
+    }
+
+    /* Scroll fade hint at bottom */
+    #lightbox-caption::after {
+        content: '';
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background: linear-gradient(to top, var(--card-background) 0%, transparent 100%);
+        pointer-events: none;
+        display: block;
+        margin-top: -30px;
+    }
+
+    /* Close button - top right of sheet */
     .close-lightbox {
-        color: #333;
-        top: 0.5rem;
-        right: 1rem;
-        font-size: 1.8rem;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        background: rgba(var(--text-rgb), 0.08);
+        border: none;
     }
 
-    .slider-btn {
-        width: 48px;
-        height: 48px;
-    }
-
-    .slider-btn svg {
+    .close-lightbox svg {
         width: 20px;
         height: 20px;
     }
 
+    .close-lightbox:hover {
+        background: rgba(var(--text-rgb), 0.15);
+        transform: scale(1.05);
+    }
+
+    /* Slider buttons - more compact */
+    .slider-btn {
+        width: 44px;
+        height: 44px;
+        opacity: 0.8;
+    }
+
+    .slider-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
     .slider-btn-prev {
-        left: 0.5rem;
+        left: 8px;
     }
 
     .slider-btn-next {
-        right: 0.5rem;
+        right: 8px;
+    }
+
+    /* Inquire button - full width */
+    .inquire-btn {
+        margin-top: 1rem;
+        padding: 0.875rem 1.5rem;
     }
 
     /* Zoom indicator mobile adjustments */
@@ -2027,8 +2635,461 @@ body.menu-open .mobile-page-title {
    ======================================== */
 
 @media (max-width: 480px) {
-    .gallery-main {
+    .gallery-main:not(.infinite-scroll-mode) {
         padding: 7rem 0 2rem;
+    }
+}
+
+/* ========================================
+   INFINITE SCROLL GALLERY (MOBILE ONLY)
+   iOS/TikTok-style vertical scrolling experience
+   ======================================== */
+
+/* Base styles - hidden by default, shown only on mobile */
+.gallery-infinite {
+    display: none;
+}
+
+/* Hide existing gallery elements when infinite scroll is active */
+.gallery-main.infinite-scroll-mode .gallery-header,
+.gallery-main.infinite-scroll-mode .gallery-filter,
+.gallery-main.infinite-scroll-mode .gallery-grid {
+    display: none !important;
+}
+
+/* Reset gallery-main constraints for infinite scroll mode */
+.gallery-main.infinite-scroll-mode {
+    --header-height: 48px; /* Mobile header height with 0.5rem padding - measured */
+    position: fixed !important;
+    top: var(--header-height) !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: hidden !important;
+    z-index: 50 !important;
+}
+
+@media (max-width: 768px) {
+    /* Show infinite scroll container on mobile */
+    .gallery-main.infinite-scroll-mode .gallery-infinite {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+        width: 100vw !important;
+        height: 100%;
+        min-height: 100%; /* Fallback for height inheritance */
+        overflow-y: scroll;
+        overflow-x: hidden;
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .gallery-main.infinite-scroll-mode .gallery-infinite::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Each artwork fills viewport - MUST use height not min-height for absolute children */
+    .gallery-infinite-item {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: var(--background-color);
+        overflow: hidden;
+    }
+
+    /* Image container - MUST have explicit width/height for absolute positioning to work */
+    .gallery-infinite-item-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .gallery-infinite-item img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        object-position: center;
+        display: block;
+        user-select: none;
+        -webkit-user-select: none;
+        pointer-events: none;
+        transition: transform 0.3s var(--ease-spring);
+        transform-origin: center center;
+    }
+
+    /* Zoomed state for images */
+    .gallery-infinite-item.zoomed img {
+        pointer-events: auto;
+        cursor: grab;
+    }
+
+    .gallery-infinite-item.zoomed img:active {
+        cursor: grabbing;
+    }
+
+    /* Hide overlay when zoomed */
+    .gallery-infinite-item.zoomed .gallery-infinite-overlay {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* Zoom indicator */
+    .gallery-infinite-zoom-indicator {
+        position: absolute;
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(-20px);
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: white;
+        padding: 0.6rem 1rem;
+        border-radius: 20px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 500;
+        z-index: 15;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease, transform 0.3s var(--ease-spring);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        letter-spacing: 0.02em;
+    }
+
+    .gallery-infinite-zoom-indicator.visible {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* Horizontal swipe container for multiple images */
+    .gallery-infinite-slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .gallery-infinite-slider::-webkit-scrollbar {
+        display: none;
+    }
+
+    .gallery-infinite-slider-item {
+        flex: 0 0 100vw;
+        width: 100vw !important;
+        min-width: 100vw !important;
+        height: 100%;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .gallery-infinite-slider-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+
+    /* Swipe indicator dots */
+    .gallery-infinite-dots {
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .gallery-infinite-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .gallery-infinite-dot.active {
+        background: rgba(255, 255, 255, 0.9);
+        width: 8px;
+        height: 8px;
+    }
+
+    /* Minimal overlay at bottom - clickable for "Tap for details" */
+    .gallery-infinite-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1.5rem 1.5rem 2rem;
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.85) 0%,
+                rgba(0, 0, 0, 0.5) 60%,
+                transparent 100%);
+        z-index: 5;
+        pointer-events: auto; /* Clickable to open details */
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+    }
+
+    /* Tap anywhere to toggle overlay visibility */
+    .gallery-infinite-item.overlay-hidden .gallery-infinite-overlay {
+        opacity: 0;
+    }
+
+    .gallery-infinite-overlay-title {
+        font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0 0 0.5rem 0;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        letter-spacing: 0.01em;
+    }
+
+    .gallery-infinite-overlay-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .gallery-infinite-overlay-price {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #fff;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .gallery-infinite-overlay-action {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.85);
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        letter-spacing: 0.02em;
+    }
+
+    /* Active tap state for overlay feedback */
+    .gallery-infinite-overlay:active {
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.9) 0%,
+                rgba(0, 0, 0, 0.6) 60%,
+                transparent 100%);
+    }
+
+    /* Expanded details card */
+    .gallery-infinite-details {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-height: 70vh;
+        background: var(--card-background);
+        border-radius: 24px 24px 0 0;
+        padding: 1.5rem 1.5rem calc(1.5rem + env(safe-area-inset-bottom, 0));
+        z-index: 1000;
+        transform: translateY(100%);
+        transition: transform 0.4s var(--ease-spring);
+        box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.2);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        pointer-events: auto;
+    }
+
+    .gallery-infinite-details.visible {
+        transform: translateY(0);
+    }
+
+    /* Drag handle */
+    .gallery-infinite-details::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 5px;
+        background: rgba(var(--text-rgb), 0.2);
+        border-radius: 3px;
+    }
+
+    .gallery-infinite-details-title {
+        font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin: 0 0 1rem 0;
+        letter-spacing: 0.01em;
+    }
+
+    .gallery-infinite-details-meta {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: var(--accent-color);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 500;
+        margin: 0 0 0.5rem 0;
+        opacity: 0.85;
+    }
+
+    .gallery-infinite-details-description {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: var(--secondary-text);
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin: 1.5rem 0;
+    }
+
+    .gallery-infinite-details-price {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--accent-color);
+        margin: 1rem 0;
+    }
+
+    .gallery-infinite-details-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .gallery-infinite-btn {
+        flex: 1;
+        padding: 0.875rem 1.5rem;
+        border-radius: var(--radius-sm);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-weight: 500;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        cursor: pointer;
+        border: none;
+        transition: all var(--transition-normal) var(--ease-smooth);
+        min-height: 44px;
+    }
+
+    .gallery-infinite-btn-primary {
+        background: var(--button-color);
+        color: var(--button-text);
+        box-shadow: 0 2px 8px rgba(139, 120, 93, 0.2);
+    }
+
+    .gallery-infinite-btn-primary:active {
+        transform: scale(0.98);
+        box-shadow: 0 1px 4px rgba(139, 120, 93, 0.15);
+    }
+
+    .gallery-infinite-btn-secondary {
+        background: transparent;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+    }
+
+    .gallery-infinite-btn-secondary:active {
+        transform: scale(0.98);
+        background: var(--border-color);
+    }
+
+    /* Backdrop overlay when details open */
+    .gallery-infinite-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+
+    .gallery-infinite-backdrop.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Sold indicator - positioned at bottom near overlay for less visual interference */
+    .gallery-infinite-sold {
+        position: absolute;
+        bottom: 5.5rem; /* Above the overlay */
+        right: 1rem;
+        background: rgba(211, 47, 47, 0.9);
+        color: white;
+        padding: 0.4rem 0.875rem;
+        border-radius: 16px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        .gallery-infinite {
+            scroll-behavior: auto;
+            scroll-snap-type: none;
+        }
+
+        .gallery-infinite-slider {
+            scroll-behavior: auto;
+        }
+
+        .gallery-infinite-details {
+            transition: none;
+        }
+
+        .gallery-infinite-backdrop {
+            transition: none;
+        }
     }
 }
 /**
@@ -2069,15 +3130,37 @@ body.menu-open .mobile-page-title {
     line-height: 1;
 }
 
-/* Focus states for accessibility */
+/* Focus states for accessibility - WCAG 2.1 AA Compliant */
 .btn-primary:focus-visible,
 .btn-secondary:focus-visible,
 .btn-primary-large:focus-visible,
 .btn-secondary-large:focus-visible,
 .submit-btn:focus-visible,
 .inquire-btn:focus-visible {
-    outline: 3px solid var(--text-color);
+    outline: 3px solid var(--accent-color);
     outline-offset: 4px;
+    box-shadow: 0 0 0 2px rgba(139, 120, 93, 0.2);
+}
+
+/* Remove outline for mouse users */
+.btn-primary:focus:not(:focus-visible),
+.btn-secondary:focus:not(:focus-visible),
+.btn-primary-large:focus:not(:focus-visible),
+.btn-secondary-large:focus:not(:focus-visible),
+.submit-btn:focus:not(:focus-visible),
+.inquire-btn:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Dark theme focus indicators */
+[data-theme="dark"] .btn-primary:focus-visible,
+[data-theme="dark"] .btn-secondary:focus-visible,
+[data-theme="dark"] .btn-primary-large:focus-visible,
+[data-theme="dark"] .btn-secondary-large:focus-visible,
+[data-theme="dark"] .submit-btn:focus-visible,
+[data-theme="dark"] .inquire-btn:focus-visible {
+    outline-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(139, 120, 93, 0.3);
 }
 
 /* Primary button variants */
@@ -2137,10 +3220,22 @@ body.menu-open .mobile-page-title {
     font-weight: 500;
     font-size: 1rem;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border: none;
+    cursor: pointer;
 }
 
 .btn-text:hover {
     transform: translateX(5px);
+}
+
+.btn-text:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+.btn-text:focus:not(:focus-visible) {
+    outline: none;
 }
 /**
  * 06-footer.css
@@ -4320,12 +5415,47 @@ main {
     box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.1);
 }
 
+.form-group input.field-error,
+.form-group textarea.field-error {
+    border-color: #d32f2f;
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+    background-color: rgba(211, 47, 47, 0.02);
+}
+
+/* Shake animation for error feedback */
+@keyframes fieldShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.field-shake {
+    animation: fieldShake 0.5s ease-in-out;
+}
+
 .error-message {
     display: block;
     color: #d32f2f;
     font-size: 0.9rem;
     margin-top: 0.25rem;
     min-height: 1.2rem;
+    font-weight: 500;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.error-message:not(:empty) {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .error-message:empty {
@@ -4340,6 +5470,13 @@ main {
 [data-theme="dark"] .form-group textarea[aria-invalid="true"] {
     border-color: #ff6b6b;
     box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.1);
+}
+
+[data-theme="dark"] .form-group input.field-error,
+[data-theme="dark"] .form-group textarea.field-error {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
+    background-color: rgba(255, 107, 107, 0.03);
 }
 
 /* Required field indicator */
@@ -4427,14 +5564,44 @@ main {
     box-shadow:
         0 2px 4px rgba(0, 102, 204, 0.1),
         0 4px 8px rgba(0, 102, 204, 0.08);
+    position: relative;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
     opacity: 0.92;
     transform: translateY(-3px);
     box-shadow:
         0 4px 8px rgba(0, 102, 204, 0.15),
         0 8px 16px rgba(0, 102, 204, 0.12);
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Loading button state */
+.submit-btn.btn-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    pointer-events: none;
+}
+
+/* Loading spinner */
+.loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 /* ========================================

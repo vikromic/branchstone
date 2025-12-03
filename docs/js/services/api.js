@@ -63,7 +63,7 @@ export const artworksAPI = {
    */
   async getById(id) {
     const artworks = await this.getAll();
-    return artworks.find(artwork => artwork.id === id) || null;
+    return artworks.find((artwork) => artwork.id === id) || null;
   },
 };
 

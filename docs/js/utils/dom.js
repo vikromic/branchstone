@@ -33,7 +33,9 @@ export function $$(selector, context = document) {
  * @returns {Function} Cleanup function
  */
 export function on(element, event, handler, options = {}) {
-  if (!element) return () => {};
+  if (!element) {
+    return () => {};
+  }
 
   element.addEventListener(event, handler, options);
   return () => element.removeEventListener(event, handler, options);
@@ -66,7 +68,7 @@ export function createElement(tag, attrs = {}, children = []) {
 
   // Add children
   const childArray = Array.isArray(children) ? children : [children];
-  childArray.forEach(child => {
+  childArray.forEach((child) => {
     if (typeof child === 'string') {
       element.appendChild(document.createTextNode(child));
     } else if (child instanceof Element) {
@@ -84,8 +86,10 @@ export function createElement(tag, attrs = {}, children = []) {
  * @param {boolean} force - Force add/remove
  */
 export function toggleClasses(element, classes, force) {
-  if (!element) return;
-  classes.forEach(className => element.classList.toggle(className, force));
+  if (!element) {
+    return;
+  }
+  classes.forEach((className) => element.classList.toggle(className, force));
 }
 
 /**
@@ -104,7 +108,9 @@ export function getFocusableElements(container) {
  * @param {Object} attrs - Attributes to set
  */
 export function setAttributes(element, attrs) {
-  if (!element) return;
+  if (!element) {
+    return;
+  }
   Object.entries(attrs).forEach(([key, value]) => {
     element.setAttribute(key, value);
   });
@@ -116,12 +122,16 @@ export function setAttributes(element, attrs) {
  * @param {string} priority - 'polite' or 'assertive'
  */
 export function announceToScreenReader(message, priority = 'polite') {
-  const announcement = createElement('div', {
-    role: 'status',
-    'aria-live': priority,
-    'aria-atomic': 'true',
-    className: 'sr-only',
-  }, message);
+  const announcement = createElement(
+    'div',
+    {
+      role: 'status',
+      'aria-live': priority,
+      'aria-atomic': 'true',
+      className: 'sr-only',
+    },
+    message,
+  );
 
   document.body.appendChild(announcement);
   setTimeout(() => announcement.remove(), 1000);

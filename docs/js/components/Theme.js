@@ -17,7 +17,9 @@ export class ThemeManager {
     this.toggle = $(options.toggleSelector || '#theme-toggle');
     this.currentTheme = this.getInitialTheme();
 
-    if (!this.toggle) return;
+    if (!this.toggle) {
+      return;
+    }
 
     this.init();
   }
@@ -70,10 +72,14 @@ export class ThemeManager {
    * @private
    */
   watchSystemPreference() {
-    if (!window.matchMedia) return;
+    if (!window.matchMedia) {
+      return;
+    }
 
     const userPreference = getStorageItem(CONFIG.storage.theme);
-    if (userPreference) return; // Don't watch if user has explicit preference
+    if (userPreference) {
+      return;
+    } // Don't watch if user has explicit preference
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     on(mediaQuery, 'change', (e) => {
@@ -86,9 +92,8 @@ export class ThemeManager {
    * Toggle between light and dark themes
    */
   toggleTheme() {
-    const newTheme = this.currentTheme === CONFIG.theme.dark
-      ? CONFIG.theme.light
-      : CONFIG.theme.dark;
+    const newTheme =
+      this.currentTheme === CONFIG.theme.dark ? CONFIG.theme.light : CONFIG.theme.dark;
 
     this.applyTheme(newTheme);
     setStorageItem(CONFIG.storage.theme, newTheme);
@@ -110,9 +115,7 @@ export class ThemeManager {
    * @param {string} theme - Current theme
    */
   updateToggleLabel(theme) {
-    const label = theme === CONFIG.theme.dark
-      ? 'Switch to light mode'
-      : 'Switch to dark mode';
+    const label = theme === CONFIG.theme.dark ? 'Switch to light mode' : 'Switch to dark mode';
     setAttributes(this.toggle, { 'aria-label': label });
   }
 

@@ -4,7 +4,8 @@
  * @module components/Gallery
  */
 
-import { $, createElement, setAttributes } from '../utils/dom.js';
+import { $, createElement } from '../utils/dom.js';
+import { sanitizeText, sanitizeURL } from '../utils/sanitize.js';
 import { artworksAPI } from '../services/api.js';
 import CONFIG from '../config.js';
 
@@ -20,7 +21,9 @@ export class Gallery {
     this.type = options.type || 'full';
     this.onLoadCallback = options.onLoad;
 
-    if (!this.container) return;
+    if (!this.container) {
+      return;
+    }
 
     // Setup delegated keyboard handler once
     this.setupKeyboardNavigation();
@@ -35,7 +38,9 @@ export class Gallery {
   setupKeyboardNavigation() {
     this.container.addEventListener('keydown', (e) => {
       const item = e.target.closest('.gallery-item');
-      if (!item) return;
+      if (!item) {
+        return;
+      }
 
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -69,7 +74,7 @@ export class Gallery {
    */
   hideSkeletons() {
     const skeletons = this.container.querySelectorAll('.skeleton-item');
-    skeletons.forEach(skeleton => {
+    skeletons.forEach((skeleton) => {
       skeleton.remove();
     });
   }
@@ -104,9 +109,10 @@ export class Gallery {
     const fragment = document.createDocumentFragment();
 
     artworks.forEach((artwork, index) => {
-      const item = this.type === 'featured'
-        ? this.createFeaturedItem(artwork, index)
-        : this.createGalleryItem(artwork, index);
+      const item =
+        this.type === 'featured'
+          ? this.createFeaturedItem(artwork, index)
+          : this.createGalleryItem(artwork, index);
       fragment.appendChild(item);
     });
 
@@ -118,40 +124,48 @@ export class Gallery {
    * Create video element for gallery items
    * @private
    * @param {Object} artwork - Artwork data
-   * @param {Object} options - Video options
    * @returns {Element|null} Video element or null if no video
    */
-  createVideoElement(artwork, options = {}) {
-    if (!artwork.video) return null;
+  createVideoElement(artwork) {
+    if (!artwork.video) {
+      return null;
+    }
+
+    // Sanitize video URLs
+    const safeWebm = artwork.video.webm ? sanitizeURL(artwork.video.webm) : '';
+    const safeMp4 = artwork.video.mp4 ? sanitizeURL(artwork.video.mp4) : '';
+    const safePoster = artwork.video.poster
+      ? sanitizeURL(artwork.video.poster)
+      : sanitizeURL(artwork.image || '');
 
     const video = createElement('video', {
       className: 'gallery-video',
-      src: artwork.video.webm || artwork.video.mp4,
+      src: safeWebm || safeMp4,
       autoplay: true,
       loop: true,
       muted: true,
       playsinline: true, // Important for iOS
       preload: 'metadata',
-      'aria-label': `Video preview of ${artwork.title}`,
+      'aria-label': `Video preview of ${sanitizeText(artwork.title || '')}`,
     });
 
-    // Add poster if available
-    if (artwork.video.poster || artwork.image) {
-      video.setAttribute('poster', artwork.video.poster || artwork.image);
+    // Add poster if available (sanitized)
+    if (safePoster) {
+      video.setAttribute('poster', safePoster);
     }
 
     // Add WebM and MP4 sources for cross-browser support
-    if (artwork.video.webm) {
+    if (safeWebm) {
       const webmSource = createElement('source', {
-        src: artwork.video.webm,
+        src: safeWebm,
         type: 'video/webm',
       });
       video.appendChild(webmSource);
     }
 
-    if (artwork.video.mp4) {
+    if (safeMp4) {
       const mp4Source = createElement('source', {
-        src: artwork.video.mp4,
+        src: safeMp4,
         type: 'video/mp4',
       });
       video.appendChild(mp4Source);
@@ -175,7 +189,7 @@ export class Gallery {
       loading = 'lazy',
       sizes = '(max-width: 768px) 100vw, 50vw',
       useThumbnail = false,
-      priority = false // fetchpriority="high" for above-fold images
+      priority = false, // fetchpriority="high" for above-fold images
     } = options;
 
     const picture = createElement('picture');
@@ -185,7 +199,9 @@ export class Gallery {
 
     // Final fallback img element source
     // Use thumbnail for grid view, full image for featured/lightbox
-    const imgSrc = useThumbnail ? (artwork.thumb || artwork.image) : artwork.image;
+    // Sanitize URLs before use
+    const rawImgSrc = useThumbnail ? artwork.thumb || artwork.image : artwork.image;
+    const imgSrc = sanitizeURL(rawImgSrc || '');
 
     // WebP source (preferred format) - auto-generate from JPEG if not provided
     if (artwork.srcset?.webp) {
@@ -216,7 +232,7 @@ export class Gallery {
 
     const imgAttributes = {
       src: imgSrc,
-      alt: artwork.title,
+      alt: sanitizeText(artwork.title || ''),
       loading,
       decoding: 'async', // Don't block main thread
       // Explicit dimensions prevent CLS (Cumulative Layout Shift)
@@ -322,26 +338,41 @@ export class Gallery {
    */
   createGalleryItem(artwork, index = 0) {
     // Prepare media array (images + videos) for lightbox
-    const media = artwork.images ? [...artwork.images] : [];
+    // Sanitize all URLs in the media array
+    const media = artwork.images ? artwork.images.map((img) => sanitizeURL(img || '')) : [];
     if (artwork.video) {
-      // Add video to media array with special marker
-      media.push({ type: 'video', ...artwork.video });
+      // Add video to media array with special marker and sanitized URLs
+      media.push({
+        type: 'video',
+        webm: sanitizeURL(artwork.video.webm || ''),
+        mp4: sanitizeURL(artwork.video.mp4 || ''),
+        poster: sanitizeURL(artwork.video.poster || ''),
+      });
     }
+
+    // Sanitize all text data
+    const safeTitle = sanitizeText(artwork.title || '');
+    const safeSize = sanitizeText(artwork.size || '');
+    const safeMaterials = sanitizeText(artwork.materials || '');
+    const safeDescription = sanitizeText(artwork.description || '');
+    const safePrice = sanitizeText(artwork.price || '');
+    const safeImage = sanitizeURL(artwork.image || '');
+    const safeCategory = sanitizeText(artwork.category || 'uncategorized');
 
     const item = createElement('div', {
       className: `gallery-item ${artwork.layout || ''} animate-on-scroll ${artwork.video ? 'has-video' : ''}`,
       role: 'button',
       tabindex: '0',
-      'aria-label': `View ${artwork.title}, ${artwork.size}`,
+      'aria-label': `View ${safeTitle}, ${safeSize}`,
       dataset: {
-        title: artwork.title,
-        size: artwork.size,
-        materials: artwork.materials,
-        description: artwork.description,
-        img: artwork.image,
+        title: safeTitle,
+        size: safeSize,
+        materials: safeMaterials,
+        description: safeDescription,
+        img: safeImage,
         available: artwork.available.toString(),
-        category: artwork.category || 'uncategorized',
-        ...(artwork.price && { price: artwork.price }),
+        category: safeCategory,
+        ...(safePrice && { price: safePrice }),
         ...(media.length > 0 && {
           images: JSON.stringify(media),
         }),
@@ -368,12 +399,12 @@ export class Gallery {
       : null;
 
     const title = createElement('h3', {});
-    title.textContent = artwork.title + ' ';
+    title.textContent = safeTitle + ' ';
     if (soldDot) {
       title.appendChild(soldDot);
     }
 
-    const size = createElement('p', {}, artwork.size);
+    const size = createElement('p', {}, safeSize);
 
     const info = createElement('div', { className: 'gallery-item-info' }, [title, size]);
 
@@ -390,9 +421,10 @@ export class Gallery {
    * @private
    */
   renderError() {
-    const message = this.type === 'featured'
-      ? 'Unable to load artworks. Please try again.'
-      : 'Unable to load gallery. Please try again.';
+    const message =
+      this.type === 'featured'
+        ? 'Unable to load artworks. Please try again.'
+        : 'Unable to load gallery. Please try again.';
 
     const errorContainer = createElement('div', {
       className: 'gallery-error',

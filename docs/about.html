@@ -24,9 +24,8 @@
     <meta name="theme-color" content="#F8F8F8" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#2B2D30" media="(prefers-color-scheme: dark)">
 
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none';">
-    <meta http-equiv="X-Frame-Options" content="DENY">
+    <!-- Security Headers - Note: frame-ancestors and X-Frame-Options only work via HTTP headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
@@ -34,17 +33,18 @@
     <title>About - Viktoria Branchstone</title>
 
     <!-- Preload critical assets -->
-    <link rel="preload" href="css/bundle.css?v=1764476014" as="style">
+    <link rel="preload" href="css/bundle.css?v=1764789948" as="style">
     <link rel="modulepreload" href="js/app.js">
     <link rel="modulepreload" href="js/config.js">
-    <link rel="stylesheet" href="css/bundle.css?v=1764476014">
+    <link rel="stylesheet" href="css/bundle.css?v=1764789948">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet" media="print">
 
     <!-- Initialize theme as early as possible to avoid flickering -->
     <script src="js/theme-init.js"></script>
+    <script src="js/css-loader.js"></script>
 </head>
 
 <body>

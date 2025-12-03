@@ -56,16 +56,21 @@ export class ScrollToTop {
     // Show/hide based on scroll position
     let ticking = false;
     this.cleanupFunctions.push(
-      on(window, 'scroll', () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            this.updateVisibility();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true }),
-      on(this.button, 'click', () => this.scrollToTop())
+      on(
+        window,
+        'scroll',
+        () => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              this.updateVisibility();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        },
+        { passive: true },
+      ),
+      on(this.button, 'click', () => this.scrollToTop()),
     );
 
     // Initial visibility check
@@ -95,7 +100,7 @@ export class ScrollToTop {
    * Destroy component
    */
   destroy() {
-    this.cleanupFunctions.forEach(cleanup => cleanup?.());
+    this.cleanupFunctions.forEach((cleanup) => cleanup?.());
     this.cleanupFunctions = [];
     if (this.button) {
       this.button.remove();

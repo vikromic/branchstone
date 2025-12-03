@@ -36,7 +36,9 @@ export function getStorageItem(key, defaultValue = null, storageType = 'localSto
 
   try {
     const item = window[storageType].getItem(key);
-    if (item === null) return defaultValue;
+    if (item === null) {
+      return defaultValue;
+    }
 
     // Try to parse JSON, fallback to raw string
     try {

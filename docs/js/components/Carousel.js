@@ -24,23 +24,27 @@ export class Carousel {
     this.itemSelector = options.itemSelector || '.carousel-item';
     this.autoplayDelay = options.autoplayDelay || CONFIG.ui.carousel.autoplayDelay;
     this.loop = options.loop !== undefined ? options.loop : CONFIG.ui.carousel.loop;
-    this.pauseOnHover = options.pauseOnHover !== undefined
-      ? options.pauseOnHover
-      : CONFIG.ui.carousel.pauseOnHover;
+    this.pauseOnHover =
+      options.pauseOnHover !== undefined ? options.pauseOnHover : CONFIG.ui.carousel.pauseOnHover;
 
     // Multi-item carousel support
     this.itemsPerView = options.itemsPerView || 1;
     this.itemsPerRow = options.itemsPerRow || this.itemsPerView;
 
-    if (!this.container) return;
+    if (!this.container) {
+      return;
+    }
 
     this.items = $$(this.itemSelector, this.container);
     this.originalItems = [...this.items];
     this.currentIndex = 0;
     this.autoplayTimer = null;
     this.isPlaying = true;
-    this.isTransitioning = false;
     this.slideGap = 0;
+
+    // Promise-based transition queue to prevent race conditions
+    this.transitionQueue = Promise.resolve();
+    this.isTransitioning = false;
 
     this.init();
   }
@@ -50,7 +54,9 @@ export class Carousel {
    * @private
    */
   init() {
-    if (this.items.length === 0) return;
+    if (this.items.length === 0) {
+      return;
+    }
 
     // For multi-item carousels, setup infinite cloning
     if (this.itemsPerView > 1 && this.loop) {
@@ -69,7 +75,9 @@ export class Carousel {
    */
   setupInfiniteClone() {
     const track = this.container.querySelector('.carousel-track');
-    if (!track) return;
+    if (!track) {
+      return;
+    }
 
     // Get the number of items to clone (at least itemsPerView)
     const cloneCount = Math.max(this.itemsPerView, 3);
@@ -83,7 +91,11 @@ export class Carousel {
     }
 
     // Clone items from the end and add to start
-    for (let i = Math.max(0, this.originalItems.length - cloneCount); i < this.originalItems.length; i++) {
+    for (
+      let i = Math.max(0, this.originalItems.length - cloneCount);
+      i < this.originalItems.length;
+      i++
+    ) {
       const clone = this.originalItems[i].cloneNode(true);
       clone.classList.add('carousel-clone');
       clone.removeAttribute('id');
@@ -125,7 +137,9 @@ export class Carousel {
    */
   setupControls() {
     const controls = this.container.querySelector('.carousel-controls');
-    if (!controls) return;
+    if (!controls) {
+      return;
+    }
 
     this.prevBtn = controls.querySelector('.carousel-prev');
     this.nextBtn = controls.querySelector('.carousel-next');
@@ -158,7 +172,9 @@ export class Carousel {
    */
   setupIndicators() {
     const indicatorsContainer = this.container.querySelector('.carousel-indicators');
-    if (!indicatorsContainer) return;
+    if (!indicatorsContainer) {
+      return;
+    }
 
     indicatorsContainer.innerHTML = '';
 
@@ -192,18 +208,28 @@ export class Carousel {
     let touchStartX = 0;
     let touchEndX = 0;
 
-    on(this.container, 'touchstart', (e) => {
-      if (e.touches && e.touches.length > 0) {
-        touchStartX = e.touches[0].clientX;
-      }
-    }, { passive: true });
+    on(
+      this.container,
+      'touchstart',
+      (e) => {
+        if (e.touches && e.touches.length > 0) {
+          touchStartX = e.touches[0].clientX;
+        }
+      },
+      { passive: true },
+    );
 
-    on(this.container, 'touchend', (e) => {
-      if (e.changedTouches && e.changedTouches.length > 0) {
-        touchEndX = e.changedTouches[0].clientX;
-        this.handleSwipe(touchStartX, touchEndX);
-      }
-    }, { passive: true });
+    on(
+      this.container,
+      'touchend',
+      (e) => {
+        if (e.changedTouches && e.changedTouches.length > 0) {
+          touchEndX = e.changedTouches[0].clientX;
+          this.handleSwipe(touchStartX, touchEndX);
+        }
+      },
+      { passive: true },
+    );
   }
 
   /**
@@ -234,7 +260,9 @@ export class Carousel {
    */
   updateTrackPosition(instant = false) {
     const track = this.container.querySelector('.carousel-track');
-    if (!track) return;
+    if (!track) {
+      return;
+    }
 
     // For multi-item carousel, calculate translation based on item width
     if (this.itemsPerView > 1) {
@@ -268,7 +296,9 @@ export class Carousel {
   goTo(index) {
     // For single-item carousel
     if (this.itemsPerView === 1) {
-      if (index === this.currentIndex) return;
+      if (index === this.currentIndex) {
+        return;
+      }
 
       const prevIndex = this.currentIndex;
       this.currentIndex = index;
@@ -294,99 +324,167 @@ export class Carousel {
 
   /**
    * Go to next slide
+   * Uses promise-based queue to prevent race conditions
    */
   next() {
-    if (this.isTransitioning) return;
+    // Queue this transition to prevent race conditions
+    this.transitionQueue = this.transitionQueue
+      .then(() => {
+        return this.executeNext();
+      })
+      .catch((error) => {
+        console.warn('Carousel transition error:', error);
+        this.isTransitioning = false;
+      });
+
+    return this.transitionQueue;
+  }
+
+  /**
+   * Execute next slide transition
+   * @private
+   * @returns {Promise} Promise that resolves when transition completes
+   */
+  executeNext() {
+    // Double-check if already transitioning (extra safety)
+    if (this.isTransitioning) {
+      return Promise.resolve();
+    }
+
     this.isTransitioning = true;
 
-    if (this.itemsPerView > 1) {
-      // For multi-item carousel, advance by itemsPerRow
-      let nextIndex = this.currentIndex + this.itemsPerRow;
+    return new Promise((resolve) => {
+      if (this.itemsPerView > 1) {
+        // For multi-item carousel, advance by itemsPerRow
+        const nextIndex = this.currentIndex + this.itemsPerRow;
 
-      // Check for infinite clone boundary
-      const cloneCount = Math.max(this.itemsPerView, 3);
-      const originalCount = this.originalItems.length;
-      const totalWithClones = originalCount + 2 * cloneCount;
+        // Check for infinite clone boundary
+        const cloneCount = Math.max(this.itemsPerView, 3);
+        const originalCount = this.originalItems.length;
 
-      if (nextIndex >= originalCount + cloneCount) {
-        // We've reached the cloned section at the end, jump back to original
-        this.updateTrackPosition();
-        setTimeout(() => {
-          const jumpIndex = cloneCount + (nextIndex - (originalCount + cloneCount));
-          this.currentIndex = jumpIndex;
-          this.updateTrackPosition(true);
-          this.isTransitioning = false;
-        }, 600); // Match transition duration
+        if (nextIndex >= originalCount + cloneCount) {
+          // We've reached the cloned section at the end, jump back to original
+          this.currentIndex = nextIndex;
+          this.updateTrackPosition();
+
+          // Wait for transition, then jump to equivalent position
+          setTimeout(() => {
+            const jumpIndex = cloneCount + (nextIndex - (originalCount + cloneCount));
+            this.currentIndex = jumpIndex;
+            this.updateTrackPosition(true);
+            this.isTransitioning = false;
+            resolve();
+          }, 600); // Match transition duration
+        } else {
+          this.currentIndex = nextIndex;
+          this.updateTrackPosition();
+
+          setTimeout(() => {
+            this.isTransitioning = false;
+            resolve();
+          }, 600);
+        }
       } else {
-        this.currentIndex = nextIndex;
-        this.updateTrackPosition();
-        setTimeout(() => {
-          this.isTransitioning = false;
-        }, 600);
+        // For single-item carousel
+        let nextIndex = this.currentIndex + 1;
+        if (nextIndex >= this.items.length) {
+          nextIndex = this.loop ? 0 : this.items.length - 1;
+        }
+        this.goTo(nextIndex);
+        this.isTransitioning = false;
+        resolve();
       }
-    } else {
-      // For single-item carousel
-      let nextIndex = this.currentIndex + 1;
-      if (nextIndex >= this.items.length) {
-        nextIndex = this.loop ? 0 : this.items.length - 1;
-      }
-      this.goTo(nextIndex);
-      this.isTransitioning = false;
-    }
+    });
   }
 
   /**
    * Go to previous slide
+   * Uses promise-based queue to prevent race conditions
    */
   previous() {
-    if (this.isTransitioning) return;
+    // Queue this transition to prevent race conditions
+    this.transitionQueue = this.transitionQueue
+      .then(() => {
+        return this.executePrevious();
+      })
+      .catch((error) => {
+        console.warn('Carousel transition error:', error);
+        this.isTransitioning = false;
+      });
+
+    return this.transitionQueue;
+  }
+
+  /**
+   * Execute previous slide transition
+   * @private
+   * @returns {Promise} Promise that resolves when transition completes
+   */
+  executePrevious() {
+    // Double-check if already transitioning (extra safety)
+    if (this.isTransitioning) {
+      return Promise.resolve();
+    }
+
     this.isTransitioning = true;
 
-    if (this.itemsPerView > 1) {
-      // For multi-item carousel, go back by itemsPerRow
-      let prevIndex = this.currentIndex - this.itemsPerRow;
-      const cloneCount = Math.max(this.itemsPerView, 3);
+    return new Promise((resolve) => {
+      if (this.itemsPerView > 1) {
+        // For multi-item carousel, go back by itemsPerRow
+        const prevIndex = this.currentIndex - this.itemsPerRow;
+        const cloneCount = Math.max(this.itemsPerView, 3);
 
-      if (prevIndex < cloneCount) {
-        // We've reached the cloned section at the start, jump to end
-        this.updateTrackPosition();
-        setTimeout(() => {
-          const originalCount = this.originalItems.length;
-          const jumpIndex = originalCount + cloneCount - (cloneCount - prevIndex) - this.itemsPerRow;
-          this.currentIndex = jumpIndex;
-          this.updateTrackPosition(true);
-          this.isTransitioning = false;
-        }, 600); // Match transition duration
+        if (prevIndex < cloneCount) {
+          // We've reached the cloned section at the start, jump to end
+          this.currentIndex = prevIndex;
+          this.updateTrackPosition();
+
+          // Wait for transition, then jump to equivalent position
+          setTimeout(() => {
+            const originalCount = this.originalItems.length;
+            const jumpIndex =
+              originalCount + cloneCount - (cloneCount - prevIndex) - this.itemsPerRow;
+            this.currentIndex = jumpIndex;
+            this.updateTrackPosition(true);
+            this.isTransitioning = false;
+            resolve();
+          }, 600); // Match transition duration
+        } else {
+          this.currentIndex = prevIndex;
+          this.updateTrackPosition();
+
+          setTimeout(() => {
+            this.isTransitioning = false;
+            resolve();
+          }, 600);
+        }
       } else {
-        this.currentIndex = prevIndex;
-        this.updateTrackPosition();
-        setTimeout(() => {
-          this.isTransitioning = false;
-        }, 600);
+        // For single-item carousel
+        let prevIndex = this.currentIndex - 1;
+        if (prevIndex < 0) {
+          prevIndex = this.loop ? this.items.length - 1 : 0;
+        }
+        this.goTo(prevIndex);
+        this.isTransitioning = false;
+        resolve();
       }
-    } else {
-      // For single-item carousel
-      let prevIndex = this.currentIndex - 1;
-      if (prevIndex < 0) {
-        prevIndex = this.loop ? this.items.length - 1 : 0;
-      }
-      this.goTo(prevIndex);
-      this.isTransitioning = false;
-    }
+    });
   }
 
   /**
    * Start autoplay
+   * Autoplay respects the transition queue, preventing race conditions
    */
   startAutoplay() {
-    if (!this.loop || !this.isPlaying) return;
+    if (!this.loop || !this.isPlaying) {
+      return;
+    }
 
     this.stopAutoplay();
     this.autoplayTimer = setInterval(() => {
-      // Only autoplay if not currently transitioning
-      if (!this.isTransitioning) {
-        this.next();
-      }
+      // Call next() which automatically queues the transition
+      // The promise-based queue prevents race conditions
+      this.next();
     }, this.autoplayDelay);
   }
 

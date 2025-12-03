@@ -133,12 +133,47 @@
     box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.1);
 }
 
+.form-group input.field-error,
+.form-group textarea.field-error {
+    border-color: #d32f2f;
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15);
+    background-color: rgba(211, 47, 47, 0.02);
+}
+
+/* Shake animation for error feedback */
+@keyframes fieldShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.field-shake {
+    animation: fieldShake 0.5s ease-in-out;
+}
+
 .error-message {
     display: block;
     color: #d32f2f;
     font-size: 0.9rem;
     margin-top: 0.25rem;
     min-height: 1.2rem;
+    font-weight: 500;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.error-message:not(:empty) {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .error-message:empty {
@@ -153,6 +188,13 @@
 [data-theme="dark"] .form-group textarea[aria-invalid="true"] {
     border-color: #ff6b6b;
     box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.1);
+}
+
+[data-theme="dark"] .form-group input.field-error,
+[data-theme="dark"] .form-group textarea.field-error {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
+    background-color: rgba(255, 107, 107, 0.03);
 }
 
 /* Required field indicator */
@@ -240,14 +282,44 @@
     box-shadow:
         0 2px 4px rgba(0, 102, 204, 0.1),
         0 4px 8px rgba(0, 102, 204, 0.08);
+    position: relative;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
     opacity: 0.92;
     transform: translateY(-3px);
     box-shadow:
         0 4px 8px rgba(0, 102, 204, 0.15),
         0 8px 16px rgba(0, 102, 204, 0.12);
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Loading button state */
+.submit-btn.btn-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    pointer-events: none;
+}
+
+/* Loading spinner */
+.loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 /* ========================================

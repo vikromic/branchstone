@@ -35,7 +35,9 @@ export class AnimationManager {
    */
   initScrollAnimations() {
     const elements = $$('.animate-on-scroll');
-    if (elements.length === 0) return;
+    if (elements.length === 0) {
+      return;
+    }
 
     const viewportHeight = window.innerHeight;
 
@@ -43,7 +45,7 @@ export class AnimationManager {
     // Elements in viewport on load stay visible immediately (no animation delay)
     const elementsToAnimate = [];
 
-    elements.forEach(element => {
+    elements.forEach((element) => {
       const rect = element.getBoundingClientRect();
       // Element is below viewport - mark for deferred animation
       if (rect.top > viewportHeight) {
@@ -53,7 +55,9 @@ export class AnimationManager {
       // Elements in viewport stay visible (no class added = instant visible via CSS)
     });
 
-    if (elementsToAnimate.length === 0) return;
+    if (elementsToAnimate.length === 0) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -69,10 +73,10 @@ export class AnimationManager {
       {
         threshold: 0.1,
         rootMargin: '50px',
-      }
+      },
     );
 
-    elementsToAnimate.forEach(element => observer.observe(element));
+    elementsToAnimate.forEach((element) => observer.observe(element));
     this.observers.set('scroll', observer);
   }
 
@@ -91,7 +95,7 @@ export class AnimationManager {
       const viewportHeight = window.innerHeight;
 
       elements.forEach(({ selector, speed }) => {
-        $$(selector).forEach(el => {
+        $$(selector).forEach((el) => {
           const rect = el.getBoundingClientRect();
 
           // Only apply parallax when element is in viewport
@@ -128,7 +132,7 @@ export class AnimationManager {
     // Find new elements not yet processed
     const elements = $$('.animate-on-scroll:not(.is-visible):not(.animate-deferred)');
 
-    elements.forEach(element => {
+    elements.forEach((element) => {
       const rect = element.getBoundingClientRect();
       // Only animate elements below viewport
       if (rect.top > viewportHeight) {
@@ -145,7 +149,7 @@ export class AnimationManager {
    * Destroy all animations and observers
    */
   destroy() {
-    this.observers.forEach(observer => observer.disconnect());
+    this.observers.forEach((observer) => observer.disconnect());
     this.observers.clear();
 
     if (this.rafId) {

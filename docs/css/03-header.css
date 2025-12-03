@@ -8,7 +8,7 @@
    HEADER CONTAINER
    ======================================== */
 header {
-    padding: 1rem 1.5rem;
+    padding: 0.5rem 1rem;
     width: 100%;
     box-sizing: border-box;
     background-color: var(--header-background);
@@ -40,12 +40,12 @@ nav {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 8px;
+    padding: 6px;
     z-index: 10002;
     border-radius: 4px;
     position: relative;
@@ -69,6 +69,17 @@ nav {
 .mobile-menu-toggle.active span:nth-child(2) { opacity: 0; }
 .mobile-menu-toggle.active span:nth-child(3) { transform: rotate(-45deg); }
 
+/* Focus indicator for mobile menu toggle - WCAG 2.1 AA */
+.mobile-menu-toggle:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    background-color: rgba(139, 120, 93, 0.05);
+}
+
+.mobile-menu-toggle:focus:not(:focus-visible) {
+    outline: none;
+}
+
 /* ========================================
    LOGO (Desktop Only)
    ======================================== */
@@ -80,9 +91,9 @@ nav {
 }
 
 .header-logo .logo-image {
-    height: 48px;
+    height: 36px;
     width: auto;
-    max-width: 48px;
+    max-width: 36px;
     object-fit: contain;
     display: block;
     /* Crisp rendering for small sizes */
@@ -107,7 +118,7 @@ html[data-theme="dark"] .header-logo .logo-image {
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--text-color);
     pointer-events: none;
@@ -210,10 +221,16 @@ body.menu-open .mobile-page-title {
     background: transparent !important;
 }
 
-/* Focus state - subtle */
-#mobile-nav-menu.active a:focus {
-    outline: none !important;
+/* Focus state - WCAG 2.1 AA compliant */
+#mobile-nav-menu.active a:focus-visible {
+    outline: 2px solid var(--accent-color) !important;
+    outline-offset: -2px !important;
     color: var(--text-color) !important;
+    background-color: rgba(139, 120, 93, 0.05) !important;
+}
+
+#mobile-nav-menu.active a:focus:not(:focus-visible) {
+    outline: none !important;
 }
 
 /* Active/current page */
@@ -285,6 +302,17 @@ body.menu-open .mobile-page-title {
     color: var(--accent-color);
 }
 
+/* Focus indicator for language toggle - WCAG 2.1 AA */
+.lang-toggle:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+    border-color: var(--accent-color);
+}
+
+.lang-toggle:focus:not(:focus-visible) {
+    outline: none;
+}
+
 /* Theme Toggle */
 .theme-toggle {
     background: transparent;
@@ -329,12 +357,23 @@ body.menu-open .mobile-page-title {
     transform: scale(1);
 }
 
+/* Focus indicator for theme toggle - WCAG 2.1 AA */
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    background-color: rgba(139, 120, 93, 0.1);
+}
+
+.theme-toggle:focus:not(:focus-visible) {
+    outline: none;
+}
+
 /* ========================================
    DESKTOP STYLES (min-width: 769px)
    ======================================== */
 @media (min-width: 769px) {
     header {
-        padding: 1rem 2rem;
+        padding: 0.5rem 2rem;
     }
 
     /* Desktop nav: 3-column grid */

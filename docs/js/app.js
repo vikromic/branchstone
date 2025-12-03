@@ -10,6 +10,13 @@ import ThemeManager from './components/Theme.js';
 import AnimationManager from './components/Animations.js';
 import { getStorageItem, setStorageItem, removeStorageItem } from './utils/storage.js';
 import CONFIG from './config.js';
+import {
+  handleError,
+  withErrorBoundary,
+  withSyncErrorBoundary,
+  initGlobalErrorHandler,
+  ErrorLevel,
+} from './utils/errorHandler.js';
 
 // Page-specific components loaded dynamically on-demand:
 // - Gallery.js (gallery page, home page)
@@ -22,6 +29,7 @@ import CONFIG from './config.js';
 class App {
   constructor() {
     this.components = new Map();
+    this.cleanupFunctions = []; // Store cleanup functions for proper teardown
     this.init();
   }
 
@@ -30,17 +38,33 @@ class App {
    * @private
    */
   async init() {
-    // Add animation ready class
-    document.body.classList.add('js-animations-active');
+    try {
+      // Initialize global error handlers first
+      initGlobalErrorHandler();
 
-    // Initialize core components
-    this.initializeCore();
+      // Add animation ready class
+      document.body.classList.add('js-animations-active');
 
-    // Initialize page-specific components
-    await this.initializePageSpecific();
+      // Initialize core components with error boundary
+      this.initializeCore();
 
-    // Initialize global features
-    this.initializeGlobalFeatures();
+      // Initialize page-specific components with error boundary
+      await this.initializePageSpecific();
+
+      // Initialize global features with error boundary
+      this.initializeGlobalFeatures();
+
+      console.info('[App] Initialization complete');
+    } catch (error) {
+      handleError(error, {
+        component: 'App',
+        action: 'Initialization',
+        level: ErrorLevel.CRITICAL,
+        showUI: true,
+        recoverable: false,
+        userMessage: 'Failed to initialize application. Please refresh the page.',
+      });
+    }
   }
 
   /**
@@ -48,17 +72,48 @@ class App {
    * @private
    */
   initializeCore() {
-    // Mobile menu
-    const menu = new Menu();
-    this.components.set('menu', menu);
+    try {
+      // Mobile menu
+      const menu = new Menu();
+      this.components.set('menu', menu);
+    } catch (error) {
+      handleError(error, {
+        component: 'App',
+        action: 'Initialize Menu',
+        level: ErrorLevel.ERROR,
+        showUI: true,
+        recoverable: true,
+        userMessage: 'Mobile menu failed to load. Navigation may be limited.',
+      });
+    }
 
-    // Theme manager
-    const theme = new ThemeManager();
-    this.components.set('theme', theme);
+    try {
+      // Theme manager
+      const theme = new ThemeManager();
+      this.components.set('theme', theme);
+    } catch (error) {
+      handleError(error, {
+        component: 'App',
+        action: 'Initialize Theme',
+        level: ErrorLevel.WARNING,
+        showUI: false,
+        recoverable: true,
+      });
+    }
 
-    // Animation manager
-    const animations = new AnimationManager();
-    this.components.set('animations', animations);
+    try {
+      // Animation manager
+      const animations = new AnimationManager();
+      this.components.set('animations', animations);
+    } catch (error) {
+      handleError(error, {
+        component: 'App',
+        action: 'Initialize Animations',
+        level: ErrorLevel.WARNING,
+        showUI: false,
+        recoverable: true,
+      });
+    }
   }
 
   /**
@@ -68,24 +123,61 @@ class App {
   async initializePageSpecific() {
     const path = window.location.pathname;
 
+    // Wrap page initializations in error boundaries
+    const initHome = withErrorBoundary(this.initHomePage.bind(this), {
+      component: 'App',
+      action: 'Initialize Home Page',
+      level: ErrorLevel.ERROR,
+      showUI: true,
+      recoverable: true,
+      userMessage: 'Some features failed to load. The page will continue to function.',
+    });
+
+    const initGallery = withErrorBoundary(this.initGalleryPage.bind(this), {
+      component: 'App',
+      action: 'Initialize Gallery Page',
+      level: ErrorLevel.ERROR,
+      showUI: true,
+      recoverable: true,
+      userMessage: 'Gallery features failed to load. Please try refreshing the page.',
+    });
+
+    const initContact = withErrorBoundary(this.initContactPage.bind(this), {
+      component: 'App',
+      action: 'Initialize Contact Page',
+      level: ErrorLevel.ERROR,
+      showUI: true,
+      recoverable: true,
+      userMessage: 'Contact form failed to load. You can still email directly.',
+    });
+
+    const initAbout = withErrorBoundary(this.initAboutPage.bind(this), {
+      component: 'App',
+      action: 'Initialize About Page',
+      level: ErrorLevel.ERROR,
+      showUI: true,
+      recoverable: true,
+      userMessage: 'Some features failed to load. The page will continue to function.',
+    });
+
     // Home page - Featured gallery
     if (path.endsWith('index.html') || path.endsWith('/')) {
-      await this.initHomePage();
+      await initHome();
     }
 
     // Gallery page - Full gallery + lightbox
     if (path.includes('gallery.html')) {
-      await this.initGalleryPage();
+      await initGallery();
     }
 
     // Contact page - Form validation
     if (path.includes('contact.html')) {
-      await this.initContactPage();
+      await initContact();
     }
 
     // About page - Carousels
     if (path.includes('about.html')) {
-      await this.initAboutPage();
+      await initAbout();
     }
   }
 
@@ -98,12 +190,9 @@ class App {
     if (!featuredGrid) return;
 
     // Dynamically import Gallery and Carousel components
-    const [
-      { default: Gallery },
-      { default: Carousel }
-    ] = await Promise.all([
+    const [{ default: Gallery }, { default: Carousel }] = await Promise.all([
       import('./components/Gallery.js'),
-      import('./components/Carousel.js')
+      import('./components/Carousel.js'),
     ]);
 
     const gallery = new Gallery({
@@ -135,11 +224,21 @@ class App {
 
         // Handle window resize to recalculate carousel layout
         let resizeTimer;
-        window.addEventListener('resize', () => {
+        const resizeHandler = () => {
           clearTimeout(resizeTimer);
           resizeTimer = setTimeout(() => {
-            carousel.recalculate();
+            if (carousel && carousel.recalculate) {
+              carousel.recalculate();
+            }
           }, 250);
+        };
+
+        window.addEventListener('resize', resizeHandler);
+
+        // Store cleanup function for proper teardown
+        this.cleanupFunctions.push(() => {
+          window.removeEventListener('resize', resizeHandler);
+          clearTimeout(resizeTimer);
         });
       },
     });
@@ -155,18 +254,66 @@ class App {
     const galleryGrid = document.querySelector('.gallery-grid');
     if (!galleryGrid) return;
 
-    // Dynamically import Gallery, GalleryFilter, Lightbox, and ScrollToTop components
-    const [
-      { default: Gallery },
-      { default: GalleryFilter },
-      { default: Lightbox },
-      { default: ScrollToTop }
-    ] = await Promise.all([
-      import('./components/Gallery.js'),
-      import('./components/GalleryFilter.js'),
-      import('./components/Lightbox.js'),
-      import('./components/ScrollToTop.js')
-    ]);
+    // Detect mobile viewport for infinite scroll mode
+    const isMobile = window.innerWidth <= CONFIG.ui.breakpoints.mobile;
+
+    if (isMobile) {
+      // Mobile: Use InfiniteGallery
+      await this.initInfiniteGallery();
+    } else {
+      // Desktop: Use traditional grid gallery
+      await this.initDesktopGallery();
+    }
+
+    // Add scroll-to-top button (mobile only via CSS)
+    const { default: ScrollToTop } = await import('./components/ScrollToTop.js');
+    const scrollToTop = new ScrollToTop();
+    this.components.set('scrollToTop', scrollToTop);
+  }
+
+  /**
+   * Initialize infinite scroll gallery for mobile
+   * @private
+   */
+  async initInfiniteGallery() {
+    const { default: InfiniteGallery } = await import('./components/InfiniteGallery.js');
+    const { artworksAPI } = await import('./services/api.js');
+
+    try {
+      // Fetch all artworks
+      const artworks = await artworksAPI.getAll();
+
+      // Initialize infinite gallery
+      const infiniteGallery = new InfiniteGallery({
+        containerSelector: '.gallery-main',
+        artworks: artworks,
+      });
+
+      this.components.set('infiniteGallery', infiniteGallery);
+    } catch (error) {
+      handleError(error, {
+        component: 'App',
+        action: 'Initialize Infinite Gallery',
+        level: ErrorLevel.ERROR,
+        showUI: true,
+        recoverable: true,
+        userMessage: 'Failed to load gallery. Please try refreshing the page.',
+      });
+    }
+  }
+
+  /**
+   * Initialize traditional grid gallery for desktop
+   * @private
+   */
+  async initDesktopGallery() {
+    // Dynamically import Gallery, GalleryFilter, and Lightbox components
+    const [{ default: Gallery }, { default: GalleryFilter }, { default: Lightbox }] =
+      await Promise.all([
+        import('./components/Gallery.js'),
+        import('./components/GalleryFilter.js'),
+        import('./components/Lightbox.js'),
+      ]);
 
     const gallery = new Gallery({
       containerSelector: '.gallery-grid',
@@ -183,14 +330,14 @@ class App {
           categories: [
             { id: 'available', label: 'Available' },
             { id: 'small', label: 'Small Items' },
-            { id: 'prints', label: 'Prints Only' }
+            { id: 'prints', label: 'Prints Only' },
           ],
           onFilter: (category) => {
             // Re-trigger animations for visible items
             if (animations) {
               setTimeout(() => animations.refresh(), 350);
             }
-          }
+          },
         });
         this.components.set('galleryFilter', galleryFilter);
 
@@ -206,10 +353,6 @@ class App {
     });
 
     this.components.set('gallery', gallery);
-
-    // Add scroll-to-top button (mobile only via CSS)
-    const scrollToTop = new ScrollToTop();
-    this.components.set('scrollToTop', scrollToTop);
   }
 
   /**
@@ -346,7 +489,6 @@ class App {
         pauseOnHover: true,
       });
       this.components.set('experienceCarousel', experienceCarousel);
-
     } catch (error) {
       // Silently fail - section stays hidden if no highlights
       console.debug('No highlights to display');
@@ -402,14 +544,14 @@ class App {
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
         }
       });
     }, observerOptions);
 
-    document.querySelectorAll('.gallery-item').forEach(item => {
+    document.querySelectorAll('.gallery-item').forEach((item) => {
       observer.observe(item);
     });
 
@@ -467,14 +609,27 @@ class App {
 
     window.addEventListener('scroll', removeHint, { passive: true });
 
+    // Store cleanup function for proper teardown
+    this.cleanupFunctions.push(() => {
+      window.removeEventListener('scroll', removeHint);
+      if (hint.parentNode) {
+        hint.remove();
+      }
+    });
+
     // Auto-remove after delay
-    setTimeout(() => {
+    const autoRemoveTimer = setTimeout(() => {
       if (hint.parentNode) {
         hint.style.transition = `opacity ${fadeDuration}ms ease`;
         hint.style.opacity = '0';
         setTimeout(() => hint.remove(), fadeDuration);
       }
     }, CONFIG.ui.scrollHint.autoRemoveDelay);
+
+    // Store cleanup for timer
+    this.cleanupFunctions.push(() => {
+      clearTimeout(autoRemoveTimer);
+    });
   }
 
   /**
@@ -494,7 +649,7 @@ class App {
    * @private
    */
   initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener('click', (e) => {
         const href = anchor.getAttribute('href');
         if (href === '#') return;
@@ -529,7 +684,7 @@ class App {
   failsafeAnimations() {
     setTimeout(() => {
       const elements = document.querySelectorAll('.animate-on-scroll:not(.is-visible)');
-      elements.forEach(element => {
+      elements.forEach((element) => {
         element.classList.add('is-visible');
       });
     }, 1000);
@@ -546,14 +701,34 @@ class App {
 
   /**
    * Destroy app and cleanup
+   * Properly cleanup all event listeners and timers to prevent memory leaks
    */
   destroy() {
-    this.components.forEach(component => {
-      if (component.destroy) {
-        component.destroy();
+    console.info('[App] Destroying application and cleaning up resources');
+
+    // Execute all stored cleanup functions
+    this.cleanupFunctions.forEach((cleanup) => {
+      try {
+        cleanup();
+      } catch (error) {
+        console.warn('[App] Cleanup function failed:', error);
+      }
+    });
+    this.cleanupFunctions = [];
+
+    // Destroy all components
+    this.components.forEach((component, name) => {
+      try {
+        if (component.destroy) {
+          component.destroy();
+        }
+      } catch (error) {
+        console.warn(`[App] Failed to destroy component "${name}":`, error);
       }
     });
     this.components.clear();
+
+    console.info('[App] Cleanup complete');
   }
 }
 

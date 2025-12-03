@@ -13,3 +13,19 @@ node_modules/
 
 # SSH keys
 .ssh/
+
+# Test coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Test artifacts
+.jest-cache/
+
+# CI/CD artifacts
+audit-report.json
+
+# Environment files
+.env
+.env.local
+.env.*.local

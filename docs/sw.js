@@ -1,4 +1,4 @@
-const CACHE_NAME = 'branchstone-v2';
+const CACHE_NAME = 'branchstone-v19';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -14,6 +14,11 @@ const STATIC_ASSETS = [
   './js/theme-init.js',
   './js/artworks.json',
   './js/translations.json',
+  './js/components/InfiniteGallery.js',
+  './js/components/Gallery.js',
+  './js/components/Lightbox.js',
+  './js/utils/dom.js',
+  './js/utils/sanitize.js',
   './favicon.svg'
 ];
 

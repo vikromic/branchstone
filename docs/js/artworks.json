@@ -2,8 +2,8 @@
     {
         "id": 1,
         "title": "Born of Burn",
-        "size": "24x36 in",
-        "materials": "Mixed media on canvas",
+        "size": "21 x 16 in in",
+        "materials": "Ponderosa pine, burned wood pieces, acrylic on canvas.",
         "image": "img/born_of_burn/0731A57D-AC50-4060-B496-FE85500E7A03_4_5005_c.jpeg",
         "images": [
             "img/born_of_burn/0731A57D-AC50-4060-B496-FE85500E7A03_4_5005_c.jpeg",
@@ -14,18 +14,14 @@
             "img/born_of_burn/5B590F84-F03D-47FA-973A-421129B8DFD7_4_5005_c.jpeg",
             "img/born_of_burn/C6493BDD-DE14-41D9-935D-947568942729_4_5005_c.jpeg"
         ],
-        "description": "A piece that captures the quiet, mystical energy of transformation through fire and renewal.",
-        "price": "$2,500",
+        "description": "What survives a fire is rarely the thing that walked into it.\nAfter the noise and heat collapse into quiet, something unexpected begins to move.\nThese flowers aren’t born in gardens — they push up from burned ground,\nfrom that strange space where destruction and stubbornness meet.\nAsh holds them like soil.\nWarm coals sketch out their roots.\nThey carry the memory of the blaze,\nand they remind me that beauty doesn’t owe anything to safety.",
+        "price": "$250",
         "available": true,
         "soldOut": false,
         "printsAvailable": true,
         "filterTags": "",
         "category": "fire",
         "imagesSrcset": [
-            null,
-            null,
-            null,
-            null,
             {
                 "webp": "img/born_of_burn/56982BA8-65C3-44CB-A6DD-3C205669E58C_1_105_c-400w.webp 400w",
                 "jpeg": "img/born_of_burn/56982BA8-65C3-44CB-A6DD-3C205669E58C_1_105_c-400w.jpeg 400w"
@@ -35,8 +31,8 @@
     {
         "id": 2,
         "title": "By Marks and Fire",
-        "size": "30x48 in",
-        "materials": "Mixed media on canvas",
+        "size": "21 x 16 in",
+        "materials": "Old acacia, oak catkins, Bohemian truffle pigment, acrylic on canvas.",
         "image": "img/by_marks_and_fire/1B2EEF46-AE1B-429D-B6B1-D78D25075FF0_1_105_c.jpeg",
         "images": [
             "img/by_marks_and_fire/1B2EEF46-AE1B-429D-B6B1-D78D25075FF0_1_105_c.jpeg",
@@ -46,8 +42,8 @@
             "img/by_marks_and_fire/8BD4601E-4594-403D-8987-B6424070EC91_4_5005_c.jpeg",
             "img/by_marks_and_fire/8BFB6E59-C7D7-4EA3-A87D-F934124B7C07_4_5005_c.jpeg"
         ],
-        "description": "Inspired by the marks left by time and the transformative power of fire.",
-        "price": "$3,200",
+        "description": "Experience rarely comes gently.\nIt scalds, splits, leaves gold on its way.\n\nWhats left is proof \nof mistakes, of survival,\nof becoming something textured,\nsomething true.\n",
+        "price": "$320",
         "available": true,
         "soldOut": false,
         "printsAvailable": true,
@@ -63,7 +59,6 @@
                 "webp": "img/by_marks_and_fire/1B2EEF46-AE1B-429D-B6B1-D78D25075FF0_1_105_c-400w.webp 400w",
                 "jpeg": "img/by_marks_and_fire/1B2EEF46-AE1B-429D-B6B1-D78D25075FF0_1_105_c-400w.jpeg 400w"
             },
-            null,
             {
                 "webp": "img/by_marks_and_fire/6029788A-0538-4E59-99EE-09FA96633C79_1_105_c-400w.webp 400w",
                 "jpeg": "img/by_marks_and_fire/6029788A-0538-4E59-99EE-09FA96633C79_1_105_c-400w.jpeg 400w"
@@ -73,8 +68,8 @@
     {
         "id": 3,
         "title": "Christmas Joy",
-        "size": "20x20 in",
-        "materials": "Mixed media on canvas",
+        "size": "20 x 16 in",
+        "materials": "Old acacia core, juniper branch, acrylic on canvas",
         "image": "img/christmass_joy/27B0BF96-31B8-4D64-8796-049C7323701B_4_5005_c.jpeg",
         "images": [
             "img/christmass_joy/27B0BF96-31B8-4D64-8796-049C7323701B_4_5005_c.jpeg",
@@ -82,9 +77,9 @@
             "img/christmass_joy/8BC1728D-88EE-452A-91E8-9DD2ECCA69A7_4_5005_c.jpeg"
         ],
         "description": "A celebration of warmth and joy, capturing the essence of the holiday season.",
-        "price": "$1,200",
-        "available": true,
-        "soldOut": false,
+        "price": "$120",
+        "available": false,
+        "soldOut": true,
         "printsAvailable": false,
         "filterTags": "small",
         "category": "seasonal"
@@ -92,8 +87,8 @@
     {
         "id": 4,
         "title": "Core",
-        "size": "48x30 in",
-        "materials": "Mixed media on canvas",
+        "size": "20 x 16 in",
+        "materials": "Acacia wood, cotton, acrylic on canvas.",
         "image": "img/core/120EE968-E29D-4AC7-ACBD-B79E8BFF81F8_4_5005_c.jpeg",
         "images": [
             "img/core/120EE968-E29D-4AC7-ACBD-B79E8BFF81F8_4_5005_c.jpeg",
@@ -101,15 +96,13 @@
             "img/core/30D29747-3372-4B45-95E8-9D8B8527C554_1_105_c.jpeg",
             "img/core/6B16E5A6-ECFC-4865-9992-50D5D48FE301_4_5005_c.jpeg"
         ],
-        "description": "An exploration of the essence and foundation of natural forms.",
+        "description": "Like a heart — quiet, strong, and raw.\nTied to everything that matters.\nIt’s where it all begins.\n",
         "available": false,
         "soldOut": true,
         "printsAvailable": true,
         "filterTags": "",
         "category": "nature",
         "imagesSrcset": [
-            null,
-            null,
             {
                 "webp": "img/core/30D29747-3372-4B45-95E8-9D8B8527C554_1_105_c-400w.webp 400w",
                 "jpeg": "img/core/30D29747-3372-4B45-95E8-9D8B8527C554_1_105_c-400w.jpeg 400w"
@@ -119,20 +112,20 @@
     {
         "id": 5,
         "title": "July Pines",
-        "size": "22x28 in",
-        "materials": "Mixed media on canvas",
+        "size": "22 x 28 in",
+        "materials": "Acacia bark, algae, river sand,\nbohemian truffle, fresh grass pigment, acrylic on canvas.",
         "image": "img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a.jpeg",
         "images": [
             "img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a.jpeg",
             "img/july_pines/521D5378-61B1-4136-8BA1-8BC25F9ED336_1_201_a.jpeg",
             "img/july_pines/D4676BF9-BA0C-4911-A527-9A67A4425394_1_201_a.jpeg"
         ],
-        "description": "A tribute to the quiet passage of time, using elements weathered by sun and water.",
-        "price": "$1,800",
-        "available": true,
-        "soldOut": false,
+        "description": "There was a forest that watched me grow.\nTwelve summers in a row, I returned — first as a child, then as a mother.\nIt held my laughter, my tears, my friendships, my first love.\n\nNow, the place that shaped so much of me is gone. Unreachable, unsafe.\n\nBut I still carry the scent of pine, the feel of the earth, the hush of the trees.\n\nThis work is a memory in texture. \nA quiet longing.\nA piece of what I never want to forget.\n",
+        "price": "$420",
+        "available": false,
+        "soldOut": true,
         "printsAvailable": true,
-        "filterTags": "small",
+        "filterTags": "",
         "category": "nature",
         "thumb": "img/july_pines/4194A90D-56FE-499F-AC39-8B291BDAAAD5_1_201_a-400w.webp",
         "srcset": {
@@ -157,8 +150,9 @@
     {
         "id": 6,
         "title": "Moonglow",
-        "size": "30x40 in",
-        "materials": "Mixed media on canvas",
+        "size": "21 x 16 in",
+        "materials": "Carpathian chaga, moss, spruce branch, \nlichen, acrylic on canvas.",
+        "price": "$50",
         "image": "img/moonglow/02DF0375-D712-4CB1-90AC-CB9473482391_4_5005_c.jpeg",
         "images": [
             "img/moonglow/02DF0375-D712-4CB1-90AC-CB9473482391_4_5005_c.jpeg",
@@ -183,8 +177,9 @@
     {
         "id": 7,
         "title": "Navy of the Dreamland",
-        "size": "36x48 in",
-        "materials": "Mixed media on canvas",
+        "size": "21 x 16 in",
+        "materials": "Acrylic, breadfruit leaves, Ming Aralia leaves,\nAcacia branches, textile on canvas.",
+        "price": "$130",
         "image": "img/navy_of_the_dreamland/4547C4FE-4693-4F8A-879A-27063978464D_4_5005_c.jpeg",
         "images": [
             "img/navy_of_the_dreamland/4547C4FE-4693-4F8A-879A-27063978464D_4_5005_c.jpeg",
@@ -193,9 +188,9 @@
             "img/navy_of_the_dreamland/DC7A9C42-D4BD-411A-B6DA-7F26DD35F0E3_4_5005_c.jpeg",
             "img/navy_of_the_dreamland/E0822BBA-E6D7-44A3-AE59-CE45560D9D5D_4_5005_c.jpeg"
         ],
-        "description": "A deep exploration of dreamlike landscapes in rich navy tones.",
-        "available": true,
-        "soldOut": false,
+        "description": "There’s a place between sleep and waking where the forest becomes the sea.\nGolden leaves rise like sails. Stems and twigs stretch skyward like masts.\nAnd lace, soft and quiet, becomes the foam of passing thoughts.\nThis piece was born from that space.\nIt’s a navy with no anchor, just drifting vessels of memory and wonder.",
+        "available": false,
+        "soldOut": true,
         "printsAvailable": true,
         "filterTags": "",
         "category": "blue",
@@ -210,8 +205,9 @@
     {
         "id": 8,
         "title": "Of Ash and Flowers",
-        "size": "28x36 in",
-        "materials": "Mixed media on canvas",
+        "size": "28 x 36 in",
+        "materials": "Acrylic, casting medium, hydrangea flowers on canvas.",
+        "price": "$410",
         "image": "img/of_ash_and_flowers/5CB4D56D-6763-4095-82AF-0AB0BE0AE4A5_4_5005_c.jpeg",
         "images": [
             "img/of_ash_and_flowers/5CB4D56D-6763-4095-82AF-0AB0BE0AE4A5_4_5005_c.jpeg",
@@ -219,9 +215,9 @@
             "img/of_ash_and_flowers/65AB0ABC-4638-4EEC-8476-A918380C0FB2_4_5005_c.jpeg",
             "img/of_ash_and_flowers/DD083F12-ECE6-4898-8C71-943A217FA0CB_4_5005_c.jpeg"
         ],
-        "description": "The contrast between destruction and renewal, ash and blossoms.",
-        "available": true,
-        "soldOut": false,
+        "description": "Some things bloom right through the burn.\nThis piece is about the quiet beauty that rises from endings. When something has been stripped bare, scorched, undone… and yet still, life insists on returning.\nThe dried textures are from real petals and plants I’ve gathered, preserved, and placed like memories.\n",
+        "available": false,
+        "soldOut": true,
         "printsAvailable": false,
         "filterTags": "",
         "category": "nature"
@@ -229,8 +225,9 @@
     {
         "id": 9,
         "title": "Prolisok",
-        "size": "24x30 in",
-        "materials": "Mixed media on canvas",
+        "price": "$220",
+        "size": "21 x 16 in",
+        "materials": "Acacia bark, algae, river sand, bohemian truffle, fresh grass pigment, acrylic on canvas.",
         "image": "img/prolisok/6DE3979C-94D3-4E39-A774-96DA71566414_4_5005_c.jpeg",
         "images": [
             "img/prolisok/6DE3979C-94D3-4E39-A774-96DA71566414_4_5005_c.jpeg",
@@ -241,16 +238,12 @@
             "img/prolisok/E79D544D-2EC3-453B-B9A2-B86E7BD3CA63_4_5005_c.jpeg"
         ],
         "description": "A delicate exploration of early spring blooms and new beginnings.",
-        "available": true,
-        "soldOut": false,
+        "available": false,
+        "soldOut": true,
         "printsAvailable": true,
         "filterTags": "",
         "category": "nature",
         "imagesSrcset": [
-            null,
-            null,
-            null,
-            null,
             {
                 "webp": "img/prolisok/E7305B34-6BA3-4A3B-BC66-087606E4F67D_1_105_c-400w.webp 400w",
                 "jpeg": "img/prolisok/E7305B34-6BA3-4A3B-BC66-087606E4F67D_1_105_c-400w.jpeg 400w"
@@ -260,8 +253,9 @@
     {
         "id": 10,
         "title": "Rise in Blue",
-        "size": "30x40 in",
-        "materials": "Mixed media on canvas",
+        "size": "21 x 16 in",
+        "price": "$150",
+        "materials": "Monstera stipules, araucaria, buttonbush, Bohemian truffle pigment, and acrylic.",
         "image": "img/rise_in_blue/1095C627-323D-43F2-AB94-E206CF1230B9_4_5005_c.jpeg",
         "images": [
             "img/rise_in_blue/1095C627-323D-43F2-AB94-E206CF1230B9_4_5005_c.jpeg",
@@ -275,28 +269,21 @@
             "img/rise_in_blue/D2A18AD5-3411-41FF-A267-48DC38E380C0_4_5005_c.jpeg",
             "img/rise_in_blue/FABFDD02-2220-4B40-BB7F-46D2BBDEECC1_1_105_c.jpeg"
         ],
-        "description": "An ascent through layers of blue, evoking sky and sea.",
-        "available": true,
-        "soldOut": false,
-        "printsAvailable": true,
+        "description": "There’s something sacred about stillness.\nThese petals, once soft and blooming, stand like monuments now.\nStretched upward, weathered but not broken, they rise against a sea of faded blue.\nA quiet rebellion.",
+        "available": false,
+        "soldOut": true,
+        "printsAvailable": false,
         "filterTags": "",
         "category": "blue",
         "imagesSrcset": [
-            null,
-            null,
             {
                 "webp": "img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-400w.webp 400w, img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-800w.webp 800w",
                 "jpeg": "img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-400w.jpeg 400w, img/rise_in_blue/4A07105A-2FE6-454A-B60D-BFC3870BC3A3_1_102_o-800w.jpeg 800w"
             },
-            null,
-            null,
             {
                 "webp": "img/rise_in_blue/9AA71EB8-D28E-42F6-B011-26D64A21CD61_1_105_c-400w.webp 400w",
                 "jpeg": "img/rise_in_blue/9AA71EB8-D28E-42F6-B011-26D64A21CD61_1_105_c-400w.jpeg 400w"
             },
-            null,
-            null,
-            null,
             {
                 "webp": "img/rise_in_blue/FABFDD02-2220-4B40-BB7F-46D2BBDEECC1_1_105_c-400w.webp 400w",
                 "jpeg": "img/rise_in_blue/FABFDD02-2220-4B40-BB7F-46D2BBDEECC1_1_105_c-400w.jpeg 400w"
@@ -306,8 +293,9 @@
     {
         "id": 11,
         "title": "Spectral",
-        "size": "24x36 in",
-        "materials": "Mixed media on canvas",
+        "size": "21 x 16 in",
+        "materials": "Carpathian chaga, moss, spruce branch, \nlichen, acrylic on canvas.",
+        "price": "$100",
         "image": "img/spectral/062C7459-A72A-4633-AFF9-B5D7E1B35552_4_5005_c.jpeg",
         "images": [
             "img/spectral/062C7459-A72A-4633-AFF9-B5D7E1B35552_4_5005_c.jpeg",
@@ -316,8 +304,8 @@
             "img/spectral/F6727605-B0CE-447D-96E4-839A2A5D7E50_4_5005_c.jpeg"
         ],
         "description": "Ethereal forms that seem to exist between worlds.",
-        "available": true,
-        "soldOut": false,
+        "available": false,
+        "soldOut": true,
         "printsAvailable": false,
         "filterTags": "",
         "category": "ethereal"
@@ -325,9 +313,10 @@
     {
         "id": 12,
         "title": "Whales",
-        "size": "36x48 in",
-        "materials": "Mixed media on canvas",
+        "size": "21 x 16 in\nset of two pieces",
+        "materials": "Driftwood, jute rope, acrylic, ink,\n acrylic on canvas.",
         "image": "img/whales/0A3DA365-986F-45B1-B07F-C57207289792_4_5005_c.jpeg",
+        "price": "$420",
         "images": [
             "img/whales/0A3DA365-986F-45B1-B07F-C57207289792_4_5005_c.jpeg",
             "img/whales/2C8C7CB4-9FA5-4A54-B467-401F9B78ED60_4_5005_c.jpeg",
@@ -338,16 +327,13 @@
             "img/whales/BF2D7551-DEDA-4B45-A2A7-97CAC2E9B2BE_4_5005_c.jpeg",
             "img/whales/C2F1DF36-7335-4F72-8F76-0EAD4746CE4B_4_5005_c.jpeg"
         ],
-        "description": "A tribute to the majestic creatures of the deep, their grace and power.",
-        "available": true,
-        "soldOut": false,
+        "description": "A quiet protest.\nRaw and restrained.\nInspired by the weight of captivity pressed on creatures meant to roam the deepest blues.\nTheir forms drift across pale currents, bound not by nature, but by hands that forgot how to listen.",
+        "available": false,
+        "soldOut": true,
         "printsAvailable": true,
         "filterTags": "",
-        "category": "blue",
+        "category": "",
         "imagesSrcset": [
-            null,
-            null,
-            null,
             {
                 "webp": "img/whales/5289B85B-1084-4D50-AF01-8A06C1136352_4_5005_c-400w.webp 400w",
                 "jpeg": "img/whales/5289B85B-1084-4D50-AF01-8A06C1136352_4_5005_c-400w.jpeg 400w"
@@ -361,8 +347,9 @@
     {
         "id": 13,
         "title": "Winds",
-        "size": "30x40 in",
-        "materials": "Mixed media on canvas",
+        "size": "21 x 16 in",
+        "materials": "Thorny branch, ink, acrylic on canvas.",
+        "price": "$110",
         "image": "img/winds/591633EA-839A-405B-A2B6-C78A603BF1EF_4_5005_c.jpeg",
         "images": [
             "img/winds/591633EA-839A-405B-A2B6-C78A603BF1EF_4_5005_c.jpeg",
@@ -371,19 +358,17 @@
             "img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o.jpeg",
             "img/winds/A721FF06-2F31-4B8B-AB9E-240A1213C8A7_4_5005_c.jpeg"
         ],
-        "description": "Capturing the invisible force of wind through texture and movement.",
+        "description": "A brittle hush clings to the air.\nBranches reach like tired hands,\netched against a sky drained \nof warmth.\n\nNo storm, no chaos —\njust the quiet ache of stillness.\nNot absence, but a pause.\nNot emptiness, but waiting.\nHere, the cold doesn’t bite, \nit brushes past and leaves a trace\nyou can’t quite name.",
         "available": true,
         "soldOut": false,
-        "printsAvailable": false,
+        "printsAvailable": true,
         "filterTags": "",
         "category": "nature",
         "imagesSrcset": [
-            null,
             {
                 "webp": "img/winds/888F1949-45B1-4DAA-88B9-71AC5293C2EB_1_105_c-400w.webp 400w",
                 "jpeg": "img/winds/888F1949-45B1-4DAA-88B9-71AC5293C2EB_1_105_c-400w.jpeg 400w"
             },
-            null,
             {
                 "webp": "img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-400w.webp 400w, img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-800w.webp 800w",
                 "jpeg": "img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-400w.jpeg 400w, img/winds/A6328694-02ED-49A9-90D3-7DB88BE3CF48_1_102_o-800w.jpeg 800w"
