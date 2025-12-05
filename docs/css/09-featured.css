@@ -275,12 +275,19 @@
   position: relative;
   overflow: hidden;
   width: 100%;
+  touch-action: pan-y pinch-zoom;
 }
 
 .carousel-track {
   display: flex;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   gap: 2.5rem;
+  touch-action: pan-x;
+  cursor: grab;
+}
+
+.carousel-track:active {
+  cursor: grabbing;
 }
 
 .carousel-item {
