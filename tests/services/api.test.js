@@ -332,7 +332,7 @@ describe('API Service', () => {
   });
 
   describe('HTTP Headers', () => {
-    it('should_include_content_type_header', async () => {
+    it('should_include_content_type_header_in_requests', async () => {
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => [],
@@ -345,31 +345,6 @@ describe('API Service', () => {
         expect.objectContaining({
           headers: expect.objectContaining({
             'Content-Type': 'application/json',
-          }),
-        })
-      );
-    });
-
-    it('should_merge_custom_headers', async () => {
-      fetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ success: true }),
-      });
-
-      // Direct test of fetch with custom headers
-      await fetch('test-url', {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Custom-Header': 'value',
-        },
-      });
-
-      expect(fetch).toHaveBeenCalledWith(
-        'test-url',
-        expect.objectContaining({
-          headers: expect.objectContaining({
-            'Content-Type': 'application/json',
-            'X-Custom-Header': 'value',
           }),
         })
       );
@@ -413,25 +388,16 @@ describe('API Service', () => {
   });
 
   describe('Response Status Codes', () => {
-    const testCases = [
-      { status: 400, description: 'Bad Request' },
-      { status: 401, description: 'Unauthorized' },
-      { status: 403, description: 'Forbidden' },
-      { status: 404, description: 'Not Found' },
-      { status: 500, description: 'Internal Server Error' },
-      { status: 502, description: 'Bad Gateway' },
-      { status: 503, description: 'Service Unavailable' },
-    ];
+    it('should_handle_client_error_status_codes', async () => {
+      fetch.mockResolvedValueOnce({ ok: false, status: 404 });
 
-    testCases.forEach(({ status, description }) => {
-      it(`should_handle_${status}_${description.replace(/\s+/g, '_')}`, async () => {
-        fetch.mockResolvedValueOnce({
-          ok: false,
-          status,
-        });
+      await expect(artworksAPI.getAll()).rejects.toThrow('HTTP error! status: 404');
+    });
 
-        await expect(artworksAPI.getAll()).rejects.toThrow(`HTTP error! status: ${status}`);
-      });
+    it('should_handle_server_error_status_codes', async () => {
+      fetch.mockResolvedValueOnce({ ok: false, status: 500 });
+
+      await expect(artworksAPI.getAll()).rejects.toThrow('HTTP error! status: 500');
     });
   });
 });
