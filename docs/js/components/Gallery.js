@@ -510,6 +510,9 @@ export class Gallery {
 
       localStorage.setItem('branchstone_favorites', JSON.stringify(favorites));
 
+      // Dispatch custom event for other components (e.g., InquiryFAB) to listen to
+      window.dispatchEvent(new CustomEvent('favoritesUpdated', { detail: { count: favorites.length } }));
+
       // Announce to screen readers
       const announcement = isFavorited ? 'Removed from favorites' : 'Added to favorites';
       this.announceToScreenReader(announcement);

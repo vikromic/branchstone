@@ -111,6 +111,12 @@ export class InfiniteGallery {
       'aria-label': 'Artwork gallery',
     });
 
+    // Create progress indicator
+    this.progressIndicator = this.createProgressIndicator();
+
+    // Create back button
+    this.backButton = this.createBackButton();
+
     // Create details modal
     this.detailsModal = this.createDetailsModal();
 
@@ -121,8 +127,60 @@ export class InfiniteGallery {
 
     // Add to DOM
     this.container.appendChild(this.infiniteContainer);
+    document.body.appendChild(this.progressIndicator);
+    document.body.appendChild(this.backButton);
     document.body.appendChild(this.backdrop);
     document.body.appendChild(this.detailsModal);
+  }
+
+  /**
+   * Create progress indicator
+   * @private
+   * @returns {Element} Progress indicator element
+   */
+  createProgressIndicator() {
+    const indicator = createElement('div', {
+      className: 'gallery-infinite-progress',
+      'aria-live': 'polite',
+      'aria-atomic': 'true',
+    });
+
+    indicator.innerHTML = `
+      <span>Artwork <span class="gallery-infinite-progress-current">1</span> of ${this.artworks.length}</span>
+    `;
+
+    return indicator;
+  }
+
+  /**
+   * Create back button
+   * @private
+   * @returns {Element} Back button element
+   */
+  createBackButton() {
+    const button = createElement('button', {
+      className: 'gallery-infinite-back',
+      type: 'button',
+      'aria-label': 'Back to grid view',
+    });
+
+    // Grid icon
+    const gridIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    gridIcon.setAttribute('viewBox', '0 0 24 24');
+    gridIcon.setAttribute('fill', 'none');
+    gridIcon.setAttribute('stroke', 'currentColor');
+    gridIcon.setAttribute('stroke-width', '2');
+    gridIcon.innerHTML =
+      '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>';
+
+    button.appendChild(gridIcon);
+
+    // Click handler
+    button.addEventListener('click', () => {
+      this.exitInfiniteScroll();
+    });
+
+    return button;
   }
 
   /**
@@ -795,6 +853,9 @@ export class InfiniteGallery {
           const index = parseInt(item.dataset.index, 10);
           this.state.currentIndex = index;
 
+          // Update progress indicator
+          this.updateProgressIndicator(index);
+
           // Reset zoom when scrolling to new item
           if (this.state.zoomed && this.state.currentZoomedItem !== item) {
             this.resetZoom();
@@ -809,6 +870,22 @@ export class InfiniteGallery {
     // Observe all items
     const items = this.infiniteContainer.querySelectorAll('.gallery-infinite-item');
     items.forEach((item) => this.observer.observe(item));
+  }
+
+  /**
+   * Update progress indicator
+   * @private
+   * @param {number} index - Current artwork index
+   */
+  updateProgressIndicator(index) {
+    if (!this.progressIndicator) {
+      return;
+    }
+
+    const currentSpan = this.progressIndicator.querySelector('.gallery-infinite-progress-current');
+    if (currentSpan) {
+      currentSpan.textContent = index + 1;
+    }
   }
 
   /**
@@ -925,6 +1002,15 @@ export class InfiniteGallery {
   }
 
   /**
+   * Exit infinite scroll mode and return to grid view
+   * @private
+   */
+  exitInfiniteScroll() {
+    // Reload the page to show regular gallery
+    window.location.reload();
+  }
+
+  /**
    * Cleanup
    */
   destroy() {
@@ -936,6 +1022,14 @@ export class InfiniteGallery {
     // Remove from DOM
     if (this.infiniteContainer) {
       this.infiniteContainer.remove();
+    }
+
+    if (this.progressIndicator) {
+      this.progressIndicator.remove();
+    }
+
+    if (this.backButton) {
+      this.backButton.remove();
     }
 
     if (this.detailsModal) {

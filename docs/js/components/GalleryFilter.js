@@ -20,6 +20,7 @@ export class GalleryFilter {
     this.categories = options.categories || [];
     this.onFilterCallback = options.onFilter;
     this.activeCategory = 'all';
+    this.scrollHintShown = false;
 
     if (!this.container || !this.galleryContainer) {
       return;
@@ -36,11 +37,17 @@ export class GalleryFilter {
     this.render();
     this.attachEventListeners();
 
+    // Restore filter from sessionStorage if exists
+    this.restoreFilter();
+
     // Update URL if there's a filter in the hash
     this.handleURLFilter();
 
     // Listen for language changes
     this.setupLanguageListener();
+
+    // Show scroll hint on mobile if not seen before
+    this.initScrollHint();
   }
 
   /**
@@ -172,6 +179,9 @@ export class GalleryFilter {
     }
 
     this.activeCategory = category;
+
+    // Save filter to sessionStorage
+    this.saveFilter(category);
 
     // Update button states
     this.updateButtonStates(category);
@@ -411,6 +421,127 @@ export class GalleryFilter {
     emptyState.appendChild(resetButton);
 
     return emptyState;
+  }
+
+  /**
+   * Save filter to sessionStorage
+   * @private
+   * @param {string} category - Category to save
+   */
+  saveFilter(category) {
+    try {
+      if (category === 'all') {
+        sessionStorage.removeItem('galleryFilter');
+      } else {
+        sessionStorage.setItem('galleryFilter', category);
+      }
+    } catch (error) {
+      console.warn('Failed to save filter:', error);
+    }
+  }
+
+  /**
+   * Restore filter from sessionStorage
+   * @private
+   */
+  restoreFilter() {
+    try {
+      const savedFilter = sessionStorage.getItem('galleryFilter');
+      if (savedFilter && savedFilter !== 'all') {
+        // Check if the saved filter is valid
+        const isValid =
+          this.categories.find((cat) => cat.id === savedFilter) || savedFilter === 'all';
+
+        if (isValid) {
+          // Apply the saved filter
+          this.filterGallery(savedFilter);
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to restore filter:', error);
+    }
+  }
+
+  /**
+   * Initialize scroll hint for mobile filters
+   * @private
+   */
+  initScrollHint() {
+    // Only show on mobile
+    if (window.innerWidth > 768) {
+      return;
+    }
+
+    // Check if hint has been seen before
+    try {
+      const hintSeen = localStorage.getItem('filterScrollHintSeen');
+      if (hintSeen === 'true') {
+        return;
+      }
+    } catch (error) {
+      // If localStorage fails, don't show hint
+      return;
+    }
+
+    // Create scroll hint element
+    const scrollHint = createElement('div', {
+      className: 'gallery-filter-scroll-hint',
+      'aria-hidden': 'true',
+    });
+
+    // Add arrow icon
+    const arrowIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    arrowIcon.setAttribute('viewBox', '0 0 24 24');
+    arrowIcon.setAttribute('fill', 'none');
+    arrowIcon.setAttribute('stroke', 'currentColor');
+    arrowIcon.setAttribute('stroke-width', '2');
+    arrowIcon.innerHTML = '<path d="M9 18l6-6-6-6"/>';
+
+    const hintText = createElement('span');
+    hintText.textContent = 'Swipe for filters';
+
+    scrollHint.appendChild(hintText);
+    scrollHint.appendChild(arrowIcon);
+
+    this.container.appendChild(scrollHint);
+
+    // Listen for scroll event to hide hint
+    const hideHint = () => {
+      scrollHint.classList.add('hidden');
+      this.scrollHintShown = true;
+
+      // Save to localStorage that hint has been seen
+      try {
+        localStorage.setItem('filterScrollHintSeen', 'true');
+      } catch (error) {
+        console.warn('Failed to save scroll hint state:', error);
+      }
+
+      // Remove listener
+      this.filterButtonsContainer.removeEventListener('scroll', hideHint);
+
+      // Remove element after transition
+      setTimeout(() => {
+        if (scrollHint.parentNode) {
+          scrollHint.remove();
+        }
+      }, 300);
+    };
+
+    // Add scroll listener to filter buttons container
+    if (this.filterButtonsContainer) {
+      this.filterButtonsContainer.addEventListener('scroll', hideHint, {
+        passive: true,
+        once: true,
+      });
+    }
+
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+      if (!this.scrollHintShown) {
+        hideHint();
+      }
+    }, 5000);
   }
 }
 
