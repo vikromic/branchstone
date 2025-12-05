@@ -4935,6 +4935,7 @@ main {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        padding: 0 !important;
     }
 
     .hero-bg-image {
@@ -4942,21 +4943,29 @@ main {
     }
 
     .hero-content {
-        padding: 1.5rem;
-        max-width: 100%;
-        width: 100%;
+        padding: 1.5rem !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
         text-align: center !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        margin: 0 auto !important;
+        margin: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
     }
 
     .hero-title {
         text-align: center !important;
-        display: block !important;
-        width: 100%;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
 
     .hero-name {
@@ -4964,8 +4973,7 @@ main {
         letter-spacing: 0.3em;
         margin-bottom: 0.5rem;
         text-align: center !important;
-        display: block !important;
-        width: 100%;
+        width: 100% !important;
     }
 
     .hero-subtitle {
@@ -4973,18 +4981,15 @@ main {
         letter-spacing: 0.15em;
         padding-bottom: 1.5rem;
         text-align: center !important;
-        display: block !important;
-        width: 100%;
+        width: 100% !important;
     }
 
     .hero-tagline {
         font-size: clamp(0.95rem, 3.5vw, 1.25rem);
-        margin: 1.5rem auto;
-        max-width: 90%;
+        margin: 1.5rem 0 !important;
+        max-width: 90% !important;
         line-height: 1.6;
         text-align: center !important;
-        display: block !important;
-        width: 100%;
     }
 
     .hero-cta {
@@ -4992,24 +4997,27 @@ main {
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 0.875rem;
-        width: 100%;
-        margin: 2rem auto 0 auto !important;
+        gap: 0.875rem !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 2rem 0 0 0 !important;
         padding: 0 !important;
+        box-sizing: border-box !important;
     }
 
-    .hero-cta a,
-    .hero-cta .btn-primary,
-    .hero-cta .btn-secondary {
+    .hero-cta > a {
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
         width: 80% !important;
         max-width: 280px !important;
-        margin: 0 auto !important;
-        padding: 1rem 2rem;
+        min-width: 200px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding: 1rem 2rem !important;
         text-align: center !important;
-        font-size: 0.875rem;
+        font-size: 0.875rem !important;
+        box-sizing: border-box !important;
     }
 
     .scroll-indicator {
