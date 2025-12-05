@@ -158,9 +158,11 @@ body.menu-open .mobile-page-title {
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    width: 100vw !important;
+    width: 100% !important;
+    max-width: 100% !important;
     height: 100vh !important;
     height: 100dvh !important;
+    box-sizing: border-box !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;

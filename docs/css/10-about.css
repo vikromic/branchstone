@@ -845,8 +845,8 @@
     /* Home About - Stack on Mobile */
     .home-about {
         grid-template-columns: 1fr;
-        gap: 3rem;
-        padding: 4rem 1.5rem;
+        gap: 2rem;
+        padding: 3rem 1.5rem;
     }
 
     .home-about-content {
