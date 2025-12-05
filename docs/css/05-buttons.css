@@ -79,22 +79,50 @@
     background: var(--button-color);
     color: var(--button-text);
     box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ripple effect base */
+.btn-primary::before,
+.btn-primary-large::before,
+.submit-btn::before,
+.inquire-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s var(--ease-out-back), height 0.6s var(--ease-out-back);
 }
 
 .btn-primary:hover,
 .btn-primary-large:hover,
 .submit-btn:hover,
 .inquire-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-button-hover);
     background: var(--button-color-hover);
+}
+
+.btn-primary:hover::before,
+.btn-primary-large:hover::before,
+.submit-btn:hover::before,
+.inquire-btn:hover::before {
+    width: 300px;
+    height: 300px;
 }
 
 .btn-primary:active,
 .btn-primary-large:active,
 .submit-btn:active,
 .inquire-btn:active {
-    transform: translateY(0);
+    transform: translateY(-1px) scale(1.01);
+    transition-duration: 0.1s;
 }
 
 /* Secondary button variants - Premium Style */
@@ -102,9 +130,24 @@
 .btn-secondary-large {
     background-color: transparent;
     color: var(--text-color);
-    border: 1px solid var(--border-color);
+    border: 1.5px solid var(--border-color);
     box-shadow: inset 0 0 0 1px transparent;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated border glow on hover */
+.btn-secondary::before,
+.btn-secondary-large::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, var(--accent-color), var(--accent-gold), var(--accent-champagne));
+    border-radius: inherit;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.4s var(--ease-gentle);
 }
 
 .btn-secondary:hover,
@@ -112,8 +155,19 @@
     background-color: var(--text-color);
     border-color: var(--text-color);
     color: var(--background-color);
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.02);
     box-shadow: var(--shadow-md);
+}
+
+.btn-secondary:hover::before,
+.btn-secondary-large:hover::before {
+    opacity: 0.15;
+}
+
+.btn-secondary:active,
+.btn-secondary-large:active {
+    transform: translateY(-1px) scale(1.01);
+    transition-duration: 0.1s;
 }
 
 /* Large button variants */

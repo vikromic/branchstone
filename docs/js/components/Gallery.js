@@ -410,10 +410,128 @@ export class Gallery {
 
     // Keyboard support handled via event delegation in setupKeyboardNavigation()
 
+    // "View" indicator overlay (shown on hover)
+    const viewIndicator = createElement('div', { className: 'gallery-item-view' });
+    const viewIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    viewIcon.setAttribute('viewBox', '0 0 24 24');
+    viewIcon.setAttribute('fill', 'none');
+    viewIcon.setAttribute('stroke', 'currentColor');
+    viewIcon.setAttribute('stroke-width', '2');
+    viewIcon.innerHTML = '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>';
+    viewIndicator.appendChild(viewIcon);
+
+    // Favorites (heart) button
+    const favoriteBtn = this.createFavoriteButton(artwork.id || safeTitle);
+
     item.appendChild(picture);
+    item.appendChild(viewIndicator);
+    item.appendChild(favoriteBtn);
     item.appendChild(info);
 
     return item;
+  }
+
+  /**
+   * Create favorites button with heart icon
+   * @private
+   * @param {string} artworkId - Unique artwork identifier
+   * @returns {Element} Favorite button element
+   */
+  createFavoriteButton(artworkId) {
+    const isFavorited = this.isFavorited(artworkId);
+
+    const btn = createElement('button', {
+      className: `favorite-btn${isFavorited ? ' favorited' : ''}`,
+      type: 'button',
+      'aria-label': isFavorited ? 'Remove from favorites' : 'Add to favorites',
+      'aria-pressed': isFavorited.toString(),
+      dataset: {
+        artworkId: artworkId
+      }
+    });
+
+    const heartIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    heartIcon.setAttribute('viewBox', '0 0 24 24');
+    heartIcon.innerHTML = '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>';
+    btn.appendChild(heartIcon);
+
+    // Click handler with event propagation stop
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      this.toggleFavorite(artworkId, btn);
+    });
+
+    return btn;
+  }
+
+  /**
+   * Check if artwork is favorited
+   * @private
+   * @param {string} artworkId - Artwork identifier
+   * @returns {boolean} Whether artwork is favorited
+   */
+  isFavorited(artworkId) {
+    try {
+      const favorites = JSON.parse(localStorage.getItem('branchstone_favorites') || '[]');
+      return favorites.includes(artworkId);
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Toggle favorite status
+   * @private
+   * @param {string} artworkId - Artwork identifier
+   * @param {Element} btn - Favorite button element
+   */
+  toggleFavorite(artworkId, btn) {
+    try {
+      let favorites = JSON.parse(localStorage.getItem('branchstone_favorites') || '[]');
+      const isFavorited = favorites.includes(artworkId);
+
+      if (isFavorited) {
+        favorites = favorites.filter(id => id !== artworkId);
+        btn.classList.remove('favorited');
+        btn.setAttribute('aria-label', 'Add to favorites');
+        btn.setAttribute('aria-pressed', 'false');
+      } else {
+        favorites.push(artworkId);
+        btn.classList.add('favorited', 'animating');
+        btn.setAttribute('aria-label', 'Remove from favorites');
+        btn.setAttribute('aria-pressed', 'true');
+
+        // Remove animation class after animation completes
+        setTimeout(() => {
+          btn.classList.remove('animating');
+        }, 600);
+      }
+
+      localStorage.setItem('branchstone_favorites', JSON.stringify(favorites));
+
+      // Announce to screen readers
+      const announcement = isFavorited ? 'Removed from favorites' : 'Added to favorites';
+      this.announceToScreenReader(announcement);
+    } catch (error) {
+      console.warn('Failed to update favorites:', error);
+    }
+  }
+
+  /**
+   * Announce message to screen readers
+   * @private
+   * @param {string} message - Message to announce
+   */
+  announceToScreenReader(message) {
+    const announcement = createElement('div', {
+      className: 'sr-only',
+      'aria-live': 'polite',
+      'aria-atomic': 'true'
+    });
+    announcement.textContent = message;
+    document.body.appendChild(announcement);
+    setTimeout(() => announcement.remove(), 1000);
   }
 
   /**

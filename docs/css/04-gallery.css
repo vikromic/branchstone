@@ -144,6 +144,34 @@
     transition-duration: 0.15s;
 }
 
+/* Filter count badge */
+.filter-btn .filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    margin-left: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 10px;
+    background: rgba(var(--text-rgb), 0.1);
+    color: var(--secondary-text);
+    transition: background-color 0.3s var(--ease-gentle),
+                color 0.3s var(--ease-gentle);
+}
+
+.filter-btn:hover .filter-count {
+    background: rgba(139, 120, 93, 0.15);
+    color: var(--accent-color);
+}
+
+.filter-btn.active .filter-count {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
 /* Elegant focus state - subtle glow */
 .filter-btn:focus-visible {
     outline: none;
@@ -524,6 +552,149 @@
 .gallery-item:hover .gallery-item-info {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* "View" indicator on hover - centered icon */
+.gallery-item-view {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-gentle),
+                transform 0.4s var(--ease-spring);
+    z-index: 3;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15),
+                0 8px 32px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+}
+
+.gallery-item-view svg {
+    width: 24px;
+    height: 24px;
+    color: var(--text-color);
+}
+
+.gallery-item:hover .gallery-item-view {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.gallery-item:active .gallery-item-view {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+/* ========================================
+   FAVORITES (HEART) BUTTON
+   Save artwork to favorites with localStorage
+   ======================================== */
+
+.favorite-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s var(--ease-gentle),
+                transform 0.3s var(--ease-spring),
+                background-color 0.3s var(--ease-gentle);
+    z-index: 4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item:hover .favorite-btn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.favorite-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+}
+
+.favorite-btn:active {
+    transform: scale(0.95);
+}
+
+.favorite-btn svg {
+    width: 20px;
+    height: 20px;
+    color: var(--secondary-text);
+    transition: color 0.3s var(--ease-gentle),
+                transform 0.3s var(--ease-spring);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+}
+
+.favorite-btn:hover svg {
+    color: #e74c3c;
+}
+
+/* Favorited state - filled heart */
+.favorite-btn.favorited svg {
+    color: #e74c3c;
+    fill: #e74c3c;
+}
+
+.favorite-btn.favorited:hover svg {
+    transform: scale(1.1);
+}
+
+/* Heart beat animation on favorite */
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.3); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.2); }
+    60% { transform: scale(1); }
+}
+
+.favorite-btn.animating svg {
+    animation: heartBeat 0.6s ease-in-out;
+}
+
+/* Always show favorite button for favorited items */
+.gallery-item .favorite-btn.favorited {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.favorite-btn:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+    opacity: 1;
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .favorite-btn {
+    background: rgba(50, 50, 50, 0.9);
+}
+
+[data-theme="dark"] .favorite-btn:hover {
+    background: rgba(70, 70, 70, 1);
+}
+
+[data-theme="dark"] .favorite-btn svg {
+    color: var(--secondary-text);
 }
 
 .gallery-item-info h3 {
@@ -1107,6 +1278,199 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     z-index: 10;
     display: none;
+}
+
+/* ========================================
+   LIGHTBOX IMAGE COUNTER
+   Shows "3 of 24" style indicator
+   ======================================== */
+
+.lightbox-counter {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s var(--ease-gentle),
+                transform 0.4s var(--ease-spring);
+}
+
+.lightbox-counter.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.lightbox-counter-current {
+    font-weight: 600;
+}
+
+.lightbox-counter-separator {
+    margin: 0 0.25rem;
+    opacity: 0.6;
+}
+
+.lightbox-counter-total {
+    opacity: 0.8;
+}
+
+/* ========================================
+   LIGHTBOX THUMBNAIL STRIP
+   Bottom navigation thumbnails
+   ======================================== */
+
+.lightbox-thumbnails {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s var(--ease-gentle),
+                transform 0.4s var(--ease-spring);
+    z-index: 10;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.lightbox-thumbnails::-webkit-scrollbar {
+    display: none;
+}
+
+.lightbox-image-container:hover .lightbox-thumbnails {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.lightbox-thumbnail {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.6;
+    transition: opacity 0.3s var(--ease-gentle),
+                border-color 0.3s var(--ease-gentle),
+                transform 0.3s var(--ease-spring);
+}
+
+.lightbox-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.lightbox-thumbnail:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+.lightbox-thumbnail.active {
+    opacity: 1;
+    border-color: white;
+}
+
+.lightbox-thumbnail:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+/* ========================================
+   LIGHTBOX SHARE BUTTON
+   ======================================== */
+
+.lightbox-share-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.3s var(--ease-gentle),
+                transform 0.3s var(--ease-spring),
+                background-color 0.3s var(--ease-gentle);
+    z-index: 10;
+}
+
+.lightbox-image-container:hover .lightbox-share-btn {
+    opacity: 0.8;
+    transform: scale(1);
+}
+
+.lightbox-share-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.1);
+}
+
+.lightbox-share-btn:active {
+    transform: scale(0.95);
+}
+
+.lightbox-share-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.lightbox-share-btn:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+/* Share tooltip */
+.share-tooltip {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.lightbox-share-btn.copied .share-tooltip {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* ========================================

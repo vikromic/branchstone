@@ -83,6 +83,14 @@
                       0 8px 24px rgba(139, 120, 93, 0.12),
                       0 16px 48px rgba(0, 0, 0, 0.06);
 
+    /* Elevated surface shadows for dark mode cards/modals */
+    --shadow-elevated: 0 4px 20px rgba(0, 0, 0, 0.08),
+                       0 8px 32px rgba(0, 0, 0, 0.06);
+
+    /* Button hover lift shadow */
+    --shadow-button-hover: 0 6px 20px rgba(139, 120, 93, 0.2),
+                           0 12px 32px rgba(139, 120, 93, 0.12);
+
     /* Premium Spacing Scale - Generous Breathing Room */
     --spacing-xs: 0.5rem;     /* 8px */
     --spacing-sm: 0.75rem;    /* 12px */
@@ -127,6 +135,7 @@
     --accent-gold: hsl(45, 45%, 72%);
     --accent-champagne: hsl(48, 40%, 78%);
     --card-background: #272421;
+    --card-background-elevated: #302D29;
     --header-background: rgba(28, 25, 23, 0.9);
     --border-color: #3A3632;
     --border-subtle: #2E2B27;
@@ -134,4 +143,8 @@
     --button-color: hsl(43, 52%, 65%);
     --button-color-hover: hsl(43, 55%, 70%);
     --button-text: #1C1917;
+
+    /* Elevated surfaces in dark mode */
+    --shadow-elevated: 0 4px 24px rgba(0, 0, 0, 0.3),
+                       0 8px 40px rgba(0, 0, 0, 0.2);
 }

@@ -135,12 +135,62 @@
     outline: none;
     border-color: var(--accent-color);
     box-shadow: 0 0 0 4px rgba(139, 120, 93, 0.12),
-                0 2px 8px rgba(139, 120, 93, 0.08);
-    transform: translateY(-1px);
+                0 2px 8px rgba(139, 120, 93, 0.08),
+                0 0 20px rgba(139, 120, 93, 0.06);
+    transform: translateY(-2px);
 }
 
 .form-group input:focus::placeholder,
 .form-group textarea:focus::placeholder {
+    opacity: 0.3;
+    transform: translateX(4px);
+}
+
+/* Floating label effect */
+.form-group.floating-label {
+    position: relative;
+    margin-top: 1.5rem;
+}
+
+.form-group.floating-label label {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-text);
+    font-size: 1rem;
+    font-weight: 400;
+    pointer-events: none;
+    transition: all 0.3s var(--ease-spring);
+    background: transparent;
+    padding: 0 4px;
+}
+
+.form-group.floating-label textarea ~ label {
+    top: 1.25rem;
+    transform: translateY(0);
+}
+
+.form-group.floating-label input:focus ~ label,
+.form-group.floating-label input:not(:placeholder-shown) ~ label,
+.form-group.floating-label textarea:focus ~ label,
+.form-group.floating-label textarea:not(:placeholder-shown) ~ label {
+    top: 0;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    background: var(--card-background);
+    letter-spacing: 0.02em;
+}
+
+.form-group.floating-label input::placeholder,
+.form-group.floating-label textarea::placeholder {
+    opacity: 0;
+}
+
+.form-group.floating-label input:focus::placeholder,
+.form-group.floating-label textarea:focus::placeholder {
     opacity: 0.4;
 }
 

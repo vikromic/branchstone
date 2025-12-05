@@ -109,7 +109,9 @@ body {
     flex-direction: column;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    /* Smooth 0.4s theme transition on all color properties */
+    transition: background-color 0.4s var(--ease-gentle),
+                color 0.4s var(--ease-gentle);
     position: relative;
     overflow-x: hidden; /* Prevent horizontal scroll on mobile */
 }
@@ -269,7 +271,177 @@ h6 {
 p,
 li {
     letter-spacing: 0.02em;
-    line-height: 1.7;
+    line-height: 1.75;
+}
+
+/* ========================================
+   STYLED BLOCKQUOTES / PULL QUOTES
+   Premium typography for artist statements
+   ======================================== */
+
+blockquote,
+.pull-quote {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin: 2.5rem 0;
+    padding: 0 0 0 2rem;
+    border-left: 3px solid var(--accent-color);
+    position: relative;
+}
+
+blockquote::before,
+.pull-quote::before {
+    content: '\201C';
+    position: absolute;
+    left: -0.5rem;
+    top: -0.5rem;
+    font-size: 4rem;
+    color: var(--accent-color);
+    opacity: 0.2;
+    font-family: Georgia, serif;
+    line-height: 1;
+}
+
+blockquote p,
+.pull-quote p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+blockquote cite,
+.pull-quote cite {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 500;
+    color: var(--secondary-text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Centered pull quote variant */
+.pull-quote-centered {
+    text-align: center;
+    border-left: none;
+    padding: 0;
+    max-width: 700px;
+    margin: 3rem auto;
+}
+
+.pull-quote-centered::before {
+    left: 50%;
+    transform: translateX(-50%);
+    top: -1rem;
+}
+
+/* ========================================
+   SCROLL PROGRESS INDICATOR
+   Shows page scroll progress at top
+   ======================================== */
+
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: transparent;
+    z-index: calc(var(--z-header) + 1);
+    pointer-events: none;
+}
+
+.scroll-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-gold));
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+}
+
+/* ========================================
+   SECTION JUMP DOTS
+   Floating vertical navigation for long pages
+   ======================================== */
+
+.section-dots {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: calc(var(--z-header) - 1);
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-gentle);
+    pointer-events: none;
+}
+
+.section-dots.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.section-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border-color);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-spring);
+    position: relative;
+}
+
+.section-dot::before {
+    content: attr(data-label);
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--secondary-text);
+    background: var(--card-background);
+    padding: 4px 10px;
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.section-dot:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-4px);
+}
+
+.section-dot:hover {
+    background: var(--accent-color);
+    transform: scale(1.3);
+}
+
+.section-dot.active {
+    background: var(--accent-color);
+    transform: scale(1.2);
+}
+
+.section-dot:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+}
+
+/* Hide section dots on mobile */
+@media (max-width: 1024px) {
+    .section-dots {
+        display: none;
+    }
 }
 
 /* Section Labels - Uppercase Small Text */

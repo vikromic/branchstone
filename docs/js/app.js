@@ -643,8 +643,59 @@ class App {
     // Hero parallax and scroll indicator
     this.initHeroEffects();
 
+    // Scroll progress indicator
+    this.initScrollProgress();
+
     // Failsafe animation trigger
     this.failsafeAnimations();
+  }
+
+  /**
+   * Initialize scroll progress indicator at top of page
+   * @private
+   */
+  initScrollProgress() {
+    // Create scroll progress bar
+    const progressContainer = document.createElement('div');
+    progressContainer.className = 'scroll-progress';
+    progressContainer.setAttribute('aria-hidden', 'true');
+
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress-bar';
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+
+    let ticking = false;
+
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
+      progressBar.style.width = `${Math.min(scrollPercent, 100)}%`;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Initial update
+    updateProgress();
+
+    // Store cleanup
+    this.cleanupFunctions.push(() => {
+      window.removeEventListener('scroll', onScroll);
+      if (progressContainer.parentNode) {
+        progressContainer.remove();
+      }
+    });
   }
 
   /**

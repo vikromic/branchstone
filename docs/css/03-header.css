@@ -12,19 +12,24 @@ header {
     width: 100%;
     box-sizing: border-box;
     background-color: var(--header-background);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(var(--text-rgb), 0.06);
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02),
+                0 4px 12px rgba(0, 0, 0, 0.03);
     /* Prevent layout shifts and jumps */
     min-height: 56px;
     height: 56px;
     will-change: transform;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+    /* Smooth theme transition */
+    transition: background-color 0.4s var(--ease-gentle),
+                border-color 0.4s var(--ease-gentle),
+                box-shadow 0.4s var(--ease-gentle);
 }
 
 /* ========================================
@@ -344,19 +349,21 @@ body.menu-open .mobile-page-title {
     background: transparent;
     border: none;
     cursor: pointer;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     padding: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     position: relative;
-    transition: transform var(--transition-fast) var(--ease-out-back);
+    transition: transform var(--transition-fast) var(--ease-out-back),
+                background-color var(--transition-normal) var(--ease-gentle);
 }
 
 .theme-toggle:hover {
     transform: scale(1.1);
+    background-color: rgba(var(--text-rgb), 0.06);
 }
 
 .theme-toggle:active {
@@ -369,8 +376,8 @@ body.menu-open .mobile-page-title {
     color: var(--text-color);
     fill: var(--text-color);
     position: absolute;
-    transition: opacity var(--transition-normal) var(--ease-gentle),
-                transform var(--transition-normal) var(--ease-gentle);
+    transition: opacity 0.5s var(--ease-spring),
+                transform 0.5s var(--ease-spring);
 }
 
 .theme-toggle .moon-icon {
@@ -380,17 +387,23 @@ body.menu-open .mobile-page-title {
 
 .theme-toggle .sun-icon {
     opacity: 0;
-    transform: scale(0) rotate(-180deg);
+    transform: scale(0.5) rotate(-90deg);
 }
 
 [data-theme="dark"] .theme-toggle .moon-icon {
     opacity: 0;
-    transform: scale(0) rotate(180deg);
+    transform: scale(0.5) rotate(90deg);
 }
 
 [data-theme="dark"] .theme-toggle .sun-icon {
     opacity: 1;
     transform: scale(1) rotate(0deg);
+}
+
+/* Smooth rotation animation on theme change */
+.theme-toggle.animating svg {
+    transition: opacity 0.4s var(--ease-spring),
+                transform 0.6s var(--ease-bounce);
 }
 
 /* Focus indicator for theme toggle - WCAG 2.1 AA */
