@@ -35,30 +35,49 @@ main {
    SECTION TRANSITIONS & ANIMATIONS
    ======================================== */
 
-/* Section Transitions & Polish */
+/* Section Transitions & Polish - Premium Luxury */
 section {
     position: relative;
     isolation: isolate;
-    animation: sectionFadeIn 1s ease-out;
+    padding: var(--spacing-4xl) var(--spacing-xl); /* Premium generous padding */
+    animation: sectionFadeIn 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 @keyframes sectionFadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(32px) scale(0.98);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
+}
+
+/* Premium section headings */
+section h2 {
+    margin-bottom: var(--spacing-2xl);
+    position: relative;
+    letter-spacing: 0.02em;
+}
+
+section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-color) 0%, transparent 100%);
+    border-radius: 2px;
 }
 
 /* ========================================
    GRADIENT SECTION DIVIDERS
    ======================================== */
 
-/* Gradient section dividers */
+/* Premium gradient section dividers */
 .featured-works::before,
 .home-about::before {
     content: '';
@@ -67,36 +86,42 @@ section {
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    height: 1px;
+    height: 2px;
     background: linear-gradient(90deg,
             transparent 0%,
-            var(--border-color) 20%,
-            var(--border-color) 80%,
+            var(--border-color) 15%,
+            var(--accent-color) 50%,
+            var(--border-color) 85%,
             transparent 100%);
-    opacity: 0.5;
+    opacity: 0.4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 /* ========================================
    HOME CTA SECTION
    ======================================== */
 
-/* Home CTA Section */
+/* Home CTA Section - Premium Spacing */
 .home-cta {
     text-align: center;
-    padding: 8rem 2rem;
+    padding: var(--spacing-4xl) var(--spacing-xl);
     background: linear-gradient(135deg, var(--card-background) 0%, var(--background-color) 100%);
 }
 
 .home-cta h2 {
     font-size: clamp(2.5rem, 6vw, 4rem);
-    margin: 0 0 1rem 0;
+    margin: 0 0 var(--spacing-lg) 0;
     color: var(--text-color);
+    font-weight: 300;
+    letter-spacing: 0.08em;
 }
 
 .home-cta p {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     color: var(--secondary-text);
-    margin-bottom: 3rem;
+    margin-bottom: var(--spacing-2xl);
+    letter-spacing: 0.02em;
+    line-height: 1.7;
 }
 
 .cta-buttons {

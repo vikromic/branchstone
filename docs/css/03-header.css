@@ -49,6 +49,15 @@ nav {
     z-index: 10002;
     border-radius: 4px;
     position: relative;
+    transition: transform var(--transition-fast) var(--ease-out-back);
+}
+
+.mobile-menu-toggle:hover {
+    transform: scale(1.05);
+}
+
+.mobile-menu-toggle:active {
+    transform: scale(0.95);
 }
 
 .mobile-menu-toggle span {
@@ -58,7 +67,8 @@ nav {
     background-color: var(--text-color);
     border-radius: 2px;
     position: absolute;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform var(--transition-normal) var(--ease-out-back),
+                opacity var(--transition-normal) var(--ease-gentle);
 }
 
 .mobile-menu-toggle span:nth-child(1) { transform: translateY(-7px); }
@@ -273,7 +283,8 @@ body.menu-open .mobile-page-title {
     font-weight: 500;
     color: var(--secondary-text);
     border-radius: 20px;
-    transition: all 0.2s ease;
+    transition: all var(--transition-normal) var(--ease-gentle),
+                transform var(--transition-fast) var(--ease-out-back);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -296,10 +307,16 @@ body.menu-open .mobile-page-title {
 
 .lang-toggle:hover {
     border-color: var(--accent-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(139, 120, 93, 0.15);
 }
 
 .lang-toggle:hover .lang-option:not(.active-lang) {
     color: var(--accent-color);
+}
+
+.lang-toggle:active {
+    transform: translateY(0);
 }
 
 /* Focus indicator for language toggle - WCAG 2.1 AA */
@@ -326,6 +343,15 @@ body.menu-open .mobile-page-title {
     justify-content: center;
     border-radius: 50%;
     position: relative;
+    transition: transform var(--transition-fast) var(--ease-out-back);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
 }
 
 .theme-toggle svg {
@@ -334,27 +360,28 @@ body.menu-open .mobile-page-title {
     color: var(--text-color);
     fill: var(--text-color);
     position: absolute;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity var(--transition-normal) var(--ease-gentle),
+                transform var(--transition-normal) var(--ease-gentle);
 }
 
 .theme-toggle .moon-icon {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
 }
 
 .theme-toggle .sun-icon {
     opacity: 0;
-    transform: scale(0);
+    transform: scale(0) rotate(-180deg);
 }
 
 [data-theme="dark"] .theme-toggle .moon-icon {
     opacity: 0;
-    transform: scale(0);
+    transform: scale(0) rotate(180deg);
 }
 
 [data-theme="dark"] .theme-toggle .sun-icon {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
 }
 
 /* Focus indicator for theme toggle - WCAG 2.1 AA */

@@ -640,8 +640,75 @@ class App {
     // Smooth scroll
     this.initSmoothScroll();
 
+    // Hero parallax and scroll indicator
+    this.initHeroEffects();
+
     // Failsafe animation trigger
     this.failsafeAnimations();
+  }
+
+  /**
+   * Initialize hero section effects (parallax, scroll indicator fade)
+   * @private
+   */
+  initHeroEffects() {
+    const heroSection = document.querySelector('.hero-fullscreen');
+    const heroContent = document.querySelector('.hero-content');
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+
+    if (!heroSection) return;
+
+    let ticking = false;
+
+    const updateHeroEffects = () => {
+      const scrollY = window.scrollY;
+      const heroHeight = heroSection.offsetHeight;
+
+      // Only apply effects while hero is in view
+      if (scrollY < heroHeight) {
+        // Subtle parallax on hero content (moves slower than scroll)
+        if (heroContent) {
+          const parallaxOffset = scrollY * 0.3;
+          heroContent.style.transform = `translateY(${parallaxOffset}px)`;
+        }
+
+        // Fade out scroll indicator as user scrolls
+        if (scrollIndicator) {
+          const fadeThreshold = 100; // Start fading after 100px scroll
+          if (scrollY > fadeThreshold) {
+            heroSection.classList.add('hero-scrolled');
+          } else {
+            heroSection.classList.remove('hero-scrolled');
+          }
+        }
+      }
+
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateHeroEffects);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Scroll indicator click handler - smooth scroll to next section
+    if (scrollIndicator) {
+      scrollIndicator.addEventListener('click', () => {
+        const nextSection = heroSection.nextElementSibling;
+        if (nextSection) {
+          nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    // Store cleanup function
+    this.cleanupFunctions.push(() => {
+      window.removeEventListener('scroll', onScroll);
+    });
   }
 
   /**

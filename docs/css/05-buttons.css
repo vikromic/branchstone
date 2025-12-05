@@ -24,13 +24,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem 2rem;
-    border-radius: 20px;
+    padding: 1.125rem 2.5rem;
+    border-radius: var(--radius-sm);
     font-weight: 500;
-    font-size: 0.95rem;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-size: 0.875rem;
+    transition: transform var(--transition-normal) var(--ease-spring),
+                box-shadow var(--transition-normal) var(--ease-gentle),
+                background-color var(--transition-normal) var(--ease-gentle);
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 0.15em;
     cursor: pointer;
     border: none;
     line-height: 1;
@@ -69,48 +71,57 @@
     box-shadow: 0 0 0 2px rgba(139, 120, 93, 0.3);
 }
 
-/* Primary button variants */
+/* Primary button variants - Premium Style */
 .btn-primary,
 .btn-primary-large,
 .submit-btn,
 .inquire-btn {
-    background-color: var(--button-color);
+    background: var(--button-color);
     color: var(--button-text);
-    box-shadow: 0 4px 12px rgba(139, 120, 93, 0.25);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover,
 .btn-primary-large:hover,
 .submit-btn:hover,
 .inquire-btn:hover {
-    transform: translateY(-1px);
-    box-shadow:
-        0 4px 12px rgba(139, 120, 93, 0.25),
-        0 12px 40px rgba(139, 120, 93, 0.15),
-        inset 0 -2px 8px rgba(0, 0, 0, 0.1);
-    opacity: 0.95;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: var(--button-color-hover);
 }
 
-/* Secondary button variants */
+.btn-primary:active,
+.btn-primary-large:active,
+.submit-btn:active,
+.inquire-btn:active {
+    transform: translateY(0);
+}
+
+/* Secondary button variants - Premium Style */
 .btn-secondary,
 .btn-secondary-large {
     background-color: transparent;
     color: var(--text-color);
-    border: 1.5px solid var(--border-color);
+    border: 1px solid var(--border-color);
+    box-shadow: inset 0 0 0 1px transparent;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-secondary:hover,
 .btn-secondary-large:hover {
-    background-color: var(--card-background);
+    background-color: var(--text-color);
     border-color: var(--text-color);
-    transform: translateY(-1px);
+    color: var(--background-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 /* Large button variants */
 .btn-primary-large,
 .btn-secondary-large {
-    padding: 1.125rem 2.5rem;
-    font-size: 1rem;
+    padding: 1.375rem 3rem;
+    font-size: 0.9375rem;
+    letter-spacing: 0.18em;
 }
 
 /* Text button */

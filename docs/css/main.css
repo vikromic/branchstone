@@ -5,6 +5,7 @@
  * Architecture:
  * 01 - Design tokens (CSS variables, colors, spacing)
  * 02 - Base styles (reset, typography, body)
+ * 03 - Animations (scroll effects, micro-interactions)
  * 03 - Header & Navigation
  * 04 - Gallery component
  * 05 - Buttons
@@ -22,6 +23,7 @@
 /* Foundation */
 @import url('01-tokens.css');
 @import url('02-base.css');
+@import url('03-animations.css');
 
 /* Layout Components */
 @import url('03-header.css');

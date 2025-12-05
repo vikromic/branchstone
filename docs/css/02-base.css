@@ -231,39 +231,81 @@ body::after {
     }
 }
 
-/* Typography Base Styles */
+/* Premium Typography Base Styles */
 h1,
 h2,
 h3 {
     font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-    font-weight: 600;
-    letter-spacing: 0.01em;
+    font-weight: 300;
+    letter-spacing: 0.04em;
 }
 
 h1,
 h2 {
-    line-height: 1.25;
+    line-height: 1.15;
+    letter-spacing: 0.06em;
 }
 
 h3 {
     line-height: 1.3;
+    letter-spacing: 0.03em;
+    font-weight: 400;
+}
+
+h4,
+h5,
+h6 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
 }
 
 p,
 li {
-    letter-spacing: 0.015em;
+    letter-spacing: 0.02em;
+    line-height: 1.7;
 }
 
-/* Link Styles */
+/* Section Labels - Uppercase Small Text */
+.section-label {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--secondary-text);
+    margin-bottom: 1rem;
+}
+
+/* Link Styles - Premium Underline Animation */
 a {
     color: var(--accent-color);
     text-decoration: none;
-    transition: color 0.3s ease;
+    position: relative;
+    transition: color var(--transition-normal) var(--ease-gentle);
+}
+
+/* Elegant underline on hover - grows from center */
+a:not(.btn-primary):not(.btn-secondary):not(.filter-btn):not(.gallery-item):not(.social-link)::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width var(--transition-normal) var(--ease-out-back),
+                left var(--transition-normal) var(--ease-out-back);
+}
+
+a:not(.btn-primary):not(.btn-secondary):not(.filter-btn):not(.gallery-item):not(.social-link):hover::after {
+    width: 100%;
+    left: 0;
 }
 
 a:hover {
-    color: var(--accent-color);
-    opacity: 0.8;
+    color: var(--accent-gold);
 }
 
 a:focus-visible {

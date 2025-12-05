@@ -17,7 +17,7 @@
     "format:check": "prettier --check \"docs/js/**/*.{js,json}\"",
     "validate": "npm run lint && npm run format:check && npm run test:ci",
     "optimize-images": "cd scripts && npm install && npm run optimize",
-    "build:css": "cd docs/css && cat 01-tokens.css 02-base.css 03-header.css 04-gallery.css 05-buttons.css 06-footer.css 07-utilities.css 08-hero.css 09-featured.css 10-about.css 11-contact.css 12-sections.css > bundle.css",
+    "build:css": "cd docs/css && cat 01-tokens.css 02-base.css 03-animations.css 03-header.css 04-gallery.css 05-buttons.css 06-footer.css 07-utilities.css 08-hero.css 09-featured.css 10-about.css 11-contact.css 12-sections.css mobile-gallery.css > bundle.css",
     "serve": "cd docs && python3 -m http.server 8000"
   },
   "keywords": [
