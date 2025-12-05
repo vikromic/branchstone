@@ -5451,6 +5451,17 @@ main {
     flex: 0 0 100%;
     padding: 0 0.5rem;
     box-sizing: border-box;
+    /* Reset to single-item mode: hide by default */
+    opacity: 0;
+    display: none;
+    transform: scale(0.95);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  #featured-carousel .carousel-item.active {
+    opacity: 1;
+    display: block;
+    transform: scale(1);
   }
 
   #featured-carousel .featured-item {
