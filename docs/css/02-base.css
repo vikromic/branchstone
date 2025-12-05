@@ -111,6 +111,11 @@ body {
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
     position: relative;
+    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+}
+
+html {
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 /* Enhanced Film Grain Overlay - More visible organic texture */
