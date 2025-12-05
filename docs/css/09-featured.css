@@ -348,7 +348,7 @@
   }
 }
 
-/* Mobile: 1 item per row */
+/* Mobile: 1.15 items per row with peek effect */
 @media (max-width: 768px) {
   .featured-works {
     padding: 2rem 1rem;
@@ -380,16 +380,16 @@
 
   .carousel {
     width: 100%;
-    overflow: hidden;
+    overflow: visible; /* Allow peek of next item */
   }
 
   .carousel-track {
-    gap: 0;
+    gap: 1rem;
     padding: 0;
   }
 
   #featured-carousel .carousel-item {
-    flex: 0 0 100%;
+    flex: 0 0 calc(100% - 3rem); /* Show 85% + 15% peek */
     padding: 0 0.5rem;
     box-sizing: border-box;
     /* Reset to single-item mode: hide by default */
@@ -403,6 +403,13 @@
     opacity: 1;
     display: block;
     transform: scale(1);
+  }
+
+  /* Show next item partially */
+  #featured-carousel .carousel-item.active + .carousel-item {
+    display: block;
+    opacity: 0.5;
+    transform: scale(0.95);
   }
 
   #featured-carousel .featured-item {

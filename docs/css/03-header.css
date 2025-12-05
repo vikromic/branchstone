@@ -286,21 +286,24 @@ body.menu-open .mobile-page-title {
     display: none;
 }
 
-/* Language Toggle - Elegant minimal design */
+/* Language Toggle - Elegant minimal design with WCAG AA touch targets */
 .lang-toggle {
     background: transparent;
     border: 1px solid var(--border-color);
     cursor: pointer;
-    padding: 0.5rem 0.75rem;
+    padding: 0.625rem 0.875rem; /* Increased for 44x44px minimum */
+    min-width: 44px;
+    min-height: 44px;
     font-family: 'Inter', sans-serif;
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--secondary-text);
-    border-radius: 20px;
+    border-radius: 22px; /* Adjusted for new padding */
     transition: all var(--transition-normal) var(--ease-gentle),
                 transform var(--transition-fast) var(--ease-out-back);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
 }
 
@@ -344,14 +347,14 @@ body.menu-open .mobile-page-title {
     outline: none;
 }
 
-/* Theme Toggle */
+/* Theme Toggle with WCAG AA touch targets */
 .theme-toggle {
     background: transparent;
     border: none;
     cursor: pointer;
-    width: 36px;
-    height: 36px;
-    padding: 4px;
+    width: 44px; /* WCAG 2.1 AA minimum */
+    height: 44px; /* WCAG 2.1 AA minimum */
+    padding: 10px; /* Adjusted for larger button */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -573,4 +576,88 @@ body.menu-open .mobile-page-title {
    ======================================== */
 .menu-hover-bg {
     display: none;
+}
+
+/* ========================================
+   MOBILE BOTTOM TAB BAR
+   iOS-style fixed bottom navigation
+   ======================================== */
+.mobile-tab-bar {
+    display: none; /* Hidden by default, shown on mobile */
+}
+
+@media (max-width: 768px) {
+    .mobile-tab-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: var(--header-background);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 100;
+        padding-bottom: env(safe-area-inset-bottom);
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04),
+                    0 -1px 2px rgba(0, 0, 0, 0.02);
+        transition: transform 0.3s var(--ease-gentle),
+                    background-color 0.4s var(--ease-gentle),
+                    border-color 0.4s var(--ease-gentle);
+    }
+
+    .tab-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        text-decoration: none;
+        color: var(--secondary-text);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        padding: 8px 12px;
+        min-width: 64px;
+        min-height: 44px; /* WCAG 2.1 AA touch target */
+        border-radius: 8px;
+        transition: color 0.2s ease,
+                    background-color 0.2s ease,
+                    transform 0.2s var(--ease-out-back);
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .tab-item svg {
+        width: 24px;
+        height: 24px;
+        stroke-width: 2;
+        transition: transform 0.2s var(--ease-out-back);
+    }
+
+    .tab-item.active {
+        color: var(--accent-color);
+    }
+
+    .tab-item.active svg {
+        transform: scale(1.1);
+    }
+
+    .tab-item:active {
+        transform: scale(0.95);
+        background-color: rgba(var(--text-rgb), 0.05);
+    }
+
+    /* Add padding to main content to account for tab bar */
+    body {
+        padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Ensure footer doesn't overlap tab bar */
+    .site-footer {
+        margin-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    }
 }

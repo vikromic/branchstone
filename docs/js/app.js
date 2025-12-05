@@ -203,10 +203,12 @@ class App {
         if (animations) animations.refresh();
 
         // Initialize carousel for featured works
-        // Responsive configuration: 3 items on desktop, 2 on tablet, 1 on mobile
+        // Responsive configuration: 3 items on desktop, 2 on tablet, 1 on mobile with peek
         let itemsPerView = 3;
+        let showPeek = false;
         if (window.innerWidth <= 768) {
           itemsPerView = 1;
+          showPeek = true; // Enable peek effect on mobile
         } else if (window.innerWidth <= 1024) {
           itemsPerView = 2;
         }
@@ -219,8 +221,15 @@ class App {
           pauseOnHover: true,
           itemsPerView: itemsPerView,
           itemsPerRow: itemsPerView,
+          showPeek: showPeek, // Pass peek option to carousel
         });
         this.components.set('featuredCarousel', carousel);
+
+        // Show "Swipe for more" hint on first visit (mobile only)
+        if (showPeek && !localStorage.getItem('carousel_hint_shown')) {
+          this.showCarouselSwipeHint();
+          localStorage.setItem('carousel_hint_shown', 'true');
+        }
 
         // Handle window resize to recalculate carousel layout
         let resizeTimer;
@@ -307,12 +316,13 @@ class App {
    * @private
    */
   async initDesktopGallery() {
-    // Dynamically import Gallery, GalleryFilter, and Lightbox components
-    const [{ default: Gallery }, { default: GalleryFilter }, { default: Lightbox }] =
+    // Dynamically import Gallery, GalleryFilter, Lightbox, and InquiryFAB components
+    const [{ default: Gallery }, { default: GalleryFilter }, { default: Lightbox }, { default: InquiryFAB }] =
       await Promise.all([
         import('./components/Gallery.js'),
         import('./components/GalleryFilter.js'),
         import('./components/Lightbox.js'),
+        import('./components/InquiryFAB.js'),
       ]);
 
     const gallery = new Gallery({
@@ -344,6 +354,10 @@ class App {
         // Initialize lightbox after gallery loads
         const lightbox = new Lightbox();
         this.components.set('lightbox', lightbox);
+
+        // Initialize Inquiry FAB (mobile only)
+        const inquiryFAB = new InquiryFAB();
+        this.components.set('inquiryFAB', inquiryFAB);
 
         // Mobile gallery enhancements
         if (window.innerWidth <= CONFIG.ui.breakpoints.mobile) {
@@ -646,8 +660,106 @@ class App {
     // Scroll progress indicator
     this.initScrollProgress();
 
+    // Mobile tab bar active state
+    this.initMobileTabBar();
+
     // Failsafe animation trigger
     this.failsafeAnimations();
+  }
+
+  /**
+   * Show carousel swipe hint for first-time visitors
+   * @private
+   */
+  showCarouselSwipeHint() {
+    const carousel = document.getElementById('featured-carousel');
+    if (!carousel) return;
+
+    const hint = document.createElement('div');
+    hint.className = 'carousel-swipe-hint';
+    hint.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14m-7-7l7 7-7 7"/>
+      </svg>
+      <span>Swipe for more</span>
+    `;
+    hint.style.cssText = `
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(var(--text-rgb), 0.9);
+      color: var(--background-color);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      pointer-events: none;
+      z-index: 10;
+      animation: fadeInOut 3s ease-in-out;
+    `;
+
+    carousel.style.position = 'relative';
+    carousel.appendChild(hint);
+
+    // Add animation
+    if (!document.getElementById('carousel-hint-style')) {
+      const style = document.createElement('style');
+      style.id = 'carousel-hint-style';
+      style.textContent = `
+        @keyframes fadeInOut {
+          0%, 100% { opacity: 0; }
+          10%, 90% { opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Remove hint after animation
+    setTimeout(() => {
+      if (hint.parentNode) {
+        hint.remove();
+      }
+    }, 3000);
+  }
+
+  /**
+   * Initialize mobile tab bar active state
+   * @private
+   */
+  initMobileTabBar() {
+    const tabBar = document.querySelector('.mobile-tab-bar');
+    if (!tabBar) return;
+
+    // Determine current page from URL
+    const path = window.location.pathname;
+    const filename = path.split('/').pop() || 'index.html';
+
+    // Map filenames to data-page values
+    const pageMap = {
+      'index.html': 'home',
+      '': 'home',
+      'gallery.html': 'gallery',
+      'contact.html': 'contact',
+      'about.html': 'about',
+      'commissions.html': 'commissions',
+    };
+
+    const currentPage = pageMap[filename] || 'home';
+
+    // Set active state on current tab
+    const tabs = tabBar.querySelectorAll('.tab-item');
+    tabs.forEach((tab) => {
+      const tabPage = tab.getAttribute('data-page');
+      if (tabPage === currentPage) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    });
   }
 
   /**

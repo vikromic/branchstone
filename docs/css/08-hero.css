@@ -413,7 +413,7 @@
     .hero-fullscreen {
         height: 100vh;
         height: calc(100vh - env(safe-area-inset-bottom, 0px));
-        min-height: 500px;
+        min-height: 85vh; /* Reduced from 100vh to hint at content below */
         max-height: none;
         display: flex !important;
         align-items: center !important;
@@ -508,6 +508,18 @@
         font-size: 0.75rem;
         left: 50%;
         transform: translateX(-50%);
+    }
+}
+
+/* Very small screens - 100% wide buttons */
+@media (max-width: 400px) {
+    .hero-cta .btn-primary-large,
+    .hero-cta .btn-secondary-large,
+    .hero-cta > a {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
 }
 

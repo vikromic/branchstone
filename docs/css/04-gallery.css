@@ -61,6 +61,162 @@
 }
 
 /* ========================================
+   INQUIRY FAB (FLOATING ACTION BUTTON)
+   Mobile-only quick access to favorites and contact
+   ======================================== */
+
+.inquiry-fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 1.5rem;
+    z-index: var(--z-fixed, 100);
+    display: none; /* Hidden by default, shown on mobile via media query */
+}
+
+@media (max-width: 768px) {
+    .inquiry-fab {
+        display: block;
+    }
+}
+
+.inquiry-fab-main {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(139, 120, 93, 0.3),
+                0 8px 24px rgba(139, 120, 93, 0.2);
+    transition: all 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+    z-index: 2;
+}
+
+.inquiry-fab-main svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.inquiry-fab.expanded .inquiry-fab-main {
+    background: var(--text-color);
+    transform: scale(1.05);
+}
+
+.inquiry-fab.expanded .inquiry-fab-main svg {
+    transform: rotate(45deg);
+}
+
+.inquiry-fab-main:active {
+    transform: scale(0.95);
+}
+
+.inquiry-fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e74c3c;
+    color: white;
+    border-radius: 10px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+    border: 2px solid var(--background-color);
+    z-index: 3;
+}
+
+.inquiry-fab-options {
+    position: absolute;
+    bottom: 72px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px) scale(0.9);
+    transition: all 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+    z-index: 1;
+}
+
+.inquiry-fab.expanded .inquiry-fab-options {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.inquiry-fab-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: var(--card-background);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 28px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+                0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+    min-height: 44px;
+}
+
+.inquiry-fab-option:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    transform: translateX(-4px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(139, 120, 93, 0.25),
+                0 3px 8px rgba(139, 120, 93, 0.15);
+}
+
+.inquiry-fab-option:active {
+    transform: translateX(-2px) scale(0.98);
+}
+
+.inquiry-fab-option svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Staggered animation for options */
+.inquiry-fab.expanded .inquiry-fab-option:nth-child(1) {
+    transition-delay: 0.05s;
+}
+
+.inquiry-fab.expanded .inquiry-fab-option:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .inquiry-fab-option {
+    background: rgba(50, 50, 50, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .inquiry-fab-option:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* ========================================
    GALLERY FILTER
    ======================================== */
 
@@ -185,6 +341,12 @@
    SKELETON LOADING STATES
    ======================================== */
 
+/* Wave pattern shimmer animation for better visual feedback */
+@keyframes skeleton-wave {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
 @keyframes skeleton-loading {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
@@ -200,14 +362,22 @@
         0 8px 16px rgba(0, 0, 0, 0.04),
         0 16px 32px rgba(0, 0, 0, 0.05);
     min-height: 320px;
+    aspect-ratio: 4/5; /* Match artwork card aspect ratio */
 }
 
 .skeleton-image {
     width: 100%;
     height: 280px;
-    background: linear-gradient(90deg, var(--card-background) 25%, var(--border-color) 50%, var(--card-background) 75%);
+    /* Wave pattern shimmer animation */
+    background: linear-gradient(
+        90deg,
+        var(--card-background) 0%,
+        var(--border-color) 20%,
+        var(--card-background) 40%,
+        var(--card-background) 100%
+    );
     background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite ease-in-out;
+    animation: skeleton-wave 1.5s ease-in-out infinite;
 }
 
 .skeleton-info {
@@ -1927,10 +2097,54 @@
         right: 0;
         top: 0;
         height: 100%;
-        width: 48px;
-        background: linear-gradient(to right, transparent, var(--background-color));
+        width: 64px;
+        background: linear-gradient(to right, transparent 0%, var(--background-color) 75%);
         pointer-events: none;
-        opacity: 0.95;
+        opacity: 1;
+        z-index: 2;
+    }
+
+    /* Filter scroll hint - shows on first visit */
+    .gallery-filter-scroll-hint {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--accent-color);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        opacity: 0.85;
+        z-index: 3;
+        animation: filterScrollHint 2s ease-in-out infinite;
+        transition: opacity 0.3s ease;
+    }
+
+    .gallery-filter-scroll-hint.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .gallery-filter-scroll-hint svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Bouncing arrow animation for scroll hint */
+    @keyframes filterScrollHint {
+        0%, 100% {
+            transform: translateY(-50%) translateX(0);
+            opacity: 0.7;
+        }
+        50% {
+            transform: translateY(-50%) translateX(6px);
+            opacity: 1;
+        }
     }
 
     .gallery-filter-buttons {
@@ -2671,6 +2885,71 @@
         letter-spacing: 1px;
         z-index: 10;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Progress indicator - "Artwork X of Y" */
+    .gallery-infinite-progress {
+        position: fixed;
+        top: calc(var(--header-height, 48px) + 12px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        z-index: 150;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        opacity: 0.9;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .gallery-infinite-progress-current {
+        font-weight: 600;
+        color: var(--accent-color, #8b785d);
+    }
+
+    /* Back to Grid View button */
+    .gallery-infinite-back {
+        position: fixed;
+        top: calc(var(--header-height, 48px) + 12px);
+        left: 12px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 150;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+    }
+
+    .gallery-infinite-back:active {
+        transform: scale(0.95);
+        background: rgba(0, 0, 0, 0.85);
+    }
+
+    .gallery-infinite-back svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .gallery-infinite-back:focus-visible {
+        outline: 2px solid white;
+        outline-offset: 2px;
     }
 
     /* Respect reduced motion */
