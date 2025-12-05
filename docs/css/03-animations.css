@@ -92,28 +92,7 @@
     opacity: 0.9;
 }
 
-/* Animated chevron icon */
-.scroll-indicator::after {
-    content: '';
-    width: 24px;
-    height: 24px;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    transform: rotate(45deg);
-    animation: scroll-bounce 2s ease-in-out infinite;
-}
-
-@keyframes scroll-bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0) rotate(45deg);
-    }
-    40% {
-        transform: translateY(-10px) rotate(45deg);
-    }
-    60% {
-        transform: translateY(-5px) rotate(45deg);
-    }
-}
+/* SVG icon is in HTML - no CSS pseudo-element needed */
 
 /* Hide scroll indicator when scrolled */
 .scroll-indicator.hidden {
@@ -577,7 +556,4 @@ textarea {
         animation: none !important;
     }
 
-    .scroll-indicator::after {
-        animation: none !important;
-    }
 }
