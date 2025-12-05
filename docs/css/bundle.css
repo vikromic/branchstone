@@ -681,565 +681,6 @@ select:focus-visible {
 [data-theme="dark"] [tabindex]:not([tabindex="-1"]):focus-visible {
     outline-color: var(--accent-color);
 }
-/**
- * 03-animations.css
- * Premium Micro-Interactions & Scroll Animations
- *
- * Includes:
- * - Scroll-based entrance animations
- * - Smooth fade-in effects
- * - Elegant slide-up animations
- * - Staggered reveals for grid items
- * - Premium scroll indicators
- * - Loading state animations
- * - Touch feedback micro-interactions
- */
-
-/* ========================================
-   SCROLL ENTRANCE ANIMATIONS
-   Fade & Slide Up - Elegant Reveal
-   ======================================== */
-
-/* Base state - elements start invisible */
-.animate-on-scroll {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity var(--transition-slow) cubic-bezier(0.16, 1, 0.3, 1),
-                transform var(--transition-slow) cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Active state - revealed when scrolled into view */
-.animate-on-scroll.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Staggered reveal for multiple items - Wave effect */
-.animate-on-scroll:nth-child(1) { transition-delay: 0ms; }
-.animate-on-scroll:nth-child(2) { transition-delay: 120ms; }
-.animate-on-scroll:nth-child(3) { transition-delay: 240ms; }
-.animate-on-scroll:nth-child(4) { transition-delay: 360ms; }
-.animate-on-scroll:nth-child(5) { transition-delay: 480ms; }
-.animate-on-scroll:nth-child(6) { transition-delay: 600ms; }
-.animate-on-scroll:nth-child(7) { transition-delay: 720ms; }
-.animate-on-scroll:nth-child(8) { transition-delay: 840ms; }
-.animate-on-scroll:nth-child(9) { transition-delay: 960ms; }
-
-/* Fade-only variant for subtle reveals */
-.animate-fade {
-    opacity: 0;
-    transition: opacity var(--transition-medium) var(--ease-gentle);
-}
-
-.animate-fade.is-visible {
-    opacity: 1;
-}
-
-/* Scale reveal for images */
-.animate-scale {
-    opacity: 0;
-    transform: scale(0.92);
-    transition: opacity var(--transition-slow) cubic-bezier(0.16, 1, 0.3, 1),
-                transform var(--transition-slow) cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.animate-scale.is-visible {
-    opacity: 1;
-    transform: scale(1);
-}
-
-/* ========================================
-   PREMIUM SCROLL INDICATOR
-   ======================================== */
-
-.scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: opacity var(--transition-normal) var(--ease-gentle);
-}
-
-.scroll-indicator:hover {
-    opacity: 0.9;
-}
-
-/* SVG icon is in HTML - no CSS pseudo-element needed */
-
-/* Hide scroll indicator when scrolled */
-.scroll-indicator.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* ========================================
-   IMAGE LOADING STATES
-   Premium Skeleton & Fade-In
-   ======================================== */
-
-/* Image placeholder with elegant shimmer */
-.image-loading {
-    position: relative;
-    background: var(--card-background);
-    overflow: hidden;
-}
-
-.image-loading::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.3) 50%,
-        transparent 100%
-    );
-    animation: shimmer 2s ease-in-out infinite;
-}
-
-[data-theme="dark"] .image-loading::before {
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255, 255, 255, 0.1) 50%,
-        transparent 100%
-    );
-}
-
-@keyframes shimmer {
-    0% {
-        left: -100%;
-    }
-    100% {
-        left: 100%;
-    }
-}
-
-/* Smooth fade-in for images that opt-in to loading animation */
-img.fade-on-load {
-    opacity: 0;
-    transition: opacity var(--transition-medium) var(--ease-gentle);
-}
-
-img.fade-on-load.loaded,
-img.fade-on-load[data-loaded="true"] {
-    opacity: 1;
-}
-
-/* ========================================
-   TOUCH FEEDBACK - MOBILE INTERACTIONS
-   ======================================== */
-
-/* Premium press effect for interactive elements */
-.touch-feedback {
-    position: relative;
-    overflow: hidden;
-    transform: translateZ(0);
-}
-
-/* Ripple effect on touch */
-.touch-feedback::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(139, 120, 93, 0.15);
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: width var(--transition-medium) var(--ease-out-back),
-                height var(--transition-medium) var(--ease-out-back),
-                opacity var(--transition-medium) var(--ease-gentle);
-    pointer-events: none;
-}
-
-.touch-feedback:active::before {
-    width: 200px;
-    height: 200px;
-    opacity: 1;
-}
-
-/* Subtle scale feedback on tap */
-.touch-scale:active {
-    transform: scale(0.98);
-    transition: transform var(--transition-instant) var(--ease-premium);
-}
-
-/* ========================================
-   LOADING SPINNER - ELEGANT
-   ======================================== */
-
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--border-color);
-    border-top-color: var(--accent-color);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-.spinner-small {
-    width: 24px;
-    height: 24px;
-    border-width: 2px;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Pulsing loader for subtle feedback */
-.pulse-loader {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--accent-color);
-    animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.5;
-        transform: scale(1.2);
-    }
-}
-
-/* ========================================
-   BUTTON HOVER MICRO-INTERACTIONS
-   ======================================== */
-
-/* Elegant lift on hover */
-.hover-lift {
-    cursor: pointer;
-    transition: transform var(--transition-normal) cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow var(--transition-normal) cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hover-lift:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(139, 120, 93, 0.15);
-}
-
-.hover-lift:active {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(139, 120, 93, 0.1);
-    transition-duration: 0.1s;
-}
-
-/* Subtle glow effect */
-.hover-glow {
-    position: relative;
-    cursor: pointer;
-    transition: box-shadow var(--transition-normal) cubic-bezier(0.33, 0, 0.2, 1);
-}
-
-.hover-glow:hover {
-    box-shadow: 0 0 24px rgba(139, 120, 93, 0.35),
-                0 0 48px rgba(139, 120, 93, 0.15);
-}
-
-.hover-glow:active {
-    box-shadow: 0 0 16px rgba(139, 120, 93, 0.25);
-    transition-duration: 0.1s;
-}
-
-/* ========================================
-   SCROLL PROGRESS INDICATOR
-   Premium Reading Progress Bar
-   ======================================== */
-
-.scroll-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background: linear-gradient(
-        90deg,
-        var(--accent-color) 0%,
-        var(--accent-gold) 50%,
-        var(--accent-champagne) 100%
-    );
-    z-index: calc(var(--z-header) + 1);
-    transition: width var(--transition-instant) linear;
-}
-
-/* ========================================
-   SECTION DIVIDERS - ELEGANT FADE
-   ======================================== */
-
-.section-divider {
-    width: 60px;
-    height: 1px;
-    margin: 3rem auto;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        var(--accent-color) 50%,
-        transparent 100%
-    );
-    opacity: 0.4;
-}
-
-/* ========================================
-   STAGGERED GRID ANIMATIONS
-   For gallery items and cards
-   ======================================== */
-
-.stagger-grid > * {
-    opacity: 0;
-    transform: translateY(30px) scale(0.96);
-    animation: fade-slide-up var(--transition-slow) cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.stagger-grid > *:nth-child(1) { animation-delay: 0ms; }
-.stagger-grid > *:nth-child(2) { animation-delay: 100ms; }
-.stagger-grid > *:nth-child(3) { animation-delay: 200ms; }
-.stagger-grid > *:nth-child(4) { animation-delay: 300ms; }
-.stagger-grid > *:nth-child(5) { animation-delay: 400ms; }
-.stagger-grid > *:nth-child(6) { animation-delay: 500ms; }
-.stagger-grid > *:nth-child(7) { animation-delay: 600ms; }
-.stagger-grid > *:nth-child(8) { animation-delay: 700ms; }
-.stagger-grid > *:nth-child(9) { animation-delay: 800ms; }
-
-@keyframes fade-slide-up {
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* ========================================
-   PREMIUM LINK ANIMATIONS
-   Elegant underline effects
-   ======================================== */
-
-/* Animated underline on hover */
-.link-underline {
-    position: relative;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.link-underline::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: currentColor;
-    transition: width var(--transition-normal) cubic-bezier(0.33, 0, 0.2, 1);
-}
-
-.link-underline:hover::after {
-    width: 100%;
-}
-
-/* Grow from center underline */
-.link-underline-center {
-    position: relative;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.link-underline-center::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    width: 0;
-    height: 1px;
-    background: currentColor;
-    transform: translateX(-50%);
-    transition: width var(--transition-normal) cubic-bezier(0.33, 0, 0.2, 1);
-}
-
-.link-underline-center:hover::after {
-    width: 100%;
-}
-
-/* Elegant fade underline */
-.link-fade-underline {
-    position: relative;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.link-fade-underline::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: currentColor;
-    opacity: 0;
-    transition: opacity var(--transition-normal) cubic-bezier(0.33, 0, 0.2, 1);
-}
-
-.link-fade-underline:hover::after {
-    opacity: 1;
-}
-
-/* ========================================
-   PAGE LOAD CHOREOGRAPHY
-   Sequential entrance animations
-   ======================================== */
-
-/* Header entrance */
-@keyframes header-entrance {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.page-header {
-    animation: header-entrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* Hero entrance */
-@keyframes hero-entrance {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.hero-section {
-    opacity: 0;
-    animation: hero-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-}
-
-/* Content entrance */
-@keyframes content-entrance {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.main-content {
-    opacity: 0;
-    animation: content-entrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
-}
-
-/* ========================================
-   PREMIUM CURSOR STATES
-   Intentional interaction cues
-   ======================================== */
-
-/* Interactive elements with pointer cursor */
-button,
-a,
-[role="button"],
-[role="link"],
-input[type="submit"],
-input[type="button"],
-.clickable,
-.gallery-item,
-.filter-btn,
-.featured-item,
-.carousel-prev,
-.carousel-next,
-.carousel-indicator {
-    cursor: pointer;
-}
-
-/* Disabled state cursor */
-button:disabled,
-[aria-disabled="true"] {
-    cursor: not-allowed;
-}
-
-/* Text selection cursor for text fields */
-input[type="text"],
-input[type="email"],
-input[type="search"],
-textarea {
-    cursor: text;
-}
-
-/* Grab cursor for draggable elements */
-.draggable {
-    cursor: grab;
-}
-
-.draggable:active {
-    cursor: grabbing;
-}
-
-/* Zoom cursor for zoomable images */
-.zoomable {
-    cursor: zoom-in;
-}
-
-.zoomable.zoomed {
-    cursor: zoom-out;
-}
-
-/* ========================================
-   REDUCED MOTION PREFERENCES
-   Respect user accessibility settings
-   ======================================== */
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-
-    .animate-on-scroll,
-    .animate-fade,
-    .animate-scale,
-    .stagger-grid > *,
-    .page-header,
-    .hero-section,
-    .main-content {
-        opacity: 1 !important;
-        transform: none !important;
-        animation: none !important;
-    }
-
-}
 /* ========================================
    03-HEADER.CSS - COMPLETE REWRITE
    ========================================
@@ -1528,21 +969,24 @@ body.menu-open .mobile-page-title {
     display: none;
 }
 
-/* Language Toggle - Elegant minimal design */
+/* Language Toggle - Elegant minimal design with WCAG AA touch targets */
 .lang-toggle {
     background: transparent;
     border: 1px solid var(--border-color);
     cursor: pointer;
-    padding: 0.5rem 0.75rem;
+    padding: 0.625rem 0.875rem; /* Increased for 44x44px minimum */
+    min-width: 44px;
+    min-height: 44px;
     font-family: 'Inter', sans-serif;
     font-size: 0.75rem;
     font-weight: 500;
     color: var(--secondary-text);
-    border-radius: 20px;
+    border-radius: 22px; /* Adjusted for new padding */
     transition: all var(--transition-normal) var(--ease-gentle),
                 transform var(--transition-fast) var(--ease-out-back);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
 }
 
@@ -1586,14 +1030,14 @@ body.menu-open .mobile-page-title {
     outline: none;
 }
 
-/* Theme Toggle */
+/* Theme Toggle with WCAG AA touch targets */
 .theme-toggle {
     background: transparent;
     border: none;
     cursor: pointer;
-    width: 36px;
-    height: 36px;
-    padding: 4px;
+    width: 44px; /* WCAG 2.1 AA minimum */
+    height: 44px; /* WCAG 2.1 AA minimum */
+    padding: 10px; /* Adjusted for larger button */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1816,6 +1260,90 @@ body.menu-open .mobile-page-title {
 .menu-hover-bg {
     display: none;
 }
+
+/* ========================================
+   MOBILE BOTTOM TAB BAR
+   iOS-style fixed bottom navigation
+   ======================================== */
+.mobile-tab-bar {
+    display: none; /* Hidden by default, shown on mobile */
+}
+
+@media (max-width: 768px) {
+    .mobile-tab-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: var(--header-background);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 100;
+        padding-bottom: env(safe-area-inset-bottom);
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04),
+                    0 -1px 2px rgba(0, 0, 0, 0.02);
+        transition: transform 0.3s var(--ease-gentle),
+                    background-color 0.4s var(--ease-gentle),
+                    border-color 0.4s var(--ease-gentle);
+    }
+
+    .tab-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        text-decoration: none;
+        color: var(--secondary-text);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        padding: 8px 12px;
+        min-width: 64px;
+        min-height: 44px; /* WCAG 2.1 AA touch target */
+        border-radius: 8px;
+        transition: color 0.2s ease,
+                    background-color 0.2s ease,
+                    transform 0.2s var(--ease-out-back);
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .tab-item svg {
+        width: 24px;
+        height: 24px;
+        stroke-width: 2;
+        transition: transform 0.2s var(--ease-out-back);
+    }
+
+    .tab-item.active {
+        color: var(--accent-color);
+    }
+
+    .tab-item.active svg {
+        transform: scale(1.1);
+    }
+
+    .tab-item:active {
+        transform: scale(0.95);
+        background-color: rgba(var(--text-rgb), 0.05);
+    }
+
+    /* Add padding to main content to account for tab bar */
+    body {
+        padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Ensure footer doesn't overlap tab bar */
+    .site-footer {
+        margin-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    }
+}
 /**
  * Gallery Component Styles
  *
@@ -1876,6 +1404,162 @@ body.menu-open .mobile-page-title {
     color: var(--secondary-text);
     margin: 0;
     letter-spacing: 0.02em;
+}
+
+/* ========================================
+   INQUIRY FAB (FLOATING ACTION BUTTON)
+   Mobile-only quick access to favorites and contact
+   ======================================== */
+
+.inquiry-fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 1.5rem;
+    z-index: var(--z-fixed, 100);
+    display: none; /* Hidden by default, shown on mobile via media query */
+}
+
+@media (max-width: 768px) {
+    .inquiry-fab {
+        display: block;
+    }
+}
+
+.inquiry-fab-main {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(139, 120, 93, 0.3),
+                0 8px 24px rgba(139, 120, 93, 0.2);
+    transition: all 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+    z-index: 2;
+}
+
+.inquiry-fab-main svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.inquiry-fab.expanded .inquiry-fab-main {
+    background: var(--text-color);
+    transform: scale(1.05);
+}
+
+.inquiry-fab.expanded .inquiry-fab-main svg {
+    transform: rotate(45deg);
+}
+
+.inquiry-fab-main:active {
+    transform: scale(0.95);
+}
+
+.inquiry-fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e74c3c;
+    color: white;
+    border-radius: 10px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+    border: 2px solid var(--background-color);
+    z-index: 3;
+}
+
+.inquiry-fab-options {
+    position: absolute;
+    bottom: 72px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px) scale(0.9);
+    transition: all 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+    z-index: 1;
+}
+
+.inquiry-fab.expanded .inquiry-fab-options {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.inquiry-fab-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: var(--card-background);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 28px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+                0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+    min-height: 44px;
+}
+
+.inquiry-fab-option:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    transform: translateX(-4px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(139, 120, 93, 0.25),
+                0 3px 8px rgba(139, 120, 93, 0.15);
+}
+
+.inquiry-fab-option:active {
+    transform: translateX(-2px) scale(0.98);
+}
+
+.inquiry-fab-option svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Staggered animation for options */
+.inquiry-fab.expanded .inquiry-fab-option:nth-child(1) {
+    transition-delay: 0.05s;
+}
+
+.inquiry-fab.expanded .inquiry-fab-option:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .inquiry-fab-option {
+    background: rgba(50, 50, 50, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .inquiry-fab-option:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
 }
 
 /* ========================================
@@ -2003,6 +1687,12 @@ body.menu-open .mobile-page-title {
    SKELETON LOADING STATES
    ======================================== */
 
+/* Wave pattern shimmer animation for better visual feedback */
+@keyframes skeleton-wave {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
 @keyframes skeleton-loading {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
@@ -2018,14 +1708,22 @@ body.menu-open .mobile-page-title {
         0 8px 16px rgba(0, 0, 0, 0.04),
         0 16px 32px rgba(0, 0, 0, 0.05);
     min-height: 320px;
+    aspect-ratio: 4/5; /* Match artwork card aspect ratio */
 }
 
 .skeleton-image {
     width: 100%;
     height: 280px;
-    background: linear-gradient(90deg, var(--card-background) 25%, var(--border-color) 50%, var(--card-background) 75%);
+    /* Wave pattern shimmer animation */
+    background: linear-gradient(
+        90deg,
+        var(--card-background) 0%,
+        var(--border-color) 20%,
+        var(--card-background) 40%,
+        var(--card-background) 100%
+    );
     background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite ease-in-out;
+    animation: skeleton-wave 1.5s ease-in-out infinite;
 }
 
 .skeleton-info {
@@ -3745,10 +3443,54 @@ body.menu-open .mobile-page-title {
         right: 0;
         top: 0;
         height: 100%;
-        width: 48px;
-        background: linear-gradient(to right, transparent, var(--background-color));
+        width: 64px;
+        background: linear-gradient(to right, transparent 0%, var(--background-color) 75%);
         pointer-events: none;
-        opacity: 0.95;
+        opacity: 1;
+        z-index: 2;
+    }
+
+    /* Filter scroll hint - shows on first visit */
+    .gallery-filter-scroll-hint {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--accent-color);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        opacity: 0.85;
+        z-index: 3;
+        animation: filterScrollHint 2s ease-in-out infinite;
+        transition: opacity 0.3s ease;
+    }
+
+    .gallery-filter-scroll-hint.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .gallery-filter-scroll-hint svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Bouncing arrow animation for scroll hint */
+    @keyframes filterScrollHint {
+        0%, 100% {
+            transform: translateY(-50%) translateX(0);
+            opacity: 0.7;
+        }
+        50% {
+            transform: translateY(-50%) translateX(6px);
+            opacity: 1;
+        }
     }
 
     .gallery-filter-buttons {
@@ -4489,6 +4231,71 @@ body.menu-open .mobile-page-title {
         letter-spacing: 1px;
         z-index: 10;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Progress indicator - "Artwork X of Y" */
+    .gallery-infinite-progress {
+        position: fixed;
+        top: calc(var(--header-height, 48px) + 12px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        z-index: 150;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        opacity: 0.9;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .gallery-infinite-progress-current {
+        font-weight: 600;
+        color: var(--accent-color, #8b785d);
+    }
+
+    /* Back to Grid View button */
+    .gallery-infinite-back {
+        position: fixed;
+        top: calc(var(--header-height, 48px) + 12px);
+        left: 12px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 150;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s var(--ease-spring, cubic-bezier(0.16, 1, 0.3, 1));
+    }
+
+    .gallery-infinite-back:active {
+        transform: scale(0.95);
+        background: rgba(0, 0, 0, 0.85);
+    }
+
+    .gallery-infinite-back svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .gallery-infinite-back:focus-visible {
+        outline: 2px solid white;
+        outline-offset: 2px;
     }
 
     /* Respect reduced motion */
@@ -5553,7 +5360,7 @@ main {
     .hero-fullscreen {
         height: 100vh;
         height: calc(100vh - env(safe-area-inset-bottom, 0px));
-        min-height: 500px;
+        min-height: 85vh; /* Reduced from 100vh to hint at content below */
         max-height: none;
         display: flex !important;
         align-items: center !important;
@@ -5648,6 +5455,18 @@ main {
         font-size: 0.75rem;
         left: 50%;
         transform: translateX(-50%);
+    }
+}
+
+/* Very small screens - 100% wide buttons */
+@media (max-width: 400px) {
+    .hero-cta .btn-primary-large,
+    .hero-cta .btn-secondary-large,
+    .hero-cta > a {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
 }
 
@@ -6044,7 +5863,7 @@ main {
   }
 }
 
-/* Mobile: 1 item per row */
+/* Mobile: 1.15 items per row with peek effect */
 @media (max-width: 768px) {
   .featured-works {
     padding: 2rem 1rem;
@@ -6076,16 +5895,16 @@ main {
 
   .carousel {
     width: 100%;
-    overflow: hidden;
+    overflow: visible; /* Allow peek of next item */
   }
 
   .carousel-track {
-    gap: 0;
+    gap: 1rem;
     padding: 0;
   }
 
   #featured-carousel .carousel-item {
-    flex: 0 0 100%;
+    flex: 0 0 calc(100% - 3rem); /* Show 85% + 15% peek */
     padding: 0 0.5rem;
     box-sizing: border-box;
     /* Reset to single-item mode: hide by default */
@@ -6099,6 +5918,13 @@ main {
     opacity: 1;
     display: block;
     transform: scale(1);
+  }
+
+  /* Show next item partially */
+  #featured-carousel .carousel-item.active + .carousel-item {
+    display: block;
+    opacity: 0.5;
+    transform: scale(0.95);
   }
 
   #featured-carousel .featured-item {
@@ -8068,102 +7894,5 @@ section h2::after {
 
   .desktop-only {
     display: none !important;
-  }
-}
-/**
- * Mobile Gallery Overrides
- * Loaded LAST to override all conflicting styles
- * Ensures proper mobile gallery display
- */
-
-@media (max-width: 768px) {
-  /* Gallery Main: Compact top padding for more artwork visibility */
-  .gallery-main {
-    padding: 1rem 0 3rem !important;
-  }
-
-  /* Gallery Header: Hide on mobile - nav already shows page title */
-  .gallery-header {
-    display: none !important;
-  }
-
-  /* Gallery Filter: Tighter spacing */
-  .gallery-filter {
-    margin-bottom: 1rem !important;
-  }
-
-  /* Gallery Grid: Force flex column layout */
-  .gallery-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    grid-template-columns: unset !important;
-    gap: 1.5rem !important;
-    padding: 1rem !important;
-  }
-
-  /* Gallery Item: Full width with proper aspect ratio */
-  .gallery-item {
-    width: 100% !important;
-    max-width: 100% !important;
-    aspect-ratio: 4/5 !important;
-    overflow: hidden !important;
-    border-radius: 12px !important;
-
-    /* Override animations - ensure immediate visibility */
-    opacity: 1 !important;
-    transform: none !important;
-    animation: none !important;
-  }
-
-  /* Gallery Item Image: Proper fill with object-fit */
-  .gallery-item img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
-    display: block !important;
-  }
-
-  /* Gallery Item Info: Enhanced readability with stronger contrast */
-  .gallery-item-info {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    position: absolute !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    padding: 1rem !important;
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.92) 0%,
-      rgba(0, 0, 0, 0.75) 40%,
-      rgba(0, 0, 0, 0.4) 70%,
-      transparent 100%
-    ) !important;
-    color: white !important;
-    transform: none !important;
-  }
-
-  /* Gallery Item Title - Enhanced shadow for WCAG contrast */
-  .gallery-item-info h3 {
-    font-size: 1.125rem !important;
-    font-weight: 600 !important;
-    margin: 0 0 0.25rem 0 !important;
-    color: white !important;
-    text-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.8),
-      0 1px 3px rgba(0, 0, 0, 0.9) !important;
-  }
-
-  /* Gallery Item Metadata - Enhanced shadow for WCAG contrast */
-  .gallery-item-info p {
-    font-size: 0.875rem !important;
-    margin: 0 !important;
-    opacity: 0.95 !important;
-    color: rgba(255, 255, 255, 0.95) !important;
-    text-shadow:
-      0 1px 6px rgba(0, 0, 0, 0.8),
-      0 1px 2px rgba(0, 0, 0, 0.9) !important;
   }
 }
