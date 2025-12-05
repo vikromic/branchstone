@@ -698,8 +698,8 @@ export class InfiniteGallery {
    */
   handleTouchStart(e) {
     if (!this.state.zoomed) {
-return;
-}
+      return;
+    }
 
     if (e.touches.length === 1) {
       this.state.isPanning = true;
@@ -722,8 +722,8 @@ return;
    */
   handlePan(e) {
     if (!this.state.zoomed || !this.state.currentZoomedImg) {
-return;
-}
+      return;
+    }
 
     e.preventDefault();
 
