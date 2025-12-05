@@ -4946,18 +4946,13 @@ main {
         max-width: 100%;
         width: 100%;
         text-align: center !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
+        display: block !important;
     }
 
     .hero-title {
         text-align: center !important;
+        display: block !important;
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
 
     .hero-name {
@@ -4965,7 +4960,7 @@ main {
         letter-spacing: 0.3em;
         margin-bottom: 0.5rem;
         text-align: center !important;
-        display: block;
+        display: block !important;
         width: 100%;
     }
 
@@ -4974,7 +4969,7 @@ main {
         letter-spacing: 0.15em;
         padding-bottom: 1.5rem;
         text-align: center !important;
-        display: block;
+        display: block !important;
         width: 100%;
     }
 
@@ -4984,6 +4979,7 @@ main {
         max-width: 90%;
         line-height: 1.6;
         text-align: center !important;
+        display: block !important;
         width: 100%;
     }
 
@@ -4995,22 +4991,19 @@ main {
         gap: 0.875rem;
         width: 100%;
         margin-top: 2rem;
-        margin-left: auto;
-        margin-right: auto;
     }
 
     .hero-cta a,
     .hero-cta .btn-primary,
     .hero-cta .btn-secondary {
-        width: auto;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
         min-width: 220px;
         max-width: 280px;
         padding: 1rem 2rem;
         text-align: center !important;
         font-size: 0.875rem;
-        display: inline-flex;
-        justify-content: center;
-        margin: 0 auto;
     }
 
     .scroll-indicator {
