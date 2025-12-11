@@ -1,251 +1,908 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Commission a custom artwork from Viktoria Branchstone. Mixed media art created with natural materials, tailored to your vision.">
-    <meta name="keywords" content="art commission, custom artwork, mixed media commission, personalized art, bespoke artwork">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Commission custom artwork from Viktoriia Branchstone. Bespoke creations crafted with premium natural materials.">
+  <meta name="keywords" content="art commissions, custom artwork, bespoke art, Branchstone, Viktoriia">
+  <title>Commissions | Branchstone Art</title>
 
-    <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="Commissions - Viktoria Branchstone">
-    <meta property="og:description" content="Commission a custom mixed media artwork tailored to your vision">
-    <meta property="og:image" content="https://branchstone.art/img/artist.jpeg">
-    <meta property="og:url" content="https://branchstone.art/commissions.html">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Commissions - Viktoria Branchstone">
-    <meta name="twitter:description" content="Commission a custom mixed media artwork tailored to your vision">
-    <meta name="twitter:image" content="https://branchstone.art/img/artist.jpeg">
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <link rel="canonical" href="https://branchstone.art/commissions.html">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <meta name="theme-color" content="#F8F8F8" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#2B2D30" media="(prefers-color-scheme: dark)">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="site.webmanifest">
 
-    <!-- Security Headers - Note: frame-ancestors and X-Frame-Options only work via HTTP headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://formspree.io; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io;">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-
-    <title>Commissions - Viktoria Branchstone</title>
-
-    <!-- Preload critical assets -->
-    <link rel="preload" href="css/bundle.css?v=1764975569" as="style">
-    <link rel="modulepreload" href="js/app.js">
-    <link rel="modulepreload" href="js/config.js">
-    <link rel="stylesheet" href="css/bundle.css?v=1764975569">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-
-    <!-- Initialize theme as early as possible to avoid flickering -->
-    <script src="js/theme-init.js"></script>
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/typography.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/mobile-ux-improvements.css">
+  <link rel="stylesheet" href="css/mobile-gallery-improvements.css">
 </head>
+<body data-theme="light">
 
-<body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    <header>
-        <nav>
-            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <a href="index.html" class="header-logo" aria-label="Branchstone Art Home">
-                <img src="img/logo.png?v=1764448781" alt="Branchstone Art" class="logo-image">
-            </a>
-            <span class="mobile-page-title" id="mobile-page-title" data-translate="nav.commissions">Commissions</span>
-            <ul id="mobile-nav-menu">
-                <li><a href="index.html" data-translate="nav.home">Home</a></li>
-                <li><a href="gallery.html" data-translate="nav.gallery">Gallery</a></li>
-                <li><a href="about.html" data-translate="nav.about">About</a></li>
-                <li><a href="commissions.html" class="active" data-translate="nav.commissions">Commissions</a></li>
-                <li><a href="contact.html" data-translate="nav.contact">Contact</a></li>
-            </ul>
-            <div class="header-controls">
-                <button class="lang-toggle" id="lang-toggle" aria-label="Toggle language">
-                    <span class="lang-option active-lang" data-lang="en">EN</span>
-                    <span class="lang-divider"></span>
-                    <span class="lang-option" data-lang="ua">UA</span>
-                </button>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
-                    </svg>
-                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-                    </svg>
-                </button>
-            </div>
-        </nav>
-    </header>
-    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
 
-    <!-- Mobile Bottom Tab Navigation -->
-    <nav class="mobile-tab-bar" aria-label="Mobile navigation">
-        <a href="gallery.html" class="tab-item" data-page="gallery">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <line x1="9" y1="3" x2="9" y2="21"/>
-                <line x1="15" y1="3" x2="15" y2="21"/>
-                <line x1="3" y1="9" x2="21" y2="9"/>
-                <line x1="3" y1="15" x2="21" y2="15"/>
-            </svg>
-            <span data-translate="nav.gallery">Gallery</span>
-        </a>
-        <a href="index.html" class="tab-item" data-page="home">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            <span data-translate="nav.home">Home</span>
-        </a>
-        <a href="contact.html" class="tab-item" data-page="contact">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
-            <span data-translate="nav.contact">Contact</span>
-        </a>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__container">
+      <a href="index.html" class="header__logo" aria-label="Branchstone Home">
+        BRANCHSTONE
+      </a>
+
+      <nav class="header__nav" aria-label="Main navigation">
+        <ul class="header__nav-list">
+          <li><a href="index.html" class="header__nav-link">Home</a></li>
+          <li><a href="gallery.html" class="header__nav-link">Gallery</a></li>
+          <li><a href="about.html" class="header__nav-link">About</a></li>
+          <li><a href="commissions.html" class="header__nav-link header__nav-link--active" aria-current="page">Commissions</a></li>
+          <li><a href="contact.html" class="header__nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="header__favorites" aria-label="View favorites" type="button">
+        <svg class="header__favorites-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span class="header__favorites-count">0</span>
+      </button>
+
+
+      <button class="header__theme-toggle" aria-label="Toggle theme" type="button">
+        <svg class="header__theme-icon header__theme-icon--sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="header__theme-icon header__theme-icon--moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <button class="header__menu-toggle" aria-label="Toggle menu" aria-expanded="false" type="button">
+        <span class="header__menu-icon"></span>
+        <span class="header__menu-icon"></span>
+        <span class="header__menu-icon"></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <div class="mobile-menu__backdrop"></div>
+    <nav class="mobile-menu__nav" aria-label="Mobile navigation">
+      <ul class="mobile-menu__list">
+        <li><a href="index.html" class="mobile-menu__link">Home</a></li>
+        <li><a href="gallery.html" class="mobile-menu__link">Gallery</a></li>
+        <li><a href="about.html" class="mobile-menu__link">About</a></li>
+        <li><a href="commissions.html" class="mobile-menu__link">Commissions</a></li>
+        <li><a href="contact.html" class="mobile-menu__link">Contact</a></li>
+      </ul>
     </nav>
+  </div>
 
-    <main class="commissions-main" id="main-content">
-        <div class="commissions-container">
-            <div class="commissions-hero">
-                <h1 data-translate="commissions.title">Commission a Custom Artwork</h1>
-                <p class="commissions-intro" data-translate="commissions.intro">I love working on commissions — it's a chance to create something deeply personal, whether it's tied to a memory, a place, or simply a feeling you want to keep close.</p>
-            </div>
+  <!-- Favorites Panel -->
+  <div class="favorites-backdrop" role="presentation" hidden></div>
 
-            <div class="commissions-content">
-                <section class="commission-section">
-                    <h2 data-translate="commissions.whatsPossible">What's Possible</h2>
-                    <p data-translate="commissions.whatsPossibleText">I work in an intuitive, abstract style using natural textures like bark, sand, dried leaves, or lichen. You're welcome to suggest a color palette, a mood, or a story you'd like the piece to reflect.</p>
-                    <p data-translate="commissions.sizeInfo">Any size or shape is possible — from tiny keepsakes to large wall pieces. Each artwork is made with acrylic and cast materials on canvas, board, or another surface that fits your vision.</p>
-                </section>
+  <aside
+    class="favorites-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="favorites-title"
+    aria-describedby="favorites-description"
+    hidden>
 
-                <section class="commission-section">
-                    <h2 data-translate="commissions.whatToExpect">What to Expect</h2>
-                    <p data-translate="commissions.whatToExpectText">After we chat and agree on the direction, I'll share a sketch or mockup in 1–2 weeks. Once you love it, I'll need another 1–3 weeks to bring the piece to life, frame it, and prepare it for shipping. If you're nearby, we can talk about pickup or delivery too.</p>
-                </section>
+    <!-- Header -->
+    <header class="favorites-panel__header">
+      <div class="favorites-panel__title-group">
+        <h2 id="favorites-title" class="favorites-panel__title">
+          Your Favorites
+        </h2>
+        <p id="favorites-description" class="favorites-panel__count">
+          <span data-count>0</span> pieces saved
+        </p>
+      </div>
+      <button
+        class="favorites-panel__close"
+        aria-label="Close favorites panel"
+        type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </header>
 
-                <section class="commission-section">
-                    <h2 data-translate="commissions.pricingPayment">Pricing & Payment</h2>
-                    <p data-translate="commissions.pricingText">Each piece is unique, so I'll share a custom quote after we talk about size, materials, and time.</p>
-                    <p data-translate="commissions.depositInfo">To begin the process, I ask for a <strong>$50 deposit</strong> — this helps cover the prep and design stage and goes toward the final cost. The rest is due once your piece is finished and ready to send.</p>
-                </section>
+    <!-- Content Area -->
+    <div class="favorites-panel__content">
 
-                <section class="commission-section">
-                    <h2 data-translate="commissions.aNote">Just a Note</h2>
-                    <p data-translate="commissions.aNotText">While I don't do portraits or realistic work, I'm always open to weaving in your story, symbols, or elements that are meaningful to you — within my natural, abstract style. If you're unsure whether your idea fits, just reach out — we can always talk it through.</p>
-                </section>
+      <!-- Favorites List (populated by JavaScript) -->
+      <ul class="favorites-list" role="list">
+        <!-- Items will be inserted here by JavaScript -->
+      </ul>
 
-                <section class="commission-section commission-cta">
-                    <h2 data-translate="commissions.howToBegin">How to Begin</h2>
-                    <p data-translate="commissions.howToBeginText">Fill out the form below or email me directly at <a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a>. I'd love to hear what you're dreaming of.</p>
-                </section>
-            </div>
+      <!-- Empty State -->
+      <div class="favorites-empty">
+        <svg class="favorites-empty__icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <h3 class="favorites-empty__title">No Favorites Yet</h3>
+        <p class="favorites-empty__description">
+          Click the heart icon on artworks to save them here
+        </p>
+        <a href="gallery.html" class="btn btn--primary">
+          Explore Gallery
+        </a>
+      </div>
 
-            <div class="commission-form-container">
-                <h2 data-translate="commissions.formTitle">Start Your Commission</h2>
-                <form action="https://formspree.io/f/xgvbwebq" method="POST" id="commission-form" class="commission-form" novalidate>
-                    <input type="hidden" name="_subject" value="New Commission Inquiry">
+    </div>
 
-                    <div class="form-group">
-                        <label for="name" data-translate="contact.nameLabel">Name<span class="required-indicator" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                        <input type="text" id="name" name="name" placeholder="Your full name" data-translate-placeholder="contact.namePlaceholder" autocomplete="name" required aria-required="true" aria-describedby="name-error">
-                        <span class="error-message" id="name-error" role="alert" aria-live="assertive" aria-atomic="true"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email" data-translate="contact.emailLabel">Email<span class="required-indicator" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                        <input type="email" id="email" name="email" placeholder="your@email.com" data-translate-placeholder="contact.emailPlaceholder" autocomplete="email" required aria-required="true" aria-describedby="email-error">
-                        <span class="error-message" id="email-error" role="alert" aria-live="assertive" aria-atomic="true"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="size" data-translate="commissions.sizeLabel">Approximate Size</label>
-                        <input type="text" id="size" name="size" placeholder="e.g., 21 x 16 inches, small tabletop piece" data-translate-placeholder="commissions.sizePlaceholder" autocomplete="off">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="colors" data-translate="commissions.colorsLabel">Color Palette or Mood</label>
-                        <input type="text" id="colors" name="colors" placeholder="e.g., earth tones, calm blues, autumn warmth" data-translate-placeholder="commissions.colorsPlaceholder" autocomplete="off">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="vision" data-translate="commissions.visionLabel">Your Vision<span class="required-indicator" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
-                        <textarea id="vision" name="vision" rows="6" placeholder="Tell me about your idea — any memories, stories, or feelings you'd like the piece to capture..." data-translate-placeholder="commissions.visionPlaceholder" autocomplete="off" required aria-required="true" aria-describedby="vision-error"></textarea>
-                        <span class="error-message" id="vision-error" role="alert" aria-live="assertive" aria-atomic="true"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="timeline" data-translate="commissions.timelineLabel">Timeline</label>
-                        <input type="text" id="timeline" name="timeline" placeholder="e.g., no rush, needed by December" data-translate-placeholder="commissions.timelinePlaceholder" autocomplete="off">
-                    </div>
-
-                    <!-- Honeypot for spam protection -->
-                    <input type="text" name="_gotcha" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
-
-                    <button type="submit" class="submit-btn" data-translate="commissions.submit">Send Commission Request</button>
-                    <p class="form-helper-text" data-translate="commissions.formHelper">I typically respond within 24–48 hours to discuss your vision and provide a quote.</p>
-                </form>
-                <div class="form-message" id="form-message" role="status" aria-live="polite"></div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-section footer-brand">
-                <h3>Viktoria Branchstone</h3>
-                <p data-translate="footer.tagline">Mixed media art inspired by natural textures and quiet resilience</p>
-            </div>
-
-            <div class="footer-section footer-nav">
-                <h4 data-translate="footer.navigate">Navigate</h4>
-                <ul>
-                    <li><a href="index.html" data-translate="nav.home">Home</a></li>
-                    <li><a href="gallery.html" data-translate="nav.gallery">Gallery</a></li>
-                    <li><a href="about.html" data-translate="nav.about">About</a></li>
-                    <li><a href="commissions.html" data-translate="nav.commissions">Commissions</a></li>
-                    <li><a href="contact.html" data-translate="nav.contact">Contact</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section footer-connect">
-                <h4 data-translate="footer.connect">Connect</h4>
-                <a href="mailto:thebranchstone@gmail.com" class="footer-social-link footer-email-link" aria-label="Email Viktoria">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="4" width="20" height="16" rx="2"/>
-                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-                    </svg>
-                    <span>thebranchstone@gmail.com</span>
-                </a>
-                <a href="https://www.instagram.com/branchstone.art" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Follow on Instagram">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
-                    <span data-translate="footer.followText">Follow for studio updates @branchstone.art</span>
-                </a>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p data-translate="footer.copyright">&copy; 2024 Branchstone Art. All rights reserved.</p>
-        </div>
+    <!-- Footer / Actions -->
+    <footer class="favorites-panel__footer">
+      <button
+        class="btn btn--secondary btn--block favorites-panel__clear"
+        type="button">
+        Clear All
+      </button>
+      <button
+        class="btn btn--primary btn--block favorites-panel__inquire"
+        type="button">
+        Inquire About <span data-selected-count>0</span> Piece<span data-plural>s</span>
+      </button>
     </footer>
 
-    <script type="module" src="js/i18n.js"></script>
-    <script type="module" src="js/app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(() => {});
-        }
-    </script>
-</body>
+  </aside>
 
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- HERO SECTION -->
+    <section class="hero hero-commissions">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">Commission Custom Art</h1>
+          <p class="hero-subtitle">Bespoke creations crafted exclusively for you, with premium natural materials and artistic vision</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section class="section section-process">
+      <div class="container">
+        <header class="section-header">
+          <h2 class="section-title">The Commission Process</h2>
+          <p class="section-description">From concept to completion, a collaborative journey to create your unique piece</p>
+        </header>
+
+        <div class="process-grid">
+          <div class="process-step">
+            <div class="process-number">1</div>
+            <div class="process-content">
+              <h3 class="process-title">Initial Consultation</h3>
+              <p class="process-description">We'll discuss your vision, preferred size, materials, and artistic direction to ensure your piece perfectly captures your intention.</p>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <div class="process-number">2</div>
+            <div class="process-content">
+              <h3 class="process-title">Concept Development</h3>
+              <p class="process-description">I'll create preliminary sketches and suggest material selections, working closely with you to refine the concept.</p>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <div class="process-number">3</div>
+            <div class="process-content">
+              <h3 class="process-title">Deposit Payment</h3>
+              <p class="process-description">A $50 deposit secures your commission slot and allows me to begin sourcing materials and preparing your piece.</p>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <div class="process-number">4</div>
+            <div class="process-content">
+              <h3 class="process-title">Creation</h3>
+              <p class="process-description">Over 4-8 weeks, I'll craft your piece with meticulous attention to detail, sharing progress photos along the way.</p>
+            </div>
+          </div>
+
+          <div class="process-step">
+            <div class="process-number">5</div>
+            <div class="process-content">
+              <h3 class="process-title">Delivery</h3>
+              <p class="process-description">Your completed artwork is carefully packaged with protective materials and shipped securely to your location.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section class="section section-pricing">
+      <div class="container">
+        <header class="section-header">
+          <h2 class="section-title">Pricing Guide</h2>
+          <p class="section-description">Investment tiers based on size and complexity</p>
+        </header>
+
+        <div class="pricing-grid">
+          <div class="pricing-card card">
+            <div class="pricing-header">
+              <h3 class="pricing-size">Small</h3>
+              <p class="pricing-dimensions">8" × 10"</p>
+            </div>
+            <div class="card-body">
+              <p class="pricing-price">Starting at <strong>$200</strong></p>
+              <ul class="pricing-features">
+                <li>Perfect for intimate spaces</li>
+                <li>Detailed craftsmanship</li>
+                <li>Premium natural materials</li>
+                <li>Certificate of authenticity</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="pricing-card card card-featured">
+            <div class="pricing-badge badge badge-primary">Most Popular</div>
+            <div class="pricing-header">
+              <h3 class="pricing-size">Medium</h3>
+              <p class="pricing-dimensions">16" × 20"</p>
+            </div>
+            <div class="card-body">
+              <p class="pricing-price">Starting at <strong>$400</strong></p>
+              <ul class="pricing-features">
+                <li>Ideal statement piece</li>
+                <li>Rich texture and depth</li>
+                <li>Premium natural materials</li>
+                <li>Certificate of authenticity</li>
+                <li>Progress documentation</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="pricing-card card">
+            <div class="pricing-header">
+              <h3 class="pricing-size">Large</h3>
+              <p class="pricing-dimensions">24" × 30"+</p>
+            </div>
+            <div class="card-body">
+              <p class="pricing-price">Starting at <strong>$700+</strong></p>
+              <ul class="pricing-features">
+                <li>Commanding focal point</li>
+                <li>Extraordinary detail</li>
+                <li>Premium natural materials</li>
+                <li>Certificate of authenticity</li>
+                <li>Full photo documentation</li>
+                <li>Custom size available</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="pricing-note">
+          <p><strong>Note:</strong> Final price depends on complexity, materials selected, and specific requirements. All commissions include consultation, custom design, and secure packaging.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT'S INCLUDED SECTION -->
+    <section class="section section-included">
+      <div class="container container-narrow">
+        <header class="section-header">
+          <h2 class="section-title">What's Included</h2>
+          <p class="section-description">Every commission comes with comprehensive service and care</p>
+        </header>
+
+        <div class="included-grid">
+          <div class="included-item">
+            <div class="included-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+            <h3 class="included-title">Consultation</h3>
+            <p class="included-description">In-depth discussion to understand your vision and preferences</p>
+          </div>
+
+          <div class="included-item">
+            <div class="included-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                <path d="M2 2l7.586 7.586"></path>
+                <circle cx="11" cy="11" r="2"></circle>
+              </svg>
+            </div>
+            <h3 class="included-title">Custom Design</h3>
+            <p class="included-description">Original artwork created specifically for you</p>
+          </div>
+
+          <div class="included-item">
+            <div class="included-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 6v6l4 2"></path>
+              </svg>
+            </div>
+            <h3 class="included-title">Premium Natural Materials</h3>
+            <p class="included-description">Carefully sourced, high-quality materials for lasting beauty</p>
+          </div>
+
+          <div class="included-item">
+            <div class="included-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <h3 class="included-title">Certificate of Authenticity</h3>
+            <p class="included-description">Signed documentation verifying your unique piece</p>
+          </div>
+
+          <div class="included-item">
+            <div class="included-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <path d="M9 3v18"></path>
+              </svg>
+            </div>
+            <h3 class="included-title">Secure Packaging</h3>
+            <p class="included-description">Professional packaging to protect your artwork during shipping</p>
+          </div>
+
+          <div class="included-item">
+            <div class="included-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </div>
+            <h3 class="included-title">Photo Documentation</h3>
+            <p class="included-description">Progress photos showing the creation of your artwork</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMISSION FORM SECTION -->
+    <section class="section section-form">
+      <div class="container container-narrow">
+        <header class="section-header">
+          <h2 class="section-title">Start Your Commission</h2>
+          <p class="section-description">Share your vision and let's create something extraordinary together</p>
+        </header>
+
+        <!-- Progress Indicator -->
+        <div class="wizard-progress" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4" aria-label="Commission form progress">
+          <div class="wizard-progress__track">
+            <div class="wizard-progress__bar" data-wizard-progress-bar></div>
+          </div>
+          <div class="wizard-progress__steps">
+            <div class="wizard-progress__step wizard-progress__step--active" data-step-indicator="1">
+              <span class="wizard-progress__step-number">1</span>
+              <span class="wizard-progress__step-label">Contact</span>
+            </div>
+            <div class="wizard-progress__step" data-step-indicator="2">
+              <span class="wizard-progress__step-number">2</span>
+              <span class="wizard-progress__step-label">Type</span>
+            </div>
+            <div class="wizard-progress__step" data-step-indicator="3">
+              <span class="wizard-progress__step-number">3</span>
+              <span class="wizard-progress__step-label">Details</span>
+            </div>
+            <div class="wizard-progress__step" data-step-indicator="4">
+              <span class="wizard-progress__step-number">4</span>
+              <span class="wizard-progress__step-label">Review</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Badge -->
+        <div class="wizard-trust-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>No obligation inquiry • Your information is secure • Response within 1-2 days</span>
+        </div>
+
+        <!-- Enhanced Trust Indicators -->
+        <div class="commission-form-trust">
+          <div class="commission-form-trust__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            <span><strong>Response within 24-48 hours</strong> to discuss your vision</span>
+          </div>
+          <div class="commission-form-trust__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span><strong>No obligation</strong> - Free consultation and quote</span>
+          </div>
+          <div class="commission-form-trust__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+            <span><strong>Secure & confidential</strong> - Your information is protected</span>
+          </div>
+          <div class="commission-form-trust__item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span><strong>Professional service</strong> - 12+ years experience, 50+ satisfied collectors</span>
+          </div>
+        </div>
+
+        <form class="form wizard-form" id="commissionForm" data-wizard-form novalidate>
+          <!-- Honeypot field for spam prevention -->
+          <input
+            type="text"
+            name="website"
+            class="form__honeypot"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+
+          <!-- STEP 1: Basic Contact Information -->
+          <div class="wizard-step wizard-step--active" data-wizard-step="1" data-step-name="contact">
+            <div class="wizard-step__content">
+              <h3 class="wizard-step__title">Let's start with the basics</h3>
+              <p class="wizard-step__description">How can I reach you about your commission?</p>
+
+              <div class="form__group">
+                <label for="commission-name" class="form__label">Name <span class="form__required">*</span></label>
+                <input
+                  type="text"
+                  id="commission-name"
+                  name="name"
+                  class="form__input"
+                  required
+                  placeholder="Your full name"
+                  aria-required="true"
+                  aria-invalid="false"
+                  aria-describedby="commission-name-error"
+                  autocomplete="name"
+                  data-wizard-field
+                >
+                <span id="commission-name-error" class="form__error" role="alert"></span>
+              </div>
+
+              <div class="form__group">
+                <label for="commission-email" class="form__label">Email <span class="form__required">*</span></label>
+                <input
+                  type="email"
+                  id="commission-email"
+                  name="email"
+                  class="form__input"
+                  required
+                  placeholder="your.email@example.com"
+                  aria-required="true"
+                  aria-invalid="false"
+                  aria-describedby="commission-email-error"
+                  autocomplete="email"
+                  data-wizard-field
+                >
+                <span id="commission-email-error" class="form__error" role="alert"></span>
+              </div>
+            </div>
+
+            <div class="wizard-step__actions">
+              <button type="button" class="btn btn-primary btn-lg btn-block" data-wizard-next>
+                Continue
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2: Commission Type Selection -->
+          <div class="wizard-step" data-wizard-step="2" data-step-name="type" hidden>
+            <div class="wizard-step__content">
+              <h3 class="wizard-step__title">What type of commission interests you?</h3>
+              <p class="wizard-step__description">Select the style that speaks to you</p>
+
+              <div class="commission-types" role="radiogroup" aria-label="Commission type selection">
+                <label class="commission-type-card">
+                  <input type="radio" name="commission-type" value="abstract" data-wizard-field>
+                  <div class="commission-type-card__content">
+                    <div class="commission-type-card__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                      </svg>
+                    </div>
+                    <h4 class="commission-type-card__title">Abstract Art</h4>
+                    <p class="commission-type-card__description">Expressive, non-representational pieces</p>
+                  </div>
+                </label>
+
+                <label class="commission-type-card">
+                  <input type="radio" name="commission-type" value="nature" data-wizard-field>
+                  <div class="commission-type-card__content">
+                    <div class="commission-type-card__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M17 8l4 4-4 4M3 12h18M3 12c0 4.97 4.03 9 9 9 1.74 0 3.35-.5 4.72-1.36"></path>
+                      </svg>
+                    </div>
+                    <h4 class="commission-type-card__title">Nature Inspired</h4>
+                    <p class="commission-type-card__description">Organic forms and natural textures</p>
+                  </div>
+                </label>
+
+                <label class="commission-type-card">
+                  <input type="radio" name="commission-type" value="mixed-media" data-wizard-field>
+                  <div class="commission-type-card__content">
+                    <div class="commission-type-card__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                      </svg>
+                    </div>
+                    <h4 class="commission-type-card__title">Mixed Media</h4>
+                    <p class="commission-type-card__description">Combined materials and techniques</p>
+                  </div>
+                </label>
+
+                <label class="commission-type-card">
+                  <input type="radio" name="commission-type" value="custom" data-wizard-field checked>
+                  <div class="commission-type-card__content">
+                    <div class="commission-type-card__icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                      </svg>
+                    </div>
+                    <h4 class="commission-type-card__title">Not Sure / Custom</h4>
+                    <p class="commission-type-card__description">Let's discuss your unique vision</p>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="wizard-step__actions">
+              <button type="button" class="btn btn-secondary btn-lg" data-wizard-prev>
+                Back
+              </button>
+              <button type="button" class="btn btn-primary btn-lg" data-wizard-next>
+                Continue
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Size & Budget Preferences -->
+          <div class="wizard-step" data-wizard-step="3" data-step-name="details" hidden>
+            <div class="wizard-step__content">
+              <h3 class="wizard-step__title">Almost there!</h3>
+              <p class="wizard-step__description">Help me understand your preferences</p>
+
+              <div class="form__group">
+                <label for="commission-size" class="form__label">Preferred Size</label>
+                <select
+                  id="commission-size"
+                  name="size"
+                  class="form__select"
+                  aria-invalid="false"
+                  aria-describedby="commission-size-error"
+                  data-wizard-field
+                >
+                  <option value="">Select a size</option>
+                  <option value="small">Small (8" × 10") - $200+</option>
+                  <option value="medium">Medium (16" × 20") - $400+</option>
+                  <option value="large">Large (24" × 30"+) - $700+</option>
+                  <option value="custom">Custom size</option>
+                </select>
+                <span id="commission-size-error" class="form__error" role="alert"></span>
+              </div>
+
+              <div class="form__group">
+                <label for="commission-budget" class="form__label">Budget Range</label>
+                <select
+                  id="commission-budget"
+                  name="budget"
+                  class="form__select"
+                  aria-invalid="false"
+                  aria-describedby="commission-budget-error"
+                  data-wizard-field
+                >
+                  <option value="">Select your budget range</option>
+                  <option value="200-400">$200 - $400</option>
+                  <option value="400-700">$400 - $700</option>
+                  <option value="700+">$700+</option>
+                  <option value="flexible">Flexible</option>
+                </select>
+                <span id="commission-budget-error" class="form__error" role="alert"></span>
+              </div>
+
+              <div class="form__group">
+                <label for="commission-colors" class="form__label">Color Preferences</label>
+                <input
+                  type="text"
+                  id="commission-colors"
+                  name="colors"
+                  class="form__input"
+                  placeholder="e.g., Earth tones, blues and greens, warm neutrals"
+                  aria-invalid="false"
+                  aria-describedby="commission-colors-error"
+                  data-wizard-field
+                >
+                <span class="form-help">What colors resonate with you?</span>
+                <span id="commission-colors-error" class="form__error" role="alert"></span>
+              </div>
+
+              <div class="form__group">
+                <label for="commission-timeline" class="form__label">Timeline Preference</label>
+                <input
+                  type="text"
+                  id="commission-timeline"
+                  name="timeline"
+                  class="form__input"
+                  placeholder="e.g., No rush, Gift for anniversary in 3 months"
+                  aria-invalid="false"
+                  aria-describedby="commission-timeline-error"
+                  data-wizard-field
+                >
+                <span class="form-help">Standard timeline is 4-8 weeks</span>
+                <span id="commission-timeline-error" class="form__error" role="alert"></span>
+              </div>
+            </div>
+
+            <div class="wizard-step__actions">
+              <button type="button" class="btn btn-secondary btn-lg" data-wizard-prev>
+                Back
+              </button>
+              <button type="button" class="btn btn-primary btn-lg" data-wizard-next>
+                Continue
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 4: Project Details & Review -->
+          <div class="wizard-step" data-wizard-step="4" data-step-name="project" hidden>
+            <div class="wizard-step__content">
+              <h3 class="wizard-step__title">Tell me about your vision</h3>
+              <p class="wizard-step__description">Share as much or as little as you'd like</p>
+
+              <div class="form__group">
+                <label for="commission-theme" class="form__label">Theme / Inspiration</label>
+                <textarea
+                  id="commission-theme"
+                  name="theme"
+                  class="form__textarea"
+                  rows="8"
+                  placeholder="Describe your vision, inspiration, or the feeling you want the artwork to evoke..."
+                  aria-invalid="false"
+                  aria-describedby="commission-theme-error"
+                  data-wizard-field
+                ></textarea>
+                <span class="form-help">Share your inspiration, mood, or any specific ideas you have in mind</span>
+                <span id="commission-theme-error" class="form__error" role="alert"></span>
+              </div>
+
+              <div class="form__group">
+                <label for="commission-referral" class="form__label">How did you hear about me?</label>
+                <input
+                  type="text"
+                  id="commission-referral"
+                  name="referral"
+                  class="form__input"
+                  placeholder="e.g., Instagram, Friend referral, Gallery show"
+                  aria-invalid="false"
+                  aria-describedby="commission-referral-error"
+                  data-wizard-field
+                >
+                <span id="commission-referral-error" class="form__error" role="alert"></span>
+              </div>
+
+              <!-- Summary Review -->
+              <div class="wizard-summary">
+                <h4 class="wizard-summary__title">Your Commission Request</h4>
+                <dl class="wizard-summary__list" data-wizard-summary>
+                  <!-- Summary items will be populated by JavaScript -->
+                </dl>
+              </div>
+            </div>
+
+            <div class="wizard-step__actions">
+              <button type="button" class="btn btn-secondary btn-lg" data-wizard-prev>
+                Back
+              </button>
+              <button type="submit" class="btn btn-primary btn-lg">
+                Submit Request
+              </button>
+            </div>
+          </div>
+
+          <!-- Success Message -->
+          <div
+            class="form__message--success wizard-success"
+            role="status"
+            aria-live="polite"
+            hidden
+          >
+            <div class="wizard-success__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <h3 class="wizard-success__title">Request Submitted!</h3>
+            <p class="wizard-success__message">
+              Thank you for your commission request! I'll respond within 1-2 business days to discuss your project in detail.
+            </p>
+            <button type="button" class="btn btn-secondary" data-wizard-reset>
+              Start Another Request
+            </button>
+          </div>
+
+          <!-- Error Message -->
+          <div
+            class="form__message--error"
+            role="alert"
+            aria-live="assertive"
+          >
+            <p>
+              Sorry, there was an error submitting your request. Please try again or contact me directly via email.
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="section section-faq">
+      <div class="container container-narrow">
+        <header class="section-header">
+          <h2 class="section-title">Frequently Asked Questions</h2>
+        </header>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <h3 class="faq-question">Is the deposit refundable?</h3>
+            <p class="faq-answer">The $50 deposit is non-refundable once work begins, as it covers initial material sourcing and design time. However, if you need to cancel before I start working on your piece, the deposit can be refunded or applied to a future commission.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3 class="faq-question">Can I see work in progress?</h3>
+            <p class="faq-answer">Absolutely! I share progress photos at key milestones throughout the creation process. You'll see your piece come to life and have opportunities to provide feedback during the journey.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3 class="faq-question">What if I don't like the result?</h3>
+            <p class="faq-answer">Your satisfaction is important to me. We'll have thorough discussions and concept approval before I begin. During creation, I share progress updates so you can provide input. If there are concerns, we'll work together to address them. Minor adjustments can often be made to ensure you love your piece.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3 class="faq-question">Do you take rush orders?</h3>
+            <p class="faq-answer">Rush orders may be possible depending on my current commission queue and the complexity of your project. Please mention your timeline when you inquire, and I'll do my best to accommodate special requests. Rush orders may include an additional fee to prioritize your project.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3 class="faq-question">What materials do you use?</h3>
+            <p class="faq-answer">I work primarily with premium natural materials including wood, stone, natural fibers, and eco-friendly mediums. Each piece is unique, and materials are selected based on your vision and the specific requirements of your commission.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3 class="faq-question">Do you ship internationally?</h3>
+            <p class="faq-answer">Yes, I ship worldwide! Shipping costs vary by location and size of the artwork. International shipping is carefully coordinated to ensure your piece arrives safely, and I provide tracking information for all shipments.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="section section-cta">
+      <div class="container">
+        <div class="cta-box">
+          <h2 class="cta-title">Ready to Begin?</h2>
+          <p class="cta-description">Let's create something beautiful together. Reach out to discuss your vision.</p>
+          <div class="cta-actions">
+            <a href="#commissionForm" class="btn btn-primary btn-lg">Request Commission</a>
+            <a href="contact.html" class="btn btn-secondary btn-lg">General Inquiry</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Newsletter Signup -->
+  <section class="newsletter" aria-labelledby="newsletter-heading">
+    <div class="newsletter__container">
+      <h2 id="newsletter-heading" class="newsletter__title">Stay Inspired</h2>
+      <p class="newsletter__text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
+      <form class="newsletter__form" id="newsletter-form" novalidate>
+        <input
+          type="email"
+          class="newsletter__input"
+          placeholder="Enter your email"
+          aria-label="Email address"
+          required
+        >
+        <button type="submit" class="newsletter__button">Subscribe</button>
+      </form>
+      <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
+      <p class="newsletter__privacy">We respect your privacy. <a href="privacy.html">Privacy Policy</a></p>
+    </div>
+  </section>
+
+  <!-- Back to Top Button -->
+  <button
+    class="back-to-top"
+    data-back-to-top
+    aria-label="Back to top"
+    aria-hidden="true"
+    type="button">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__container">
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo" aria-label="Branchstone Home">
+          BRANCHSTONE
+        </a>
+        <p class="footer__tagline">Art inspired by natural textures and quiet resilience</p>
+      </div>
+
+      <nav class="footer__nav" aria-label="Footer navigation">
+        <div class="footer__nav-column">
+          <h3 class="footer__nav-heading">Navigation</h3>
+          <ul class="footer__nav-list">
+            <li><a href="gallery.html" class="footer__nav-link">Gallery</a></li>
+            <li><a href="about.html" class="footer__nav-link">About</a></li>
+            <li><a href="commissions.html" class="footer__nav-link">Commissions</a></li>
+            <li><a href="contact.html" class="footer__nav-link">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__nav-column">
+          <h3 class="footer__nav-heading">Legal</h3>
+          <ul class="footer__nav-list">
+            <li><a href="privacy.html" class="footer__nav-link">Privacy Policy</a></li>
+            <li><a href="terms.html" class="footer__nav-link">Terms of Service</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="footer__social">
+        <h3 class="footer__social-heading">Connect</h3>
+        <ul class="footer__social-list">
+          <li>
+            <a href="https://instagram.com/branchstone.art" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Follow on Instagram">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+          </li>
+        </ul>
+        <p class="footer__email">
+          <a href="mailto:thebranchstone@gmail.com" class="footer__email-link">thebranchstone@gmail.com</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copyright">&copy; <span id="copyright-year">2025</span> Branchstone. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script defer src="js/main.js"></script>
+</body>
 </html>

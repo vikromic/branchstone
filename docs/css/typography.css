@@ -1,0 +1,490 @@
+/**
+ * Typography Styles - branchstone.art
+ *
+ * Contents:
+ * - Heading styles (h1-h6)
+ * - Body text & paragraphs
+ * - Links with animated underline
+ * - Blockquotes
+ * - Lists
+ * - Utility classes
+ */
+
+/* ========================================
+   HEADINGS
+   ======================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--font-light);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
+
+  /* Improve heading kerning */
+  text-rendering: optimizeLegibility;
+}
+
+h1 {
+  font-size: var(--text-display-lg);
+  margin-bottom: var(--space-8);
+}
+
+h2 {
+  font-size: var(--text-display-md);
+  margin-bottom: var(--space-6);
+}
+
+h3 {
+  font-size: var(--text-display-sm);
+  margin-bottom: var(--space-5);
+}
+
+h4 {
+  font-size: var(--text-3xl);
+  margin-bottom: var(--space-4);
+}
+
+h5 {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-4);
+  font-weight: var(--font-regular);
+}
+
+h6 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-3);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-normal);
+}
+
+/* Hero/Display headings */
+.heading-display {
+  font-size: var(--text-display-2xl);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tighter);
+  margin-bottom: var(--space-10);
+}
+
+/* ========================================
+   BODY TEXT & PARAGRAPHS
+   ======================================== */
+
+p {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--text-primary);
+  margin-bottom: var(--space-6);
+}
+
+/* Last paragraph in a container shouldn't have bottom margin */
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Lead/intro paragraph */
+.lead {
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+  font-weight: var(--font-regular);
+  margin-bottom: var(--space-8);
+}
+
+/* Small text */
+.text-small {
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+}
+
+/* Large text */
+.text-large {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+}
+
+/* ========================================
+   LINKS
+   ======================================== */
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  /* Enhanced with premium color transition */
+  transition: var(--transition-hover-color);
+  position: relative;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* Animated underline for text links */
+a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mobile-menu__link) {
+  background-image: linear-gradient(
+    to right,
+    var(--accent-primary) 0%,
+    var(--accent-primary) 100%
+  );
+  background-size: 0% 1px;
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--transition-smooth), color var(--transition-fast);
+}
+
+a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mobile-menu__link):hover,
+a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mobile-menu__link):focus {
+  background-size: 100% 1px;
+}
+
+/* External link indicator */
+a[target="_blank"]:not(.btn)::after {
+  content: '↗';
+  display: inline-block;
+  margin-left: var(--space-1);
+  font-size: 0.85em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+/* ========================================
+   BLOCKQUOTES
+   ======================================== */
+
+blockquote {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-snug);
+  font-weight: var(--font-light);
+  font-style: italic;
+  color: var(--text-secondary);
+
+  margin: var(--space-12) 0;
+  padding-left: var(--space-8);
+  border-left: 3px solid var(--accent-primary);
+
+  position: relative;
+}
+
+blockquote::before {
+  content: '"';
+  font-size: 4em;
+  line-height: 0;
+  position: absolute;
+  left: -0.2em;
+  top: 0.4em;
+  color: var(--accent-primary);
+  opacity: 0.3;
+  font-style: normal;
+}
+
+blockquote p {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+blockquote cite {
+  display: block;
+  margin-top: var(--space-4);
+  font-size: var(--text-base);
+  font-style: normal;
+  font-family: var(--font-body);
+  color: var(--text-tertiary);
+}
+
+blockquote cite::before {
+  content: '— ';
+}
+
+/* ========================================
+   LISTS
+   ======================================== */
+
+ul,
+ol {
+  margin: var(--space-6) 0;
+  padding-left: var(--space-8);
+}
+
+ul {
+  list-style-type: none;
+}
+
+/* Custom bullet points */
+ul li {
+  position: relative;
+  padding-left: var(--space-6);
+  margin-bottom: var(--space-3);
+  line-height: var(--leading-relaxed);
+}
+
+ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-primary);
+  border-radius: 50%;
+}
+
+/* Ordered lists */
+ol {
+  list-style-type: decimal;
+  list-style-position: outside;
+}
+
+ol li {
+  padding-left: var(--space-3);
+  margin-bottom: var(--space-3);
+  line-height: var(--leading-relaxed);
+}
+
+ol li::marker {
+  color: var(--accent-primary);
+  font-weight: var(--font-semibold);
+}
+
+/* Nested lists */
+ul ul,
+ol ul,
+ul ol,
+ol ol {
+  margin: var(--space-3) 0;
+}
+
+/* Remove margin from last list item */
+li:last-child {
+  margin-bottom: 0;
+}
+
+/* ========================================
+   EMPHASIS & STRONG
+   ======================================== */
+
+em,
+i {
+  font-style: italic;
+}
+
+strong,
+b {
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   INLINE CODE
+   ======================================== */
+
+code {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--accent-tertiary);
+}
+
+/* Code blocks */
+pre {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  padding: var(--space-6);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: var(--space-8) 0;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: inherit;
+}
+
+/* ========================================
+   HORIZONTAL RULE
+   ======================================== */
+
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--border-default);
+  margin: var(--space-12) 0;
+}
+
+/* Decorative HR */
+hr.decorative {
+  position: relative;
+  height: 1px;
+  background: transparent;
+  overflow: visible;
+}
+
+hr.decorative::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 1px;
+  background: var(--border-default);
+}
+
+hr.decorative::after {
+  content: '✦';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-primary);
+  padding: 0 var(--space-4);
+  color: var(--accent-primary);
+  font-size: var(--text-sm);
+}
+
+/* ========================================
+   ABBREVIATIONS
+   ======================================== */
+
+abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+  border-bottom: 1px dotted var(--border-strong);
+}
+
+/* ========================================
+   MARK/HIGHLIGHT
+   ======================================== */
+
+mark {
+  background-color: var(--accent-secondary);
+  color: var(--text-primary);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Text alignment */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+/* Text transform */
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+
+/* Font weights */
+.font-light { font-weight: var(--font-light); }
+.font-regular { font-weight: var(--font-regular); }
+.font-medium { font-weight: var(--font-medium); }
+.font-semibold { font-weight: var(--font-semibold); }
+.font-bold { font-weight: var(--font-bold); }
+
+/* Font families */
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+
+/* Text colors */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-accent { color: var(--accent-primary); }
+
+/* Letter spacing */
+.tracking-tight { letter-spacing: var(--tracking-tight); }
+.tracking-normal { letter-spacing: var(--tracking-normal); }
+.tracking-wide { letter-spacing: var(--tracking-wide); }
+.tracking-wider { letter-spacing: var(--tracking-wider); }
+
+/* Line height */
+.leading-none { line-height: var(--leading-none); }
+.leading-tight { line-height: var(--leading-tight); }
+.leading-normal { line-height: var(--leading-normal); }
+.leading-relaxed { line-height: var(--leading-relaxed); }
+
+/* Truncate text with ellipsis */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Line clamp (multiline truncation) */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Heading Utilities */
+.heading-xl {
+  font-family: var(--font-display);
+  font-size: var(--text-display-xl);
+  font-weight: var(--font-light);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.subheading {
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 42rem;
+}
+
+.text-lg {
+  font-size: var(--text-lg);
+}
+
+/* ========================================
+   MOBILE TYPOGRAPHY ENHANCEMENTS
+   Improved readability on small screens
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Stronger heading weights for better mobile readability */
+  h1, h2, h3, h4, .heading-display, .heading-xl {
+    font-weight: var(--font-regular); /* 400 instead of 300 */
+  }
+
+  h5 {
+    font-weight: var(--font-medium); /* 500 instead of 400 */
+  }
+
+  /* Slightly better line-height for mobile reading */
+  h1, h2, h3 {
+    line-height: 1.15; /* Improved from 1.1 (--leading-tight) */
+  }
+
+  /* Optimize paragraph sizing for mobile */
+  p {
+    font-size: 1rem; /* 16px - browser default, prevents zoom on iOS */
+    line-height: 1.6; /* Better mobile readability */
+  }
+
+  .lead {
+    font-size: var(--text-lg); /* 18px - scaled down from 20px for mobile */
+  }
+}

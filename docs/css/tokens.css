@@ -1,0 +1,333 @@
+/**
+ * Design Tokens - branchstone.art
+ * Premium Artist Portfolio - Design System Foundation
+ *
+ * Contents:
+ * - Color system (light/dark themes)
+ * - Typography scale & fonts
+ * - Spacing system
+ * - Shadows & elevations
+ * - Border radius
+ * - Transitions & animations
+ */
+
+:root {
+  /* ========================================
+     COLORS - LIGHT THEME (Warm & Natural)
+     ======================================== */
+
+  /* Background Colors */
+  --bg-primary: #FAF9F7;      /* Main canvas - warm off-white */
+  --bg-secondary: #F5F3F0;    /* Subtle contrast backgrounds */
+  --bg-tertiary: #FFFFFF;     /* Pure white for cards */
+  --bg-elevated: #FFFFFF;     /* Elevated surfaces */
+
+  /* Text Colors */
+  --text-primary: #1A1816;    /* Main text - rich charcoal */
+  --text-secondary: #4A4745;  /* Secondary text */
+  --text-tertiary: #6B6662;   /* Tertiary/muted text */
+  --text-inverse: #FFFFFF;    /* Text on dark backgrounds */
+
+  /* Accent Colors */
+  --accent-primary: #B8866B;    /* Primary accent - warm copper */
+  --accent-secondary: #5B7A8F;  /* Secondary accent - slate blue */
+  --accent-tertiary: #D4A586;   /* Tertiary accent - light copper */
+  --accent-hover: #A67757;      /* Hover state - darker copper */
+
+  /* Copper Color Spectrum (9-tone professional palette) */
+  --copper-50: #F5ECE4;    /* Light sand - backgrounds, subtle highlights */
+  --copper-100: #E8D5C4;   /* Warm cream - hover backgrounds */
+  --copper-200: #D4B89E;   /* Light copper - borders, dividers */
+  --copper-300: #C29776;   /* Medium copper - secondary UI elements */
+  --copper-400: #B8866B;   /* Primary copper - main brand color */
+  --copper-500: #A67757;   /* Dark copper - hover states, emphasis */
+  --copper-600: #8C6347;   /* Deep copper - active states */
+  --copper-700: #6B4A35;   /* Rich earth - strong contrast */
+  --copper-800: #4A3325;   /* Deep earth - text on light backgrounds */
+  --copper-900: #2D1F17;   /* Almost black - darkest accents */
+
+  /* Semantic Colors */
+  --success: #6B8E7F;   /* Success messages */
+  --warning: #C29563;   /* Warning messages */
+  --error: #A65B4F;     /* Error messages */
+
+  /* Border Colors */
+  --border-subtle: #E8E5E1;   /* Very subtle borders */
+  --border-default: #D4CFC9;  /* Default border color */
+  --border-strong: #B5ACA3;   /* Strong/emphasized borders */
+
+  /* ========================================
+     SHADOWS & ELEVATIONS
+     Updated: Increased opacity for better card visibility
+     ======================================== */
+
+  --shadow-sm: 0 1px 3px rgba(26, 24, 22, 0.08), 0 1px 2px rgba(26, 24, 22, 0.06);
+  --shadow-md: 0 4px 8px rgba(26, 24, 22, 0.10), 0 2px 4px rgba(26, 24, 22, 0.08);
+  --shadow-lg: 0 10px 24px rgba(26, 24, 22, 0.12), 0 4px 8px rgba(26, 24, 22, 0.08);
+  --shadow-xl: 0 20px 40px rgba(26, 24, 22, 0.15), 0 8px 16px rgba(26, 24, 22, 0.10);
+
+  /* ========================================
+     GRADIENTS - Enhanced with multi-stop depth
+     ======================================== */
+
+  /* Primary gradients - enhanced with copper palette */
+  --gradient-warm: linear-gradient(135deg,
+    var(--copper-200) 0%,
+    var(--copper-300) 35%,
+    var(--copper-400) 65%,
+    var(--copper-500) 100%
+  );
+
+  --gradient-copper-rich: linear-gradient(135deg,
+    var(--copper-300) 0%,
+    var(--copper-400) 50%,
+    var(--copper-600) 100%
+  );
+
+  --gradient-earth: linear-gradient(135deg,
+    #5E7A6F 0%,
+    #4A5F57 100%
+  );
+
+  --gradient-subtle: linear-gradient(180deg,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 100%
+  );
+
+  /* Radial gradients for depth */
+  --gradient-radial-warm: radial-gradient(
+    circle at top right,
+    var(--copper-100) 0%,
+    var(--bg-primary) 60%
+  );
+
+  --gradient-radial-glow: radial-gradient(
+    circle at center,
+    rgba(184, 134, 107, 0.15) 0%,
+    rgba(184, 134, 107, 0.05) 50%,
+    transparent 100%
+  );
+
+  /* Overlay gradients for depth and sophistication */
+  --gradient-overlay-top: linear-gradient(
+    180deg,
+    rgba(26, 24, 22, 0.6) 0%,
+    rgba(26, 24, 22, 0.3) 50%,
+    transparent 100%
+  );
+
+  --gradient-overlay-bottom: linear-gradient(
+    0deg,
+    rgba(26, 24, 22, 0.7) 0%,
+    rgba(26, 24, 22, 0.4) 40%,
+    transparent 100%
+  );
+
+  /* Shimmer gradient for highlights */
+  --gradient-shimmer: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+
+  /* ========================================
+     TYPOGRAPHY
+     ======================================== */
+
+  /* Font Families */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Responsive Display Sizes (fluid typography) */
+  --text-display-2xl: clamp(3.5rem, 8vw, 6rem);      /* 56px - 96px */
+  --text-display-xl: clamp(3rem, 6vw, 5rem);         /* 48px - 80px */
+  --text-display-lg: clamp(2.5rem, 5vw, 4rem);       /* 40px - 64px */
+  --text-display-md: clamp(2rem, 4vw, 3rem);         /* 32px - 48px */
+  --text-display-sm: clamp(1.75rem, 3vw, 2.5rem);    /* 28px - 40px */
+
+  /* Fixed Type Scale */
+  --text-5xl: 3rem;       /* 48px */
+  --text-4xl: 2.5rem;     /* 40px */
+  --text-3xl: 2rem;       /* 32px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-base: 1rem;      /* 16px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-xs: 0.75rem;     /* 12px */
+
+  /* Font Weights */
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* Letter Spacing */
+  --tracking-tighter: -0.02em;
+  --tracking-tight: -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
+  --tracking-wider: 0.05em;
+
+  /* ========================================
+     SPACING SCALE
+     ======================================== */
+
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+  --space-32: 8rem;     /* 128px */
+
+  /* ========================================
+     CONTAINER WIDTHS
+     ======================================== */
+
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+
+  /* ========================================
+     BORDER RADIUS
+     Enhanced for organic, artisan feel
+     ======================================== */
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;   /* Increased for organic, handcrafted feel */
+  --radius-xl: 20px;   /* Adjusted proportionally */
+  --radius-2xl: 24px;  /* Adjusted proportionally */
+  --radius-full: 9999px;
+
+  /* ========================================
+     TRANSITIONS & ANIMATIONS
+     ======================================== */
+
+  /* Duration Scale - Premium timing */
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 700ms;
+
+  /* Premium Easing Curves */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);      /* Material standard */
+  --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);      /* Entrance */
+  --ease-accelerate: cubic-bezier(0.4, 0, 1, 1);      /* Exit */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);       /* Bouncy spring */
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);    /* Smooth luxury */
+  --ease-subtle: cubic-bezier(0.33, 1, 0.68, 1);      /* Subtle motion */
+
+  /* Composite Transitions - Backwards compatible */
+  --transition-fast: 150ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-normal: 300ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-slow: 500ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Premium Hover Transitions - Refined for luxury feel */
+  --transition-hover-lift: transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                           box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  --transition-hover-scale: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  --transition-hover-color: color 200ms cubic-bezier(0.25, 0.1, 0.25, 1),
+                            background-color 200ms cubic-bezier(0.25, 0.1, 0.25, 1),
+                            border-color 200ms cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  --transition-hover-all: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Legacy Easing (backwards compatible) */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* ========================================
+   DARK THEME (Enhanced contrast for WCAG AA)
+   ======================================== */
+
+[data-theme="dark"] {
+  /* Background Colors */
+  --bg-primary: #141210;      /* Deep charcoal - darker */
+  --bg-secondary: #1E1B18;    /* Slightly lighter charcoal */
+  --bg-tertiary: #282522;     /* Mid-tone charcoal */
+  --bg-elevated: #302D2A;     /* Elevated surfaces */
+
+  /* Text Colors - Enhanced for WCAG AA contrast */
+  --text-primary: #FAFAF9;    /* Near white - 15.8:1 contrast */
+  --text-secondary: #D4D0CB;  /* Lighter warm gray - 10.2:1 contrast */
+  --text-tertiary: #A8A39D;   /* Visible muted gray - 6.5:1 contrast */
+  --text-inverse: #141210;    /* Dark text on light backgrounds */
+
+  /* Accent Colors - Enhanced for visibility */
+  --accent-primary: #D9AD8F;    /* Lighter copper for dark mode */
+  --accent-secondary: #8DAFC4;  /* Lighter slate blue for dark mode */
+  --accent-tertiary: #E8C9A0;   /* Lightest copper */
+  --accent-hover: #E8C9A0;      /* Hover state - even brighter */
+
+  /* Border Colors */
+  --border-subtle: #353230;   /* More visible borders */
+  --border-default: #4A4540;  /* Default border color */
+  --border-strong: #5F5954;   /* Strong borders */
+
+  /* Shadows (darker, more pronounced for dark mode) */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.20), 0 2px 4px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.18);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.30), 0 8px 16px rgba(0, 0, 0, 0.20);
+
+  /* Gradients */
+  --gradient-warm: linear-gradient(135deg, #E8C9A0 0%, #D9AD8F 100%);
+  --gradient-earth: linear-gradient(135deg, #8FB3A4 0%, #6B9485 100%);
+  --gradient-subtle: linear-gradient(180deg, #141210 0%, #1E1B18 100%);
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    /* Durations */
+    --duration-instant: 0ms;
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+    --duration-slower: 0ms;
+
+    /* Transitions - instant but keep easing for potential micro-animations */
+    --transition-fast: 0ms;
+    --transition-normal: 0ms;
+    --transition-slow: 0ms;
+    --transition-smooth: 0ms;
+  }
+
+  /* Disable transforms and animations */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

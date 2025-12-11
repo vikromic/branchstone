@@ -1,0 +1,281 @@
+/**
+ * Base Styles & Modern CSS Reset - branchstone.art
+ *
+ * Contents:
+ * - Modern CSS reset
+ * - Box model normalization
+ * - Body & root styles
+ * - Accessibility utilities
+ * - Focus management
+ * - Smooth scrolling
+ */
+
+/* ========================================
+   MODERN CSS RESET
+   ======================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove default margins and paddings */
+body,
+h1, h2, h3, h4, h5, h6,
+p,
+figure,
+blockquote,
+dl, dd,
+ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove list styles */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* ========================================
+   ROOT & HTML
+   ======================================== */
+
+html {
+  /* Smooth scrolling for anchor links */
+  scroll-behavior: smooth;
+
+  /* Prevent iOS font size adjustment */
+  -webkit-text-size-adjust: 100%;
+
+  /* Better font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Disable smooth scrolling for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ========================================
+   BODY
+   ======================================== */
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-normal);
+
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+
+  /* Better text rendering */
+  text-rendering: optimizeLegibility;
+
+  /* Prevent horizontal overflow */
+  overflow-x: hidden;
+}
+
+/* ========================================
+   IMAGES & MEDIA
+   ======================================== */
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Maintain aspect ratio for images */
+img {
+  font-style: italic; /* Alt text styling if image fails to load */
+  background-repeat: no-repeat;
+  background-size: cover;
+  shape-margin: 1rem;
+}
+
+/* ========================================
+   FORMS
+   ======================================== */
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Remove default button styles */
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* Ensure textareas don't overflow */
+textarea {
+  resize: vertical;
+}
+
+/* ========================================
+   TABLES
+   ======================================== */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ========================================
+   TEXT SELECTION
+   ======================================== */
+
+::selection {
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
+  text-shadow: none;
+}
+
+::-moz-selection {
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
+  text-shadow: none;
+}
+
+/* ========================================
+   FOCUS STYLES
+   ======================================== */
+
+/* Remove default outline, we'll add custom focus styles */
+:focus {
+  outline: none;
+}
+
+/* Custom focus visible styles (keyboard navigation only) */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Focus within for containers */
+:focus-within {
+  /* Can be customized per component */
+}
+
+/* ========================================
+   SCREEN READER ONLY
+   ======================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Allow element to be focusable when navigated to via keyboard */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
+/* ========================================
+   HIGH CONTRAST MODE
+   ======================================== */
+
+@media (prefers-contrast: high) {
+  :root {
+    --border-default: currentColor;
+    --border-strong: currentColor;
+  }
+
+  :focus-visible {
+    outline-width: 3px;
+    outline-offset: 4px;
+  }
+}

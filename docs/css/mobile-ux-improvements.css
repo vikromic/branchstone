@@ -1,0 +1,829 @@
+/* ==========================================================================
+   MOBILE UX IMPROVEMENTS
+   Branchstone Artist Portfolio - Mobile-First Enhancements
+   ========================================================================== */
+
+/* ==========================================================================
+   1. MOBILE BOTTOM NAVIGATION BAR
+   ========================================================================== */
+
+.mobile-bottom-nav {
+  display: none; /* Hidden on desktop */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-default);
+  box-shadow: 0 -2px 10px rgba(26, 24, 22, 0.1);
+  z-index: 100;
+  transform: translateY(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .mobile-bottom-nav {
+  background: rgba(26, 24, 22, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top-color: var(--border-strong);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Hide on scroll down */
+.mobile-bottom-nav--hidden {
+  transform: translateY(100%);
+}
+
+/* Navigation list */
+.mobile-bottom-nav__list {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Navigation items */
+.mobile-bottom-nav__item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navigation links - WCAG compliant 44x44px touch targets */
+.mobile-bottom-nav__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0.25rem 0.5rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-radius: var(--radius-sm);
+  position: relative;
+}
+
+.mobile-bottom-nav__link:active {
+  transform: scale(0.95);
+}
+
+/* Icon container */
+.mobile-bottom-nav__icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+.mobile-bottom-nav__link svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2px;
+}
+
+/* Active state */
+.mobile-bottom-nav__link--active {
+  color: var(--accent-primary);
+}
+
+.mobile-bottom-nav__link--active .mobile-bottom-nav__icon {
+  transform: translateY(-2px);
+}
+
+/* Label */
+.mobile-bottom-nav__label {
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+
+/* Show only on mobile */
+@media (max-width: 767px) {
+  .mobile-bottom-nav {
+    display: block;
+  }
+
+  /* Add bottom padding to body to prevent content hiding */
+  body {
+    padding-bottom: 56px;
+  }
+
+  /* Adjust back-to-top button position - same as sticky-inquiry-button */
+  .back-to-top {
+    bottom: calc(var(--space-4, 1rem) + 72px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ==========================================================================
+   2. WCAG COMPLIANT TOUCH TARGETS (44x44px minimum)
+   ========================================================================== */
+
+/* Gallery filter buttons */
+@media (max-width: 767px) {
+  .tag,
+  [data-filter],
+  [data-mobile-filter] {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.625rem 1rem;
+    touch-action: manipulation;
+  }
+
+  /* Mobile filter chips */
+  .mobile-filter-chip {
+    min-height: 44px;
+    min-width: 80px;
+    padding: 0.75rem 1.25rem;
+  }
+
+  /* Favorite buttons - Increased to 56px for better tap accuracy */
+  .artwork-card__favorite,
+  .header__favorites,
+  .favorite-item__remove {
+    min-width: 56px;
+    min-height: 56px;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Enhanced artwork card favorite button - liquid glass style */
+  .artwork-card__favorite {
+    position: absolute;
+    bottom: var(--space-4);
+    right: var(--space-4);
+    left: auto;
+    top: auto;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.2) 100%
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-full);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    z-index: 10;
+  }
+
+  .artwork-card__favorite svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Badge stays at top-left (original position) */
+  .artwork-card__badge {
+    left: var(--space-4);
+    top: var(--space-4);
+    z-index: 5;
+  }
+
+  /* Inquire button - liquid glass style */
+  .artwork-card__inquire {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    min-width: 56px;
+    min-height: 56px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(
+      135deg,
+      rgba(184, 134, 107, 0.5) 0%,
+      rgba(184, 134, 107, 0.3) 100%
+    );
+    color: white;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .artwork-card__inquire svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* View button for explicit lightbox trigger - bottom-right */
+  .artwork-card__view {
+    position: absolute;
+    bottom: var(--space-4);
+    right: var(--space-4);
+    min-width: 56px;
+    min-height: 56px;
+    padding: var(--space-3);
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid var(--accent-primary);
+    border-radius: var(--radius-full);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Disable card-level click for lightbox on mobile to prevent mis-taps */
+  .artwork-card__image-wrapper {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* Re-enable pointer events for buttons */
+  .artwork-card__favorite,
+  .artwork-card__inquire,
+  .artwork-card__view {
+    pointer-events: auto;
+  }
+
+  /* Back to top button styles now in components.css */
+
+  /* Navigation links */
+  .header__nav-link,
+  .mobile-menu__link,
+  .footer__nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+  }
+
+  /* All interactive buttons */
+  button,
+  .btn {
+    min-height: 44px;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .btn--sm {
+    min-height: 44px;
+    padding: 0.625rem 1.25rem;
+  }
+
+  .btn--icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Close buttons */
+  .favorites-panel__close,
+  .lightbox__close,
+  .mobile-menu__close,
+  .mobile-filter-dropdown__close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Header action buttons */
+  .header__theme-toggle,
+  .header__menu-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.625rem;
+  }
+
+  /* Newsletter form */
+  .newsletter__button {
+    min-height: 44px;
+  }
+
+  .newsletter__input {
+    min-height: 44px;
+  }
+
+  /* Form inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    min-height: 44px;
+  }
+
+  /* Radio and checkbox larger touch areas */
+  input[type="radio"],
+  input[type="checkbox"] {
+    min-width: 24px;
+    min-height: 24px;
+  }
+
+  /* Radio/checkbox labels - make clickable area larger */
+  label:has(input[type="radio"]),
+  label:has(input[type="checkbox"]) {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+  }
+}
+
+/* ==========================================================================
+   3. REDUCED ANIMATION DURATION ON MOBILE (30% faster)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* Reduce all animations by 30% on mobile for snappier feel */
+  *,
+  *::before,
+  *::after {
+    --duration-fast: 105ms;     /* Down from 150ms */
+    --duration-normal: 210ms;   /* Down from 300ms */
+    --duration-slow: 350ms;     /* Down from 500ms */
+  }
+
+  /* Animation-specific overrides */
+  .artwork-card,
+  .artwork-card__image,
+  .btn,
+  .tag,
+  .mobile-filter-chip {
+    transition-duration: 210ms !important;
+  }
+
+  /* Modal/panel transitions */
+  .favorites-panel,
+  .mobile-menu,
+  .lightbox,
+  .modal-overlay {
+    transition-duration: 210ms !important;
+  }
+
+  /* Hover effects - instant on mobile */
+  .artwork-card:hover,
+  .btn:hover {
+    transition-duration: 105ms !important;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   4. SMART STICKY HEADER (Mobile Only)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Hide header when scrolling down */
+  .header--hidden {
+    transform: translateY(-100%);
+  }
+
+  /* Always show when at top of page */
+  .header.is-scrolled {
+    box-shadow: 0 2px 8px rgba(26, 24, 22, 0.1);
+  }
+
+  [data-theme="dark"] .header.is-scrolled {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ==========================================================================
+   5. IMPROVED SKELETON LOADING STATES (Brand Colors)
+   ========================================================================== */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--bg-elevated) 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Skeleton for artwork cards */
+.artwork-card.is-loading {
+  pointer-events: none;
+}
+
+.artwork-card.is-loading .artwork-card__image {
+  background: linear-gradient(
+    135deg,
+    var(--bg-secondary) 0%,
+    rgba(184, 134, 107, 0.1) 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 200%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.artwork-card.is-loading .artwork-card__title,
+.artwork-card.is-loading .artwork-card__collection,
+.artwork-card.is-loading .artwork-card__price {
+  background: linear-gradient(
+    90deg,
+    var(--bg-elevated) 0%,
+    rgba(184, 134, 107, 0.15) 50%,
+    var(--bg-elevated) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+  color: transparent;
+  user-select: none;
+}
+
+/* Dark theme skeleton */
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+}
+
+[data-theme="dark"] .artwork-card.is-loading .artwork-card__image {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(184, 134, 107, 0.2) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton,
+  .artwork-card.is-loading .artwork-card__image,
+  .artwork-card.is-loading .artwork-card__title {
+    animation: none;
+    background: var(--bg-elevated);
+  }
+}
+
+/* ==========================================================================
+   6. MOBILE-SPECIFIC INTERACTION IMPROVEMENTS
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* Larger tap areas for cards */
+  .artwork-card {
+    padding: 0.5rem;
+    position: relative;
+  }
+
+  /* Prevent text selection during interactions */
+  .mobile-bottom-nav,
+  .header,
+  .btn,
+  .artwork-card__favorite {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Smooth momentum scrolling */
+  .favorites-panel__content,
+  .mobile-menu__list,
+  .gallery-grid {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Better focus indicators for keyboard users */
+  *:focus-visible {
+    outline: 3px solid var(--accent-primary);
+    outline-offset: 3px;
+  }
+}
+
+/* ==========================================================================
+   7. HAPTIC FEEDBACK VISUAL CUE
+   ========================================================================== */
+
+/* Add visual feedback when haptic feedback is triggered */
+@media (max-width: 767px) {
+  .artwork-card__favorite.haptic-feedback {
+    animation: haptic-pulse 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@keyframes haptic-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* ==========================================================================
+   8. SAFE AREA INSETS (For iPhone notch/Dynamic Island)
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .mobile-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(56px + env(safe-area-inset-bottom));
+  }
+
+  .header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Adjust body padding for safe areas */
+  body {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ==========================================================================
+   9. ACCESSIBILITY - HIGH CONTRAST MODE
+   ========================================================================== */
+
+@media (prefers-contrast: high) {
+  .mobile-bottom-nav {
+    border-top-width: 2px;
+    border-top-color: currentColor;
+  }
+
+  .mobile-bottom-nav__link {
+    border: 2px solid transparent;
+  }
+
+  .mobile-bottom-nav__link--active {
+    border-color: var(--accent-primary);
+    background: rgba(184, 134, 107, 0.1);
+  }
+
+  .artwork-card__favorite,
+  .btn {
+    border-width: 2px;
+  }
+}
+
+/* ==========================================================================
+   10. MOBILE FOOTER REDESIGN - IMPROVED VISUAL HIERARCHY
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* Enhanced footer spacing and breathing room */
+  .footer {
+    padding: var(--space-12) 0 calc(var(--space-10) + 72px); /* Extra bottom padding for mobile nav */
+  }
+
+  .footer__container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10); /* Increased from default for better separation */
+    padding: 0 var(--space-6);
+  }
+
+  /* Brand section - more prominent */
+  .footer__brand {
+    max-width: 100%;
+    text-align: center;
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .footer__logo {
+    font-size: var(--text-2xl);
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+
+  .footer__tagline {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+    max-width: 400px;
+    margin: var(--space-3) auto 0;
+  }
+
+  /* Navigation sections - stacked vertically with clear hierarchy */
+  .footer__nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .footer__nav-column {
+    text-align: center;
+  }
+
+  .footer__nav-heading {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-5);
+    color: var(--text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  .footer__nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .footer__nav-link {
+    font-size: var(--text-base);
+    padding: var(--space-3) var(--space-4);
+    display: block;
+    min-height: 48px; /* WCAG compliant touch target */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Social section - enhanced visibility */
+  .footer__social {
+    text-align: center;
+    padding-bottom: var(--space-8);
+  }
+
+  .footer__social-heading {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-5);
+    color: var(--text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  /* Larger social icon tap targets - 56px for better mobile UX */
+  .footer__social-list {
+    justify-content: center;
+    gap: var(--space-5);
+    margin-bottom: var(--space-5);
+  }
+
+  .footer__social-link {
+    min-width: 56px;
+    min-height: 56px;
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--border-default);
+    transition: all var(--transition-normal);
+  }
+
+  .footer__social-link:hover,
+  .footer__social-link:active {
+    transform: scale(1.1);
+    background: var(--accent-primary);
+    color: var(--text-inverse);
+    border-color: var(--accent-primary);
+  }
+
+  .footer__social-link svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Email link - larger touch target */
+  .footer__email {
+    margin-top: var(--space-5);
+  }
+
+  .footer__email-link {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: inline-block;
+    padding: var(--space-3) var(--space-4);
+    min-height: 44px;
+    transition: color var(--transition-normal);
+  }
+
+  .footer__email-link:hover,
+  .footer__email-link:active {
+    color: var(--accent-primary);
+  }
+
+  /* Trust badges - LARGER and MORE PROMINENT on mobile */
+  .footer__trust-badges {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+  }
+
+  .trust-badge-small {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+    text-align: center;
+    padding: var(--space-3);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+    min-width: 140px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .trust-badge-small svg {
+    width: 28px;
+    height: 28px;
+    color: var(--accent-primary);
+    flex-shrink: 0;
+  }
+
+  /* Footer bottom - clear separation */
+  .footer__bottom {
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 2px solid var(--border-default);
+    text-align: center;
+  }
+
+  .footer__copyright {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    line-height: var(--leading-relaxed);
+  }
+
+  /* Dark theme adjustments for mobile footer */
+  [data-theme="dark"] .footer__brand,
+  [data-theme="dark"] .footer__nav,
+  [data-theme="dark"] .footer__social {
+    border-bottom-color: var(--border-default);
+  }
+
+  [data-theme="dark"] .footer__trust-badges {
+    border-top-color: var(--border-default);
+  }
+
+  [data-theme="dark"] .trust-badge-small {
+    background: var(--bg-tertiary);
+    box-shadow: var(--shadow-md);
+  }
+
+  [data-theme="dark"] .footer__bottom {
+    border-top-color: var(--border-default);
+  }
+
+  /* ==========================================================================
+     TOAST NOTIFICATIONS - POSITION ABOVE MOBILE NAV
+     ========================================================================== */
+
+  .toast-container {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+    left: var(--space-4) !important;
+    right: var(--space-4) !important;
+  }
+
+  .toast {
+    width: 100%;
+    max-width: none;
+    justify-content: center;
+  }
+}

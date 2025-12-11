@@ -1,10 +1,16 @@
 {
-  "name": "Viktoria Branchstone - Art",
+  "name": "Branchstone Art",
   "short_name": "Branchstone",
-  "description": "Mixed media artist inspired by natural textures and quiet resilience",
-  "icons": [],
-  "theme_color": "#F8F8F8",
-  "background_color": "#F8F8F8",
-  "display": "browser",
-  "start_url": "index.html"
+  "description": "Mixed-media art by Viktoriia using found natural materials",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF9F7",
+  "theme_color": "#9B7E5F",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
 }

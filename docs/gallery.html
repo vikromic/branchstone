@@ -1,662 +1,813 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore Viktoria Branchstone's gallery of mixed media artwork inspired by natural textures, wood, moss, and organic materials">
-    <meta name="keywords" content="art gallery, mixed media, natural materials, contemporary art, abstract art">
+    <meta name="description" content="Explore the complete collection of Viktoriia's pyrography artwork. Contemporary burned wood art featuring intricate designs, nature-inspired themes, and modern aesthetics.">
+    <title>Gallery | Branchstone Art</title>
 
-    <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="Gallery - Viktoria Branchstone">
-    <meta property="og:description" content="Explore mixed media artwork inspired by natural textures and organic materials">
-    <meta property="og:image" content="https://branchstone.art/img/galleries.jpeg">
-    <meta property="og:url" content="https://branchstone.art/gallery.html">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Gallery - Viktoria Branchstone">
-    <meta name="twitter:description" content="Explore mixed media artwork inspired by natural textures and organic materials">
-    <meta name="twitter:image" content="https://branchstone.art/img/galleries.jpeg">
-
-    <link rel="canonical" href="https://branchstone.art/gallery.html">
-    <!-- <link rel="manifest" href="site.webmanifest"> -->
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <meta name="theme-color" content="#F8F8F8" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#2B2D30" media="(prefers-color-scheme: dark)">
-
-    <!-- Security Headers - Note: frame-ancestors and X-Frame-Options only work via HTTP headers, not meta tags -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-
-    <title>Gallery - Viktoria Branchstone</title>
-
-    <!-- Critical CSS for above-the-fold content -->
-    <style>
-        /* CSS Variables - Light Theme */
-        :root {
-            --background-color: #F8F8F8;
-            --text-color: #2B2B2B;
-            --text-rgb: 43, 43, 43;
-            --secondary-text: #4A4A4A;
-            --accent-color: hsl(40, 38%, 38%);
-            --card-background: #ffffff;
-            --header-background: rgba(248, 248, 248, 0.8);
-            --border-color: #e0e0e0;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --button-color: #8B785D;
-            --button-text: #ffffff;
-            --z-header: 100;
-            --z-mobile-menu: 10000;
-            --z-mobile-controls: 10001;
-            --z-mobile-toggle: 10002;
-            --z-skip-link: 10003;
-            --radius-sm: 8px;
-            --radius-md: 14px;
-            --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-fast: 0.2s;
-            --transition-normal: 0.3s;
-            --shadow-sm: 0 1px 0 rgba(0, 0, 0, 0.02);
-            --text-sm: 0.875rem;
-            --text-base: 1rem;
-            --text-2xl: 1.5rem;
-        }
-
-        /* Dark Theme */
-        [data-theme="dark"] {
-            --background-color: #2A2622;
-            --text-color: #F9F9F9;
-            --text-rgb: 249, 249, 249;
-            --secondary-text: #D4D6D9;
-            --accent-color: #C2B280;
-            --card-background: #353230;
-            --header-background: rgba(42, 38, 34, 0.8);
-            --border-color: #45474a;
-            --shadow-color: rgba(0, 0, 0, 0.3);
-        }
-
-        /* Base Styles */
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 80px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            line-height: 1.6;
-            letter-spacing: 0.01em;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior-y: none;
-        }
-
-        /* Skip Link */
-        .skip-link {
-            position: absolute;
-            left: -9999px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            background: var(--accent-color);
-            color: #ffffff;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            font-weight: 600;
-            z-index: var(--z-skip-link);
-            border-radius: 0 0 var(--radius-sm) 0;
-        }
-
-        .skip-link:focus {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: auto;
-            height: auto;
-            overflow: visible;
-            outline: 3px solid var(--text-color);
-            outline-offset: 2px;
-        }
-
-        /* Header - MUST match 03-header.css values exactly */
-        header {
-            padding: 0.5rem 1rem;
-            width: 100%;
-            box-sizing: border-box;
-            background-color: var(--header-background);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            position: relative;
-        }
-
-        /* Mobile Menu Toggle - MUST match 03-header.css values exactly */
-        .mobile-menu-toggle {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 6px;
-            z-index: 10002;
-            border-radius: 4px;
-            position: relative;
-        }
-
-        .mobile-menu-toggle span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background-color: var(--text-color);
-            border-radius: 2px;
-            position: absolute;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        .mobile-menu-toggle span:nth-child(1) { transform: translateY(-7px); }
-        .mobile-menu-toggle span:nth-child(2) { transform: translateY(0); }
-        .mobile-menu-toggle span:nth-child(3) { transform: translateY(7px); }
-
-        /* Mobile Page Title - MUST match 03-header.css values exactly */
-        .mobile-page-title {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--text-color);
-            pointer-events: none;
-        }
-
-        #mobile-nav-menu {
-            display: none;
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Header Controls */
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            z-index: 10002;
-        }
-
-        .lang-toggle {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            padding: 0.5rem 0.75rem;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--secondary-text);
-            border-radius: 20px;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .lang-toggle .lang-option {
-            transition: color 0.2s ease;
-        }
-
-        .lang-toggle .active-lang {
-            color: var(--text-color);
-            font-weight: 600;
-        }
-
-        .lang-toggle .lang-divider {
-            width: 1px;
-            height: 12px;
-            background: var(--border-color);
-        }
-
-        .theme-toggle {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            padding: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .theme-toggle svg {
-            width: 20px;
-            height: 20px;
-            color: var(--text-color);
-            fill: var(--text-color);
-            position: absolute;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .theme-toggle .moon-icon {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .theme-toggle .sun-icon {
-            opacity: 0;
-            transform: scale(0);
-        }
-
-        [data-theme="dark"] .theme-toggle .moon-icon {
-            opacity: 0;
-            transform: scale(0);
-        }
-
-        [data-theme="dark"] .theme-toggle .sun-icon {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* Gallery Main */
-        main {
-            flex-grow: 1;
-            min-height: calc(100vh - 200px);
-        }
-
-        .gallery-main {
-            padding: 2rem 2rem 8rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Gallery Header */
-        .gallery-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 0 2rem;
-        }
-
-        .gallery-header h1 {
-            font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-            font-size: 3rem;
-            font-weight: 600;
-            color: var(--text-color);
-            margin: 0 0 0.75rem 0;
-            letter-spacing: 0.01em;
-            line-height: 1.25;
-        }
-
-        .gallery-tagline {
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            color: var(--secondary-text);
-            margin: 0;
-            letter-spacing: 0.02em;
-        }
-
-        /* Gallery Filter */
-        .gallery-filter {
-            margin-bottom: 3rem;
-            padding: 0 1rem;
-        }
-
-        .gallery-filter-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .filter-btn {
-            padding: 0.75rem 1.5rem;
-            min-height: 44px;
-            background: var(--card-background);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            font-family: 'Inter', sans-serif;
-            font-size: var(--text-sm);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all var(--transition-normal) var(--ease-smooth);
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 0.02em;
-        }
-
-        .filter-btn.active {
-            background: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-            box-shadow: 0 2px 12px rgba(139, 120, 93, 0.25);
-        }
-
-        /* Gallery Grid */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem 2.5rem;
-            grid-auto-flow: dense;
-            content-visibility: auto;
-            contain-intrinsic-size: auto 500px;
-        }
-
-        /* Skeleton Loading */
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        .skeleton-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 16px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.03), 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.05);
-            min-height: 320px;
-        }
-
-        .skeleton-image {
-            width: 100%;
-            height: 280px;
-            background: linear-gradient(90deg, var(--card-background) 25%, var(--border-color) 50%, var(--card-background) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite ease-in-out;
-        }
-
-        .skeleton-info {
-            padding: 1rem 1.5rem;
-            background: var(--card-background);
-        }
-
-        .skeleton-title {
-            width: 70%;
-            height: 1.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(90deg, var(--border-color) 25%, var(--card-background) 50%, var(--border-color) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite ease-in-out;
-            border-radius: 4px;
-        }
-
-        .skeleton-subtitle {
-            width: 40%;
-            height: 0.875rem;
-            background: linear-gradient(90deg, var(--border-color) 25%, var(--card-background) 50%, var(--border-color) 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s infinite ease-in-out;
-            border-radius: 4px;
-        }
-
-        .gallery-loaded .skeleton-item {
-            display: none;
-        }
-    </style>
-
-    <!-- Preload critical assets -->
-    <link rel="preload" href="js/artworks.json" as="fetch" crossorigin>
-    <link rel="modulepreload" href="js/app.js">
-    <link rel="modulepreload" href="js/config.js">
-
-    <!-- Load full CSS asynchronously -->
-    <link rel="stylesheet" href="css/bundle.css?v=1764975569" media="print">
-    <noscript><link rel="stylesheet" href="css/bundle.css?v=1764975569"></noscript>
-
+    <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet" media="print">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <!-- Initialize theme as early as possible to avoid flickering -->
-    <script src="js/theme-init.js"></script>
-    <script src="js/css-loader.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="manifest" href="site.webmanifest">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/artwork-animations.css">
+  <link rel="stylesheet" href="css/mobile-ux-improvements.css">
+    <link rel="stylesheet" href="css/mobile-gallery-improvements.css">
+
+    <!-- Scripts -->
+    <script defer src="js/main.js"></script>
 </head>
+<body data-theme="light">
 
-<body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    <header>
-        <nav>
-            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <a href="index.html" class="header-logo" aria-label="Branchstone Art Home">
-                <img src="img/logo.png?v=1764448781" alt="Branchstone Art" class="logo-image">
-            </a>
-            <span class="mobile-page-title" id="mobile-page-title" data-translate="nav.gallery">Gallery</span>
-            <ul id="mobile-nav-menu">
-                <li><a href="index.html" data-translate="nav.home">Home</a></li>
-                <li><a href="gallery.html" class="active" data-translate="nav.gallery">Gallery</a></li>
-                <li><a href="about.html" data-translate="nav.about">About</a></li>
-                <li><a href="commissions.html" data-translate="nav.commissions">Commissions</a></li>
-                <li><a href="contact.html" data-translate="nav.contact">Contact</a></li>
-            </ul>
-            <div class="header-controls">
-                <button class="lang-toggle" id="lang-toggle" aria-label="Toggle language">
-                    <span class="lang-option active-lang" data-lang="en">EN</span>
-                    <span class="lang-divider"></span>
-                    <span class="lang-option" data-lang="ua">UA</span>
-                </button>
-                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
-                    </svg>
-                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-                    </svg>
-                </button>
-            </div>
-        </nav>
-    </header>
-    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
 
-    <!-- Mobile Bottom Tab Navigation -->
-    <nav class="mobile-tab-bar" aria-label="Mobile navigation">
-        <a href="gallery.html" class="tab-item active" data-page="gallery">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <line x1="9" y1="3" x2="9" y2="21"/>
-                <line x1="15" y1="3" x2="15" y2="21"/>
-                <line x1="3" y1="9" x2="21" y2="9"/>
-                <line x1="3" y1="15" x2="21" y2="15"/>
-            </svg>
-            <span data-translate="nav.gallery">Gallery</span>
-        </a>
-        <a href="index.html" class="tab-item" data-page="home">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            <span data-translate="nav.home">Home</span>
-        </a>
-        <a href="contact.html" class="tab-item" data-page="contact">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
-            <span data-translate="nav.contact">Contact</span>
-        </a>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__container">
+      <a href="index.html" class="header__logo" aria-label="Branchstone Home">
+        BRANCHSTONE
+      </a>
+
+      <nav class="header__nav" aria-label="Main navigation">
+        <ul class="header__nav-list">
+          <li><a href="index.html" class="header__nav-link">Home</a></li>
+          <li><a href="gallery.html" class="header__nav-link header__nav-link--active" aria-current="page">Gallery</a></li>
+          <li><a href="about.html" class="header__nav-link">About</a></li>
+          <li><a href="commissions.html" class="header__nav-link">Commissions</a></li>
+          <li><a href="contact.html" class="header__nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="header__favorites" aria-label="View favorites" type="button">
+        <svg class="header__favorites-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span class="header__favorites-count">0</span>
+      </button>
+
+
+      <button class="header__theme-toggle" aria-label="Toggle theme" type="button">
+        <svg class="header__theme-icon header__theme-icon--sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="header__theme-icon header__theme-icon--moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+
+      <button class="header__menu-toggle" aria-label="Toggle menu" aria-expanded="false" type="button">
+        <span class="header__menu-icon"></span>
+        <span class="header__menu-icon"></span>
+        <span class="header__menu-icon"></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <div class="mobile-menu__backdrop"></div>
+    <nav class="mobile-menu__nav" aria-label="Mobile navigation">
+      <ul class="mobile-menu__list">
+        <li><a href="index.html" class="mobile-menu__link">Home</a></li>
+        <li><a href="gallery.html" class="mobile-menu__link">Gallery</a></li>
+        <li><a href="about.html" class="mobile-menu__link">About</a></li>
+        <li><a href="commissions.html" class="mobile-menu__link">Commissions</a></li>
+        <li><a href="contact.html" class="mobile-menu__link">Contact</a></li>
+      </ul>
     </nav>
+  </div>
 
-    <main class="gallery-main" id="main-content">
+  <!-- Favorites Panel -->
+  <div class="favorites-backdrop" role="presentation" hidden></div>
 
-        <div class="gallery-header">
-            <h1 data-translate="gallery.title">Gallery</h1>
-            <p class="gallery-tagline" data-translate="gallery.tagline">Explore mixed media art inspired by nature</p>
-        </div>
+  <aside
+    class="favorites-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="favorites-title"
+    aria-describedby="favorites-description"
+    hidden>
 
-        <div class="gallery-filter" id="gallery-filter">
-            <!-- Filter buttons will be dynamically loaded here -->
-        </div>
+    <!-- Header -->
+    <header class="favorites-panel__header">
+      <div class="favorites-panel__title-group">
+        <h2 id="favorites-title" class="favorites-panel__title">
+          Your Favorites
+        </h2>
+        <p id="favorites-description" class="favorites-panel__count">
+          <span data-count>0</span> pieces saved
+        </p>
+      </div>
+      <button
+        class="favorites-panel__close"
+        aria-label="Close favorites panel"
+        type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </header>
 
-        <div class="gallery-grid">
-            <!-- Skeleton Loading Placeholders -->
-            <div class="skeleton-item" aria-hidden="true">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-subtitle"></div>
+    <!-- Content Area -->
+    <div class="favorites-panel__content">
+
+      <!-- Favorites List (populated by JavaScript) -->
+      <ul class="favorites-list" role="list">
+        <!-- Items will be inserted here by JavaScript -->
+      </ul>
+
+      <!-- Empty State -->
+      <div class="favorites-empty">
+        <svg class="favorites-empty__icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <h3 class="favorites-empty__title">No Favorites Yet</h3>
+        <p class="favorites-empty__description">
+          Click the heart icon on artworks to save them here
+        </p>
+        <a href="gallery.html" class="btn btn--primary">
+          Explore Gallery
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Footer / Actions -->
+    <footer class="favorites-panel__footer">
+      <button
+        class="btn btn--secondary btn--block favorites-panel__clear"
+        type="button">
+        Clear All
+      </button>
+      <button
+        class="btn btn--primary btn--block favorites-panel__inquire"
+        type="button">
+        Inquire About <span data-selected-count>0</span> Piece<span data-plural>s</span>
+      </button>
+    </footer>
+
+  </aside>
+
+    <!-- Main Content -->
+    <main id="main-content">
+
+        <!-- Gallery Hero Section -->
+        <section class="gallery-hero" aria-labelledby="gallery-title">
+            <div class="container">
+                <h1 id="gallery-title" class="heading-xl">The Collection</h1>
+                <p class="subheading text-lg">Contemporary pyrography art where fire meets artistry. Each piece is meticulously burned by hand, creating timeless works that blend traditional craft with modern design.</p>
+
+                <!-- Trust Indicators Banner -->
+                <div class="gallery-trust-banner">
+                  <div class="trust-badge">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M20 7h-9M14 3v4M6 7v14M6 7l8 8-8 8"/>
+                    </svg>
+                    <span>Free shipping on all pieces</span>
+                  </div>
+                  <div class="trust-badge">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <span>Satisfaction guaranteed</span>
+                  </div>
+                  <div class="trust-badge">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    </svg>
+                    <span>30-day return policy</span>
+                  </div>
+                  <div class="trust-badge">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 6v6l4 2"/>
+                    </svg>
+                    <span>Direct from the artist</span>
+                  </div>
                 </div>
             </div>
-            <div class="skeleton-item" aria-hidden="true">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-subtitle"></div>
+        </section>
+
+        <!-- Filter Bar -->
+        <section class="filter-bar" aria-label="Filter gallery by collection">
+            <div class="container">
+                <!-- Mobile Filter Button (visible < 768px) -->
+                <button class="mobile-filter-toggle"
+                        aria-expanded="false"
+                        aria-controls="mobile-filter-dropdown"
+                        aria-label="Open filter options">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                    </svg>
+                    <span class="mobile-filter-toggle__label">Filters</span>
+                    <span class="mobile-filter-toggle__count" hidden aria-label="active filters">0</span>
+                </button>
+
+                <!-- Mobile Filter Dropdown -->
+                <div class="mobile-filter-dropdown"
+                     id="mobile-filter-dropdown"
+                     role="dialog"
+                     aria-modal="true"
+                     aria-labelledby="mobile-filter-title"
+                     hidden>
+                    <div class="mobile-filter-dropdown__header">
+                        <h2 id="mobile-filter-title" class="mobile-filter-dropdown__title">Filter Gallery</h2>
+                        <button class="mobile-filter-dropdown__close"
+                                aria-label="Close filters">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mobile-filter-dropdown__content">
+                        <button class="mobile-filter-chip mobile-filter-chip--active" data-filter="all" data-mobile-filter aria-pressed="true">
+                            All
+                        </button>
+                        <button class="mobile-filter-chip" data-filter="moonglow" data-mobile-filter aria-pressed="false">
+                            Moonglow
+                        </button>
+                        <button class="mobile-filter-chip" data-filter="rise-in-blue" data-mobile-filter aria-pressed="false">
+                            Rise in Blue
+                        </button>
+                        <button class="mobile-filter-chip" data-filter="whales" data-mobile-filter aria-pressed="false">
+                            Whales
+                        </button>
+                        <button class="mobile-filter-chip" data-filter="winds" data-mobile-filter aria-pressed="false">
+                            Winds
+                        </button>
+                        <button class="mobile-filter-chip" data-filter="navy-of-the-dreamland" data-mobile-filter aria-pressed="false">
+                            Navy of the Dreamland
+                        </button>
+                        <button class="mobile-filter-chip" data-filter="of-ash-and-flowers" data-mobile-filter aria-pressed="false">
+                            Of Ash and Flowers
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Desktop Filter Controls (visible >= 768px) -->
+                <div class="filter-controls">
+                    <button class="tag tag-active" data-filter="all" aria-pressed="true">
+                        All
+                    </button>
+                    <button class="tag" data-filter="moonglow" aria-pressed="false">
+                        Moonglow
+                    </button>
+                    <button class="tag" data-filter="rise-in-blue" aria-pressed="false">
+                        Rise in Blue
+                    </button>
+                    <button class="tag" data-filter="whales" aria-pressed="false">
+                        Whales
+                    </button>
+                    <button class="tag" data-filter="winds" aria-pressed="false">
+                        Winds
+                    </button>
+                    <button class="tag" data-filter="navy-of-the-dreamland" aria-pressed="false">
+                        Navy of the Dreamland
+                    </button>
+                    <button class="tag" data-filter="of-ash-and-flowers" aria-pressed="false">
+                        Of Ash and Flowers
+                    </button>
                 </div>
             </div>
-            <div class="skeleton-item" aria-hidden="true">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-subtitle"></div>
+        </section>
+
+        <!-- Gallery Grid -->
+        <section class="gallery-section" aria-label="Artwork gallery">
+            <div class="container">
+                <div class="bento-grid">
+
+                    <!-- Artwork 1 - Large -->
+                    <article class="artwork-card bento-large" data-collection="moonglow" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--new">New</span>
+                        <span class="collectors-choice-indicator" aria-label="Collector's Choice" title="Popular with collectors"></span>
+                        <img
+                            src="img/art1.webp"
+                            alt="Moonglow artwork featuring ethereal moonlit landscape"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="800"
+                            height="800">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Moonlit Serenity" data-artwork-id="art-1" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-1">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Moonlit Serenity</h2>
+                            <p class="artwork-card__collection">Moonglow Collection</p>
+                            <p class="artwork-card__description">Crafted from silver birch gathered after winter storms. 32 hours of composition. This piece captures the quiet luminescence of a California forest under moonlight.</p>
+                            <p class="artwork-card__price">$1,800</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 2 - Regular -->
+                    <article class="artwork-card" data-collection="rise-in-blue" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--available">Available</span>
+                        <img
+                            src="img/art2.webp"
+                            alt="Rise in Blue artwork with flowing water patterns"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="400"
+                            height="400">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Azure Dreams" data-artwork-id="art-2" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-2">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Azure Dreams</h2>
+                            <p class="artwork-card__collection">Rise in Blue Collection</p>
+                            <p class="artwork-card__description">Ocean-washed driftwood and preserved sea moss from Bodega Bay. Each curve shaped by decades of Pacific tides. A meditation on water's patient artistry.</p>
+                            <p class="artwork-card__price">$650</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 3 - Wide -->
+                    <article class="artwork-card bento-wide artwork-card--sold" data-collection="whales" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--sold">Sold</span>
+                        <img
+                            src="img/art3.webp"
+                            alt="Whales collection featuring majestic ocean creatures"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="800"
+                            height="400">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Ocean Giants" data-artwork-id="art-3" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-3">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Ocean Giants</h2>
+                            <p class="artwork-card__collection">Whales Collection</p>
+                            <p class="artwork-card__description">Inspired by migrating gray whales off the Sonoma coast. Created with aged redwood bark and natural indigo pigments. 45 hours of careful layering.</p>
+                            <p class="artwork-card__price">$1,200</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 4 - Tall -->
+                    <article class="artwork-card bento-tall" data-collection="winds" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--available">Available</span>
+                        <img
+                            src="img/art4.webp"
+                            alt="Winds collection with sweeping natural motifs"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="400"
+                            height="800">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Breath of Nature" data-artwork-id="art-4" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-4">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Breath of Nature</h2>
+                            <p class="artwork-card__collection">Winds Collection</p>
+                            <p class="artwork-card__description">Fallen manzanita branches shaped by decades of coastal winds. Wild grasses dried in summer sun. This piece echoes the movement of air through the hills of Sonoma.</p>
+                            <p class="artwork-card__price">$2,400</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 5 - Regular -->
+                    <article class="artwork-card" data-collection="navy-of-the-dreamland" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--reserved">Reserved</span>
+                        <img
+                            src="img/art5.webp"
+                            alt="Navy of the Dreamland with surreal maritime themes"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="400"
+                            height="400">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Dreamland Voyage" data-artwork-id="art-5" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-5">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Dreamland Voyage</h2>
+                            <p class="artwork-card__collection">Navy of the Dreamland</p>
+                            <p class="artwork-card__description">Weathered oak from an old vineyard, transformed into a vessel of imagination. Dried lavender and eucalyptus leaves evoke distant shores of memory.</p>
+                            <p class="artwork-card__price">$750</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 6 - Large -->
+                    <article class="artwork-card bento-large" data-collection="of-ash-and-flowers" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--available">Available</span>
+                        <span class="collectors-choice-indicator" aria-label="Collector's Choice" title="Popular with collectors"></span>
+                        <img
+                            src="img/art6.webp"
+                            alt="Of Ash and Flowers featuring delicate floral designs"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="800"
+                            height="800">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Eternal Bloom" data-artwork-id="art-6" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-6">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Eternal Bloom</h2>
+                            <p class="artwork-card__collection">Of Ash and Flowers</p>
+                            <p class="artwork-card__description">Preserved wildflowers collected over three seasons. Fire-kissed branches from controlled burns. A tribute to cycles of destruction and renewal.</p>
+                            <p class="artwork-card__price">$2,100</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 7 - Regular -->
+                    <article class="artwork-card artwork-card--sold" data-collection="moonglow" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--sold">Sold</span>
+                        <img
+                            src="img/art7.webp"
+                            alt="Moonglow artwork with celestial patterns"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="400"
+                            height="400">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Celestial Whisper" data-artwork-id="art-7" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-7">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Celestial Whisper</h2>
+                            <p class="artwork-card__collection">Moonglow Collection</p>
+                            <p class="artwork-card__description">Delicate lichen and silver-toned bark collected under full moon. The smallest piece in the Moonglow series, yet it holds infinite depth.</p>
+                            <p class="artwork-card__price">$550</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 8 - Wide -->
+                    <article class="artwork-card bento-wide" data-collection="rise-in-blue" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--available">Available</span>
+                        <img
+                            src="img/art8.webp"
+                            alt="Rise in Blue with cascading water elements"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="800"
+                            height="400">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Cascading Tides" data-artwork-id="art-8" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-8">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Cascading Tides</h2>
+                            <p class="artwork-card__collection">Rise in Blue Collection</p>
+                            <p class="artwork-card__description">Layers of kelp, sea-smoothed glass, and coastal pine. 60+ hours of meticulous arrangement. Each element placed to mirror the rhythm of breaking waves.</p>
+                            <p class="artwork-card__price">$1,350</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 9 - Tall -->
+                    <article class="artwork-card bento-tall" data-collection="whales" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--new">New</span>
+                        <span class="collectors-choice-indicator" aria-label="Collector's Choice" title="Popular with collectors"></span>
+                        <img
+                            src="img/art9.webp"
+                            alt="Whales collection with deep ocean scenes"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="400"
+                            height="800">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Deep Blue Journey" data-artwork-id="art-9" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-9">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Deep Blue Journey</h2>
+                            <p class="artwork-card__collection">Whales Collection</p>
+                            <p class="artwork-card__description">My largest Whales piece. Blue-stained driftwood and abalone shell fragments from Point Reyes. A vertical dive into oceanic mystery. 80 hours of creation.</p>
+                            <p class="artwork-card__price">$2,600</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 10 - Regular -->
+                    <article class="artwork-card" data-collection="whales" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--available">Available</span>
+                        <img
+                            src="img/whales/0A3DA365-986F-45B1-B07F-C57207289792_4_5005_c.webp"
+                            alt="Whales collection with flowing organic forms"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="400"
+                            height="400">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Ocean Majesty" data-artwork-id="art-10" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-10">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Ocean Majesty</h2>
+                            <p class="artwork-card__collection">Whales Collection</p>
+                            <p class="artwork-card__description">Compact power in a smaller format. Storm-tossed seaweed and mineral-rich clay from the Sonoma coast. Perfect for intimate spaces seeking oceanic energy.</p>
+                            <p class="artwork-card__price">$800</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 11 - Wide -->
+                    <article class="artwork-card bento-wide artwork-card--sold" data-collection="navy-of-the-dreamland" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--sold">Sold</span>
+                        <img
+                            src="img/navy_of_the_dreamland/4547C4FE-4693-4F8A-879A-27063978464D_4_5005_c.webp"
+                            alt="Navy of the Dreamland with fantastical sea elements"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="800"
+                            height="400">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Phantom Ships" data-artwork-id="art-11" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-11">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Phantom Ships</h2>
+                            <p class="artwork-card__collection">Navy of the Dreamland</p>
+                            <p class="artwork-card__description">Salvaged boat wood from Tomales Bay, rope fibers, and sea-aged copper. Memories of vessels that once carried dreams across uncertain waters.</p>
+                            <p class="artwork-card__price">$1,150</p>
+                        </div>
+                    </article>
+
+                    <!-- Artwork 12 - Regular -->
+                    <article class="artwork-card" data-collection="of-ash-and-flowers" data-lightbox-trigger>
+                        <span class="artwork-card__badge artwork-card__badge--available">Available</span>
+                        <img
+                            src="img/of_ash_and_flowers/5CB4D56D-6763-4095-82AF-0AB0BE0AE4A5_4_5005_c.webp"
+                            alt="Of Ash and Flowers with botanical details"
+                            class="artwork-card__image"
+                            loading="lazy"
+                            width="400"
+                            height="400">
+                        <button class="artwork-card__inquire" aria-label="Inquire about Garden of Embers" data-artwork-id="art-12" title="Inquire about this artwork">
+                            <svg class="artwork-card__inquire-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-12">
+                            <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+
+                        <div class="artwork-card__content">
+                            <h2 class="artwork-card__title">Garden of Embers</h2>
+                            <p class="artwork-card__collection">Of Ash and Flowers</p>
+                            <p class="artwork-card__description">From the ashes of the 2020 fires emerged this piece. Charred wood, resilient succulents, and California poppies. Proof that beauty rises from devastation.</p>
+                            <p class="artwork-card__price">$700</p>
+                        </div>
+                    </article>
+
                 </div>
             </div>
-            <div class="skeleton-item" aria-hidden="true">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-info">
-                    <div class="skeleton-title"></div>
-                    <div class="skeleton-subtitle"></div>
-                </div>
-            </div>
-            <!-- Artworks will be dynamically loaded here -->
-        </div>
+        </section>
+
     </main>
 
+    <!-- Sticky Mobile Inquiry Button -->
+    <button class="sticky-inquiry-button" id="sticky-inquiry-btn" aria-label="Open inquiry form">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      Have Questions?
+    </button>
+
     <!-- Lightbox Modal -->
-    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" aria-hidden="true">
-        <div class="lightbox-content">
-            <button class="close-lightbox" aria-label="Close lightbox">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M18 6L6 18M6 6l12 12"/>
-                </svg>
-                <span class="sr-only">Close</span>
+    <div class="modal-overlay" data-lightbox-modal aria-hidden="true">
+        <div class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title">
+
+            <!-- Close Button -->
+            <button
+                class="lightbox__close"
+                data-lightbox-close
+                aria-label="Close lightbox">
+                <span aria-hidden="true">&times;</span>
             </button>
-            <div class="lightbox-image-container">
-                <button class="slider-btn slider-btn-prev" id="prev-btn" aria-label="Previous image">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                    </svg>
-                </button>
-                <div class="lightbox-image-wrapper">
-                    <img src="" alt="Artwork image" id="lightbox-img">
-                </div>
-                <button class="slider-btn slider-btn-next" id="next-btn" aria-label="Next image">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                    </svg>
-                </button>
-                <div class="slider-indicator" id="slider-indicator"></div>
+
+            <!-- Previous Button -->
+            <button
+                class="lightbox__nav lightbox__nav--prev"
+                data-lightbox-prev
+                aria-label="Previous artwork">
+                <span aria-hidden="true">‹</span>
+            </button>
+
+            <!-- Next Button -->
+            <button
+                class="lightbox__nav lightbox__nav--next"
+                data-lightbox-next
+                aria-label="Next artwork">
+                <span aria-hidden="true">›</span>
+            </button>
+
+            <!-- Image Display Area -->
+            <div class="lightbox__image-container">
+                <img
+                    src=""
+                    alt=""
+                    class="lightbox__image"
+                    data-lightbox-image>
             </div>
-            <div id="lightbox-caption">
-                <button class="back-to-gallery" id="back-to-gallery" aria-label="Back to gallery">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M19 12H5M12 19l-7-7 7-7"/>
-                    </svg>
-                    <span data-translate="lightbox.backToGallery">Back to Gallery</span>
-                </button>
-                <h3 id="lightbox-title"></h3>
-                <p id="lightbox-size"></p>
-                <p id="lightbox-materials"></p>
-                <p id="lightbox-description"></p>
-                <p id="lightbox-price" class="lightbox-price"></p>
-                <div id="lightbox-availability" class="artwork-availability hidden">
-                    <p class="sold-label">
-                        <span class="sold-dot" aria-hidden="true"></span>
-                        <span data-translate="artwork.sold">Sold</span>
-                    </p>
-                </div>
-                <div id="lightbox-prints" class="prints-badge hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
-                    <span data-translate="lightbox.printsAvailable">Prints Available</span>
-                </div>
-                <div class="lightbox-notes">
-                    <p class="lightbox-note" data-translate="lightbox.emailMockup">Email me to see a mockup of this painting on your wall.</p>
-                    <p class="lightbox-note" data-translate="lightbox.colorNote">Please note that colours may vary slightly on different screens.</p>
-                </div>
-                <button class="inquire-btn" data-translate="contact.inquire">Purchase Inquiry</button>
+
+            <!-- Caption Area -->
+            <div class="lightbox__caption">
+                <h2 id="lightbox-title" class="lightbox__title" data-lightbox-title></h2>
+                <p class="lightbox__collection" data-lightbox-collection></p>
+                <p class="lightbox__description" data-lightbox-description></p>
+                <p class="lightbox__price" data-lightbox-price></p>
             </div>
+
         </div>
     </div>
 
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-section footer-brand">
-                <h3>Viktoria Branchstone</h3>
-                <p data-translate="footer.tagline">Mixed media art inspired by natural textures and quiet resilience</p>
-            </div>
+    <!-- Newsletter Signup -->
+    <section class="newsletter" aria-labelledby="newsletter-heading">
+      <div class="newsletter__container">
+        <h2 id="newsletter-heading" class="newsletter__title">Stay Inspired</h2>
+        <p class="newsletter__text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
+        <form class="newsletter__form" id="newsletter-form" novalidate>
+          <input
+            type="email"
+            class="newsletter__input"
+            placeholder="Enter your email"
+            aria-label="Email address"
+            required
+          >
+          <button type="submit" class="newsletter__button">Subscribe</button>
+        </form>
+        <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
+        <p class="newsletter__privacy">We respect your privacy. <a href="privacy.html">Privacy Policy</a></p>
+      </div>
+    </section>
 
-            <div class="footer-section footer-nav">
-                <h4 data-translate="footer.navigate">Navigate</h4>
-                <ul>
-                    <li><a href="index.html" data-translate="nav.home">Home</a></li>
-                    <li><a href="gallery.html" data-translate="nav.gallery">Gallery</a></li>
-                    <li><a href="about.html" data-translate="nav.about">About</a></li>
-                    <li><a href="commissions.html" data-translate="nav.commissions">Commissions</a></li>
-                    <li><a href="contact.html" data-translate="nav.contact">Contact</a></li>
-                </ul>
-            </div>
+    <!-- Back to Top Button -->
+    <button
+      class="back-to-top"
+      data-back-to-top
+      aria-label="Back to top"
+      aria-hidden="true"
+      type="button">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="18 15 12 9 6 15"></polyline>
+      </svg>
+    </button>
 
-            <div class="footer-section footer-connect">
-                <h4 data-translate="footer.connect">Connect</h4>
-                <a href="mailto:thebranchstone@gmail.com" class="footer-social-link footer-email-link" aria-label="Email Viktoria">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="4" width="20" height="16" rx="2"/>
-                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-                    </svg>
-                    <span>thebranchstone@gmail.com</span>
-                </a>
-                <a href="https://www.instagram.com/branchstone.art" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Follow on Instagram">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
-                    <span data-translate="footer.followText">Follow for studio updates @branchstone.art</span>
-                </a>
-            </div>
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer__container">
+        <div class="footer__brand">
+          <a href="index.html" class="footer__logo" aria-label="Branchstone Home">
+            BRANCHSTONE
+          </a>
+          <p class="footer__tagline">Art inspired by natural textures and quiet resilience</p>
         </div>
 
-        <div class="footer-bottom">
-            <p data-translate="footer.copyright">&copy; 2024 Branchstone Art. All rights reserved.</p>
+        <nav class="footer__nav" aria-label="Footer navigation">
+          <div class="footer__nav-column">
+            <h3 class="footer__nav-heading">Navigation</h3>
+            <ul class="footer__nav-list">
+              <li><a href="gallery.html" class="footer__nav-link">Gallery</a></li>
+              <li><a href="about.html" class="footer__nav-link">About</a></li>
+              <li><a href="commissions.html" class="footer__nav-link">Commissions</a></li>
+              <li><a href="contact.html" class="footer__nav-link">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="footer__nav-column">
+            <h3 class="footer__nav-heading">Legal</h3>
+            <ul class="footer__nav-list">
+              <li><a href="privacy.html" class="footer__nav-link">Privacy Policy</a></li>
+              <li><a href="terms.html" class="footer__nav-link">Terms of Service</a></li>
+            </ul>
+          </div>
+        </nav>
+
+        <div class="footer__social">
+          <h3 class="footer__social-heading">Connect</h3>
+          <ul class="footer__social-list">
+            <li>
+              <a href="https://instagram.com/branchstone.art" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Follow on Instagram">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
+            </li>
+          </ul>
+          <p class="footer__email">
+            <a href="mailto:thebranchstone@gmail.com" class="footer__email-link">thebranchstone@gmail.com</a>
+          </p>
+
+          <!-- Trust Badges -->
+          <div class="footer__trust-badges">
+            <div class="trust-badge-small">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Secure checkout</span>
+            </div>
+            <div class="trust-badge-small">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+              <span>Est. 2013</span>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; <span id="copyright-year">2025</span> Branchstone. All rights reserved.</p>
+      </div>
     </footer>
 
-    <script type="module" src="js/i18n.js"></script>
-    <script type="module" src="js/app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(() => {});
-        }
-    </script>
-
 </body>
-
 </html>
