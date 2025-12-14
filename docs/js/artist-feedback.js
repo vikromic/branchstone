@@ -61,6 +61,33 @@
 
     if (!lightboxCaption) return;
 
+    // Store reference to current artwork for prints availability
+    let currentArtworkElement = null;
+
+    // Listen for lightbox open events to track current artwork
+    const artworkTriggers = document.querySelectorAll('[data-lightbox-trigger]');
+    artworkTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        currentArtworkElement = trigger;
+      });
+    });
+
+    // Create prints available marker (conditional)
+    const printsMarker = document.createElement('div');
+    printsMarker.className = 'artwork-prints-available';
+    printsMarker.style.display = 'none'; // Hidden by default
+
+    const refreshSVG = createSVG('0 0 24 24', [
+      { points: '23 4 23 10 17 10' },
+      { d: 'M20.49 15a9 9 0 1 1-2.12-9.36L23 10' }
+    ]);
+
+    const printsText = document.createElement('span');
+    printsText.textContent = 'Prints Available';
+
+    printsMarker.appendChild(refreshSVG);
+    printsMarker.appendChild(printsText);
+
     // Create color notice
     const colorNotice = document.createElement('div');
     colorNotice.className = 'artwork-color-notice';
@@ -108,10 +135,41 @@
 
     // Append elements to caption
     if (lightboxDescription && lightboxDescription.parentNode === lightboxCaption) {
-      lightboxDescription.insertAdjacentElement('afterend', colorNotice);
+      lightboxDescription.insertAdjacentElement('afterend', printsMarker);
+      printsMarker.insertAdjacentElement('afterend', colorNotice);
       colorNotice.insertAdjacentElement('afterend', tryBeforeBuy);
       tryBeforeBuy.insertAdjacentElement('afterend', inquiryButton);
     }
+
+    // Update prints availability when lightbox opens
+    const updatePrintsAvailability = () => {
+      if (currentArtworkElement && currentArtworkElement.dataset.printsAvailable === 'true') {
+        printsMarker.style.display = 'inline-flex';
+      } else {
+        printsMarker.style.display = 'none';
+      }
+    };
+
+    // Observer for lightbox visibility changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'aria-hidden') {
+          const isHidden = lightbox.getAttribute('aria-hidden') === 'true';
+          if (!isHidden) {
+            updatePrintsAvailability();
+          }
+        }
+      });
+    });
+
+    observer.observe(lightbox, { attributes: true });
+
+    // Also update on trigger clicks
+    artworkTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        setTimeout(updatePrintsAvailability, 100);
+      });
+    });
 
     // Handle inquiry button click
     inquiryButton.addEventListener('click', () => {
