@@ -15,7 +15,8 @@
   opacity: 0.85;
   /* Override display: none from components.css */
   display: flex !important;
-  /* Position as specified */
+  /* Fixed positioning relative to viewport */
+  position: fixed !important;
   right: 24px !important;
   bottom: 88px !important;
 }
