@@ -27,9 +27,11 @@
   <link rel="stylesheet" href="css/artwork-animations.css?v=2">
   <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=2">
   <link rel="stylesheet" href="css/mobile-gallery-improvements.css?v=2">
+  <link rel="stylesheet" href="css/artist-feedback.css?v=1">
 
   <!-- Main Script -->
   <script defer src="js/main.js"></script>
+  <script defer src="js/artist-feedback.js"></script>
 </head>
 <body data-theme="light">
 
@@ -185,15 +187,6 @@
           <span aria-hidden="true">×</span>
         </button>
 
-        <!-- Verified Artist Badge -->
-        <div class="verified-artist-badge" role="img" aria-label="Verified artist with 12 years of experience">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <polyline points="9 12 11 14 15 10"/>
-          </svg>
-          <span>Verified Artist</span>
-        </div>
-
         <h1 class="section-hero__heading">Where Forest Meets Art</h1>
         <p class="section-hero__subheading">
           Bring nature's raw beauty into your home. Each handcrafted piece transforms foraged California materials into one-of-a-kind art that tells your story.
@@ -221,10 +214,16 @@
           </a>
           <a href="commissions.html" class="btn btn--secondary btn--hero">Request a Custom Piece</a>
         </div>
-        <p class="section-hero__trust-badge">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="display: inline; vertical-align: middle; margin-right: 0.5rem;">
+        <!-- Verified Artist Badge -->
+        <div class="verified-artist-badge" role="img" aria-label="Verified artist with 12 years of experience">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 11 14 15 10"/>
           </svg>
+          <span>Verified Artist</span>
+        </div>
+
+        <p class="section-hero__trust-badge">
           Ethically sourced from California forests • 100% unique handcrafted art
         </p>
       </div>
@@ -317,7 +316,6 @@
         <div class="bento-grid">
           <article class="artwork-card">
             <a href="gallery.html" class="artwork-card__link">
-              <span class="artwork-card__badge artwork-card__badge--limited">Only 1 available</span>
               <img src="img/art1.webp" alt="Featured artwork 1" class="artwork-card__image" loading="lazy">
                 <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-home-1">
                     <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -352,7 +350,6 @@
 
           <article class="artwork-card">
             <a href="gallery.html" class="artwork-card__link">
-              <span class="artwork-card__badge artwork-card__badge--limited">Limited availability</span>
               <img src="img/art3.webp" alt="Featured artwork 3" class="artwork-card__image" loading="lazy">
                 <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-home-3">
                     <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -387,7 +384,6 @@
 
           <article class="artwork-card">
             <a href="gallery.html" class="artwork-card__link">
-              <span class="artwork-card__badge artwork-card__badge--limited">Only 1 available</span>
               <img src="img/art5.webp" alt="Featured artwork 5" class="artwork-card__image" loading="lazy">
                 <button class="artwork-card__favorite" aria-label="Add to favorites" data-artwork-id="art-home-5">
                     <svg class="artwork-card__favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
