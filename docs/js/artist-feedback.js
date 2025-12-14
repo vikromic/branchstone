@@ -47,6 +47,82 @@
   };
 
   // ========================================
+  // LOCALSTORAGE UTILITIES WITH VALIDATION
+  // ========================================
+
+  /**
+   * Safely writes data to localStorage with validation and error handling
+   * @param {string} key - Storage key
+   * @param {Object} data - Data to store (will be JSON stringified)
+   * @returns {boolean} - Success status
+   */
+  const safeLocalStorageWrite = (key, data) => {
+    // Validate key
+    if (!key || typeof key !== 'string') {
+      console.warn('Invalid localStorage key:', key);
+      return false;
+    }
+
+    // Validate data exists
+    if (data === null || data === undefined) {
+      console.warn('Cannot store null/undefined data');
+      return false;
+    }
+
+    try {
+      const serialized = JSON.stringify(data);
+
+      // Check if serialization resulted in valid data
+      if (!serialized || serialized === '{}' || serialized === 'null') {
+        console.warn('Invalid data for localStorage:', data);
+        return false;
+      }
+
+      localStorage.setItem(key, serialized);
+      return true;
+    } catch (error) {
+      // Handle quota exceeded or other storage errors
+      if (error.name === 'QuotaExceededError') {
+        console.error('localStorage quota exceeded:', error);
+      } else if (error.name === 'SecurityError') {
+        console.error('localStorage access denied (private browsing?):', error);
+      } else {
+        console.error('Failed to write to localStorage:', error);
+      }
+      return false;
+    }
+  };
+
+  /**
+   * Safely reads and validates data from localStorage
+   * @param {string} key - Storage key
+   * @returns {Object|null} - Parsed data or null if invalid/not found
+   */
+  const safeLocalStorageRead = (key) => {
+    if (!key || typeof key !== 'string') {
+      return null;
+    }
+
+    try {
+      const item = localStorage.getItem(key);
+      if (!item) {
+        return null;
+      }
+
+      return JSON.parse(item);
+    } catch (error) {
+      console.error('Failed to read from localStorage:', error);
+      // Clean up corrupted data
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+      return null;
+    }
+  };
+
+  // ========================================
   // ENHANCED LIGHTBOX WITH CAROUSEL & DETAILS
   // ========================================
 
@@ -173,19 +249,32 @@
 
     // Handle inquiry button click
     inquiryButton.addEventListener('click', () => {
-      const artworkTitle = lightboxTitle?.textContent || 'Artwork';
+      const artworkTitle = lightboxTitle?.textContent?.trim() || 'Artwork';
+      const collection = lightboxCollection?.textContent?.trim() || '';
 
-      // Store inquiry data in localStorage
-      localStorage.setItem('pendingInquiry', JSON.stringify({
+      // Validate that we have meaningful data
+      if (!artworkTitle || artworkTitle === 'Artwork') {
+        console.warn('No valid artwork title found for inquiry');
+      }
+
+      // Prepare inquiry data with validation
+      const inquiryData = {
         artworks: [{
           title: artworkTitle,
-          collection: lightboxCollection?.textContent || '',
+          collection: collection,
           price: ''
         }],
         timestamp: Date.now()
-      }));
+      };
 
-      // Navigate to contact page
+      // Store inquiry data using safe localStorage write
+      const writeSuccess = safeLocalStorageWrite('pendingInquiry', inquiryData);
+
+      if (!writeSuccess) {
+        console.warn('Failed to store inquiry data, continuing to contact page anyway');
+      }
+
+      // Navigate to contact page (even if storage failed, user can still contact)
       window.location.href = 'contact.html';
     });
   };
@@ -222,18 +311,43 @@
 
     if (!messageField || !subjectField) return;
 
-    try {
-      const inquiryData = localStorage.getItem('pendingInquiry');
-      if (!inquiryData) return;
+    // Use safe localStorage read
+    const inquiryData = safeLocalStorageRead('pendingInquiry');
+    if (!inquiryData) return;
 
-      const { artworks, timestamp } = JSON.parse(inquiryData);
-
-      const oneHour = 60 * 60 * 1000;
-      if (Date.now() - timestamp > oneHour) {
+    // Validate inquiry data structure
+    if (!inquiryData.artworks || !Array.isArray(inquiryData.artworks) || !inquiryData.timestamp) {
+      console.warn('Invalid inquiry data structure:', inquiryData);
+      try {
         localStorage.removeItem('pendingInquiry');
-        return;
+      } catch (e) {
+        // Ignore cleanup errors
       }
+      return;
+    }
 
+    const { artworks, timestamp } = inquiryData;
+
+    // Check if data is stale (older than 1 hour)
+    const oneHour = 60 * 60 * 1000;
+    if (Date.now() - timestamp > oneHour) {
+      try {
+        localStorage.removeItem('pendingInquiry');
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+      return;
+    }
+
+    // Validate artwork data
+    const artwork = artworks[0];
+    if (!artwork || !artwork.title) {
+      console.warn('No valid artwork data in inquiry');
+      return;
+    }
+
+    try {
+      // Pre-fill subject field
       if (subjectField.tagName === 'SELECT') {
         const purchaseOption = Array.from(subjectField.options).find(
           opt => opt.value === 'purchase' || opt.textContent.toLowerCase().includes('purchase')
@@ -242,21 +356,32 @@
           subjectField.value = purchaseOption.value;
         }
       } else {
-        subjectField.value = artworks[0]?.title ? `Inquiry about ${artworks[0].title}` : 'Artwork Inquiry';
+        subjectField.value = `Inquiry about ${artwork.title}`;
       }
 
-      const artworkTitle = artworks[0]?.title || 'Artwork';
-      messageField.value = `Hello, I'm interested in ${artworkTitle}`;
+      // Pre-fill message field
+      messageField.value = `Hello, I'm interested in ${artwork.title}`;
 
+      // Scroll to and focus message field
       setTimeout(() => {
         messageField.scrollIntoView({ behavior: 'smooth', block: 'center' });
         messageField.focus();
       }, 300);
 
-      localStorage.removeItem('pendingInquiry');
+      // Clean up localStorage after successful pre-fill
+      try {
+        localStorage.removeItem('pendingInquiry');
+      } catch (e) {
+        // Ignore cleanup errors
+      }
     } catch (error) {
       console.error('Error pre-filling inquiry:', error);
-      localStorage.removeItem('pendingInquiry');
+      // Clean up on error
+      try {
+        localStorage.removeItem('pendingInquiry');
+      } catch (e) {
+        // Ignore cleanup errors
+      }
     }
   };
 

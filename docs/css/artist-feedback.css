@@ -4,40 +4,56 @@
  */
 
 /* ==========================================================================
+   CSS CUSTOM PROPERTIES
+   ========================================================================== */
+
+:root {
+  --hero-info-size-base: 52px;
+  --hero-info-size-reduced: calc(var(--hero-info-size-base) * 0.8); /* 41.6px */
+  --hero-info-icon-size-base: 26px;
+  --hero-info-icon-size-reduced: calc(var(--hero-info-icon-size-base) * 0.8); /* 20.8px */
+
+  --hero-info-size-mobile-base: 56px;
+  --hero-info-size-mobile-reduced: calc(var(--hero-info-size-mobile-base) * 0.8); /* 44.8px */
+  --hero-info-icon-size-mobile-base: 30px;
+  --hero-info-icon-size-mobile-reduced: calc(var(--hero-info-icon-size-mobile-base) * 0.8); /* 24px */
+}
+
+/* ==========================================================================
    HERO "i" BUTTON - REDUCED SIZE AND PROMINENCE
    ========================================================================== */
 
-.hero-show-info {
-  /* Reduce size by 20% */
-  min-width: 41.6px !important; /* 52px * 0.8 */
-  height: 41.6px !important; /* 52px * 0.8 */
+.section-hero .hero-show-info {
+  /* Reduce size by 20% using CSS custom properties */
+  min-width: var(--hero-info-size-reduced) !important;
+  height: var(--hero-info-size-reduced) !important;
   /* Reduce opacity for less prominence */
   opacity: 0.85;
-  /* Override display: none from components.css */
+  /* Override display: none from components.css - !important required */
   display: flex !important;
-  /* Fixed positioning relative to viewport */
+  /* Fixed positioning relative to viewport - !important required to override */
   position: fixed !important;
   right: 24px !important;
   bottom: 88px !important;
 }
 
-.hero-show-info__icon {
-  /* Reduce icon size proportionally */
-  font-size: 20.8px !important; /* 26px * 0.8 */
+.section-hero .hero-show-info__icon {
+  /* Reduce icon size proportionally using CSS custom properties */
+  font-size: var(--hero-info-icon-size-reduced) !important;
 }
 
-.hero-show-info:hover {
+.section-hero .hero-show-info:hover {
   opacity: 1;
 }
 
 @media (max-width: 768px) {
-  .hero-show-info {
-    min-width: 44.8px !important; /* 56px * 0.8 */
-    height: 44.8px !important; /* 56px * 0.8 */
+  .section-hero .hero-show-info {
+    min-width: var(--hero-info-size-mobile-reduced) !important;
+    height: var(--hero-info-size-mobile-reduced) !important;
   }
 
-  .hero-show-info__icon {
-    font-size: 24px !important; /* 30px * 0.8 */
+  .section-hero .hero-show-info__icon {
+    font-size: var(--hero-info-icon-size-mobile-reduced) !important;
   }
 }
 
@@ -78,7 +94,7 @@
    REMOVE STATS ANIMATION
    ========================================================================== */
 
-.stat-item {
+.section-stats .stat-item {
   /* Disable animation by removing transition */
   transition: none !important;
   /* Ensure stats are always visible */
@@ -86,13 +102,13 @@
   transform: none !important;
 }
 
-.stat-item__number {
+.section-stats .stat-item__number {
   /* Disable number animation */
   transition: none !important;
 }
 
-/* Disable intersection observer effects */
-[data-stat-item].is-visible {
+/* Disable intersection observer effects - !important required to override JS-added styles */
+.section-stats [data-stat-item].is-visible {
   opacity: 1 !important;
   transform: none !important;
 }
@@ -101,9 +117,11 @@
    LIGHTBOX/MODAL BUTTON STYLING - REMOVE CIRCULAR BACKGROUND
    ========================================================================== */
 
-.lightbox__close,
-.lightbox__nav {
-  /* Remove circular background */
+.lightbox .lightbox__close,
+.lightbox .lightbox__nav,
+.modal-overlay .lightbox__close,
+.modal-overlay .lightbox__nav {
+  /* Remove circular background - !important required to override component styles */
   background: transparent !important;
   border: none !important;
   border-radius: 0 !important;
@@ -111,8 +129,10 @@
   padding: 0.5rem;
 }
 
-.lightbox__close span,
-.lightbox__nav span {
+.lightbox .lightbox__close span,
+.lightbox .lightbox__nav span,
+.modal-overlay .lightbox__close span,
+.modal-overlay .lightbox__nav span {
   /* Style the text/arrow without circle */
   font-size: 2rem;
   font-weight: 300;
@@ -120,8 +140,11 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.lightbox__close:hover,
-.lightbox__nav:hover {
+.lightbox .lightbox__close:hover,
+.lightbox .lightbox__nav:hover,
+.modal-overlay .lightbox__close:hover,
+.modal-overlay .lightbox__nav:hover {
+  /* !important required to override component hover effects */
   background: rgba(255, 255, 255, 0.1) !important;
   transform: none !important;
 }
