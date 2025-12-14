@@ -13,6 +13,11 @@
   height: 41.6px !important; /* 52px * 0.8 */
   /* Reduce opacity for less prominence */
   opacity: 0.85;
+  /* Override display: none from components.css */
+  display: flex !important;
+  /* Position as specified */
+  right: 24px !important;
+  bottom: 88px !important;
 }
 
 .hero-show-info__icon {
