@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Final Test</title>
+    <style>
+        body { font-family: system-ui; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .bento-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+        .artwork-card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+        .artwork-card__image { width: 100%; height: 200px; object-fit: cover; }
+        .artwork-card__content { padding: 10px; }
+        .artwork-card__title { margin: 0 0 5px 0; font-size: 16px; }
+        .artwork-card__collection { margin: 0; font-size: 14px; color: #666; }
+    </style>
+</head>
+<body>
+    <h1>Gallery Final Test</h1>
+    <div id="status"></div>
+    <div class="bento-grid" id="gallery"></div>
+
+    <script type="module">
+        const statusEl = document.getElementById('status');
+        const galleryEl = document.getElementById('gallery');
+
+        function addStatus(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            statusEl.appendChild(div);
+        }
+
+        try {
+            addStatus('Loading artworks.json...', 'info');
+
+            const response = await fetch('./docs/artworks.json');
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            const artworks = data.artworks || [];
+
+            addStatus(`✓ Loaded ${artworks.length} artworks`, 'success');
+
+            // Check for missing images
+            let loadedImages = 0;
+            let failedImages = [];
+
+            for (const artwork of artworks) {
+                const img = new Image();
+                const imagePath = `./docs/${artwork.main_image}`;
+
+                await new Promise((resolve) => {
+                    img.onload = () => {
+                        loadedImages++;
+                        resolve();
+                    };
+                    img.onerror = () => {
+                        failedImages.push(`${artwork.name}: ${imagePath}`);
+                        resolve();
+                    };
+                    img.src = imagePath;
+                });
+            }
+
+            if (failedImages.length > 0) {
+                addStatus(`❌ ${failedImages.length} images failed to load:`, 'error');
+                failedImages.forEach(f => addStatus(`  - ${f}`, 'error'));
+            } else {
+                addStatus(`✓ All ${loadedImages} images loaded successfully`, 'success');
+            }
+
+            // Render gallery
+            artworks.forEach((artwork, index) => {
+                const card = document.createElement('article');
+                card.className = 'artwork-card';
+
+                const img = document.createElement('img');
+                img.className = 'artwork-card__image';
+                img.src = `./docs/${artwork.main_image}`;
+                img.alt = artwork.name;
+                img.loading = 'lazy';
+
+                const content = document.createElement('div');
+                content.className = 'artwork-card__content';
+
+                const title = document.createElement('h2');
+                title.className = 'artwork-card__title';
+                title.textContent = `${index + 1}. ${artwork.name}`;
+
+                const collection = document.createElement('p');
+                collection.className = 'artwork-card__collection';
+                collection.textContent = artwork.collection;
+
+                const status = document.createElement('p');
+                status.textContent = artwork.sold ? '🔴 Sold' : (artwork.highlighted ? '⭐ Highlighted' : '✅ Available');
+
+                content.appendChild(title);
+                content.appendChild(collection);
+                content.appendChild(status);
+                card.appendChild(img);
+                card.appendChild(content);
+                galleryEl.appendChild(card);
+            });
+
+            addStatus('✓ Gallery rendered successfully', 'success');
+            addStatus(`Order: 1st=${artworks[0].name}, Last=${artworks[artworks.length-1].name}`, 'info');
+
+        } catch (error) {
+            addStatus(`❌ Error: ${error.message}`, 'error');
+            console.error(error);
+        }
+    </script>
+</body>
+</html>
