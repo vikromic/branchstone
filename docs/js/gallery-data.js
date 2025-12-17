@@ -167,7 +167,7 @@ export class GalleryDataManager {
     inquireBtn.setAttribute('title', 'Inquire about this artwork');
 
     const inquireSvg = this.createSVG('0 0 24 24', ['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z']);
-    inquireSvg.className = 'artwork-card__inquire-icon';
+    inquireSvg.setAttribute('class', 'artwork-card__inquire-icon');
     inquireBtn.appendChild(inquireSvg);
     article.appendChild(inquireBtn);
 
@@ -178,7 +178,7 @@ export class GalleryDataManager {
     favoriteBtn.setAttribute('data-artwork-id', artworkId);
 
     const favoriteSvg = this.createSVG('0 0 24 24', ['M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z']);
-    favoriteSvg.className = 'artwork-card__favorite-icon';
+    favoriteSvg.setAttribute('class', 'artwork-card__favorite-icon');
     favoriteBtn.appendChild(favoriteSvg);
     article.appendChild(favoriteBtn);
 
