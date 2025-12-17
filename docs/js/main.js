@@ -690,7 +690,6 @@ import { GalleryDataManager } from './gallery-data.js';
             }, 300);
           }
         }
-      }
     };
 
     // Clear all favorites
