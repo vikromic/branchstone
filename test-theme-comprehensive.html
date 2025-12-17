@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprehensive Theme Test</title>
+  <link rel="stylesheet" href="docs/css/tokens.css">
+  <link rel="stylesheet" href="docs/css/base.css">
+  <link rel="stylesheet" href="docs/css/components.css">
+  <link rel="stylesheet" href="docs/css/layout.css">
+  <style>
+    body {
+      padding: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .test-section {
+      margin: 30px 0;
+      padding: 20px;
+      border: 2px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      background: var(--bg-secondary);
+    }
+    .test-result {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: var(--radius-md);
+      font-family: monospace;
+    }
+    .test-pass {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .test-fail {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .color-sample {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body data-theme="light">
+
+  <!-- Header with theme toggle (mimicking the real site) -->
+  <header class="header" style="margin-bottom: 40px;">
+    <button class="header__theme-toggle" aria-label="Toggle theme" type="button">
+      <svg class="header__theme-icon header__theme-icon--sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="header__theme-icon header__theme-icon--moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </header>
+
+  <h1>Comprehensive Theme Toggle Test</h1>
+
+  <div class="test-section">
+    <h2>1. Visual Theme Check</h2>
+    <p>Current theme: <strong id="visual-theme">-</strong></p>
+    <p>Background color: <span class="color-sample" id="bg-sample"></span><code id="bg-color">-</code></p>
+    <p>Text color: <span class="color-sample" id="text-sample"></span><code id="text-color">-</code></p>
+    <p>Accent color: <span class="color-sample" id="accent-sample"></span><code id="accent-color">-</code></p>
+  </div>
+
+  <div class="test-section">
+    <h2>2. DOM Attributes</h2>
+    <div id="dom-tests"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>3. Storage Tests</h2>
+    <div id="storage-tests"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>4. Icon Visibility Tests</h2>
+    <div id="icon-tests"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>5. Toggle Functionality</h2>
+    <button id="manual-toggle" class="btn btn--primary">Manual Toggle</button>
+    <button id="run-tests" class="btn btn--secondary">Run All Tests</button>
+    <button id="clear-storage" class="btn btn--outline">Clear Storage</button>
+    <div id="toggle-tests" style="margin-top: 20px;"></div>
+  </div>
+
+  <script type="module">
+    import { THEME, STORAGE_KEYS } from './docs/js/constants.js';
+    import * as storage from './docs/js/storage.js';
+
+    const testResults = {
+      dom: [],
+      storage: [],
+      icons: [],
+      toggle: []
+    };
+
+    function addResult(category, test, pass, message) {
+      testResults[category].push({ test, pass, message });
+    }
+
+    function displayResults(category, containerId) {
+      const container = document.getElementById(containerId);
+      // Clear using safe method
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+
+      testResults[category].forEach(result => {
+        const div = document.createElement('div');
+        div.className = `test-result ${result.pass ? 'test-pass' : 'test-fail'}`;
+        div.textContent = `${result.pass ? '✓' : '✗'} ${result.test}: ${result.message}`;
+        container.appendChild(div);
+      });
+    }
+
+    function updateVisualTheme() {
+      const theme = document.body.getAttribute('data-theme');
+      document.getElementById('visual-theme').textContent = theme || 'not set';
+
+      const styles = getComputedStyle(document.body);
+      const bgColor = styles.getPropertyValue('--bg-primary').trim();
+      const textColor = styles.getPropertyValue('--text-primary').trim();
+      const accentColor = styles.getPropertyValue('--accent-primary').trim();
+
+      document.getElementById('bg-color').textContent = bgColor;
+      document.getElementById('text-color').textContent = textColor;
+      document.getElementById('accent-color').textContent = accentColor;
+
+      document.getElementById('bg-sample').style.backgroundColor = bgColor;
+      document.getElementById('text-sample').style.backgroundColor = textColor;
+      document.getElementById('accent-sample').style.backgroundColor = accentColor;
+    }
+
+    function runDOMTests() {
+      testResults.dom = [];
+
+      const bodyTheme = document.body.getAttribute('data-theme');
+      const htmlTheme = document.documentElement.getAttribute('data-theme');
+
+      addResult('dom', 'Body has data-theme', !!bodyTheme, bodyTheme || 'not set');
+      addResult('dom', 'HTML has data-theme', !!htmlTheme, htmlTheme || 'not set');
+      addResult('dom', 'Body and HTML match', bodyTheme === htmlTheme, `${bodyTheme} === ${htmlTheme}`);
+      addResult('dom', 'Theme is valid', bodyTheme === 'light' || bodyTheme === 'dark', bodyTheme);
+
+      displayResults('dom', 'dom-tests');
+    }
+
+    function runStorageTests() {
+      testResults.storage = [];
+
+      const storedTheme = storage.getItem(STORAGE_KEYS.THEME);
+      const bodyTheme = document.body.getAttribute('data-theme');
+
+      addResult('storage', 'Theme is stored', !!storedTheme, storedTheme || 'not set');
+      addResult('storage', 'Stored theme is valid', storedTheme === 'light' || storedTheme === 'dark', storedTheme);
+      addResult('storage', 'Stored matches DOM', storedTheme === bodyTheme, `${storedTheme} === ${bodyTheme}`);
+
+      displayResults('storage', 'storage-tests');
+    }
+
+    function runIconTests() {
+      testResults.icons = [];
+
+      const sunIcon = document.querySelector('.header__theme-icon--sun');
+      const moonIcon = document.querySelector('.header__theme-icon--moon');
+      const theme = document.body.getAttribute('data-theme');
+
+      addResult('icons', 'Sun icon exists', !!sunIcon, sunIcon ? 'found' : 'not found');
+      addResult('icons', 'Moon icon exists', !!moonIcon, moonIcon ? 'found' : 'not found');
+
+      if (sunIcon && moonIcon) {
+        const sunDisplay = window.getComputedStyle(sunIcon).display;
+        const moonDisplay = window.getComputedStyle(moonIcon).display;
+
+        addResult('icons', 'Sun icon visibility',
+          (theme === 'light' && sunDisplay !== 'none') || (theme === 'dark' && sunDisplay === 'none'),
+          `${sunDisplay} (theme: ${theme})`);
+
+        addResult('icons', 'Moon icon visibility',
+          (theme === 'dark' && moonDisplay !== 'none') || (theme === 'light' && moonDisplay === 'none'),
+          `${moonDisplay} (theme: ${theme})`);
+      }
+
+      displayResults('icons', 'icon-tests');
+    }
+
+    function runToggleTests() {
+      testResults.toggle = [];
+
+      const toggleButton = document.querySelector('.header__theme-toggle');
+      addResult('toggle', 'Toggle button exists', !!toggleButton, toggleButton ? 'found' : 'not found');
+
+      if (toggleButton) {
+        const initialTheme = document.body.getAttribute('data-theme');
+
+        // Simulate click
+        toggleButton.click();
+
+        setTimeout(() => {
+          const newTheme = document.body.getAttribute('data-theme');
+          const changed = initialTheme !== newTheme;
+
+          addResult('toggle', 'Theme changed on click', changed, `${initialTheme} → ${newTheme}`);
+          addResult('toggle', 'Theme toggled correctly',
+            (initialTheme === 'light' && newTheme === 'dark') || (initialTheme === 'dark' && newTheme === 'light'),
+            `${initialTheme} → ${newTheme}`);
+
+          // Toggle back
+          toggleButton.click();
+
+          displayResults('toggle', 'toggle-tests');
+          updateVisualTheme();
+          runDOMTests();
+          runStorageTests();
+          runIconTests();
+        }, 100);
+      } else {
+        displayResults('toggle', 'toggle-tests');
+      }
+    }
+
+    function runAllTests() {
+      updateVisualTheme();
+      runDOMTests();
+      runStorageTests();
+      runIconTests();
+      runToggleTests();
+    }
+
+    // Manual toggle button
+    document.getElementById('manual-toggle').addEventListener('click', () => {
+      const toggleButton = document.querySelector('.header__theme-toggle');
+      if (toggleButton) {
+        toggleButton.click();
+        setTimeout(() => {
+          updateVisualTheme();
+          runAllTests();
+        }, 100);
+      }
+    });
+
+    // Run tests button
+    document.getElementById('run-tests').addEventListener('click', runAllTests);
+
+    // Clear storage button
+    document.getElementById('clear-storage').addEventListener('click', () => {
+      storage.removeItem(STORAGE_KEYS.THEME);
+      alert('Storage cleared! Reload the page to see the default theme.');
+    });
+
+    // Run tests on load
+    window.addEventListener('DOMContentLoaded', () => {
+      // Import and run the main.js initialization
+      import('./docs/js/main.js').then(() => {
+        console.log('Main.js loaded');
+        setTimeout(runAllTests, 500);
+      });
+    });
+
+    // Also run tests after a short delay to ensure everything is initialized
+    setTimeout(runAllTests, 1000);
+  </script>
+
+</body>
+</html>
