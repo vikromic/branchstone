@@ -375,6 +375,20 @@ export const generateUniqueId = (prefix = 'id') => {
  * @returns {number}
  */
 export const clamp = (num, min, max) => {
+  // Validate inputs are numbers
+  if (typeof num !== 'number' || isNaN(num)) {
+    console.warn('[Utils] clamp: num is not a valid number:', num);
+    return 0;
+  }
+  if (typeof min !== 'number' || isNaN(min)) {
+    console.warn('[Utils] clamp: min is not a valid number:', min);
+    return num;
+  }
+  if (typeof max !== 'number' || isNaN(max)) {
+    console.warn('[Utils] clamp: max is not a valid number:', max);
+    return num;
+  }
+
   return Math.min(Math.max(num, min), max);
 };
 
@@ -386,6 +400,20 @@ export const clamp = (num, min, max) => {
  * @returns {number}
  */
 export const lerp = (start, end, t) => {
+  // Validate inputs are numbers
+  if (typeof start !== 'number' || isNaN(start)) {
+    console.warn('[Utils] lerp: start is not a valid number:', start);
+    return 0;
+  }
+  if (typeof end !== 'number' || isNaN(end)) {
+    console.warn('[Utils] lerp: end is not a valid number:', end);
+    return start;
+  }
+  if (typeof t !== 'number' || isNaN(t)) {
+    console.warn('[Utils] lerp: t is not a valid number:', t);
+    return start;
+  }
+
   return start + (end - start) * t;
 };
 
@@ -399,6 +427,34 @@ export const lerp = (start, end, t) => {
  * @returns {number}
  */
 export const mapRange = (value, inMin, inMax, outMin, outMax) => {
+  // Validate inputs are numbers
+  if (typeof value !== 'number' || isNaN(value)) {
+    console.warn('[Utils] mapRange: value is not a valid number:', value);
+    return 0;
+  }
+  if (typeof inMin !== 'number' || isNaN(inMin)) {
+    console.warn('[Utils] mapRange: inMin is not a valid number:', inMin);
+    return value;
+  }
+  if (typeof inMax !== 'number' || isNaN(inMax)) {
+    console.warn('[Utils] mapRange: inMax is not a valid number:', inMax);
+    return value;
+  }
+  if (typeof outMin !== 'number' || isNaN(outMin)) {
+    console.warn('[Utils] mapRange: outMin is not a valid number:', outMin);
+    return value;
+  }
+  if (typeof outMax !== 'number' || isNaN(outMax)) {
+    console.warn('[Utils] mapRange: outMax is not a valid number:', outMax);
+    return value;
+  }
+
+  // Prevent division by zero
+  if (inMax === inMin) {
+    console.warn('[Utils] mapRange: inMax equals inMin, cannot map range');
+    return outMin;
+  }
+
   return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
 };
 
