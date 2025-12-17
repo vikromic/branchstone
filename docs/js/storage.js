@@ -243,6 +243,67 @@ export const isStorageNearQuota = () => {
 };
 
 /**
+ * Get accurate storage quota using StorageManager API
+ * @returns {Promise<{usage: number, quota: number, percentage: number}>}
+ */
+export const getStorageQuota = async () => {
+  try {
+    if (navigator.storage && navigator.storage.estimate) {
+      const estimate = await navigator.storage.estimate();
+      const usage = estimate.usage || 0;
+      const quota = estimate.quota || 0;
+      const percentage = quota > 0 ? (usage / quota) * 100 : 0;
+
+      return {
+        usage,
+        quota,
+        percentage,
+        usageInMB: (usage / (1024 * 1024)).toFixed(2),
+        quotaInMB: (quota / (1024 * 1024)).toFixed(2)
+      };
+    } else {
+      // Fallback to approximate calculation
+      const size = getStorageSize();
+      const approximateQuota = 5 * 1024 * 1024;
+      return {
+        usage: size,
+        quota: approximateQuota,
+        percentage: (size / approximateQuota) * 100,
+        usageInMB: (size / (1024 * 1024)).toFixed(2),
+        quotaInMB: (approximateQuota / (1024 * 1024)).toFixed(2),
+        isApproximate: true
+      };
+    }
+  } catch (error) {
+    console.error('[Storage] Failed to get storage quota:', error);
+    return {
+      usage: 0,
+      quota: 0,
+      percentage: 0,
+      usageInMB: '0.00',
+      quotaInMB: '0.00',
+      error: true
+    };
+  }
+};
+
+/**
+ * Check if storage is near quota using StorageManager API (async)
+ * @param {number} threshold - Percentage threshold (default 90%)
+ * @returns {Promise<boolean>}
+ */
+export const isStorageNearQuotaAsync = async (threshold = 90) => {
+  try {
+    const quota = await getStorageQuota();
+    return quota.percentage >= threshold;
+  } catch (error) {
+    console.error('[Storage] Failed to check storage quota:', error);
+    // Fallback to synchronous method
+    return isStorageNearQuota();
+  }
+};
+
+/**
  * Namespace utilities for organized storage
  */
 export class StorageNamespace {
@@ -345,6 +406,8 @@ export default {
   setItemWithTimestamp,
   getStorageSize,
   isStorageNearQuota,
+  getStorageQuota,
+  isStorageNearQuotaAsync,
   isStorageAvailable,
   createNamespace
 };
