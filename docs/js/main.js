@@ -4,135 +4,17 @@
  * All features initialized on DOMContentLoaded
  */
 
+// Import foundational modules
+import { THEME, SCROLL, ANIMATION, STORAGE_KEYS, TIMING } from './constants.js';
+import { debounce, prefersReducedMotion, trapFocus, smoothScrollTo } from './utils.js';
+import { isValidImageUrl, sanitizeText } from './security.js';
+import * as storage from './storage.js';
+
 (function () {
   'use strict';
 
-  // ========================================
-  // CONSTANTS & STATE
-  // ========================================
-
-  const THEME_KEY = 'branchstone-theme';
-  const SCROLL_THRESHOLD = 100;
-  const ANIMATION_DELAY = 100;
-  const MOBILE_BREAKPOINT = 768;
-
-  // ========================================
-  // SECURITY UTILITIES
-  // ========================================
-
-  /**
-   * Validate URL is safe (relative or same-origin only)
-   * Prevents loading images from malicious external sources
-   * @param {string} url - URL to validate
-   * @returns {boolean} - True if URL is safe
-   */
-  const isValidImageUrl = (url) => {
-    if (!url || typeof url !== 'string') return false;
-
-    // Allow relative URLs (start with ./ or ../ or / or just filename)
-    if (url.startsWith('./') || url.startsWith('../') || url.startsWith('/')) {
-      return true;
-    }
-
-    // Allow data URLs for inline images (only specific safe image types)
-    if (url.startsWith('data:image/')) {
-      const allowedTypes = ['data:image/jpeg', 'data:image/png', 'data:image/gif', 'data:image/webp', 'data:image/svg+xml'];
-      return allowedTypes.some(type => url.startsWith(type));
-    }
-
-    // Allow same-origin absolute URLs
-    try {
-      const urlObj = new URL(url, window.location.origin);
-      return urlObj.origin === window.location.origin;
-    } catch {
-      // If URL parsing fails, check if it looks like a relative path (no protocol)
-      return !url.includes('://') && !url.startsWith('//');
-    }
-  };
-
-  /**
-   * Sanitize text content to prevent XSS
-   * Creates a text node and extracts its content, ensuring no HTML is interpreted
-   * @param {string} text - Text to sanitize
-   * @returns {string} - Sanitized text
-   */
-  const sanitizeText = (text) => {
-    if (!text || typeof text !== 'string') return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  };
-
   let galleryData = [];
   let currentLightboxIndex = 0;
-
-  // ========================================
-  // UTILITY FUNCTIONS
-  // ========================================
-
-  /**
-   * Check if user prefers reduced motion
-   */
-  const prefersReducedMotion = () => {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  };
-
-  /**
-   * Trap focus within element
-   */
-  const trapFocus = (element) => {
-    const focusableElements = element.querySelectorAll(
-      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-
-    element.addEventListener('keydown', (e) => {
-      if (e.key !== 'Tab') return;
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstFocusable) {
-          e.preventDefault();
-          lastFocusable.focus();
-        }
-      } else {
-        if (document.activeElement === lastFocusable) {
-          e.preventDefault();
-          firstFocusable.focus();
-        }
-      }
-    });
-  };
-
-  /**
-   * Debounce function
-   */
-  const debounce = (func, wait) => {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  };
-
-  /**
-   * Smooth scroll with offset
-   */
-  const smoothScrollTo = (target, offset = 0) => {
-    const element = document.querySelector(target);
-    if (!element) return;
-
-    const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - offset;
-
-    window.scrollTo({
-      top: targetPosition,
-      behavior: prefersReducedMotion() ? 'auto' : 'smooth'
-    });
-  };
 
   // ========================================
   // 1. THEME TOGGLE
@@ -146,23 +28,23 @@
 
     // Get initial theme
     const getInitialTheme = () => {
-      const savedTheme = localStorage.getItem(THEME_KEY);
+      const savedTheme = storage.getItem(STORAGE_KEYS.THEME);
       if (savedTheme) return savedTheme;
 
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      return prefersDark ? 'dark' : 'light';
+      return prefersDark ? THEME.DARK : THEME.LIGHT;
     };
 
     // Set theme
     const setTheme = (theme, animate = true) => {
       document.body.setAttribute('data-theme', theme);
-      localStorage.setItem(THEME_KEY, theme);
+      storage.setItem(STORAGE_KEYS.THEME, theme);
     };
 
     // Toggle theme
     const toggleTheme = () => {
-      const currentTheme = document.body.getAttribute('data-theme') || 'light';
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      const currentTheme = document.body.getAttribute('data-theme') || THEME.LIGHT;
+      const newTheme = currentTheme === THEME.DARK ? THEME.LIGHT : THEME.DARK;
       setTheme(newTheme);
     };
 
@@ -175,8 +57,8 @@
 
     // Listen for system preference changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem(THEME_KEY)) {
-        setTheme(e.matches ? 'dark' : 'light', false);
+      if (!storage.hasItem(STORAGE_KEYS.THEME)) {
+        setTheme(e.matches ? THEME.DARK : THEME.LIGHT, false);
       }
     });
   };
@@ -263,7 +145,7 @@
         if (entry.isIntersecting) {
           // Stagger animations for lists
           const delay = entry.target.hasAttribute('data-animate-stagger')
-            ? index * ANIMATION_DELAY
+            ? index * ANIMATION.STAGGER_DELAY
             : 0;
 
           setTimeout(() => {
@@ -898,7 +780,7 @@
 
     const handleScroll = () => {
       const currentScrollY = window.pageYOffset;
-      const scrolled = currentScrollY > SCROLL_THRESHOLD;
+      const scrolled = currentScrollY > SCROLL.THRESHOLD;
 
       // Add/remove scrolled state (for shadow effect)
       if (scrolled) {
@@ -909,8 +791,8 @@
 
       // Hide-on-scroll behavior (mobile only)
       // Only activate after scrolling past the threshold to avoid hiding at page top
-      if (currentScrollY > SCROLL_THRESHOLD) {
-        if (currentScrollY > lastScrollY && currentScrollY > 150) {
+      if (currentScrollY > SCROLL.THRESHOLD) {
+        if (currentScrollY > lastScrollY && currentScrollY > SCROLL.HEADER_HIDE_THRESHOLD) {
           // Scrolling down - hide header
           header.classList.add('header--hidden');
         } else if (currentScrollY < lastScrollY) {
@@ -1089,10 +971,10 @@
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         // Store in localStorage as backup
-        const subscribers = JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]');
+        const subscribers = storage.getItem(STORAGE_KEYS.NEWSLETTER_SUBSCRIBERS) || [];
         if (!subscribers.includes(email)) {
           subscribers.push(email);
-          localStorage.setItem('newsletter_subscribers', JSON.stringify(subscribers));
+          storage.setItem(STORAGE_KEYS.NEWSLETTER_SUBSCRIBERS, subscribers);
         }
 
         showMessage('Thank you for subscribing! Check your inbox for a welcome message.', 'success');
@@ -1239,15 +1121,11 @@
   // ========================================
 
   const initFavorites = () => {
-    const STORAGE_KEY = 'branchstone_favorites';
+    const STORAGE_KEY = STORAGE_KEYS.FAVORITES;
 
     // Get favorites from localStorage
     const getFavorites = () => {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-      } catch {
-        return [];
-      }
+      return storage.getItem(STORAGE_KEY) || [];
     };
 
     // Clean up orphaned favorites (IDs that don't exist in DOM)
@@ -1257,7 +1135,7 @@
         return document.querySelector(`[data-artwork-id="${id}"]`) !== null;
       });
       if (validFavorites.length !== favorites.length) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(validFavorites));
+        storage.setItem(STORAGE_KEY, validFavorites);
         return validFavorites;
       }
       return favorites;
@@ -1265,7 +1143,7 @@
 
     // Save favorites to localStorage
     const saveFavorites = (favorites) => {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+      storage.setItem(STORAGE_KEY, favorites);
       updateFavoritesCount(favorites.length);
     };
 
@@ -1346,7 +1224,7 @@
   // ========================================
 
   const initFavoritesPanel = () => {
-    const STORAGE_KEY = 'branchstone_favorites';
+    const STORAGE_KEY = STORAGE_KEYS.FAVORITES;
     const panel = document.querySelector('.favorites-panel');
     const backdrop = document.querySelector('.favorites-backdrop');
     const favoritesButton = document.querySelector('.header__favorites');
@@ -1365,12 +1243,10 @@
 
     // Get favorites data with full artwork details
     const getFavoritesData = () => {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) return [];
+      const favoriteIds = storage.getItem(STORAGE_KEY);
+      if (!favoriteIds || !Array.isArray(favoriteIds)) return [];
 
-        const favoriteIds = JSON.parse(stored);
-        const favoritesData = [];
+      const favoritesData = [];
 
         // Get artwork data from DOM
         favoriteIds.forEach(id => {
@@ -1395,9 +1271,6 @@
         });
 
         return favoritesData;
-      } catch {
-        return [];
-      }
     };
 
     // Create favorite item element (safe DOM creation)
@@ -1492,18 +1365,17 @@
 
     // Remove individual favorite
     const removeFavorite = (artworkId) => {
-      try {
-        const favorites = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        const index = favorites.indexOf(artworkId);
+      const favorites = storage.getItem(STORAGE_KEY) || [];
+      const index = favorites.indexOf(artworkId);
 
-        if (index > -1) {
-          // Animate removal
-          const item = favoritesList.querySelector(`[data-favorite-id="${artworkId}"]`);
-          if (item) {
-            item.classList.add('is-removing');
-            setTimeout(() => {
-              favorites.splice(index, 1);
-              localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+      if (index > -1) {
+        // Animate removal
+        const item = favoritesList.querySelector(`[data-favorite-id="${artworkId}"]`);
+        if (item) {
+          item.classList.add('is-removing');
+          setTimeout(() => {
+            favorites.splice(index, 1);
+            storage.setItem(STORAGE_KEY, favorites);
 
               // Update favorites button state
               const favButton = document.querySelector(`[data-artwork-id="${artworkId}"]`);
@@ -1523,15 +1395,13 @@
             }, 300);
           }
         }
-      } catch (error) {
-        console.error('Error removing favorite:', error);
       }
     };
 
     // Clear all favorites
     const clearAllFavorites = () => {
       if (confirm('Are you sure you want to clear all favorites?')) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+        storage.setItem(STORAGE_KEY, []);
 
         // Update all favorite buttons
         document.querySelectorAll('.artwork-card__favorite.is-favorited').forEach(btn => {
@@ -1608,11 +1478,11 @@
       const favorites = getFavoritesData();
       if (favorites.length === 0) return;
 
-      // Store inquiry data in localStorage
-      localStorage.setItem('pendingInquiry', JSON.stringify({
+      // Store inquiry data in storage
+      storage.setItem(STORAGE_KEYS.PENDING_INQUIRY, {
         artworks: favorites,
         timestamp: Date.now()
-      }));
+      });
 
       // Navigate to contact page
       window.location.href = 'contact.html';
@@ -1698,18 +1568,10 @@
     // Only run on contact page
     if (!document.querySelector('.main') || !window.location.pathname.includes('contact')) return;
 
-    try {
-      const inquiryData = localStorage.getItem('pendingInquiry');
-      if (!inquiryData) return;
+    const inquiryData = storage.getItemWithExpiration(STORAGE_KEYS.PENDING_INQUIRY, TIMING.ONE_HOUR);
+    if (!inquiryData) return;
 
-      const { artworks, timestamp } = JSON.parse(inquiryData);
-
-      // Check if data is stale (older than 1 hour)
-      const oneHour = 60 * 60 * 1000;
-      if (Date.now() - timestamp > oneHour) {
-        localStorage.removeItem('pendingInquiry');
-        return;
-      }
+    const { artworks, timestamp } = inquiryData;
 
       // Pre-fill form
       const subjectField = document.querySelector('[name="subject"]');
@@ -1745,12 +1607,8 @@
         messageField.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
         // Clear inquiry data
-        localStorage.removeItem('pendingInquiry');
+        storage.removeItem(STORAGE_KEYS.PENDING_INQUIRY);
       }
-    } catch (error) {
-      console.error('Error pre-filling inquiry:', error);
-      localStorage.removeItem('pendingInquiry');
-    }
   };
 
   // ========================================
@@ -1761,7 +1619,7 @@
     const backToTopButton = document.querySelector('[data-back-to-top]');
     if (!backToTopButton) return;
 
-    const SCROLL_TRIGGER = 300;
+    const SCROLL_TRIGGER = SCROLL.TRIGGER_BACK_TO_TOP;
 
     // Show/hide button based on scroll position
     const handleScroll = () => {
@@ -2097,7 +1955,7 @@
     const wizardForm = document.querySelector('[data-wizard-form]');
     if (!wizardForm) return;
 
-    const STORAGE_KEY = 'branchstone_commission_draft';
+    const STORAGE_KEY = STORAGE_KEYS.COMMISSION_DRAFT;
     const TOTAL_STEPS = 4;
 
     let currentStep = 1;
@@ -2140,50 +1998,30 @@
 
     // Load saved draft from localStorage
     const loadDraft = () => {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return;
-
-        const { data, timestamp } = JSON.parse(saved);
-
-        // Check if draft is less than 24 hours old
-        const oneDay = 24 * 60 * 60 * 1000;
-        if (Date.now() - timestamp < oneDay) {
-          formData = data;
-          restoreFormFields();
-        } else {
-          localStorage.removeItem(STORAGE_KEY);
-        }
-      } catch (error) {
-        console.error('Error loading draft:', error);
+      const saved = storage.getItemWithExpiration(STORAGE_KEY, TIMING.ONE_DAY);
+      if (saved && saved.data) {
+        formData = saved.data;
+        restoreFormFields();
       }
     };
 
     // Save draft to localStorage
     const saveDraft = () => {
-      try {
-        const allFields = wizardForm.querySelectorAll('[data-wizard-field]');
-        const data = {};
+      const allFields = wizardForm.querySelectorAll('[data-wizard-field]');
+      const data = {};
 
-        allFields.forEach(field => {
-          if (field.type === 'radio') {
-            if (field.checked) {
-              data[field.name] = field.value;
-            }
-          } else {
-            data[field.name || field.id] = field.value;
+      allFields.forEach(field => {
+        if (field.type === 'radio') {
+          if (field.checked) {
+            data[field.name] = field.value;
           }
-        });
+        } else {
+          data[field.name || field.id] = field.value;
+        }
+      });
 
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          data,
-          timestamp: Date.now()
-        }));
-
-        formData = data;
-      } catch (error) {
-        console.error('Error saving draft:', error);
-      }
+      storage.setItemWithTimestamp(STORAGE_KEY, { data });
+      formData = data;
     };
 
     // Restore form fields from saved data
@@ -2421,7 +2259,7 @@
         }
 
         // Clear saved draft
-        localStorage.removeItem(STORAGE_KEY);
+        storage.removeItem(STORAGE_KEY);
 
         // Scroll to success message
         setTimeout(() => {
@@ -2450,7 +2288,7 @@
       resetButton.addEventListener('click', () => {
         wizardForm.reset();
         formData = {};
-        localStorage.removeItem(STORAGE_KEY);
+        storage.removeItem(STORAGE_KEY);
 
         if (successMessage) {
           successMessage.hidden = true;
@@ -2520,11 +2358,11 @@
           price: priceEl?.textContent || ''
         };
 
-        // Store inquiry data in localStorage
-        localStorage.setItem('pendingInquiry', JSON.stringify({
+        // Store inquiry data in storage
+        storage.setItem(STORAGE_KEYS.PENDING_INQUIRY, {
           artworks: [artworkData],
           timestamp: Date.now()
-        }));
+        });
 
         // Navigate to contact page
         window.location.href = 'contact.html';

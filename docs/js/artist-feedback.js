@@ -4,123 +4,13 @@
  * Uses safe DOM methods to prevent XSS vulnerabilities
  */
 
+// Import foundational modules
+import { STORAGE_KEYS } from './constants.js';
+import { createSVG } from './utils.js';
+import * as storage from './storage.js';
+
 (function() {
   'use strict';
-
-  // ========================================
-  // SAFE DOM CREATION UTILITIES
-  // ========================================
-
-  const createSVG = (viewBox, paths) => {
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('viewBox', viewBox);
-    svg.setAttribute('fill', 'none');
-    svg.setAttribute('stroke', 'currentColor');
-    svg.setAttribute('stroke-width', '2');
-    svg.setAttribute('stroke-linecap', 'round');
-    svg.setAttribute('stroke-linejoin', 'round');
-
-    paths.forEach(pathData => {
-      const path = document.createElementNS(svgNS, 'path');
-      if (pathData.d) path.setAttribute('d', pathData.d);
-      if (pathData.points) path.setAttribute('points', pathData.points);
-      if (pathData.tag === 'circle') {
-        const circle = document.createElementNS(svgNS, 'circle');
-        circle.setAttribute('cx', pathData.cx);
-        circle.setAttribute('cy', pathData.cy);
-        circle.setAttribute('r', pathData.r);
-        svg.appendChild(circle);
-      } else if (pathData.tag === 'line') {
-        const line = document.createElementNS(svgNS, 'line');
-        line.setAttribute('x1', pathData.x1);
-        line.setAttribute('y1', pathData.y1);
-        line.setAttribute('x2', pathData.x2);
-        line.setAttribute('y2', pathData.y2);
-        svg.appendChild(line);
-      } else {
-        svg.appendChild(path);
-      }
-    });
-
-    return svg;
-  };
-
-  // ========================================
-  // LOCALSTORAGE UTILITIES WITH VALIDATION
-  // ========================================
-
-  /**
-   * Safely writes data to localStorage with validation and error handling
-   * @param {string} key - Storage key
-   * @param {Object} data - Data to store (will be JSON stringified)
-   * @returns {boolean} - Success status
-   */
-  const safeLocalStorageWrite = (key, data) => {
-    // Validate key
-    if (!key || typeof key !== 'string') {
-      console.warn('Invalid localStorage key:', key);
-      return false;
-    }
-
-    // Validate data exists
-    if (data === null || data === undefined) {
-      console.warn('Cannot store null/undefined data');
-      return false;
-    }
-
-    try {
-      const serialized = JSON.stringify(data);
-
-      // Check if serialization resulted in valid data
-      if (!serialized || serialized === '{}' || serialized === 'null') {
-        console.warn('Invalid data for localStorage:', data);
-        return false;
-      }
-
-      localStorage.setItem(key, serialized);
-      return true;
-    } catch (error) {
-      // Handle quota exceeded or other storage errors
-      if (error.name === 'QuotaExceededError') {
-        console.error('localStorage quota exceeded:', error);
-      } else if (error.name === 'SecurityError') {
-        console.error('localStorage access denied (private browsing?):', error);
-      } else {
-        console.error('Failed to write to localStorage:', error);
-      }
-      return false;
-    }
-  };
-
-  /**
-   * Safely reads and validates data from localStorage
-   * @param {string} key - Storage key
-   * @returns {Object|null} - Parsed data or null if invalid/not found
-   */
-  const safeLocalStorageRead = (key) => {
-    if (!key || typeof key !== 'string') {
-      return null;
-    }
-
-    try {
-      const item = localStorage.getItem(key);
-      if (!item) {
-        return null;
-      }
-
-      return JSON.parse(item);
-    } catch (error) {
-      console.error('Failed to read from localStorage:', error);
-      // Clean up corrupted data
-      try {
-        localStorage.removeItem(key);
-      } catch (e) {
-        // Ignore cleanup errors
-      }
-      return null;
-    }
-  };
 
   // ========================================
   // ENHANCED LIGHTBOX WITH CAROUSEL & DETAILS
@@ -268,7 +158,7 @@
       };
 
       // Store inquiry data using safe localStorage write
-      const writeSuccess = safeLocalStorageWrite('pendingInquiry', inquiryData);
+      const writeSuccess = storage.setItem(STORAGE_KEYS.PENDING_INQUIRY, inquiryData);
 
       if (!writeSuccess) {
         console.warn('Failed to store inquiry data, continuing to contact page anyway');
@@ -312,7 +202,7 @@
     if (!messageField || !subjectField) return;
 
     // Use safe localStorage read
-    const inquiryData = safeLocalStorageRead('pendingInquiry');
+    const inquiryData = storage.getItem(STORAGE_KEYS.PENDING_INQUIRY);
     if (!inquiryData) return;
 
     // Validate inquiry data structure

@@ -4,6 +4,9 @@
  * Date: December 14, 2025
  */
 
+// Import foundational modules
+import { prefersReducedMotion } from './utils.js';
+
 (function () {
   'use strict';
 
@@ -140,11 +143,8 @@
   // ========================================
 
   const enhanceScrollBehavior = () => {
-    // Check if user prefers reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     // Apply scroll behavior
-    document.documentElement.style.scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
+    document.documentElement.style.scrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
 
     // Listen for changes in motion preference
     window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
