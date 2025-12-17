@@ -125,9 +125,12 @@ export const sanitizeHTML = (html) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
 
-  // Remove script tags
+  // Remove script and style tags
   const scripts = doc.querySelectorAll('script');
   scripts.forEach(script => script.remove());
+
+  const styles = doc.querySelectorAll('style');
+  styles.forEach(style => style.remove());
 
   // Remove event handlers
   const allElements = doc.querySelectorAll('*');
