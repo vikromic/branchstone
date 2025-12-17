@@ -14,6 +14,7 @@ import * as storage from './storage.js';
 import { LightboxManager } from './lightbox-manager.js';
 import { FavoritesManager } from './favorites-manager.js';
 import { FormValidator } from './form-validator.js';
+import { MobileMenuManager } from './mobile-menu-manager.js';
 
 (function () {
   'use strict';
@@ -80,50 +81,8 @@ import { FormValidator } from './form-validator.js';
   // ========================================
 
   const initMobileMenu = () => {
-    const menuToggle = document.querySelector('.header__menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const backdrop = mobileMenu?.querySelector('.mobile-menu__backdrop');
-    const menuLinks = mobileMenu?.querySelectorAll('.mobile-menu__link');
-
-    if (!menuToggle || !mobileMenu) return;
-
-    function openMenu() {
-      mobileMenu.hidden = false;
-      menuToggle.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-
-      // Focus first link after animation
-      setTimeout(() => {
-        const firstLink = mobileMenu.querySelector('.mobile-menu__link');
-        if (firstLink) firstLink.focus();
-      }, 300);
-    }
-
-    function closeMenu() {
-      mobileMenu.hidden = true;
-      menuToggle.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-      menuToggle.focus();
-    }
-
-    menuToggle.addEventListener('click', () => {
-      const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
-      isOpen ? closeMenu() : openMenu();
-    });
-
-    backdrop?.addEventListener('click', closeMenu);
-
-    // Close on link click
-    menuLinks?.forEach(link => {
-      link.addEventListener('click', closeMenu);
-    });
-
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !mobileMenu.hidden) {
-        closeMenu();
-      }
-    });
+    const mobileMenuManager = new MobileMenuManager();
+    mobileMenuManager.init();
   };
 
   // ========================================
