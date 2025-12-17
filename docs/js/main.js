@@ -29,12 +29,18 @@ import { GalleryDataManager } from './gallery-data.js';
     // Support both data-theme-toggle and class-based selectors
     const toggleButton = document.querySelector('[data-theme-toggle]') ||
                         document.querySelector('.header__theme-toggle');
-    if (!toggleButton) return;
+
+    if (!toggleButton) {
+      console.warn('[Theme] Toggle button not found');
+      return;
+    }
 
     // Get initial theme
     const getInitialTheme = () => {
       const savedTheme = storage.getItem(STORAGE_KEYS.THEME);
-      if (savedTheme) return savedTheme;
+      if (savedTheme && (savedTheme === THEME.DARK || savedTheme === THEME.LIGHT)) {
+        return savedTheme;
+      }
 
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       return prefersDark ? THEME.DARK : THEME.LIGHT;
@@ -42,8 +48,22 @@ import { GalleryDataManager } from './gallery-data.js';
 
     // Set theme
     const setTheme = (theme, animate = true) => {
+      // Validate theme value
+      if (theme !== THEME.DARK && theme !== THEME.LIGHT) {
+        console.warn('[Theme] Invalid theme value:', theme);
+        theme = THEME.LIGHT;
+      }
+
+      // Apply theme to document root and body for maximum compatibility
+      document.documentElement.setAttribute('data-theme', theme);
       document.body.setAttribute('data-theme', theme);
-      storage.setItem(STORAGE_KEYS.THEME, theme);
+
+      // Save to storage
+      const saved = storage.setItem(STORAGE_KEYS.THEME, theme);
+
+      if (!saved) {
+        console.warn('[Theme] Failed to save theme to storage');
+      }
     };
 
     // Toggle theme
@@ -53,7 +73,7 @@ import { GalleryDataManager } from './gallery-data.js';
       setTheme(newTheme);
     };
 
-    // Initialize
+    // Initialize - get and apply initial theme
     const initialTheme = getInitialTheme();
     setTheme(initialTheme, false);
 
@@ -61,7 +81,9 @@ import { GalleryDataManager } from './gallery-data.js';
     toggleButton.addEventListener('click', toggleTheme);
 
     // Listen for system preference changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', (e) => {
+      // Only auto-switch if user hasn't manually set a preference
       if (!storage.hasItem(STORAGE_KEYS.THEME)) {
         setTheme(e.matches ? THEME.DARK : THEME.LIGHT, false);
       }
