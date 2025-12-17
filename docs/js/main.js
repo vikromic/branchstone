@@ -12,6 +12,7 @@ import * as storage from './storage.js';
 
 // Import feature modules
 import { LightboxManager } from './lightbox-manager.js';
+import { FavoritesManager } from './favorites-manager.js';
 
 (function () {
   'use strict';
@@ -850,159 +851,12 @@ import { LightboxManager } from './lightbox-manager.js';
   };
 
   // ========================================
-  // TOAST NOTIFICATION SYSTEM
-  // ========================================
-
-  const createToastContainer = () => {
-    let container = document.querySelector('.toast-container');
-    if (!container) {
-      container = document.createElement('div');
-      container.className = 'toast-container';
-      container.setAttribute('aria-live', 'polite');
-      container.setAttribute('aria-atomic', 'true');
-      document.body.appendChild(container);
-    }
-    return container;
-  };
-
-  const showToast = (message, duration = 2000) => {
-    const container = createToastContainer();
-
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.setAttribute('role', 'status');
-
-    toast.innerHTML = `
-      <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg>
-      <span class="toast__message">${message}</span>
-    `;
-
-    container.appendChild(toast);
-
-    // Trigger animation
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        toast.classList.add('show');
-      });
-    });
-
-    // Auto-dismiss
-    setTimeout(() => {
-      toast.classList.remove('show');
-      toast.classList.add('hide');
-
-      setTimeout(() => {
-        if (toast.parentNode) {
-          toast.parentNode.removeChild(toast);
-        }
-      }, 300);
-    }, duration);
-  };
-
-  // ========================================
   // 13. FAVORITES SYSTEM
   // ========================================
 
   const initFavorites = () => {
-    const STORAGE_KEY = STORAGE_KEYS.FAVORITES;
-
-    // Get favorites from localStorage
-    const getFavorites = () => {
-      return storage.getItem(STORAGE_KEY) || [];
-    };
-
-    // Clean up orphaned favorites (IDs that don't exist in DOM)
-    const cleanupOrphanedFavorites = () => {
-      const favorites = getFavorites();
-      const validFavorites = favorites.filter(id => {
-        return document.querySelector(`[data-artwork-id="${id}"]`) !== null;
-      });
-      if (validFavorites.length !== favorites.length) {
-        storage.setItem(STORAGE_KEY, validFavorites);
-        return validFavorites;
-      }
-      return favorites;
-    };
-
-    // Save favorites to localStorage
-    const saveFavorites = (favorites) => {
-      storage.setItem(STORAGE_KEY, favorites);
-      updateFavoritesCount(favorites.length);
-    };
-
-    // Toggle favorite status
-    const toggleFavorite = (artworkId) => {
-      const favorites = getFavorites();
-      const index = favorites.indexOf(artworkId);
-
-      if (index > -1) {
-        favorites.splice(index, 1);
-      } else {
-        favorites.push(artworkId);
-      }
-
-      saveFavorites(favorites);
-      return index === -1; // Returns true if now favorited
-    };
-
-    // Update UI count with animation
-    const updateFavoritesCount = (count) => {
-      const countEl = document.querySelector('.header__favorites-count');
-      if (countEl) {
-        const oldCount = parseInt(countEl.textContent) || 0;
-        countEl.textContent = count;
-        countEl.classList.toggle('has-items', count > 0);
-
-        // Pulse animation when count changes
-        if (oldCount !== count && count > 0) {
-          countEl.classList.remove('pulse');
-          void countEl.offsetWidth; // Force reflow
-          countEl.classList.add('pulse');
-
-          setTimeout(() => {
-            countEl.classList.remove('pulse');
-          }, 300);
-        }
-      }
-    };
-
-    // Initialize favorite buttons
-    const favoriteButtons = document.querySelectorAll('.artwork-card__favorite');
-    const favorites = getFavorites();
-
-    favoriteButtons.forEach(btn => {
-      const artworkId = btn.dataset.artworkId;
-
-      // Set initial state
-      if (favorites.includes(artworkId)) {
-        btn.classList.add('is-favorited');
-        btn.setAttribute('aria-label', 'Remove from favorites');
-      }
-
-      // Handle click
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const isFavorited = toggleFavorite(artworkId);
-        btn.classList.toggle('is-favorited', isFavorited);
-        btn.setAttribute('aria-label', isFavorited ? 'Remove from favorites' : 'Add to favorites');
-
-        // Show toast notification
-        const message = isFavorited ? 'Added to favorites' : 'Removed from favorites';
-        showToast(message);
-
-        // Heart animation is handled by CSS animation on .is-favorited class
-        // No need for manual transform manipulation
-      });
-    });
-
-    // Clean up orphaned favorites and initialize count
-    const validFavorites = cleanupOrphanedFavorites();
-    updateFavoritesCount(validFavorites.length);
+    const favoritesManager = new FavoritesManager();
+    favoritesManager.init();
   };
 
   // ========================================
