@@ -7,6 +7,8 @@
  * These are NOT vulnerabilities - they are the sanitization layer itself.
  */
 
+import { FORM } from './constants.js';
+
 /**
  * Validate URL is safe (relative or same-origin only)
  * Prevents loading resources from malicious external sources
@@ -157,10 +159,7 @@ export const sanitizeHTML = (html) => {
  */
 export const isValidEmail = (email) => {
   if (!email || typeof email !== 'string') return false;
-
-  // Basic email regex pattern
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email.trim());
+  return FORM.EMAIL_REGEX.test(email.trim());
 };
 
 /**
