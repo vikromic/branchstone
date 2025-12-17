@@ -16,6 +16,7 @@ import { FavoritesManager } from './favorites-manager.js';
 import { FormValidator } from './form-validator.js';
 import { MobileMenuManager } from './mobile-menu-manager.js';
 import { ScrollManager } from './scroll-manager.js';
+import { GalleryDataManager } from './gallery-data.js';
 
 (function () {
   'use strict';
@@ -101,7 +102,32 @@ import { ScrollManager } from './scroll-manager.js';
   };
 
   // ========================================
-  // 4. GALLERY FILTERING
+  // 4. GALLERY DATA LOADING
+  // ========================================
+
+  const initGalleryData = async () => {
+    // Only run on gallery page
+    if (!document.querySelector('.bento-grid')) return null;
+
+    const galleryManager = new GalleryDataManager();
+    const success = await galleryManager.init();
+
+    if (success) {
+      // Re-initialize features that depend on gallery cards
+      // These need to be called after gallery is rendered
+      initLightbox();
+      initFavorites();
+      initArtworkOverlays();
+      initArtworkInquiry();
+      initGalleryFiltering();
+      initMobileFilterDropdown();
+    }
+
+    return galleryManager;
+  };
+
+  // ========================================
+  // 5. GALLERY FILTERING
   // ========================================
 
   // Shared gallery filtering state (accessible to both desktop and mobile filters)
@@ -176,7 +202,7 @@ import { ScrollManager } from './scroll-manager.js';
   };
 
   // ========================================
-  // 5. LIGHTBOX
+  // 6. LIGHTBOX
   // ========================================
 
   const initLightbox = () => {
@@ -1845,7 +1871,7 @@ import { ScrollManager } from './scroll-manager.js';
   // INITIALIZATION
   // ========================================
 
-  const init = () => {
+  const init = async () => {
     try {
       // Initialize all features
       initThemeToggle();
@@ -1853,9 +1879,11 @@ import { ScrollManager } from './scroll-manager.js';
       initMobileNavigation();
       initScrollAnimations();
       initArtworkScrollAnimations();
-      initGalleryFiltering();
-      initMobileFilterDropdown();
-      initLightbox();
+
+      // Load gallery data first (this will also init gallery-dependent features)
+      await initGalleryData();
+
+      // Continue with other features
       initSmoothScroll();
       initFormHandling();
       initCommissionWizard();
@@ -1865,13 +1893,10 @@ import { ScrollManager } from './scroll-manager.js';
       initSkipLink();
       initNewsletter();
       initStatsCounter();
-      initFavorites();
       initFavoritesPanel();
       initInquiryPrefill();
       initBackToTop();
-      initArtworkOverlays();
       initStickyInquiryButton();
-      initArtworkInquiry();
 
       // NEW: Mobile UX improvements
       initMobileBottomNav();
