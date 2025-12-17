@@ -308,10 +308,52 @@ export const checkHoneypot = (field) => {
  * Prevents abuse by limiting action frequency
  */
 export class RateLimiter {
-  constructor(maxAttempts, timeWindow) {
+  constructor(maxAttempts, timeWindow, cleanupInterval = 60000) {
     this.maxAttempts = maxAttempts;
     this.timeWindow = timeWindow;
     this.attempts = new Map();
+    this.cleanupInterval = cleanupInterval;
+
+    // Start periodic cleanup to prevent memory leaks
+    this._startCleanup();
+  }
+
+  /**
+   * Start periodic cleanup of old entries
+   * @private
+   */
+  _startCleanup() {
+    this.cleanupTimer = setInterval(() => {
+      this.cleanup();
+    }, this.cleanupInterval);
+  }
+
+  /**
+   * Remove expired entries from the attempts map
+   */
+  cleanup() {
+    const now = Date.now();
+    const keysToDelete = [];
+
+    for (const [key, timestamps] of this.attempts.entries()) {
+      // Filter out old attempts
+      const recentAttempts = timestamps.filter(
+        timestamp => now - timestamp < this.timeWindow
+      );
+
+      if (recentAttempts.length === 0) {
+        // No recent attempts, mark for deletion
+        keysToDelete.push(key);
+      } else if (recentAttempts.length < timestamps.length) {
+        // Update with filtered attempts
+        this.attempts.set(key, recentAttempts);
+      }
+    }
+
+    // Delete keys with no recent attempts
+    keysToDelete.forEach(key => this.attempts.delete(key));
+
+    return keysToDelete.length;
   }
 
   /**
@@ -352,6 +394,17 @@ export class RateLimiter {
    */
   clear() {
     this.attempts.clear();
+  }
+
+  /**
+   * Stop cleanup timer (call when destroying instance)
+   */
+  destroy() {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer);
+      this.cleanupTimer = null;
+    }
+    this.clear();
   }
 }
 
