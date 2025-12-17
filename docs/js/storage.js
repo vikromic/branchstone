@@ -47,7 +47,7 @@ export const setItem = (key, data) => {
     const serialized = JSON.stringify(data);
 
     // Check if serialization resulted in valid data
-    if (!serialized || serialized === '{}' || serialized === 'null') {
+    if (!serialized || serialized === 'null') {
       console.warn('[Storage] Invalid data for localStorage:', data);
       return false;
     }
