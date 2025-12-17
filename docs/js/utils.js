@@ -4,6 +4,8 @@
  * Promotes code reuse and maintains DRY principles
  */
 
+import { sanitizeText } from './security.js';
+
 /**
  * Check if user prefers reduced motion
  * @returns {boolean}
@@ -187,11 +189,13 @@ export const createElement = (tag, attributes = {}, children = []) => {
     } else if (key === 'style' && typeof value === 'object') {
       Object.assign(element.style, value);
     } else if (key.startsWith('data-')) {
-      element.setAttribute(key, value);
+      // Sanitize data attribute values to prevent XSS
+      element.setAttribute(key, sanitizeText(String(value)));
     } else if (key in element) {
       element[key] = value;
     } else {
-      element.setAttribute(key, value);
+      // Sanitize generic attribute values to prevent XSS
+      element.setAttribute(key, sanitizeText(String(value)));
     }
   });
 
