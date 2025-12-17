@@ -26,7 +26,9 @@ export class GalleryDataManager {
       console.log('[GalleryData] JSON parsed, artworks count:', data.artworks?.length || 0);
       this.artworks = data.artworks || [];
       this.extractCollections();
+      this.sortArtworks();
       console.log('[GalleryData] Collections extracted:', this.collections);
+      console.log('[GalleryData] Artworks sorted by priority (highlighted unsold -> available -> sold)');
       return this.artworks;
     } catch (error) {
       console.error('[GalleryData] Error loading artworks:', error);
@@ -45,6 +47,28 @@ export class GalleryDataManager {
       }
     });
     this.collections = Array.from(collectionsSet).sort();
+  }
+
+  /**
+   * Sort artworks by priority:
+   * 1. Highlighted and not sold (featured pieces)
+   * 2. Not highlighted and not sold (regular available pieces)
+   * 3. Sold pieces (archived at the end)
+   */
+  sortArtworks() {
+    this.artworks.sort((a, b) => {
+      // Calculate priority (lower number = higher priority)
+      const getPriority = (artwork) => {
+        if (artwork.sold) return 3; // Sold pieces last
+        if (artwork.highlighted) return 1; // Highlighted available pieces first
+        return 2; // Regular available pieces in the middle
+      };
+
+      const priorityA = getPriority(a);
+      const priorityB = getPriority(b);
+
+      return priorityA - priorityB;
+    });
   }
 
   /**
