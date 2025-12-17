@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Debug Test</title>
+</head>
+<body>
+    <h1>Gallery Debug Test</h1>
+    <div class="bento-grid" style="border: 2px solid red; min-height: 200px; padding: 20px;">
+        <!-- Gallery will load here -->
+    </div>
+
+    <div id="debug-output" style="margin-top: 20px; padding: 20px; background: #f0f0f0; font-family: monospace;">
+        <h2>Debug Output:</h2>
+        <div id="logs"></div>
+    </div>
+
+    <script type="module">
+        const log = (msg) => {
+            const logs = document.getElementById('logs');
+            const p = document.createElement('p');
+            p.textContent = new Date().toISOString() + ': ' + msg;
+            logs.appendChild(p);
+            console.log(msg);
+        };
+
+        log('Script started');
+
+        try {
+            log('Attempting to import GalleryDataManager...');
+            const { GalleryDataManager } = await import('./docs/js/gallery-data.js');
+            log('GalleryDataManager imported successfully');
+
+            log('Creating GalleryDataManager instance...');
+            const galleryManager = new GalleryDataManager();
+            log('Instance created');
+
+            log('Initializing gallery...');
+            const success = await galleryManager.init();
+            log('Gallery init result: ' + success);
+
+            if (success) {
+                log('Gallery loaded successfully!');
+                log('Artworks count: ' + galleryManager.artworks.length);
+                log('Collections: ' + galleryManager.collections.join(', '));
+            } else {
+                log('Gallery init returned false');
+            }
+        } catch (error) {
+            log('ERROR: ' + error.message);
+            log('Stack: ' + error.stack);
+        }
+    </script>
+</body>
+</html>

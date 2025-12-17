@@ -16,16 +16,20 @@ export class GalleryDataManager {
    */
   async loadArtworks() {
     try {
+      console.log('[GalleryData] Fetching artworks.json...');
       const response = await fetch('../artworks.json');
+      console.log('[GalleryData] Response status:', response.status);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      console.log('[GalleryData] JSON parsed, artworks count:', data.artworks?.length || 0);
       this.artworks = data.artworks || [];
       this.extractCollections();
+      console.log('[GalleryData] Collections extracted:', this.collections);
       return this.artworks;
     } catch (error) {
-      console.error('Error loading artworks:', error);
+      console.error('[GalleryData] Error loading artworks:', error);
       throw error;
     }
   }
@@ -217,11 +221,14 @@ export class GalleryDataManager {
    * Render all artworks to the gallery grid
    */
   renderGallery(containerSelector = '.bento-grid') {
+    console.log('[GalleryData] Rendering gallery...');
     const container = document.querySelector(containerSelector);
     if (!container) {
-      console.error('Gallery container not found:', containerSelector);
+      console.error('[GalleryData] Gallery container not found:', containerSelector);
       return;
     }
+
+    console.log('[GalleryData] Container found, clearing and rendering', this.artworks.length, 'artworks');
 
     // Clear existing content
     container.innerHTML = '';
@@ -231,6 +238,8 @@ export class GalleryDataManager {
       const card = this.createArtworkCard(artwork, index);
       container.appendChild(card);
     });
+
+    console.log('[GalleryData] Gallery rendered successfully');
 
     // Dispatch custom event to notify other modules
     const event = new CustomEvent('galleryRendered', {

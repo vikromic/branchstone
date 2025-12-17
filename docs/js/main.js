@@ -129,12 +129,19 @@ import { GalleryDataManager } from './gallery-data.js';
 
   const initGalleryData = async () => {
     // Only run on gallery page
-    if (!document.querySelector('.bento-grid')) return null;
+    if (!document.querySelector('.bento-grid')) {
+      console.log('[Gallery] Bento grid not found, skipping gallery initialization');
+      return null;
+    }
 
+    console.log('[Gallery] Initializing gallery data manager...');
     const galleryManager = new GalleryDataManager();
     const success = await galleryManager.init();
 
+    console.log('[Gallery] Init result:', success);
+
     if (success) {
+      console.log('[Gallery] Initializing gallery-dependent features...');
       // Re-initialize features that depend on gallery cards
       // These need to be called after gallery is rendered
       initLightbox();
@@ -143,6 +150,9 @@ import { GalleryDataManager } from './gallery-data.js';
       initArtworkInquiry();
       initGalleryFiltering();
       initMobileFilterDropdown();
+      console.log('[Gallery] All features initialized');
+    } else {
+      console.error('[Gallery] Failed to initialize gallery');
     }
 
     return galleryManager;
