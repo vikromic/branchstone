@@ -129,33 +129,39 @@ import { GalleryDataManager } from './gallery-data.js';
 
   const initGalleryData = async () => {
     // Only run on gallery page
-    if (!document.querySelector('.bento-grid')) {
+    const container = document.querySelector('.bento-grid');
+    if (!container) {
       console.log('[Gallery] Bento grid not found, skipping gallery initialization');
       return null;
     }
 
     console.log('[Gallery] Initializing gallery data manager...');
     const galleryManager = new GalleryDataManager();
-    const success = await galleryManager.init();
 
-    console.log('[Gallery] Init result:', success);
+    try {
+      const success = await galleryManager.init();
+      console.log('[Gallery] Init result:', success);
 
-    if (success) {
-      console.log('[Gallery] Initializing gallery-dependent features...');
-      // Re-initialize features that depend on gallery cards
-      // These need to be called after gallery is rendered
-      initLightbox();
-      initFavorites();
-      initArtworkOverlays();
-      initArtworkInquiry();
-      initGalleryFiltering();
-      initMobileFilterDropdown();
-      console.log('[Gallery] All features initialized');
-    } else {
-      console.error('[Gallery] Failed to initialize gallery');
+      if (success) {
+        console.log('[Gallery] Initializing gallery-dependent features...');
+        // Re-initialize features that depend on gallery cards
+        // These need to be called after gallery is rendered
+        initLightbox();
+        initFavorites();
+        initArtworkOverlays();
+        initArtworkInquiry();
+        initGalleryFiltering();
+        initMobileFilterDropdown();
+        console.log('[Gallery] All features initialized');
+      } else {
+        console.error('[Gallery] Failed to initialize gallery');
+      }
+
+      return galleryManager;
+    } catch (error) {
+      console.error('[Gallery] Error during initialization:', error);
+      return null;
     }
-
-    return galleryManager;
   };
 
   // ========================================
@@ -1904,6 +1910,8 @@ import { GalleryDataManager } from './gallery-data.js';
 
   const init = async () => {
     try {
+      console.log('[Main] Initializing... (readyState:', document.readyState + ')');
+
       // Initialize all features
       initThemeToggle();
       initMobileMenu();
@@ -1947,10 +1955,32 @@ import { GalleryDataManager } from './gallery-data.js';
   };
 
   // Run on DOM ready
+  // ES6 modules are deferred, but we need to ensure DOM is fully loaded
+  const startInit = () => {
+    // Ensure body exists before initializing
+    if (document.body) {
+      init();
+    } else {
+      // Fallback: wait a bit and try again
+      console.warn('[Main] Body not ready, retrying...');
+      setTimeout(startInit, 50);
+    }
+  };
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    // Still loading - wait for DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', startInit);
   } else {
-    init();
+    // DOM is already loaded (interactive or complete)
+    // But ensure we're truly ready
+    if (document.readyState === 'complete') {
+      // Everything is loaded
+      startInit();
+    } else {
+      // DOM is interactive but resources may still be loading
+      // Wait for DOMContentLoaded to be safe
+      document.addEventListener('DOMContentLoaded', startInit);
+    }
   }
 
   // Handle page show (for back/forward cache)

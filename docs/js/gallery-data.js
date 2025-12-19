@@ -309,7 +309,7 @@ export class GalleryDataManager {
   renderFilters(containerSelector = '.filter-controls') {
     const container = document.querySelector(containerSelector);
     if (!container) {
-      console.error('Filter container not found:', containerSelector);
+      console.warn('[GalleryData] Filter container not found:', containerSelector);
       return;
     }
 
