@@ -1165,13 +1165,9 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Sold artwork styling */
+/* Sold artwork styling - removed grayscale filter to show original colors */
 .artwork-card--sold .artwork-card__image {
-  filter: grayscale(30%);
-}
-
-.artwork-card--sold:hover .artwork-card__image {
-  filter: grayscale(0%);
+  /* No filter - display in original colors */
 }
 
 /* Badge with dot indicator */
@@ -1866,7 +1862,6 @@
 /* Disable inquiry button for sold items */
 .artwork-card--sold .artwork-card__inquire,
 .artwork-card:has(.artwork-card__badge--sold) .artwork-card__inquire {
-  opacity: 0.3;
   cursor: default;
   pointer-events: none;
 }
@@ -2975,7 +2970,6 @@
 .artwork-card--sold .artwork-card__favorite,
 .artwork-card:has(.artwork-card__badge--sold) .artwork-card__favorite {
   pointer-events: none;
-  opacity: 0.5;
   cursor: not-allowed;
 }
 
