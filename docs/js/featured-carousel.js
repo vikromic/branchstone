@@ -205,13 +205,8 @@ export class FeaturedCarousel {
     collection.className = 'featured-carousel__collection';
     collection.textContent = sanitizeText(artwork.collection);
 
-    const price = document.createElement('p');
-    price.className = 'featured-carousel__price';
-    price.textContent = artwork.price ? `$${artwork.price}` : 'Price on request';
-
     content.appendChild(title);
     content.appendChild(collection);
-    content.appendChild(price);
 
     // Favorite button
     const favoriteBtn = this.createFavoriteButton(artwork);
@@ -352,8 +347,8 @@ export class FeaturedCarousel {
    */
   attachEventListeners() {
     // Navigation buttons
-    this.elements.prevButton?.addEventListener('click', () => this.navigate(-1));
-    this.elements.nextButton?.addEventListener('click', () => this.navigate(1));
+    this.elements.prevButton?.addEventListener('click', () => this.navigate(1));
+    this.elements.nextButton?.addEventListener('click', () => this.navigate(-1));
 
     // Pagination dots
     this.elements.dots.forEach(dot => {
