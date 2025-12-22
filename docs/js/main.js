@@ -17,6 +17,7 @@ import { FormValidator } from './form-validator.js';
 import { MobileMenuManager } from './mobile-menu-manager.js';
 import { ScrollManager } from './scroll-manager.js';
 import { GalleryDataManager } from './gallery-data.js';
+import { FeaturedCarousel } from './featured-carousel.js';
 
 (function () {
   'use strict';
@@ -1853,6 +1854,33 @@ import { GalleryDataManager } from './gallery-data.js';
   };
 
   // ========================================
+  // FEATURED CAROUSEL (HOME PAGE)
+  // ========================================
+
+  const initFeaturedCarousel = async () => {
+    const carouselContainer = document.querySelector('#featured-carousel');
+
+    // Only run on home page
+    if (!carouselContainer) {
+      console.log('[FeaturedCarousel] Container not found, skipping initialization');
+      return;
+    }
+
+    console.log('[FeaturedCarousel] Initializing featured carousel...');
+    const carousel = new FeaturedCarousel('#featured-carousel');
+
+    try {
+      await carousel.init();
+      console.log('[FeaturedCarousel] Initialized successfully');
+
+      // Re-initialize favorites for carousel cards
+      initFavorites();
+    } catch (error) {
+      console.error('[FeaturedCarousel] Initialization failed:', error);
+    }
+  };
+
+  // ========================================
   // HERO CARD CLOSE FUNCTIONALITY
   // ========================================
 
@@ -1925,6 +1953,9 @@ import { GalleryDataManager } from './gallery-data.js';
 
       // Load gallery data first (this will also init gallery-dependent features)
       await initGalleryData();
+
+      // Initialize featured carousel on home page
+      await initFeaturedCarousel();
 
       // Continue with other features
       initSmoothScroll();

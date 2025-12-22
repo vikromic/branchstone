@@ -1,0 +1,501 @@
+/**
+ * Featured Carousel - Home page featured artworks carousel
+ * Responsive carousel with navigation, pagination, and swipe support
+ */
+
+/* ==========================================================================
+   CAROUSEL CONTAINER
+   ========================================================================== */
+
+.featured-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 3rem; /* Space for nav arrows */
+  margin: 2rem 0;
+}
+
+/* ==========================================================================
+   CAROUSEL TRACK
+   ========================================================================== */
+
+.featured-carousel__track {
+  display: flex;
+  gap: 1.5rem;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* ==========================================================================
+   CAROUSEL CARDS
+   ========================================================================== */
+
+.featured-carousel__card {
+  position: relative;
+  flex: 0 0 calc(33.333% - 1rem); /* 3 cards on desktop */
+  min-width: 0; /* Allow flex shrinking */
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--duration-normal) var(--ease-spring),
+              box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.featured-carousel__card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+  z-index: 2;
+}
+
+.featured-carousel__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+
+/* ==========================================================================
+   IMAGE
+   ========================================================================== */
+
+.featured-carousel__image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* 1:1 aspect ratio */
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.featured-carousel__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slower) var(--ease-spring);
+}
+
+.featured-carousel__card:hover .featured-carousel__image {
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   CONTENT
+   ========================================================================== */
+
+.featured-carousel__content {
+  padding: 1.25rem;
+}
+
+.featured-carousel__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.featured-carousel__collection {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin: 0 0 0.75rem 0;
+}
+
+.featured-carousel__price {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin: 0;
+}
+
+/* ==========================================================================
+   FAVORITE BUTTON
+   ========================================================================== */
+
+.featured-carousel__favorite {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-smooth);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.featured-carousel__favorite:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.featured-carousel__favorite:active {
+  transform: scale(0.95);
+}
+
+.featured-carousel__favorite-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--text-secondary);
+  transition: all var(--duration-normal) var(--ease-smooth);
+}
+
+.featured-carousel__favorite.is-favorited .featured-carousel__favorite-icon {
+  fill: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.featured-carousel__favorite:hover .featured-carousel__favorite-icon {
+  color: var(--accent-primary);
+}
+
+[data-theme="dark"] .featured-carousel__favorite {
+  background: rgba(26, 24, 22, 0.95);
+}
+
+[data-theme="dark"] .featured-carousel__favorite:hover {
+  background: rgba(26, 24, 22, 1);
+}
+
+/* ==========================================================================
+   NAVIGATION ARROWS
+   ========================================================================== */
+
+.featured-carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-smooth);
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+
+.featured-carousel__nav--prev {
+  left: 0;
+}
+
+.featured-carousel__nav--next {
+  right: 0;
+}
+
+.featured-carousel__nav:hover:not(:disabled) {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+.featured-carousel__nav:hover:not(:disabled) svg {
+  color: var(--text-inverse);
+}
+
+.featured-carousel__nav:active:not(:disabled) {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.featured-carousel__nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.featured-carousel__nav svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--text-primary);
+  transition: color var(--duration-normal) var(--ease-smooth);
+}
+
+/* ==========================================================================
+   PAGINATION DOTS
+   ========================================================================== */
+
+.featured-carousel__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.featured-carousel__dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  padding: 0;
+  background: var(--border-default);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-smooth);
+}
+
+.featured-carousel__dot:hover {
+  background: var(--accent-primary);
+  transform: scale(1.2);
+}
+
+.featured-carousel__dot--active {
+  width: 2rem;
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+}
+
+.featured-carousel__dot:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   EMPTY & ERROR STATES
+   ========================================================================== */
+
+.featured-carousel__empty,
+.featured-carousel__error {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.featured-carousel__empty p,
+.featured-carousel__error p {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.featured-carousel__error p {
+  color: var(--error);
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT
+   ========================================================================== */
+
+/* Tablet: 2 cards */
+@media (max-width: 1024px) {
+  .featured-carousel__card {
+    flex: 0 0 calc(50% - 0.75rem);
+  }
+
+  .featured-carousel {
+    padding: 0 2.5rem;
+  }
+
+  .featured-carousel__nav {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .featured-carousel__nav svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+/* Mobile: 1 card */
+@media (max-width: 768px) {
+  .featured-carousel__card {
+    flex: 0 0 100%;
+  }
+
+  .featured-carousel {
+    padding: 0 2rem;
+  }
+
+  .featured-carousel__track {
+    gap: 1rem;
+  }
+
+  .featured-carousel__nav {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .featured-carousel__nav svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .featured-carousel__content {
+    padding: 1rem;
+  }
+
+  .featured-carousel__title {
+    font-size: var(--text-lg);
+  }
+
+  .featured-carousel__collection {
+    font-size: var(--text-xs);
+  }
+
+  .featured-carousel__price {
+    font-size: var(--text-base);
+  }
+
+  /* Smaller favorite button on mobile */
+  .featured-carousel__favorite {
+    width: 2.25rem;
+    height: 2.25rem;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .featured-carousel__favorite-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+/* Small mobile: Even more compact */
+@media (max-width: 480px) {
+  .featured-carousel {
+    padding: 0 1.5rem;
+  }
+
+  .featured-carousel__nav {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .featured-carousel__pagination {
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .featured-carousel__dot {
+    width: 0.625rem;
+    height: 0.625rem;
+  }
+
+  .featured-carousel__dot--active {
+    width: 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY - REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-carousel__track {
+    transition: none;
+  }
+
+  .featured-carousel__card {
+    transition: box-shadow 0.2s ease;
+  }
+
+  .featured-carousel__card:hover {
+    transform: none;
+  }
+
+  .featured-carousel__image {
+    transition: none;
+  }
+
+  .featured-carousel__card:hover .featured-carousel__image {
+    transform: none;
+  }
+
+  .featured-carousel__nav {
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .featured-carousel__nav:hover:not(:disabled) {
+    transform: translateY(-50%);
+  }
+
+  .featured-carousel__nav:active:not(:disabled) {
+    transform: translateY(-50%);
+  }
+
+  .featured-carousel__favorite {
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .featured-carousel__favorite:hover {
+    transform: none;
+  }
+
+  .featured-carousel__favorite:active {
+    transform: none;
+  }
+
+  .featured-carousel__dot {
+    transition: background 0.2s ease;
+  }
+
+  .featured-carousel__dot:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   DARK MODE
+   ========================================================================== */
+
+[data-theme="dark"] .featured-carousel__card {
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .featured-carousel__card:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .featured-carousel__nav {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-strong);
+}
+
+[data-theme="dark"] .featured-carousel__nav:hover:not(:disabled) {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* ==========================================================================
+   LOADING STATE
+   ========================================================================== */
+
+.featured-carousel--loading .featured-carousel__card {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.featured-carousel--loading .featured-carousel__image {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--bg-elevated) 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
