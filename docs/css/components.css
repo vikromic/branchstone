@@ -1092,11 +1092,11 @@
   transform: translateY(0);
 }
 
-/* Always show price on mobile */
+/* Hide price and description on mobile - show only in lightbox */
 @media (max-width: 767px) {
-  .artwork-card__price {
-    opacity: 1;
-    transform: translateY(0);
+  .artwork-card__price,
+  .artwork-card__description {
+    display: none;
   }
 }
 
