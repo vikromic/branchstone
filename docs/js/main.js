@@ -237,6 +237,10 @@ import { GalleryDataManager } from './gallery-data.js';
         updateActiveButton(button);
       });
     });
+
+    // Show all artworks initially
+    console.log('[Gallery] Showing all artworks initially');
+    filterGallery('all');
   };
 
   // ========================================
