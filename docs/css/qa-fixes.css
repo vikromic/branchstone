@@ -502,6 +502,13 @@ a[target="_blank"]::after {
   line-height: 1.4;
 }
 
+/* Hide description on mobile - show only in lightbox */
+@media (max-width: 767px) {
+  .artwork-card__description {
+    display: none !important;
+  }
+}
+
 /* LOW-006: Mobile Menu Animation - Smooth Slide from Right */
 @media (max-width: 767px) {
   .mobile-menu__nav {

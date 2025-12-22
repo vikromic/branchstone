@@ -1839,12 +1839,10 @@
   margin-top: var(--space-2);
 }
 
-/* Mobile: always show description */
+/* Mobile: hide description - show only in lightbox */
 @media (max-width: 767px) {
   .artwork-card__description {
-    opacity: 0.85;
-    max-height: 100px;
-    margin-top: var(--space-2);
+    display: none;
   }
 
   /* Optimize animations for mobile performance */
