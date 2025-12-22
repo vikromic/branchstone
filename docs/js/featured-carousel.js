@@ -484,17 +484,17 @@ export class FeaturedCarousel {
     const maxIndex = Math.max(0, this.artworks.length - this.slidesPerView);
     let targetIndex;
 
-    if (direction > 0) {
-      // Moving forward (next)
-      targetIndex = this.currentIndex + this.slidesPerView;
-      if (targetIndex > maxIndex) {
-        targetIndex = 0; // Wrap to beginning
-      }
-    } else {
-      // Moving backward (previous)
+    if (direction < 0) {
+      // Moving backward (previous) - show earlier items
       targetIndex = this.currentIndex - this.slidesPerView;
       if (targetIndex < 0) {
         targetIndex = maxIndex; // Wrap to end
+      }
+    } else {
+      // Moving forward (next) - show later items
+      targetIndex = this.currentIndex + this.slidesPerView;
+      if (targetIndex > maxIndex) {
+        targetIndex = 0; // Wrap to beginning
       }
     }
 
