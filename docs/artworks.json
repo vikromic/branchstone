@@ -273,16 +273,16 @@
     {
       "name": "November Forest",
       "highlighted": false,
-      "collection": "Of Ash and Flowers",
-      "description": "This work is dedicated to the loss of Iryna Tsybukh — a figure whose courage, honesty, and love of life became a symbol for many in Ukraine.\n\nThough she was taken by the war, the values she lived by cannot be erased.\nAs Iryna wrote, “To have the strength to be free, one must be brave.”\n\nThe piece reflects the emotional weight of losing something monumental — something that should not have disappeared. Fragments of Iryna’s words appear in the background, carrying the strength and inspiration she shared with others.\n\nThe colors speak of hope and freedom — of what endures, and of what continues to live in our hearts.\nThe textures reflect how deeply grief can tear through the soul.",
-      "materials": "Sago palm seed coating, algae, sand, acrylic on canvas panel",
+      "collection": "The calm of the forest",
+      "description": "",
+      "materials": "Bark, sand, acrylic on canvas",
       "dimensions": "20 x 16 in",
       "year": "2024",
-      "main_image": "img/fragments_of_light/fragments.jpeg",
+      "main_image": "img/november_forest/nov.jpeg",
       "images": [],
-      "sold": true,
+      "sold": false,
       "prints": true,
-      "price": "240",
+      "price": "210",
       "scale": "medium"
     }
   ]

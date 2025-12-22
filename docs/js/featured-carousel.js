@@ -347,8 +347,8 @@ export class FeaturedCarousel {
    */
   attachEventListeners() {
     // Navigation buttons
-    this.elements.prevButton?.addEventListener('click', () => this.navigate(1));
-    this.elements.nextButton?.addEventListener('click', () => this.navigate(-1));
+    this.elements.prevButton?.addEventListener('click', () => this.navigate(-1));
+    this.elements.nextButton?.addEventListener('click', () => this.navigate(1));
 
     // Pagination dots
     this.elements.dots.forEach(dot => {
@@ -476,22 +476,26 @@ export class FeaturedCarousel {
 
   /**
    * Navigate to next/previous slide
-   * @param {number} direction - -1 for previous, 1 for next
+   * @param {number} direction - 1 for next (forward), -1 for previous (backward)
    */
   navigate(direction) {
     if (this.isTransitioning) return;
 
-    const newIndex = this.currentIndex + (direction * this.slidesPerView);
     const maxIndex = Math.max(0, this.artworks.length - this.slidesPerView);
-
-    // Allow wrapping for seamless carousel
     let targetIndex;
-    if (newIndex < 0) {
-      targetIndex = maxIndex; // Wrap to end
-    } else if (newIndex > maxIndex) {
-      targetIndex = 0; // Wrap to beginning
+
+    if (direction > 0) {
+      // Moving forward (next)
+      targetIndex = this.currentIndex + this.slidesPerView;
+      if (targetIndex > maxIndex) {
+        targetIndex = 0; // Wrap to beginning
+      }
     } else {
-      targetIndex = newIndex;
+      // Moving backward (previous)
+      targetIndex = this.currentIndex - this.slidesPerView;
+      if (targetIndex < 0) {
+        targetIndex = maxIndex; // Wrap to end
+      }
     }
 
     this.goToSlide(targetIndex);
