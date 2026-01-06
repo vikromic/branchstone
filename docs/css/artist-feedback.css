@@ -23,23 +23,23 @@
    HERO "i" BUTTON - REDUCED SIZE AND PROMINENCE
    ========================================================================== */
 
-.section-hero .hero-show-info {
+.section-hero .hero-show-info.hero-show-info {
   /* Reduce size by 20% using CSS custom properties */
-  min-width: var(--hero-info-size-reduced) !important;
-  height: var(--hero-info-size-reduced) !important;
+  min-width: var(--hero-info-size-reduced);
+  height: var(--hero-info-size-reduced);
   /* Reduce opacity for less prominence */
   opacity: 0.85;
-  /* Override display: none from components.css - !important required */
-  display: flex !important;
-  /* Fixed positioning relative to viewport - !important required to override */
-  position: fixed !important;
-  right: 24px !important;
-  bottom: 88px !important;
+  /* Override display: none from components.css - specificity increased via class repetition */
+  display: flex;
+  /* Fixed positioning relative to viewport - specificity increased via class repetition */
+  position: fixed;
+  right: 24px;
+  bottom: 88px;
 }
 
-.section-hero .hero-show-info__icon {
+.section-hero .hero-show-info__icon.hero-show-info__icon {
   /* Reduce icon size proportionally using CSS custom properties */
-  font-size: var(--hero-info-icon-size-reduced) !important;
+  font-size: var(--hero-info-icon-size-reduced);
 }
 
 .section-hero .hero-show-info:hover {
@@ -47,13 +47,13 @@
 }
 
 @media (max-width: 768px) {
-  .section-hero .hero-show-info {
-    min-width: var(--hero-info-size-mobile-reduced) !important;
-    height: var(--hero-info-size-mobile-reduced) !important;
+  .section-hero .hero-show-info.hero-show-info {
+    min-width: var(--hero-info-size-mobile-reduced);
+    height: var(--hero-info-size-mobile-reduced);
   }
 
-  .section-hero .hero-show-info__icon {
-    font-size: var(--hero-info-icon-size-mobile-reduced) !important;
+  .section-hero .hero-show-info__icon.hero-show-info__icon {
+    font-size: var(--hero-info-icon-size-mobile-reduced);
   }
 }
 
@@ -94,37 +94,37 @@
    REMOVE STATS ANIMATION
    ========================================================================== */
 
-.section-stats .stat-item {
-  /* Disable animation by removing transition */
-  transition: none !important;
+.section-stats .stat-item.stat-item {
+  /* Disable animation by removing transition - specificity increased via class repetition */
+  transition: none;
   /* Ensure stats are always visible */
-  opacity: 1 !important;
-  transform: none !important;
+  opacity: 1;
+  transform: none;
 }
 
-.section-stats .stat-item__number {
-  /* Disable number animation */
-  transition: none !important;
+.section-stats .stat-item__number.stat-item__number {
+  /* Disable number animation - specificity increased via class repetition */
+  transition: none;
 }
 
-/* Disable intersection observer effects - !important required to override JS-added styles */
-.section-stats [data-stat-item].is-visible {
-  opacity: 1 !important;
-  transform: none !important;
+/* Disable intersection observer effects - specificity increased to override JS-added styles */
+.section-stats [data-stat-item].is-visible.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 /* ==========================================================================
    LIGHTBOX/MODAL BUTTON STYLING - REMOVE CIRCULAR BACKGROUND
    ========================================================================== */
 
-.lightbox .lightbox__close,
-.lightbox .lightbox__nav,
-.modal-overlay .lightbox__close,
-.modal-overlay .lightbox__nav {
-  /* Remove circular background - !important required to override component styles */
-  background: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
+.lightbox .lightbox__close.lightbox__close,
+.lightbox .lightbox__nav.lightbox__nav,
+.modal-overlay .lightbox__close.lightbox__close,
+.modal-overlay .lightbox__nav.lightbox__nav {
+  /* Remove circular background - specificity increased via class repetition */
+  background: transparent;
+  border: none;
+  border-radius: 0;
   /* Keep only the icon visible */
   padding: 0.5rem;
 }
@@ -140,13 +140,13 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.lightbox .lightbox__close:hover,
-.lightbox .lightbox__nav:hover,
-.modal-overlay .lightbox__close:hover,
-.modal-overlay .lightbox__nav:hover {
-  /* !important required to override component hover effects */
-  background: rgba(255, 255, 255, 0.1) !important;
-  transform: none !important;
+.lightbox .lightbox__close.lightbox__close:hover,
+.lightbox .lightbox__nav.lightbox__nav:hover,
+.modal-overlay .lightbox__close.lightbox__close:hover,
+.modal-overlay .lightbox__nav.lightbox__nav:hover {
+  /* Specificity increased via class repetition to override component hover effects */
+  background: rgba(255, 255, 255, 0.1);
+  transform: none;
 }
 
 /* ==========================================================================

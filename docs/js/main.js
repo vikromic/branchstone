@@ -10,6 +10,19 @@ import { debounce, prefersReducedMotion, trapFocus, smoothScrollTo } from './uti
 import { isValidImageUrl, sanitizeText } from './security.js';
 import * as storage from './storage.js';
 
+// ========================================
+// CONSTANTS
+// ========================================
+
+// Storage namespace to prevent key collision with other sites/apps
+const STORAGE_PREFIX = 'branchstone_';
+
+// Magic number constants
+const SCROLL_THRESHOLD_STICKY = 300; // Threshold for sticky inquiry button visibility
+const SCROLL_THRESHOLD_BOTTOM_NAV = 150; // Threshold for bottom nav visibility
+const SCROLL_THRESHOLD_BOTTOM_NAV_HIDE = 200; // Additional threshold for hiding bottom nav
+const SWIPE_THRESHOLD_CLOSE = 100; // Swipe distance threshold to close panel
+
 // Import feature modules
 import { LightboxManager } from './lightbox-manager.js';
 import { FavoritesManager } from './favorites-manager.js';
@@ -414,9 +427,11 @@ import { FeaturedCarousel } from './featured-carousel.js';
         return;
       }
 
-      // Disable form
+      // Disable form and set aria-busy for accessibility
       submitBtn.disabled = true;
+      submitBtn.setAttribute('aria-busy', 'true');
       submitBtn.textContent = 'Subscribing...';
+      form.setAttribute('aria-busy', 'true');
       clearMessage();
 
       try {
@@ -438,7 +453,9 @@ import { FeaturedCarousel } from './featured-carousel.js';
         showMessage('Something went wrong. Please try again.', 'error');
       } finally {
         submitBtn.disabled = false;
+        submitBtn.removeAttribute('aria-busy');
         submitBtn.textContent = 'Subscribe';
+        form.removeAttribute('aria-busy');
       }
     });
 
@@ -455,15 +472,33 @@ import { FeaturedCarousel } from './featured-carousel.js';
   // ========================================
 
   const initStatsCounter = () => {
-    if (prefersReducedMotion()) {
-      // If reduced motion is preferred, just show the stats immediately
-      const statItems = document.querySelectorAll('[data-stat-item]');
-      statItems.forEach(item => item.classList.add('is-visible'));
+    const statItems = document.querySelectorAll('[data-stat-item]');
+    if (statItems.length === 0) return;
+
+    // Feature detection: check if IntersectionObserver is supported
+    if (!('IntersectionObserver' in window)) {
+      console.warn('[Stats] IntersectionObserver not supported, showing stats immediately');
+      // Fallback: show all stats immediately without animation
+      statItems.forEach(item => {
+        item.classList.add('is-visible');
+        const numberEl = item.querySelector('[data-stat-number]');
+        if (numberEl) {
+          const targetValue = parseInt(numberEl.getAttribute('data-stat-number'));
+          const text = numberEl.textContent;
+          const hasPlus = text.includes('+');
+          const hasPercent = text.includes('%');
+          const suffix = hasPlus ? '+' : hasPercent ? '%' : '';
+          numberEl.textContent = targetValue + suffix;
+        }
+      });
       return;
     }
 
-    const statItems = document.querySelectorAll('[data-stat-item]');
-    if (statItems.length === 0) return;
+    if (prefersReducedMotion()) {
+      // If reduced motion is preferred, just show the stats immediately
+      statItems.forEach(item => item.classList.add('is-visible'));
+      return;
+    }
 
     const observerOptions = {
       root: null,
@@ -854,8 +889,8 @@ import { FeaturedCarousel } from './featured-carousel.js';
         touchEndY = e.changedTouches[0].screenY;
         const deltaY = touchEndY - touchStartY;
 
-        // If dragged down more than 100px, close panel
-        if (deltaY > 100) {
+        // If dragged down more than swipe threshold, close panel
+        if (deltaY > SWIPE_THRESHOLD_CLOSE) {
           closePanel();
         } else {
           // Reset position
@@ -1048,8 +1083,8 @@ import { FeaturedCarousel } from './featured-carousel.js';
     const updateStickyButton = () => {
       const currentScrollY = window.scrollY;
 
-      // Show button after scrolling 300px down
-      if (currentScrollY > 300) {
+      // Show button after scrolling past threshold
+      if (currentScrollY > SCROLL_THRESHOLD_STICKY) {
         stickyButton.classList.add('is-visible');
       } else {
         stickyButton.classList.remove('is-visible');
@@ -1544,8 +1579,12 @@ import { FeaturedCarousel } from './featured-carousel.js';
       const submitButton = wizardForm.querySelector('[type="submit"]');
       if (submitButton) {
         submitButton.disabled = true;
+        submitButton.setAttribute('aria-busy', 'true');
         submitButton.textContent = 'Submitting...';
       }
+
+      // Set aria-busy on form for accessibility
+      wizardForm.setAttribute('aria-busy', 'true');
 
       try {
         // Simulate API submission
@@ -1583,8 +1622,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
       } finally {
         if (submitButton) {
           submitButton.disabled = false;
+          submitButton.removeAttribute('aria-busy');
           submitButton.textContent = 'Submit Request';
         }
+        wizardForm.removeAttribute('aria-busy');
       }
     });
 
@@ -1762,8 +1803,8 @@ import { FeaturedCarousel } from './featured-carousel.js';
       const currentScrollY = window.scrollY;
 
       // Only hide/show after scrolling past threshold
-      if (currentScrollY > 150) {
-        if (currentScrollY > lastScrollY && currentScrollY > 200) {
+      if (currentScrollY > SCROLL_THRESHOLD_BOTTOM_NAV) {
+        if (currentScrollY > lastScrollY && currentScrollY > SCROLL_THRESHOLD_BOTTOM_NAV_HIDE) {
           // Scrolling down - hide nav
           nav.classList.add('mobile-bottom-nav--hidden');
         } else if (currentScrollY < lastScrollY) {
@@ -1835,11 +1876,17 @@ import { FeaturedCarousel } from './featured-carousel.js';
   // ========================================
 
   const showSimpleToast = (message, duration = 4000) => {
+    // Sanitize message to prevent XSS
+    const sanitizedMessage = sanitizeText(message);
+
     const toast = document.createElement('div');
     toast.className = 'simple-toast';
-    toast.textContent = message;
+    // Use textContent (not innerHTML) for XSS protection
+    toast.textContent = sanitizedMessage;
+    // Add ARIA attributes for accessibility
     toast.setAttribute('role', 'status');
     toast.setAttribute('aria-live', 'polite');
+    toast.setAttribute('aria-atomic', 'true');
 
     document.body.appendChild(toast);
 
@@ -1897,8 +1944,8 @@ import { FeaturedCarousel } from './featured-carousel.js';
     closeButton.addEventListener('click', (e) => {
       e.stopPropagation();
       heroContent.classList.add('is-hidden');
-      // Save state to sessionStorage
-      sessionStorage.setItem('heroCardDismissed', 'true');
+      // Save state to sessionStorage with namespaced key
+      sessionStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
       // Show scroll indicator
       if (scrollIndicator) {
         scrollIndicator.classList.add('is-visible');
@@ -1912,7 +1959,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
       showButton.addEventListener('click', (e) => {
         e.stopPropagation();
         heroContent.classList.remove('is-hidden');
-        sessionStorage.removeItem('heroCardDismissed');
+        sessionStorage.removeItem(STORAGE_PREFIX + 'heroCardDismissed');
         // Hide scroll indicator
         if (scrollIndicator) {
           scrollIndicator.classList.remove('is-visible');
@@ -1926,7 +1973,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
         // Only close if clicking on the section itself, not the content card
         if (e.target === heroSection || e.target.classList.contains('section-hero__background') || e.target.classList.contains('section-hero__background-image')) {
           heroContent.classList.add('is-hidden');
-          sessionStorage.setItem('heroCardDismissed', 'true');
+          sessionStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
           // Show scroll indicator
           if (scrollIndicator) {
             scrollIndicator.classList.add('is-visible');
@@ -1939,7 +1986,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !heroContent.classList.contains('is-hidden')) {
         heroContent.classList.add('is-hidden');
-        sessionStorage.setItem('heroCardDismissed', 'true');
+        sessionStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
         // Show scroll indicator
         if (scrollIndicator) {
           scrollIndicator.classList.add('is-visible');
@@ -1947,8 +1994,8 @@ import { FeaturedCarousel } from './featured-carousel.js';
       }
     });
 
-    // Restore dismissed state from sessionStorage
-    if (sessionStorage.getItem('heroCardDismissed') === 'true') {
+    // Restore dismissed state from sessionStorage using namespaced key
+    if (sessionStorage.getItem(STORAGE_PREFIX + 'heroCardDismissed') === 'true') {
       heroContent.classList.add('is-hidden');
       // Show scroll indicator
       if (scrollIndicator) {
