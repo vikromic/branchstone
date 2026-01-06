@@ -1327,39 +1327,24 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background:
-    /* Vignette effect - draws eye to center */
-    radial-gradient(
-      ellipse at center,
-      transparent 0%,
-      rgba(26, 24, 22, 0.15) 60%,
-      rgba(26, 24, 22, 0.4) 100%
-    ),
-    /* Bottom gradient - text readability */
-    linear-gradient(
-      to top,
-      rgba(26, 24, 22, 0.85) 0%,
-      rgba(26, 24, 22, 0.4) 30%,
-      rgba(26, 24, 22, 0.2) 60%,
-      transparent 100%
-    );
+  /* Simplified single gradient for warmth and readability */
+  background: linear-gradient(
+    to top,
+    rgba(26, 24, 22, 0.65) 0%,
+    rgba(26, 24, 22, 0.25) 40%,
+    rgba(26, 24, 22, 0.1) 70%,
+    transparent 100%
+  );
 }
 
 [data-theme="dark"] .section-hero__background::before {
-  background:
-    radial-gradient(
-      ellipse at center,
-      transparent 0%,
-      rgba(20, 18, 16, 0.2) 60%,
-      rgba(20, 18, 16, 0.5) 100%
-    ),
-    linear-gradient(
-      to top,
-      rgba(20, 18, 16, 0.92) 0%,
-      rgba(20, 18, 16, 0.55) 30%,
-      rgba(20, 18, 16, 0.3) 60%,
-      transparent 100%
-    );
+  background: linear-gradient(
+    to top,
+    rgba(20, 18, 16, 0.75) 0%,
+    rgba(20, 18, 16, 0.35) 40%,
+    rgba(20, 18, 16, 0.15) 70%,
+    transparent 100%
+  );
 }
 
 .section-hero__background-image {
@@ -1367,7 +1352,8 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  filter: brightness(0.88) contrast(1.08) saturate(1.05);
+  /* Warmer, more breathable feel */
+  filter: brightness(0.95) contrast(1.05) saturate(1.1);
   will-change: transform;
   animation: heroBackgroundReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -1384,7 +1370,7 @@
 }
 
 [data-theme="dark"] .section-hero__background-image {
-  filter: brightness(0.65) contrast(1.1) saturate(0.95);
+  filter: brightness(0.75) contrast(1.08) saturate(1.0);
 }
 
 /* Parallax on scroll - enhanced in main.js */

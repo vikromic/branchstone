@@ -1889,6 +1889,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
     const closeButton = document.querySelector('.hero-card-close');
     const showButton = document.querySelector('.hero-show-info');
     const heroSection = document.querySelector('.section-hero');
+    const scrollIndicator = document.querySelector('.hero-scroll-indicator');
 
     if (!heroContent || !closeButton) return;
 
@@ -1898,6 +1899,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
       heroContent.classList.add('is-hidden');
       // Save state to sessionStorage
       sessionStorage.setItem('heroCardDismissed', 'true');
+      // Show scroll indicator
+      if (scrollIndicator) {
+        scrollIndicator.classList.add('is-visible');
+      }
       // Show toast notification
       showSimpleToast('Tap ⓘ to restore');
     });
@@ -1908,6 +1913,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
         e.stopPropagation();
         heroContent.classList.remove('is-hidden');
         sessionStorage.removeItem('heroCardDismissed');
+        // Hide scroll indicator
+        if (scrollIndicator) {
+          scrollIndicator.classList.remove('is-visible');
+        }
       });
     }
 
@@ -1918,6 +1927,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
         if (e.target === heroSection || e.target.classList.contains('section-hero__background') || e.target.classList.contains('section-hero__background-image')) {
           heroContent.classList.add('is-hidden');
           sessionStorage.setItem('heroCardDismissed', 'true');
+          // Show scroll indicator
+          if (scrollIndicator) {
+            scrollIndicator.classList.add('is-visible');
+          }
         }
       });
     }
@@ -1927,12 +1940,20 @@ import { FeaturedCarousel } from './featured-carousel.js';
       if (e.key === 'Escape' && !heroContent.classList.contains('is-hidden')) {
         heroContent.classList.add('is-hidden');
         sessionStorage.setItem('heroCardDismissed', 'true');
+        // Show scroll indicator
+        if (scrollIndicator) {
+          scrollIndicator.classList.add('is-visible');
+        }
       }
     });
 
     // Restore dismissed state from sessionStorage
     if (sessionStorage.getItem('heroCardDismissed') === 'true') {
       heroContent.classList.add('is-hidden');
+      // Show scroll indicator
+      if (scrollIndicator) {
+        scrollIndicator.classList.add('is-visible');
+      }
     }
   };
 
