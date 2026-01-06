@@ -393,7 +393,11 @@
 .verified-artist-badge {
   opacity: 0.9;
   font-size: 0.75rem; /* Smaller */
-  padding: 0.375rem 0.75rem; /* Reduced padding */
+  padding: 0.25rem 0.5rem; /* Minimal padding for tight fit */
+  text-align: center; /* Center text within badge */
+  display: inline-flex; /* Ensure proper centering of flex content */
+  align-items: center; /* Vertically center content */
+  justify-content: center; /* Horizontally center content */
 }
 
 /* Scale down icon to match smaller badge */
