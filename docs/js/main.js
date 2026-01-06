@@ -1928,6 +1928,161 @@ import { FeaturedCarousel } from './featured-carousel.js';
   };
 
   // ========================================
+  // DYNAMIC FEEDBACK LOADING
+  // ========================================
+
+  const initDynamicFeedbacks = async () => {
+    // Try to find testimonials container - different structure on different pages
+    const testimonialsGrid = document.querySelector('.section-testimonials .testimonials-grid') ||
+                             document.querySelector('.section--testimonials .grid--three-column');
+
+    // Only run if testimonials grid exists
+    if (!testimonialsGrid) {
+      console.log('[Feedbacks] Testimonials grid not found, skipping initialization');
+      return;
+    }
+
+    try {
+      console.log('[Feedbacks] Loading feedbacks from JSON...');
+
+      const response = await fetch('feedbacks.json');
+      if (!response.ok) {
+        throw new Error(`Failed to load feedbacks: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const feedbacks = data.feedbacks;
+
+      if (!feedbacks || !Array.isArray(feedbacks)) {
+        throw new Error('Invalid feedbacks data structure');
+      }
+
+      console.log(`[Feedbacks] Loaded ${feedbacks.length} feedbacks`);
+
+      // Determine which page we're on
+      const isAboutPage = document.body.classList.contains('page-about') ||
+                          window.location.pathname.includes('about.html');
+      const isHomePage = !isAboutPage && (
+        document.body.classList.contains('page-home') ||
+        window.location.pathname.includes('index.html') ||
+        window.location.pathname === '/' ||
+        window.location.pathname === '/docs/'
+      );
+
+      // Select feedbacks to display
+      let selectedFeedbacks = [];
+      if (isHomePage) {
+        // Home page: show first 5 feedbacks
+        selectedFeedbacks = feedbacks.slice(0, 5);
+      } else if (isAboutPage) {
+        // About page: show 3 specific feedbacks (indices 0, 3, 5)
+        selectedFeedbacks = [
+          feedbacks[0],  // Sarah Mitchell
+          feedbacks[3],  // David K.
+          feedbacks[5]   // Emily Rodriguez
+        ].filter(Boolean); // Filter out undefined if array is too short
+      }
+
+      // Clear existing testimonials by removing child nodes
+      while (testimonialsGrid.firstChild) {
+        testimonialsGrid.removeChild(testimonialsGrid.firstChild);
+      }
+
+      // Generate testimonial cards
+      selectedFeedbacks.forEach(feedback => {
+        const card = createTestimonialCard(feedback, isAboutPage);
+        testimonialsGrid.appendChild(card);
+      });
+
+      console.log('[Feedbacks] Rendered successfully');
+
+    } catch (error) {
+      console.error('[Feedbacks] Error loading feedbacks:', error);
+
+      // Keep existing hardcoded content as fallback
+      console.warn('[Feedbacks] Using hardcoded testimonials as fallback');
+    }
+  };
+
+  const createTestimonialCard = (feedback, isAboutPage) => {
+    // Generate avatar initials from name
+    const initials = feedback.name
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase())
+      .join('')
+      .slice(0, 2);
+
+    // Different structure for home page vs about page
+    if (isAboutPage) {
+      // About page structure: blockquote with footer
+      const blockquote = document.createElement('blockquote');
+      blockquote.className = 'testimonial-card';
+
+      const quote = document.createElement('p');
+      quote.className = 'testimonial-card__quote';
+      quote.textContent = `" ${feedback.review}"`;
+
+      const footer = document.createElement('footer');
+      footer.className = 'testimonial-card__footer';
+
+      const author = document.createElement('cite');
+      author.className = 'testimonial-card__author';
+      author.textContent = feedback.name;
+
+      const role = document.createElement('span');
+      role.className = 'testimonial-card__role';
+      // Use title field if available, otherwise use location with a generic role
+      role.textContent = feedback.title || `Collector, ${feedback.location}`;
+
+      footer.appendChild(author);
+      footer.appendChild(role);
+
+      blockquote.appendChild(quote);
+      blockquote.appendChild(footer);
+
+      return blockquote;
+    } else {
+      // Home page structure: article with photo, quote, and footer
+      const article = document.createElement('article');
+      article.className = 'testimonial-card';
+
+      const photoDiv = document.createElement('div');
+      photoDiv.className = 'testimonial-card__photo';
+
+      const avatar = document.createElement('div');
+      avatar.className = 'testimonial-card__avatar';
+      avatar.setAttribute('aria-hidden', 'true');
+      avatar.textContent = initials;
+
+      photoDiv.appendChild(avatar);
+
+      const blockquote = document.createElement('blockquote');
+      blockquote.className = 'testimonial-card__quote';
+      blockquote.textContent = `"${feedback.review}"`;
+
+      const footer = document.createElement('footer');
+      footer.className = 'testimonial-card__footer';
+
+      const author = document.createElement('cite');
+      author.className = 'testimonial-card__author';
+      author.textContent = feedback.name;
+
+      const location = document.createElement('span');
+      location.className = 'testimonial-card__location';
+      location.textContent = feedback.location;
+
+      footer.appendChild(author);
+      footer.appendChild(location);
+
+      article.appendChild(photoDiv);
+      article.appendChild(blockquote);
+      article.appendChild(footer);
+
+      return article;
+    }
+  };
+
+  // ========================================
   // HERO CARD CLOSE FUNCTIONALITY
   // ========================================
 
@@ -2024,6 +2179,9 @@ import { FeaturedCarousel } from './featured-carousel.js';
 
       // Initialize featured carousel on home page
       await initFeaturedCarousel();
+
+      // Load dynamic feedbacks
+      await initDynamicFeedbacks();
 
       // Continue with other features
       initSmoothScroll();
