@@ -233,7 +233,7 @@
 .bento-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(1rem, 2.5vw, 1.5rem);
+  gap: clamp(0.5rem, 1.5vw, 0.75rem);
   /* Small baseline row units (10px) for precise vertical fitting */
   grid-auto-rows: 10px;
   /* Dense packing to minimize gaps without overlaps */
@@ -259,7 +259,7 @@
     grid-template-columns: repeat(2, 1fr);
     /* Keep 10px baseline for precise sizing */
     grid-auto-rows: 10px;
-    gap: clamp(1rem, 2.5vw, 1.5rem);
+    gap: clamp(0.5rem, 1.5vw, 0.75rem);
   }
 }
 
@@ -268,7 +268,7 @@
   .bento-grid {
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 10px;
-    gap: clamp(1rem, 2vw, 1.5rem);
+    gap: clamp(0.5rem, 1.25vw, 0.75rem);
   }
 }
 
@@ -277,7 +277,7 @@
     grid-template-columns: repeat(4, 1fr);
     /* Consistent 10px baseline across all breakpoints */
     grid-auto-rows: 10px;
-    gap: clamp(1.25rem, 2vw, 1.75rem);
+    gap: clamp(0.625rem, 1.25vw, 0.875rem);
   }
 }
 

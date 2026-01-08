@@ -35,21 +35,21 @@
 .artwork-card[data-size="small"] {
   grid-column: span 1;
   grid-row: span 20;
-  aspect-ratio: 4 / 5; /* Portrait-ish */
+  /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
 }
 
 /* Medium artworks - standard size */
 .artwork-card[data-size="medium"] {
   grid-column: span 1;
   grid-row: span 28;
-  aspect-ratio: 1 / 1; /* Square-ish */
+  /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
 }
 
 /* Large artworks - prominent display */
 .artwork-card[data-size="large"] {
   grid-column: span 1;
   grid-row: span 36;
-  aspect-ratio: 4 / 5; /* Taller */
+  /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
 }
 
 /* ==========================================================================
@@ -73,7 +73,7 @@
   .artwork-card[data-size="large"] {
     grid-column: span 2;
     grid-row: span 20;
-    aspect-ratio: 16 / 9; /* Wider when spanning 2 columns */
+    /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
   }
 }
 
@@ -131,13 +131,13 @@
 
 /*
  * aspect-ratio on card reserves space before image loads
- * Images fill container with object-fit: cover
+ * Images fill container with object-fit: contain to prevent cropping
  */
 
 .artwork-card__image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
 }
 

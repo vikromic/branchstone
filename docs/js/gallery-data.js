@@ -111,6 +111,34 @@ export class GalleryDataManager {
     return scale; // Returns: "small" | "medium" | "large"
   }
 
+  /**
+   * Parse dimensions string and calculate aspect ratio
+   * Supports formats like "20 x 16 in", "16 x 20 in", etc.
+   * Returns width/height ratio or null if parsing fails
+   */
+  parseAspectRatio(dimensionsString) {
+    if (!dimensionsString) {
+      return null;
+    }
+
+    // Match patterns like "20 x 16 in" or "20x16"
+    const match = dimensionsString.match(/(\d+\.?\d*)\s*x\s*(\d+\.?\d*)/i);
+
+    if (!match) {
+      return null;
+    }
+
+    const width = parseFloat(match[1]);
+    const height = parseFloat(match[2]);
+
+    if (isNaN(width) || isNaN(height) || height === 0) {
+      return null;
+    }
+
+    // Return width/height ratio
+    return width / height;
+  }
+
 
   /**
    * Create SVG element using namespace
@@ -156,6 +184,18 @@ export class GalleryDataManager {
     }
     if (artwork.dimensions) {
       article.setAttribute('data-dimensions', artwork.dimensions);
+    }
+
+    // Calculate and apply dynamic aspect ratio from actual artwork dimensions
+    const aspectRatio = this.parseAspectRatio(artwork.dimensions);
+    if (aspectRatio !== null) {
+      // Apply as inline style for dynamic aspect ratio
+      article.style.aspectRatio = aspectRatio.toString();
+    } else {
+      // Fallback: use default aspect ratio based on size if dimensions unavailable
+      // Default to portrait 4/5 for small/large, square 1/1 for medium
+      const fallbackRatio = (sizeClass === 'medium') ? 1 : 0.8;
+      article.style.aspectRatio = fallbackRatio.toString();
     }
 
     // Create unique artwork ID from name
