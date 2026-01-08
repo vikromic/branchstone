@@ -234,9 +234,9 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(1rem, 2.5vw, 1.5rem);
-  /* Small row units allow flexible height distribution */
-  grid-auto-rows: clamp(80px, 10vw, 120px);
-  /* Dense packing to minimize gaps while maintaining visual flow */
+  /* Small baseline row units (10px) for precise vertical fitting */
+  grid-auto-rows: 10px;
+  /* Dense packing to minimize gaps without overlaps */
   grid-auto-flow: dense;
 }
 
@@ -257,8 +257,8 @@
 @media (min-width: 640px) {
   .bento-grid {
     grid-template-columns: repeat(2, 1fr);
-    /* Smaller row units for better vertical packing */
-    grid-auto-rows: clamp(90px, 12vw, 140px);
+    /* Keep 10px baseline for precise sizing */
+    grid-auto-rows: 10px;
     gap: clamp(1rem, 2.5vw, 1.5rem);
   }
 }
@@ -267,7 +267,7 @@
 @media (min-width: 768px) and (max-width: 1023px) {
   .bento-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: clamp(100px, 12vw, 150px);
+    grid-auto-rows: 10px;
     gap: clamp(1rem, 2vw, 1.5rem);
   }
 }
@@ -275,8 +275,8 @@
 @media (min-width: 1024px) {
   .bento-grid {
     grid-template-columns: repeat(4, 1fr);
-    /* Desktop: refined row units for organic flow */
-    grid-auto-rows: clamp(110px, 12vw, 160px);
+    /* Consistent 10px baseline across all breakpoints */
+    grid-auto-rows: 10px;
     gap: clamp(1.25rem, 2vw, 1.75rem);
   }
 }

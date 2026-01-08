@@ -96,51 +96,21 @@ export class GalleryDataManager {
   }
 
   /**
-   * Generate layout class for artwork card
-   * Distributes bento layouts across the grid
+   * Get size class based on artwork scale metadata
+   * Maps scale field to data-size attribute for CSS Grid sizing
    */
-  getLayoutClass(index, artwork) {
-    // Pattern: large, wide, wide, tall, regular, large, regular, wide, tall, regular, wide, regular
-    const pattern = ['bento-large', 'bento-wide', 'bento-wide', 'bento-tall', '', 'bento-large', '', 'bento-wide', 'bento-tall', '', 'bento-wide', ''];
+  getSizeClass(artwork) {
+    // Map scale values to size categories
+    const scale = artwork.scale || 'medium'; // Default to medium if not specified
 
-    // Use artwork scale if specified
-    if (artwork.scale === 'large') {
-      return 'bento-large';
+    // Normalize empty string to medium
+    if (scale === '') {
+      return 'medium';
     }
 
-    return pattern[index % pattern.length];
+    return scale; // Returns: "small" | "medium" | "large"
   }
 
-  /**
-   * Calculate aspect ratio category based on image dimensions
-   * This enables precise grid row spanning for masonry layout
-   *
-   * @param {number} width - Image width in pixels
-   * @param {number} height - Image height in pixels
-   * @returns {string} Aspect ratio category name
-   */
-  getAspectRatioCategory(width, height) {
-    if (!width || !height) {
-      return 'landscape'; // Default fallback
-    }
-
-    const aspectRatio = width / height;
-
-    // Categorize by aspect ratio ranges
-    if (aspectRatio > 2) {
-      return 'panoramic';          // Very wide (21:9 or wider)
-    } else if (aspectRatio > 1.4) {
-      return 'wide-landscape';     // Wide (16:9 range)
-    } else if (aspectRatio > 1.1) {
-      return 'landscape';          // Standard landscape (4:3 range)
-    } else if (aspectRatio >= 0.9) {
-      return 'square';             // Square-ish (1:1 range)
-    } else if (aspectRatio >= 0.7) {
-      return 'portrait';           // Portrait (3:4 range)
-    } else {
-      return 'tall-portrait';      // Tall portrait (2:3 or taller)
-    }
-  }
 
   /**
    * Create SVG element using namespace
@@ -169,14 +139,16 @@ export class GalleryDataManager {
    */
   createArtworkCard(artwork, index) {
     const article = document.createElement('article');
-    const layoutClass = this.getLayoutClass(index, artwork);
+    const sizeClass = this.getSizeClass(artwork);
     const collectionSlug = this.collectionToSlug(artwork.collection);
 
-    article.className = `artwork-card ${layoutClass}`;
+    article.className = 'artwork-card';
     if (artwork.sold) {
       article.classList.add('artwork-card--sold');
     }
 
+    // Apply size-based data attribute for CSS Grid sizing
+    article.setAttribute('data-size', sizeClass);
     article.setAttribute('data-collection', collectionSlug);
     article.setAttribute('data-lightbox-trigger', '');
     if (artwork.prints) {
@@ -217,26 +189,17 @@ export class GalleryDataManager {
     // Set loading state
     img.setAttribute('data-loading', '');
 
-    // Load image to determine aspect ratio for masonry layout
+    // Simple load handler - size is driven by data-size attribute, not aspect ratio
     img.addEventListener('load', () => {
-      const aspectRatioCategory = this.getAspectRatioCategory(img.naturalWidth, img.naturalHeight);
-      article.setAttribute('data-aspect-category', aspectRatioCategory);
-
-      // Set aspect ratio as inline style for precise layout
-      const aspectRatio = img.naturalWidth / img.naturalHeight;
-      article.style.aspectRatio = `${aspectRatio.toFixed(3)}`;
-
-      // Remove loading state and add loaded class
+      // Remove loading state and add loaded class for fade-in
       img.removeAttribute('data-loading');
       img.classList.add('loaded');
     });
 
     // Handle image load errors
     img.addEventListener('error', () => {
-      // Use default landscape aspect ratio on error
-      article.setAttribute('data-aspect-category', 'landscape');
-      article.style.aspectRatio = '4 / 3';
       img.removeAttribute('data-loading');
+      console.error(`Failed to load image: ${imagePath}`);
     });
 
     article.appendChild(img);
