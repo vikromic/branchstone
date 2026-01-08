@@ -382,9 +382,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
     if (updatePersistence) {
       // Convert filter slug back to collection name
       const collectionName = filter === 'all' ? 'all' :
-        galleryManagerInstance?.getCollections().find(c =>
-          galleryManagerInstance.collectionToSlug(c) === filter
-        ) || filter;
+        (galleryManagerInstance?.slugToCollection(filter) || filter);
 
       saveCollectionToStorage(collectionName);
       updateURLWithCollection(collectionName);

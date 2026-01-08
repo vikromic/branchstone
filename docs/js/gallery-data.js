@@ -134,6 +134,18 @@ export class GalleryDataManager {
   }
 
   /**
+   * Convert slug back to collection name
+   * Finds the collection whose slug matches the given slug
+   */
+  slugToCollection(slug) {
+    if (!slug || slug === 'all') return 'all';
+
+    // Find the collection that matches this slug
+    const collection = this.collections.find(c => this.collectionToSlug(c) === slug);
+    return collection || slug; // Return slug as fallback if no match found
+  }
+
+  /**
    * Get size class based on artwork scale metadata
    * Maps scale field to data-size attribute for CSS Grid sizing
    */
@@ -537,6 +549,7 @@ export class GalleryDataManager {
       }
 
       // Load data
+      await this.loadCollectionsMetadata();
       await this.loadArtworks();
 
       // Render everything
