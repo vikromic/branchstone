@@ -107,89 +107,22 @@
 }
 
 /* ==========================================================================
-   GRID LAYOUT IMPROVEMENTS - MASONRY STYLE
+   GRID LAYOUT IMPROVEMENTS
    ========================================================================== */
 
-/*
- * Masonry Layout Strategy:
- * 1. Try CSS Grid Masonry (experimental) with @supports
- * 2. Fall back to optimized grid with minimal row gaps
- * 3. JavaScript will enhance layout for browsers without masonry support
- */
-
-/* Modern browsers with masonry support */
-@supports (grid-template-rows: masonry) {
-  .bento-grid {
-    grid-template-rows: masonry;
-    align-tracks: start;
-  }
-}
-
-/* Reduce excessive vertical gaps for all browsers */
+/* Reduce excessive vertical gaps */
 @media (min-width: 640px) {
   .bento-grid {
     gap: var(--space-4);
-    row-gap: var(--space-3); /* Reduced from space-5 */
+    row-gap: var(--space-5);
   }
 }
 
 @media (min-width: 1024px) {
   .bento-grid {
     gap: var(--space-5);
-    row-gap: var(--space-4); /* Reduced from space-6 */
+    row-gap: var(--space-6);
   }
-}
-
-/*
- * Masonry-enhanced layout class (applied by JavaScript)
- * When JS detects no native masonry support, it will:
- * - Calculate optimal positions for each item
- * - Use CSS transforms for positioning
- * - Maintain natural aspect ratios
- */
-.bento-grid--masonry-js {
-  position: relative;
-  /* Height will be set by JavaScript based on content */
-}
-
-.bento-grid--masonry-js .artwork-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  /* Width and transform will be set by JavaScript */
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  will-change: transform;
-}
-
-/* Optimize rendering performance for masonry items */
-@media (min-width: 640px) {
-  .bento-grid--masonry-js .artwork-card {
-    /* Use GPU acceleration for smooth transitions */
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-/* Prevent layout shift during image loading */
-.artwork-card__image {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: var(--card-aspect-ratio, auto);
-}
-
-/* Placeholder while images load */
-.artwork-card__image[data-loading] {
-  background: var(--bg-elevated);
-  min-height: 200px;
-}
-
-/* Ensure section labels and dividers span full width in masonry layout */
-.bento-grid--masonry-js .gallery-section-label,
-.bento-grid--masonry-js .gallery-section-divider {
-  position: relative !important;
-  width: 100% !important;
-  transform: none !important;
-  grid-column: 1 / -1;
 }
 
 /* Collection divider captions for orientation */
