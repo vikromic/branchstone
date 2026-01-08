@@ -32,6 +32,7 @@ import { MobileMenuManager } from './mobile-menu-manager.js';
 import { ScrollManager } from './scroll-manager.js';
 import { GalleryDataManager } from './gallery-data.js';
 import { FeaturedCarousel } from './featured-carousel.js';
+import { MasonryLayout } from './masonry-layout.js';
 
 (function () {
   'use strict';
@@ -167,6 +168,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
         initArtworkInquiry();
         initGalleryFiltering();
         initMobileFilterDropdown();
+        initMasonryLayout();
         console.log('[Gallery] All features initialized');
       } else {
         console.error('[Gallery] Failed to initialize gallery');
@@ -287,6 +289,52 @@ import { FeaturedCarousel } from './featured-carousel.js';
     // Show all artworks initially
     console.log('[Gallery] Showing all artworks initially');
     filterGallery('all');
+  };
+
+  // ========================================
+  // MASONRY LAYOUT
+  // ========================================
+
+  let masonryInstance = null;
+
+  const initMasonryLayout = () => {
+    const container = document.querySelector('.bento-grid');
+    if (!container) {
+      console.log('[Masonry] Container not found, skipping masonry initialization');
+      return;
+    }
+
+    console.log('[Masonry] Initializing masonry layout...');
+
+    // Create masonry instance
+    masonryInstance = new MasonryLayout('.bento-grid', {
+      columnGap: 20,
+      rowGap: 16,
+      minColumnWidth: 250,
+      enableResize: true
+    });
+
+    // Initialize after a short delay to ensure images are loaded
+    setTimeout(() => {
+      masonryInstance.init().then((success) => {
+        if (success) {
+          console.log('[Masonry] Layout initialized successfully');
+        }
+      });
+    }, 100);
+
+    // Listen for filter changes and refresh layout
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        if (masonryInstance) {
+          // Refresh masonry after filter animation completes
+          setTimeout(() => {
+            masonryInstance.refresh();
+          }, 500);
+        }
+      });
+    });
   };
 
   // ========================================
