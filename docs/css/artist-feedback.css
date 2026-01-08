@@ -23,21 +23,22 @@
    HERO "i" BUTTON - REDUCED SIZE AND PROMINENCE
    ========================================================================== */
 
-.section-hero .hero-show-info.hero-show-info {
+/* Using parent selector chain for proper specificity without class repetition hack */
+.section-hero .hero-show-info {
   /* Reduce size by 20% using CSS custom properties */
   min-width: var(--hero-info-size-reduced);
   height: var(--hero-info-size-reduced);
   /* Reduce opacity for less prominence */
   opacity: 0.85;
-  /* Override display: none from components.css - specificity increased via class repetition */
+  /* Override display: none from components.css */
   display: flex;
-  /* Fixed positioning relative to viewport - specificity increased via class repetition */
+  /* Fixed positioning relative to viewport */
   position: fixed;
   right: 24px;
   bottom: 88px;
 }
 
-.section-hero .hero-show-info__icon.hero-show-info__icon {
+.section-hero .hero-show-info .hero-show-info__icon {
   /* Reduce icon size proportionally using CSS custom properties */
   font-size: var(--hero-info-icon-size-reduced);
 }
@@ -47,12 +48,12 @@
 }
 
 @media (max-width: 768px) {
-  .section-hero .hero-show-info.hero-show-info {
+  .section-hero .hero-show-info {
     min-width: var(--hero-info-size-mobile-reduced);
     height: var(--hero-info-size-mobile-reduced);
   }
 
-  .section-hero .hero-show-info__icon.hero-show-info__icon {
+  .section-hero .hero-show-info .hero-show-info__icon {
     font-size: var(--hero-info-icon-size-mobile-reduced);
   }
 }
@@ -94,21 +95,22 @@
    REMOVE STATS ANIMATION
    ========================================================================== */
 
-.section-stats .stat-item.stat-item {
-  /* Disable animation by removing transition - specificity increased via class repetition */
+/* Using parent selector chain for proper specificity */
+.section-stats .stat-item {
+  /* Disable animation by removing transition */
   transition: none;
   /* Ensure stats are always visible */
   opacity: 1;
   transform: none;
 }
 
-.section-stats .stat-item__number.stat-item__number {
-  /* Disable number animation - specificity increased via class repetition */
+.section-stats .stat-item__number {
+  /* Disable number animation */
   transition: none;
 }
 
-/* Disable intersection observer effects - specificity increased to override JS-added styles */
-.section-stats [data-stat-item].is-visible.is-visible {
+/* Disable intersection observer effects - using parent chain */
+.section-stats [data-stat-item].is-visible {
   opacity: 1;
   transform: none;
 }
@@ -117,11 +119,12 @@
    LIGHTBOX/MODAL BUTTON STYLING - REMOVE CIRCULAR BACKGROUND
    ========================================================================== */
 
-.lightbox .lightbox__close.lightbox__close,
-.lightbox .lightbox__nav.lightbox__nav,
-.modal-overlay .lightbox__close.lightbox__close,
-.modal-overlay .lightbox__nav.lightbox__nav {
-  /* Remove circular background - specificity increased via class repetition */
+/* Using parent selector chain for proper specificity */
+.lightbox .lightbox__close,
+.lightbox .lightbox__nav,
+.modal-overlay .lightbox__close,
+.modal-overlay .lightbox__nav {
+  /* Remove circular background */
   background: transparent;
   border: none;
   border-radius: 0;
@@ -140,11 +143,11 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.lightbox .lightbox__close.lightbox__close:hover,
-.lightbox .lightbox__nav.lightbox__nav:hover,
-.modal-overlay .lightbox__close.lightbox__close:hover,
-.modal-overlay .lightbox__nav.lightbox__nav:hover {
-  /* Specificity increased via class repetition to override component hover effects */
+.lightbox .lightbox__close:hover,
+.lightbox .lightbox__nav:hover,
+.modal-overlay .lightbox__close:hover,
+.modal-overlay .lightbox__nav:hover {
+  /* Override component hover effects */
   background: rgba(255, 255, 255, 0.1);
   transform: none;
 }

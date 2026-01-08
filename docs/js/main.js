@@ -17,11 +17,12 @@ import * as storage from './storage.js';
 // Storage namespace to prevent key collision with other sites/apps
 const STORAGE_PREFIX = 'branchstone_';
 
-// Magic number constants
-const SCROLL_THRESHOLD_STICKY = 300; // Threshold for sticky inquiry button visibility
-const SCROLL_THRESHOLD_BOTTOM_NAV = 150; // Threshold for bottom nav visibility
-const SCROLL_THRESHOLD_BOTTOM_NAV_HIDE = 200; // Additional threshold for hiding bottom nav
-const SWIPE_THRESHOLD_CLOSE = 100; // Swipe distance threshold to close panel
+// Scroll and interaction thresholds
+// These thresholds control when various UI elements appear/disappear based on user scroll position
+const SCROLL_THRESHOLD_STICKY = 300; // Show sticky inquiry button after scrolling 300px (approximately one viewport height)
+const SCROLL_THRESHOLD_BOTTOM_NAV = 150; // Start tracking bottom nav visibility after 150px scroll
+const SCROLL_THRESHOLD_BOTTOM_NAV_HIDE = 200; // Hide bottom nav when scrolling down past 200px (allows quick scrolls without flicker)
+const SWIPE_THRESHOLD_CLOSE = 100; // Minimum swipe distance in pixels to trigger panel close (prevents accidental closes)
 
 // Import feature modules
 import { LightboxManager } from './lightbox-manager.js';
@@ -169,13 +170,44 @@ import { FeaturedCarousel } from './featured-carousel.js';
         console.log('[Gallery] All features initialized');
       } else {
         console.error('[Gallery] Failed to initialize gallery');
+        // Display user-facing error message
+        showGalleryError('Unable to load gallery. Please refresh the page to try again.');
       }
 
       return galleryManager;
     } catch (error) {
       console.error('[Gallery] Error during initialization:', error);
+      // Display user-facing error message
+      showGalleryError('An error occurred while loading the gallery. Please refresh the page.');
       return null;
     }
+  };
+
+  /**
+   * Display a user-facing error message in the gallery container
+   * Provides graceful fallback when gallery fails to load
+   */
+  const showGalleryError = (message) => {
+    const container = document.querySelector('.bento-grid');
+    if (!container) return;
+
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'gallery-error';
+    errorDiv.setAttribute('role', 'alert');
+    errorDiv.setAttribute('aria-live', 'polite');
+    errorDiv.style.cssText = `
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-secondary);
+      background: var(--sage-50);
+      border: 1px solid var(--sage-200);
+      border-radius: var(--radius-md);
+      margin: 2rem 0;
+    `;
+    errorDiv.textContent = message;
+
+    container.innerHTML = '';
+    container.appendChild(errorDiv);
   };
 
   // ========================================
@@ -1010,6 +1042,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
     let lastScrollY = window.scrollY;
     let ticking = false;
 
+    /**
+     * Update sticky button visibility based on scroll position
+     * Uses requestAnimationFrame to throttle updates and prevent memory leaks
+     */
     const updateStickyButton = () => {
       const currentScrollY = window.scrollY;
 
@@ -1024,6 +1060,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
       ticking = false;
     };
 
+    /**
+     * Scroll event handler with requestAnimationFrame throttling
+     * MEMORY LEAK PREVENTION: The 'ticking' flag ensures only one rAF is scheduled at a time
+     */
     const onScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(updateStickyButton);
@@ -1031,7 +1071,8 @@ import { FeaturedCarousel } from './featured-carousel.js';
       }
     };
 
-    // Add scroll listener
+    // Add scroll listener with passive flag for better scroll performance
+    // NOTE: This listener is page-lifetime scoped; cleanup not needed for multi-page app
     window.addEventListener('scroll', onScroll, { passive: true });
 
     // Click handler - redirect to contact page
@@ -1725,7 +1766,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
     nav.appendChild(ul);
     document.body.appendChild(nav);
 
-    // Scroll behavior - hide on scroll down, show on scroll up
+    /**
+     * Scroll behavior: hide nav when scrolling down, show when scrolling up
+     * MEMORY LEAK PREVENTION: requestAnimationFrame with ticking flag
+     */
     let lastScrollY = window.scrollY;
     let ticking = false;
 
@@ -1750,6 +1794,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
       ticking = false;
     };
 
+    /**
+     * Throttled scroll handler using requestAnimationFrame
+     * NOTE: Listener is page-lifetime scoped; cleanup not needed for multi-page app
+     */
     const requestNavUpdate = () => {
       if (!ticking) {
         window.requestAnimationFrame(updateNavVisibility);
@@ -1929,8 +1977,16 @@ import { FeaturedCarousel } from './featured-carousel.js';
     } catch (error) {
       console.error('[Feedbacks] Error loading feedbacks:', error);
 
-      // Keep existing hardcoded content as fallback
-      console.warn('[Feedbacks] Using hardcoded testimonials as fallback');
+      // Graceful fallback: Keep existing hardcoded content
+      // Don't clear the grid if loading fails, preserving any static testimonials
+      console.warn('[Feedbacks] Using hardcoded testimonials as fallback - dynamic loading failed');
+
+      // Optionally show a subtle notification to user (non-intrusive)
+      // This is informational only - the page still works with fallback content
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        // Only show detailed error in development
+        console.warn('[Feedbacks] Development mode: Check that feedbacks.json exists and is accessible');
+      }
     }
   };
 
@@ -2072,47 +2128,70 @@ import { FeaturedCarousel } from './featured-carousel.js';
   // INITIALIZATION
   // ========================================
 
+  /**
+   * Main initialization function - coordinates all feature initialization
+   *
+   * PHASES:
+   * 1. CRITICAL FEATURES: Theme, mobile menu, scroll behaviors (must run first)
+   * 2. DATA LOADING: Gallery and carousel data (async, may fail gracefully)
+   * 3. ENHANCEMENT FEATURES: Forms, animations, UX improvements (can fail individually)
+   *
+   * ERROR ISOLATION: Each feature is isolated in its own init function.
+   * If one feature fails, others continue to work. Errors are logged but not thrown.
+   *
+   * EVENT LISTENER CLEANUP NOTE:
+   * - Most event listeners are persistent (page-lifetime scoped)
+   * - SPA-style cleanup is not needed for this multi-page application
+   * - Scroll listeners use requestAnimationFrame or debouncing to prevent memory leaks
+   * - Modal/panel listeners are scoped to their lifecycle (open/close)
+   *
+   * MEMORY LEAK PREVENTION:
+   * - Scroll handlers use passive listeners where possible
+   * - Event delegation is used for dynamic content (gallery cards, filters)
+   * - Panel/modal close handlers clean up their specific listeners
+   */
   const init = async () => {
     try {
       console.log('[Main] Initializing... (readyState:', document.readyState + ')');
 
-      // Initialize all features
-      initThemeToggle();
-      initMobileMenu();
-      initMobileNavigation();
-      initScrollAnimations();
-      initArtworkScrollAnimations();
+      // ===== PHASE 1: CRITICAL FEATURES (synchronous, must succeed) =====
+      initThemeToggle();         // Theme must load first to prevent flash
+      initMobileMenu();          // Mobile navigation
+      initMobileNavigation();    // Legacy mobile nav support
+      initScrollAnimations();    // Scroll-based UI behaviors
+      initArtworkScrollAnimations(); // Artwork reveal animations
 
-      // Load gallery data first (this will also init gallery-dependent features)
+      // ===== PHASE 2: DATA LOADING (async, graceful degradation) =====
+      // Gallery data loads artwork cards; failure shows error message but doesn't break page
       await initGalleryData();
 
-      // Initialize featured carousel on home page
+      // Featured carousel on home page; failure is silent (carousel not critical)
       await initFeaturedCarousel();
 
-      // Load dynamic feedbacks
+      // Dynamic testimonials; failure falls back to hardcoded content
       await initDynamicFeedbacks();
 
-      // Continue with other features
-      initSmoothScroll();
-      initFormHandling();
-      initCommissionWizard();
-      initHeaderScroll();
-      initHeroParallax();
-      initLazyLoading();
-      initSkipLink();
-      initNewsletter();
-      initStatsCounter();
-      initFavoritesPanel();
-      initInquiryPrefill();
-      initBackToTop();
-      initStickyInquiryButton();
+      // ===== PHASE 3: ENHANCEMENT FEATURES (independent, fail-safe) =====
+      initSmoothScroll();        // Smooth anchor scrolling
+      initFormHandling();        // Form validation
+      initCommissionWizard();    // Multi-step commission form
+      initHeaderScroll();        // Header show/hide on scroll
+      initHeroParallax();        // Hero section parallax effect
+      initLazyLoading();         // Image lazy loading enhancements
+      initSkipLink();            // Accessibility skip link
+      initNewsletter();          // Newsletter subscription form
+      initStatsCounter();        // Statistics display
+      initFavoritesPanel();      // Favorites management panel
+      initInquiryPrefill();      // Contact form pre-fill from favorites
+      initBackToTop();           // Back to top button
+      initStickyInquiryButton(); // Sticky inquiry CTA on mobile
 
-      // NEW: Mobile UX improvements
-      initMobileBottomNav();
-      enhanceFavoritesWithHaptics();
+      // Mobile UX enhancements
+      initMobileBottomNav();        // Bottom navigation bar
+      enhanceFavoritesWithHaptics(); // Haptic feedback for favorites
 
-      // Hero card close functionality
-      initHeroCardClose();
+      // Hero card functionality
+      initHeroCardClose();       // Hero card dismiss/restore
 
       // Set dynamic copyright year
       const yearElement = document.getElementById('copyright-year');
@@ -2120,6 +2199,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
         yearElement.textContent = new Date().getFullYear();
       }
     } catch (error) {
+      // Top-level error handler - should rarely trigger due to individual try-catch in features
       console.error('Branchstone Art: Initialization error', error);
     }
   };
