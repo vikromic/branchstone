@@ -233,8 +233,8 @@ import { FeaturedCarousel } from './featured-carousel.js';
       const shouldShow = filter === 'all' || collection === filter;
 
       if (shouldShow) {
-        // Remove hidden state immediately
-        card.style.visibility = '';
+        // Remove hidden state immediately - use display instead of visibility
+        card.style.display = '';
 
         if (!prefersReducedMotion()) {
           card.style.opacity = '0';
@@ -256,13 +256,13 @@ import { FeaturedCarousel } from './featured-carousel.js';
           card.style.opacity = '0';
           card.style.transform = 'translateY(-20px)';
 
-          // Use visibility instead of display to prevent layout shift
+          // Use display none to completely hide and remove from layout
           setTimeout(() => {
-            card.style.visibility = 'hidden';
+            card.style.display = 'none';
           }, fadeDuration);
         } else {
           // Immediate hide for reduced motion
-          card.style.visibility = 'hidden';
+          card.style.display = 'none';
         }
       }
     });

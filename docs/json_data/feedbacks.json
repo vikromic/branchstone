@@ -1,40 +1,28 @@
 {
-  "feedbacks": [
+  "collections": [
     {
-      "name": "Sarah Mitchell",
-      "title": "",
-      "location": "Plano, TX",
-      "review": "Viktoria's work brings a piece of the forest into our home."
+      "name": "Deep Ocean",
+      "description": ""
     },
     {
-      "name": "Iuliana R.",
-      "title": "",
-      "location": "Fort Worth, TX",
-      "review": "I have two of your art pieces - SPECTRAL and PROLISOK. Every guest asks about it. The way the natural materials catch the light is absolutely mesmerizing"
+      "name": "Golden",
+      "description": ""
     },
     {
-      "name": "Sarah L.",
-      "title": "",
-      "location": "Ellenwood, GA",
-      "review": "Navy Dreamland’ arrived yesterday and it’s even more beautiful in person. The layers, textures, light, and depth are incredible. I was honestly left speechless. This piece feels truly special, something I’ll hold close and treasure for years. Thank you so much, Viktoria — I’m deeply grateful for this magnificent artwork."
+      "name": "Storms",
+      "description": ""
     },
     {
-      "name": "David K.",
-      "title": "",
-      "location": "Dallas, TX",
-      "review": "I placed ‘July Pines’ in my bedroom, and I love this work. The colors, textures, and the atmosphere it creates are beautiful. It reminds me of summers spent in the forest with friends, and it brings that feeling back every day."
+      "name": "Of Ash and Flowers",
+      "description": ""
     },
     {
-      "name": "Amanda S.",
-      "title": "",
-      "location": "McKinney, TX",
-      "review": "The way light plays through the branches creates magic at different times of day. It's like having a living piece of California nature on our wall."
+      "name": "The Calm of the Forest",
+      "description": ""
     },
     {
-      "name": "Emily Rodriguez",
-      "title": "",
-      "location": "Plano, TX",
-      "review": "Working with Viktoria on a custom piece was an incredible experience. She listened to our vision and created something that exceeded our expectations. It's not just art — it's a conversation with nature."
+      "name": "Following Her Steps",
+      "description": "Following Her Steps is a collection about lineage — about the paths shaped by women before us, and the ways we move through the same world carrying their traces.\n\nThese works reflect different moments along that shared journey: pressure, resilience, interruption, moments of weakness, and endurance. Each piece holds a distinct state, staying exist within the same field, shaped by similar forces. The ground beneath the feet doesn’t change, what changes is the way each woman learns to move across it.\n\nThis collection is my way of listening to womanhood, through memories of my mother and grandmother, and the stories our family has carried about the women before us."
     }
   ]
 }
