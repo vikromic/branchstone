@@ -223,40 +223,52 @@ import { FeaturedCarousel } from './featured-carousel.js';
 
     const artworkCards = document.querySelectorAll('[data-collection]');
 
+    // Get animation duration from CSS custom properties
+    const rootStyles = getComputedStyle(document.documentElement);
+    const staggerDelay = parseInt(rootStyles.getPropertyValue('--gallery-filter-stagger-delay')) || 50;
+    const fadeDuration = parseInt(rootStyles.getPropertyValue('--gallery-filter-fade-duration')) || 200;
+
     artworkCards.forEach((card, index) => {
       const collection = card.getAttribute('data-collection');
       const shouldShow = filter === 'all' || collection === filter;
 
       if (shouldShow) {
-        card.style.display = '';
+        // Remove hidden state immediately
+        card.style.visibility = '';
 
         if (!prefersReducedMotion()) {
           card.style.opacity = '0';
           card.style.transform = 'translateY(20px)';
 
           setTimeout(() => {
-            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            card.style.transition = `opacity ${fadeDuration * 1.5}ms ease, transform ${fadeDuration * 1.5}ms ease`;
             card.style.opacity = '1';
             card.style.transform = 'translateY(0)';
-          }, index * 50);
+          }, index * staggerDelay);
+        } else {
+          // Immediate show for reduced motion
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
         }
       } else {
         if (!prefersReducedMotion()) {
-          card.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+          card.style.transition = `opacity ${fadeDuration}ms ease, transform ${fadeDuration}ms ease`;
           card.style.opacity = '0';
           card.style.transform = 'translateY(-20px)';
 
+          // Use visibility instead of display to prevent layout shift
           setTimeout(() => {
-            card.style.display = 'none';
-          }, 200);
+            card.style.visibility = 'hidden';
+          }, fadeDuration);
         } else {
-          card.style.display = 'none';
+          // Immediate hide for reduced motion
+          card.style.visibility = 'hidden';
         }
       }
     });
 
     // Reset flag after animations complete
-    const totalDuration = 200 + (artworkCards.length * 50);
+    const totalDuration = fadeDuration + (artworkCards.length * staggerDelay);
     setTimeout(() => { isGalleryFiltering = false; }, totalDuration);
   };
 
@@ -366,9 +378,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
     const lazyImages = document.querySelectorAll('img[loading="lazy"]');
 
     lazyImages.forEach(img => {
-      // Add blur placeholder class
+      // Add blur placeholder class AND data-loading attribute
       if (!img.complete) {
         img.classList.add('lazy-loading');
+        img.setAttribute('data-loading', ''); // Activates placeholder styling
       }
 
       // Fade in on load
@@ -378,12 +391,14 @@ import { FeaturedCarousel } from './featured-carousel.js';
         }
         img.classList.remove('lazy-loading');
         img.classList.add('lazy-loaded');
+        img.removeAttribute('data-loading'); // Remove placeholder state
       });
 
       // Handle error
       img.addEventListener('error', () => {
         img.classList.remove('lazy-loading');
         img.classList.add('lazy-error');
+        img.removeAttribute('data-loading'); // Remove placeholder state on error
       });
     });
   };

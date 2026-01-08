@@ -225,7 +225,8 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(1rem, 2.5vw, 2rem);
-  grid-auto-rows: minmax(200px, auto);
+  /* Use minmax with responsive min to handle extreme aspect ratios */
+  grid-auto-rows: minmax(clamp(200px, 30vw, 400px), auto);
 }
 
 /* Gallery loading and error states */
@@ -245,7 +246,8 @@
 @media (min-width: 640px) {
   .bento-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: minmax(250px, auto);
+    /* Responsive row height that adapts to viewport and content */
+    grid-auto-rows: minmax(clamp(250px, 25vw, 450px), auto);
   }
 }
 
@@ -253,7 +255,7 @@
 @media (min-width: 768px) and (max-width: 1023px) {
   .bento-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: minmax(280px, auto);
+    grid-auto-rows: minmax(clamp(280px, 22vw, 500px), auto);
     gap: clamp(1.25rem, 2.5vw, 1.75rem);
   }
 }
@@ -261,7 +263,8 @@
 @media (min-width: 1024px) {
   .bento-grid {
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: minmax(300px, auto);
+    /* Desktop: maintain stability with clamp for extreme content */
+    grid-auto-rows: minmax(clamp(300px, 20vw, 550px), auto);
   }
 }
 

@@ -4,6 +4,19 @@
  */
 
 /* ==========================================================================
+   CSS CUSTOM PROPERTIES
+   ========================================================================== */
+
+:root {
+  /* Gallery grid layout */
+  --gallery-card-aspect-ratio: 4 / 3;
+
+  /* Gallery filter animations */
+  --gallery-filter-stagger-delay: 50ms;
+  --gallery-filter-fade-duration: 200ms;
+}
+
+/* ==========================================================================
    AVAILABLE VS SOLD SEPARATION
    ========================================================================== */
 
