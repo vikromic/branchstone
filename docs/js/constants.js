@@ -141,3 +141,25 @@ export const FEATURES = {
   PARALLAX_EFFECTS: true,
   STATS_ANIMATION: true
 };
+
+// Gallery configuration
+export const GALLERY = {
+  FILTER_STAGGER_DELAY: 50,
+  FILTER_FADE_DURATION: 200,
+  FILTER_FADE_DURATION_MULTIPLIER: 1.5,
+  FILTER_TRANSLATE_SHOW: 20,
+  FILTER_TRANSLATE_HIDE: -20,
+  DEFAULT_ASPECT_RATIO_MEDIUM: 1,
+  DEFAULT_ASPECT_RATIO_OTHER: 0.8,
+  IMAGE_FADE_DURATION: 300
+};
+
+// SVG namespace
+export const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
+
+// Artwork card configuration
+export const ARTWORK_CARD = {
+  SVG_VIEWBOX_DEFAULT: '0 0 24 24',
+  SVG_STROKE_WIDTH: '2',
+  IMAGE_LOADING: 'lazy'
+};

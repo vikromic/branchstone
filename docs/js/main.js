@@ -2,10 +2,21 @@
  * Branchstone Art - Main JavaScript
  * Premium artist portfolio website
  * All features initialized on DOMContentLoaded
+ *
+ * TODO [REFACTOR - Phase 3]: This file is too large (2400+ lines) and mixes concerns.
+ * Suggested improvements:
+ * 1. Extract gallery filtering logic into dedicated GalleryFilterManager
+ *    - Handles filter state, URL persistence, and animation
+ *    - Reduces duplication between desktop and mobile filter code
+ * 2. Extract mobile-specific features into mobile-enhancements.js
+ *    - Mobile bottom nav, sticky buttons, swipe gestures
+ * 3. Extract panel management (favorites, filters) into dedicated managers
+ * 4. Move testimonial/feedback loading into separate module
+ * 5. Keep main.js focused on orchestration and initialization only
  */
 
 // Import foundational modules
-import { THEME, SCROLL, ANIMATION, STORAGE_KEYS, TIMING } from './constants.js';
+import { THEME, SCROLL, ANIMATION, STORAGE_KEYS, TIMING, GALLERY, TOUCH, SVG_NAMESPACE, ARTWORK_CARD } from './constants.js';
 import { debounce, prefersReducedMotion, trapFocus, smoothScrollTo } from './utils.js';
 import { isValidImageUrl, sanitizeText } from './security.js';
 import * as storage from './storage.js';
@@ -17,12 +28,11 @@ import * as storage from './storage.js';
 // Storage namespace to prevent key collision with other sites/apps
 const STORAGE_PREFIX = 'branchstone_';
 
-// Scroll and interaction thresholds
-// These thresholds control when various UI elements appear/disappear based on user scroll position
-const SCROLL_THRESHOLD_STICKY = 300; // Show sticky inquiry button after scrolling 300px (approximately one viewport height)
-const SCROLL_THRESHOLD_BOTTOM_NAV = 150; // Start tracking bottom nav visibility after 150px scroll
-const SCROLL_THRESHOLD_BOTTOM_NAV_HIDE = 200; // Hide bottom nav when scrolling down past 200px (allows quick scrolls without flicker)
-const SWIPE_THRESHOLD_CLOSE = 100; // Minimum swipe distance in pixels to trigger panel close (prevents accidental closes)
+// Scroll and interaction thresholds (using constants from constants.js)
+const SCROLL_THRESHOLD_STICKY = SCROLL.TRIGGER_BACK_TO_TOP;
+const SCROLL_THRESHOLD_BOTTOM_NAV = SCROLL.HEADER_HIDE_THRESHOLD;
+const SCROLL_THRESHOLD_BOTTOM_NAV_HIDE = 200; // TODO: Move to constants.js
+const SWIPE_THRESHOLD_CLOSE = TOUCH.SWIPE_CLOSE_THRESHOLD;
 
 // Import feature modules
 import { LightboxManager } from './lightbox-manager.js';
@@ -334,10 +344,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
 
     const artworkCards = document.querySelectorAll('[data-collection]');
 
-    // Get animation duration from CSS custom properties
+    // Get animation duration from CSS custom properties with fallbacks from constants
     const rootStyles = getComputedStyle(document.documentElement);
-    const staggerDelay = parseInt(rootStyles.getPropertyValue('--gallery-filter-stagger-delay')) || 50;
-    const fadeDuration = parseInt(rootStyles.getPropertyValue('--gallery-filter-fade-duration')) || 200;
+    const staggerDelay = parseInt(rootStyles.getPropertyValue('--gallery-filter-stagger-delay')) || GALLERY.FILTER_STAGGER_DELAY;
+    const fadeDuration = parseInt(rootStyles.getPropertyValue('--gallery-filter-fade-duration')) || GALLERY.FILTER_FADE_DURATION;
 
     artworkCards.forEach((card, index) => {
       const collection = card.getAttribute('data-collection');
@@ -349,10 +359,10 @@ import { FeaturedCarousel } from './featured-carousel.js';
 
         if (!prefersReducedMotion()) {
           card.style.opacity = '0';
-          card.style.transform = 'translateY(20px)';
+          card.style.transform = `translateY(${GALLERY.FILTER_TRANSLATE_SHOW}px)`;
 
           setTimeout(() => {
-            card.style.transition = `opacity ${fadeDuration * 1.5}ms ease, transform ${fadeDuration * 1.5}ms ease`;
+            card.style.transition = `opacity ${fadeDuration * GALLERY.FILTER_FADE_DURATION_MULTIPLIER}ms ease, transform ${fadeDuration * GALLERY.FILTER_FADE_DURATION_MULTIPLIER}ms ease`;
             card.style.opacity = '1';
             card.style.transform = 'translateY(0)';
           }, index * staggerDelay);
@@ -365,7 +375,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
         if (!prefersReducedMotion()) {
           card.style.transition = `opacity ${fadeDuration}ms ease, transform ${fadeDuration}ms ease`;
           card.style.opacity = '0';
-          card.style.transform = 'translateY(-20px)';
+          card.style.transform = `translateY(${GALLERY.FILTER_TRANSLATE_HIDE}px)`;
 
           // Use display none to completely hide and remove from layout
           setTimeout(() => {
@@ -520,7 +530,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
       // Fade in on load
       img.addEventListener('load', () => {
         if (!prefersReducedMotion()) {
-          img.style.transition = 'opacity 0.3s ease';
+          img.style.transition = `opacity ${GALLERY.IMAGE_FADE_DURATION}ms ease`;
         }
         img.classList.remove('lazy-loading');
         img.classList.add('lazy-loaded');
@@ -1163,16 +1173,15 @@ import { FeaturedCarousel } from './featured-carousel.js';
       ctaSpan.textContent = 'View Details ';
 
       // Create SVG using namespace-aware methods
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('viewBox', '0 0 24 24');
+      const svg = document.createElementNS(SVG_NAMESPACE, 'svg');
+      svg.setAttribute('viewBox', ARTWORK_CARD.SVG_VIEWBOX_DEFAULT);
       svg.setAttribute('fill', 'none');
       svg.setAttribute('stroke', 'currentColor');
       svg.setAttribute('stroke-linecap', 'round');
       svg.setAttribute('stroke-linejoin', 'round');
       svg.setAttribute('aria-hidden', 'true');
 
-      const path = document.createElementNS(svgNS, 'path');
+      const path = document.createElementNS(SVG_NAMESPACE, 'path');
       path.setAttribute('d', 'M5 12h14M12 5l7 7-7 7');
       svg.appendChild(path);
       ctaSpan.appendChild(svg);
