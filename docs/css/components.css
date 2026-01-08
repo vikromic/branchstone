@@ -4567,3 +4567,358 @@ details[open] summary {
 }
 
 /* Scroll indicator styles removed */
+
+/* ==========================================================================
+   ARTWORK MODAL
+   ========================================================================== */
+
+/* Modal container */
+.artwork-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.artwork-modal.is-active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Overlay backdrop */
+.artwork-modal__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Content container */
+.artwork-modal__content {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 90vh;
+  background: var(--surface-primary);
+  border-radius: var(--radius-lg);
+  overflow-y: auto;
+  transform: scale(0.95) translateY(20px);
+  transition: transform 300ms ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.artwork-modal.is-active .artwork-modal__content {
+  transform: scale(1) translateY(0);
+}
+
+/* Close button */
+.artwork-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-secondary);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.artwork-modal__close svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--text-primary);
+}
+
+.artwork-modal__close:hover {
+  background: var(--accent-primary);
+  transform: rotate(90deg);
+}
+
+.artwork-modal__close:hover svg {
+  stroke: var(--text-inverse);
+}
+
+/* Grid layout */
+.artwork-modal__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Images section */
+.artwork-modal__images {
+  position: relative;
+}
+
+.artwork-modal__carousel {
+  position: relative;
+  width: 100%;
+}
+
+.artwork-modal__main-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--surface-tertiary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.artwork-modal__main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artwork-modal__no-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background: var(--surface-tertiary);
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+}
+
+/* Carousel controls */
+.artwork-modal__carousel-prev,
+.artwork-modal__carousel-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 200ms ease;
+  z-index: 2;
+}
+
+.artwork-modal__carousel-prev {
+  left: 1rem;
+}
+
+.artwork-modal__carousel-next {
+  right: 1rem;
+}
+
+.artwork-modal__carousel-prev svg,
+.artwork-modal__carousel-next svg {
+  width: 24px;
+  height: 24px;
+  stroke: white;
+}
+
+.artwork-modal__carousel-prev:hover,
+.artwork-modal__carousel-next:hover {
+  background: rgba(0, 0, 0, 0.75);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Carousel dots */
+.artwork-modal__carousel-dots {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.artwork-modal__carousel-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--text-tertiary);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 200ms ease;
+  padding: 0;
+}
+
+.artwork-modal__carousel-dot.active {
+  background: var(--accent-primary);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.artwork-modal__carousel-dot:hover {
+  background: var(--accent-primary);
+  opacity: 0.7;
+}
+
+/* Details section */
+.artwork-modal__details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.artwork-modal__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.artwork-modal__title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.artwork-modal__badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.artwork-modal__badge--sold {
+  background: var(--sage-100);
+  color: var(--sage-800);
+}
+
+/* Info section */
+.artwork-modal__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.artwork-modal__collection {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin: 0;
+}
+
+.artwork-modal__materials,
+.artwork-modal__meta {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.artwork-modal__price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.artwork-modal__price--sold {
+  color: var(--text-tertiary);
+}
+
+/* Description */
+.artwork-modal__description-container {
+  flex: 1;
+}
+
+.artwork-modal__description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  white-space: pre-line;
+}
+
+.artwork-modal__read-more {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0;
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  cursor: pointer;
+  text-decoration: underline;
+  transition: opacity 200ms ease;
+}
+
+.artwork-modal__read-more:hover {
+  opacity: 0.8;
+}
+
+/* Actions */
+.artwork-modal__actions {
+  display: flex;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.artwork-modal__cta {
+  width: 100%;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .artwork-modal__content {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .artwork-modal__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    padding-top: 3rem;
+  }
+
+  .artwork-modal__close {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .artwork-modal__title {
+    font-size: 1.5rem;
+  }
+
+  .artwork-modal__carousel-prev,
+  .artwork-modal__carousel-next {
+    width: 36px;
+    height: 36px;
+  }
+
+  .artwork-modal__carousel-prev svg,
+  .artwork-modal__carousel-next svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .artwork-modal__carousel-prev {
+    left: 0.5rem;
+  }
+
+  .artwork-modal__carousel-next {
+    right: 0.5rem;
+  }
+}

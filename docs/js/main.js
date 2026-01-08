@@ -41,6 +41,7 @@ import { MobileMenuManager } from './mobile-menu-manager.js';
 import { ScrollManager } from './scroll-manager.js';
 import { GalleryDataManager } from './gallery-data.js';
 import { FeaturedCarousel } from './featured-carousel.js';
+import { ArtworkModalManager } from './artwork-modal.js';
 
 (function () {
   'use strict';
@@ -176,6 +177,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
         initFavorites();
         initArtworkOverlays();
         initArtworkInquiry();
+        initArtworkModal();
         initGalleryFiltering();
         initMobileFilterDropdown();
         console.log('[Gallery] All features initialized');
@@ -1017,6 +1019,32 @@ import { FeaturedCarousel } from './featured-carousel.js';
     // Only run on contact page
     if (!document.querySelector('.main') || !window.location.pathname.includes('contact')) return;
 
+    const messageField = document.querySelector('[name="message"]');
+    if (!messageField) return;
+
+    // Check for URL query parameters first (from modal)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlMessage = urlParams.get('message');
+
+    if (urlMessage) {
+      // Pre-fill from URL parameters
+      messageField.value = decodeURIComponent(urlMessage);
+
+      // Scroll to form
+      setTimeout(() => {
+        messageField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+
+      // Clean up URL
+      const url = new URL(window.location);
+      url.searchParams.delete('message');
+      url.searchParams.delete('art');
+      window.history.replaceState({}, '', url);
+
+      return;
+    }
+
+    // Fallback: Check localStorage for pending inquiry (from favorites)
     const inquiryData = storage.getItemWithExpiration(STORAGE_KEYS.PENDING_INQUIRY, TIMING.ONE_HOUR);
     if (!inquiryData) return;
 
@@ -1024,7 +1052,6 @@ import { FeaturedCarousel } from './featured-carousel.js';
 
       // Pre-fill form
       const subjectField = document.querySelector('[name="subject"]');
-      const messageField = document.querySelector('[name="message"]');
 
       if (subjectField && messageField) {
         // Set subject
@@ -1807,6 +1834,24 @@ import { FeaturedCarousel } from './featured-carousel.js';
     // Initialize
     loadDraft();
     updateProgress();
+  };
+
+  // ========================================
+  // ARTWORK MODAL SYSTEM
+  // ========================================
+
+  const initArtworkModal = () => {
+    // Only run on gallery page
+    const container = document.querySelector('.bento-grid');
+    if (!container) {
+      console.log('[ArtworkModal] Gallery not found, skipping initialization');
+      return;
+    }
+
+    console.log('[ArtworkModal] Initializing artwork modal system...');
+    const modalManager = new ArtworkModalManager();
+    modalManager.init();
+    console.log('[ArtworkModal] Modal system initialized');
   };
 
   // ========================================
