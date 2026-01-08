@@ -314,7 +314,7 @@ import * as storage from './storage.js';
 
   const init = () => {
     try {
-      initEnhancedLightbox();
+      // initEnhancedLightbox(); // REMOVED: Lightbox removed in preparation for new modal system
       disableStatsAnimation();
       enhanceContactForm();
       addPrintsAvailability();

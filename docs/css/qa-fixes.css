@@ -11,46 +11,6 @@
 /* HIGH-001: Hero Info Button Positioning - ALREADY FIXED in artist-feedback.css */
 /* Using fixed positioning relative to viewport for consistent visibility */
 
-/* HIGH-002: Lightbox Navigation - Enhanced Touch Targets & Swipe Indicators */
-.lightbox__nav--prev,
-.lightbox__nav--next {
-  /* Larger touch targets on mobile - 56x56px minimum */
-  min-width: 56px;
-  min-height: 56px;
-  padding: 1rem;
-  /* Enhanced tap area */
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-@media (max-width: 768px) {
-  .lightbox__nav--prev,
-  .lightbox__nav--next {
-    /* Even larger for better thumb reach */
-    min-width: 64px;
-    min-height: 64px;
-  }
-
-  /* Swipe indicator hint */
-  .lightbox__content::after {
-    content: '← Swipe →';
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.6);
-    opacity: 0;
-    animation: swipeHintFade 3s ease-in-out;
-    pointer-events: none;
-  }
-}
-
-@keyframes swipeHintFade {
-  0%, 100% { opacity: 0; }
-  15%, 85% { opacity: 1; }
-}
-
 /* HIGH-003: Favorites Panel Mobile Layout - Full Width on Small Screens */
 @media (max-width: 767px) {
   .favorites-panel {
@@ -217,25 +177,6 @@ select.is-valid {
   );
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
-}
-
-/* Lightbox image loading state */
-.lightbox__image {
-  position: relative;
-}
-
-.lightbox__image.is-loading::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 48px;
-  height: 48px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
 }
 
 /* ==========================================================================
@@ -706,8 +647,7 @@ body {
 }
 
 /* Contain layout shifts */
-.artwork-card__image,
-.lightbox__image {
+.artwork-card__image {
   content-visibility: auto;
 }
 

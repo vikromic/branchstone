@@ -291,7 +291,6 @@
 
   /* Close buttons */
   .favorites-panel__close,
-  .lightbox__close,
   .mobile-menu__close,
   .mobile-filter-dropdown__close {
     min-width: 44px;
@@ -366,9 +365,7 @@
 
   /* Modal/panel transitions */
   .favorites-panel,
-  .mobile-menu,
-  .lightbox,
-  .modal-overlay {
+  .mobile-menu {
     transition-duration: 210ms !important;
   }
 

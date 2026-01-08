@@ -116,43 +116,6 @@
 }
 
 /* ==========================================================================
-   LIGHTBOX/MODAL BUTTON STYLING - REMOVE CIRCULAR BACKGROUND
-   ========================================================================== */
-
-/* Using parent selector chain for proper specificity */
-.lightbox .lightbox__close,
-.lightbox .lightbox__nav,
-.modal-overlay .lightbox__close,
-.modal-overlay .lightbox__nav {
-  /* Remove circular background */
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  /* Keep only the icon visible */
-  padding: 0.5rem;
-}
-
-.lightbox .lightbox__close span,
-.lightbox .lightbox__nav span,
-.modal-overlay .lightbox__close span,
-.modal-overlay .lightbox__nav span {
-  /* Style the text/arrow without circle */
-  font-size: 2rem;
-  font-weight: 300;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.lightbox .lightbox__close:hover,
-.lightbox .lightbox__nav:hover,
-.modal-overlay .lightbox__close:hover,
-.modal-overlay .lightbox__nav:hover {
-  /* Override component hover effects */
-  background: rgba(255, 255, 255, 0.1);
-  transform: none;
-}
-
-/* ==========================================================================
    ARTWORK DETAILS POPUP ENHANCEMENTS
    ========================================================================== */
 

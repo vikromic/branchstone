@@ -362,7 +362,3 @@
   display: none !important;
 }
 
-/* Price is only shown in lightbox/detail view */
-.lightbox__price {
-  display: block;
-}

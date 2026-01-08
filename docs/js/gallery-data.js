@@ -419,7 +419,6 @@ export class GalleryDataManager {
 
     article.setAttribute('data-size', sizeClass);
     article.setAttribute('data-collection', collectionSlug);
-    article.setAttribute('data-lightbox-trigger', '');
     if (artwork.prints) {
       article.setAttribute('data-prints-available', 'true');
     }

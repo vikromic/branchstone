@@ -35,7 +35,6 @@ const SCROLL_THRESHOLD_BOTTOM_NAV_HIDE = 200; // TODO: Move to constants.js
 const SWIPE_THRESHOLD_CLOSE = TOUCH.SWIPE_CLOSE_THRESHOLD;
 
 // Import feature modules
-import { LightboxManager } from './lightbox-manager.js';
 import { FavoritesManager } from './favorites-manager.js';
 import { FormValidator } from './form-validator.js';
 import { MobileMenuManager } from './mobile-menu-manager.js';
@@ -174,7 +173,6 @@ import { FeaturedCarousel } from './featured-carousel.js';
         console.log('[Gallery] Initializing gallery-dependent features...');
         // Re-initialize features that depend on gallery cards
         // These need to be called after gallery is rendered
-        initLightbox();
         initFavorites();
         initArtworkOverlays();
         initArtworkInquiry();
@@ -442,15 +440,6 @@ import { FeaturedCarousel } from './featured-carousel.js';
     updateGalleryHeader(initialCollection);
     filterGallery(initialFilter, false); // false = don't update persistence (already loaded from it)
     updateActiveButton(initialFilter);
-  };
-
-  // ========================================
-  // 6. LIGHTBOX
-  // ========================================
-
-  const initLightbox = () => {
-    const lightboxManager = new LightboxManager();
-    lightboxManager.init();
   };
 
   // ========================================
