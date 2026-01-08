@@ -31,9 +31,15 @@ export class ArtworkCarousel {
   static buildImagePaths(artwork) {
     if (!artwork.main_image) return [];
 
+    // Defensive: Ensure main_image is a string before calling lastIndexOf
+    const mainImage = artwork.main_image;
+    if (!mainImage || typeof mainImage !== 'string') {
+      return [];
+    }
+
     // Extract directory from main_image
-    const lastSlash = artwork.main_image.lastIndexOf('/');
-    const directory = artwork.main_image.substring(0, lastSlash);
+    const lastSlash = mainImage.lastIndexOf('/');
+    const directory = mainImage.substring(0, lastSlash);
 
     // Build array: [main_image, ...additional images]
     const allImages = [artwork.main_image];
@@ -211,6 +217,8 @@ export class ArtworkModalManager {
     this.carousel = null;
     this.focusedElementBeforeModal = null;
     this.keyboardHandler = this.handleKeyboard.bind(this);
+    this.focusTrapHandler = this.trapFocus.bind(this);
+    this.popstateHandler = null;
     this.scrollPosition = 0;
   }
 
@@ -228,7 +236,13 @@ export class ArtworkModalManager {
    */
   createModalHTML() {
     // Check if modal already exists
-    if (document.querySelector('.artwork-modal')) return;
+    const existingModal = document.querySelector('.artwork-modal');
+    if (existingModal) {
+      console.log('[ArtworkModal] Modal already exists in DOM');
+      return;
+    }
+
+    console.log('[ArtworkModal] Creating modal HTML structure...');
 
     // Create modal container
     const modal = document.createElement('div');
@@ -236,7 +250,8 @@ export class ArtworkModalManager {
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
     modal.setAttribute('aria-labelledby', 'modal-title');
-    modal.hidden = true;
+    // Don't use hidden attribute - it conflicts with CSS transitions
+    // modal.hidden = true;
 
     // Overlay
     const overlay = document.createElement('div');
@@ -367,6 +382,9 @@ export class ArtworkModalManager {
     this.modal = modal;
     this.overlay = overlay;
 
+    console.log('[ArtworkModal] Modal HTML created and appended to body');
+    console.log('[ArtworkModal] Modal element:', this.modal);
+
     // Attach close listeners
     closeBtn.addEventListener('click', () => this.close());
     overlay.addEventListener('click', () => this.close());
@@ -376,25 +394,36 @@ export class ArtworkModalManager {
    * Attach global event listeners
    */
   attachGlobalListeners() {
+    console.log('[ArtworkModal] Attaching global click listeners');
+
     // Listen for artwork card clicks
     document.addEventListener('click', (e) => {
       const card = e.target.closest('.artwork-card');
       if (!card) return;
 
+      console.log('[ArtworkModal] Artwork card clicked:', card);
+
       // Don't open modal if clicking action buttons
       if (e.target.closest('.artwork-card__favorite') ||
           e.target.closest('.artwork-card__inquire')) {
+        console.log('[ArtworkModal] Click on action button - ignoring');
         return;
       }
 
+      console.log('[ArtworkModal] Extracting artwork data from card...');
       const artworkData = this.extractArtworkDataFromCard(card);
+      console.log('[ArtworkModal] Artwork data:', artworkData);
+
       if (artworkData) {
         this.open(artworkData);
+      } else {
+        console.error('[ArtworkModal] Failed to extract artwork data');
       }
     });
 
     // Handle browser back/forward navigation
-    window.addEventListener('popstate', () => {
+    // Store as class property for cleanup in destroy()
+    this.popstateHandler = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const artSlug = urlParams.get('art');
 
@@ -411,7 +440,8 @@ export class ArtworkModalManager {
         // Modal is open but shouldn't be - close it
         this.close(false); // false = don't update URL
       }
-    });
+    };
+    window.addEventListener('popstate', this.popstateHandler);
   }
 
   /**
@@ -486,6 +516,14 @@ export class ArtworkModalManager {
    * Open modal with artwork data
    */
   open(artwork, updateURL = true) {
+    console.log('[ArtworkModal] Opening modal for:', artwork.name);
+    console.log('[ArtworkModal] Modal element exists:', !!this.modal);
+
+    if (!this.modal) {
+      console.error('[ArtworkModal] ERROR: Modal element is null - cannot open');
+      return;
+    }
+
     this.currentArtwork = artwork;
     this.focusedElementBeforeModal = document.activeElement;
 
@@ -495,13 +533,18 @@ export class ArtworkModalManager {
     // Populate modal content
     this.populateModal(artwork);
 
-    // Show modal
-    this.modal.hidden = false;
+    // Show modal - don't use hidden attribute, use CSS classes only
+    // this.modal.hidden = false;
 
-    // Trigger reflow
+    // Trigger reflow to ensure transition plays
     this.modal.offsetHeight;
 
+    // Add active class to trigger CSS transition
     this.modal.classList.add('is-active');
+
+    console.log('[ArtworkModal] Modal classes:', this.modal.className);
+    console.log('[ArtworkModal] Modal computed display:', window.getComputedStyle(this.modal).display);
+    console.log('[ArtworkModal] Modal computed opacity:', window.getComputedStyle(this.modal).opacity);
 
     // Lock body scroll
     document.body.style.overflow = 'hidden';
@@ -516,6 +559,7 @@ export class ArtworkModalManager {
 
     // Attach keyboard listeners
     document.addEventListener('keydown', this.keyboardHandler);
+    document.addEventListener('keydown', this.focusTrapHandler);
 
     // Focus close button
     setTimeout(() => {
@@ -529,10 +573,13 @@ export class ArtworkModalManager {
   close(updateURL = true) {
     if (!this.isOpen()) return;
 
+    console.log('[ArtworkModal] Closing modal');
+
     this.modal.classList.remove('is-active');
 
     setTimeout(() => {
-      this.modal.hidden = true;
+      // Don't use hidden attribute - keep consistent with open method
+      // this.modal.hidden = true;
       this.currentArtwork = null;
 
       // Unlock body scroll
@@ -549,8 +596,9 @@ export class ArtworkModalManager {
         this.focusedElementBeforeModal.focus();
       }
 
-      // Remove keyboard listener
+      // Remove keyboard listeners
       document.removeEventListener('keydown', this.keyboardHandler);
+      document.removeEventListener('keydown', this.focusTrapHandler);
 
       // Update URL
       if (updateURL) {
@@ -747,5 +795,64 @@ export class ArtworkModalManager {
     } else if (this.carousel) {
       this.carousel.handleKeyboardNavigation(e);
     }
+  }
+
+  /**
+   * Trap focus within modal for accessibility
+   * Re-queries focusable elements to account for dynamic content (e.g., "Read more" button)
+   */
+  trapFocus(e) {
+    if (e.key !== 'Tab') return;
+
+    // Query focusable elements dynamically to catch newly visible elements
+    const focusableElements = this.modal.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    const focusableArray = Array.from(focusableElements);
+
+    if (focusableArray.length === 0) return;
+
+    const firstFocusable = focusableArray[0];
+    const lastFocusable = focusableArray[focusableArray.length - 1];
+
+    if (e.shiftKey && document.activeElement === firstFocusable) {
+      e.preventDefault();
+      lastFocusable.focus();
+    } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+      e.preventDefault();
+      firstFocusable.focus();
+    }
+  }
+
+  /**
+   * Destroy modal and cleanup event listeners to prevent memory leaks
+   */
+  destroy() {
+    // Remove keyboard listener if modal is open
+    document.removeEventListener('keydown', this.keyboardHandler);
+    document.removeEventListener('keydown', this.focusTrapHandler);
+
+    // Remove popstate listener
+    if (this.popstateHandler) {
+      window.removeEventListener('popstate', this.popstateHandler);
+      this.popstateHandler = null;
+    }
+
+    // Close modal if open
+    if (this.isOpen()) {
+      this.close(false);
+    }
+
+    // Remove modal from DOM
+    if (this.modal && this.modal.parentNode) {
+      this.modal.parentNode.removeChild(this.modal);
+    }
+
+    // Clear references
+    this.modal = null;
+    this.overlay = null;
+    this.currentArtwork = null;
+    this.carousel = null;
+    this.focusedElementBeforeModal = null;
   }
 }
