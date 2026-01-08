@@ -112,6 +112,37 @@ export class GalleryDataManager {
   }
 
   /**
+   * Calculate aspect ratio category based on image dimensions
+   * This enables precise grid row spanning for masonry layout
+   *
+   * @param {number} width - Image width in pixels
+   * @param {number} height - Image height in pixels
+   * @returns {string} Aspect ratio category name
+   */
+  getAspectRatioCategory(width, height) {
+    if (!width || !height) {
+      return 'landscape'; // Default fallback
+    }
+
+    const aspectRatio = width / height;
+
+    // Categorize by aspect ratio ranges
+    if (aspectRatio > 2) {
+      return 'panoramic';          // Very wide (21:9 or wider)
+    } else if (aspectRatio > 1.4) {
+      return 'wide-landscape';     // Wide (16:9 range)
+    } else if (aspectRatio > 1.1) {
+      return 'landscape';          // Standard landscape (4:3 range)
+    } else if (aspectRatio >= 0.9) {
+      return 'square';             // Square-ish (1:1 range)
+    } else if (aspectRatio >= 0.7) {
+      return 'portrait';           // Portrait (3:4 range)
+    } else {
+      return 'tall-portrait';      // Tall portrait (2:3 or taller)
+    }
+  }
+
+  /**
    * Create SVG element using namespace
    */
   createSVG(viewBox, paths) {
@@ -182,8 +213,32 @@ export class GalleryDataManager {
     img.alt = sanitizeText(artwork.name);
     img.className = 'artwork-card__image';
     img.loading = 'lazy';
-    img.width = 400;
-    img.height = 400;
+
+    // Set loading state
+    img.setAttribute('data-loading', '');
+
+    // Load image to determine aspect ratio for masonry layout
+    img.addEventListener('load', () => {
+      const aspectRatioCategory = this.getAspectRatioCategory(img.naturalWidth, img.naturalHeight);
+      article.setAttribute('data-aspect-category', aspectRatioCategory);
+
+      // Set aspect ratio as inline style for precise layout
+      const aspectRatio = img.naturalWidth / img.naturalHeight;
+      article.style.aspectRatio = `${aspectRatio.toFixed(3)}`;
+
+      // Remove loading state and add loaded class
+      img.removeAttribute('data-loading');
+      img.classList.add('loaded');
+    });
+
+    // Handle image load errors
+    img.addEventListener('error', () => {
+      // Use default landscape aspect ratio on error
+      article.setAttribute('data-aspect-category', 'landscape');
+      article.style.aspectRatio = '4 / 3';
+      img.removeAttribute('data-loading');
+    });
+
     article.appendChild(img);
 
     // Inquire button

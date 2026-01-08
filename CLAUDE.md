@@ -329,6 +329,48 @@ Producer → Consumer examples:
 Any Consumer workstream (Reviewer / QA / Security / Verifier) MUST first confirm the required outputs exist.
 If outputs are missing → return: "BLOCKED: required outputs not created yet."
 
+## Reviewer Mode for UI Changes (STRICT)
+
+If the change touches **UI / UX** (frontend, templates, styling, layout, behavior), a **code-only review is not sufficient**.
+
+### Required Coverage
+
+Reviewer must do BOTH:
+
+1) **Code Review**
+- Verify correctness, security, maintainability, and test coverage for the changed UI code.
+
+2) **Behavioral UI Review**
+- Validate the change by **running** the UI (locally or in a preview environment) and checking real behavior.
+- If running the UI is impossible due to missing access/env → return:
+  `BLOCKED: cannot run UI (reason). Provide steps or a preview link.`
+
+### Reviewer Delegation Requirements (UI)
+
+When delegating a UI review, the Reviewer task MUST include:
+
+- **Verification:** explicit run steps (commands) OR a preview URL (if provided)
+- **Acceptance criteria:** include at least these bullets:
+    - Confirm the UI builds and renders without errors.
+    - Confirm the changed user flow works end-to-end.
+    - Confirm key visual/layout states (responsive where relevant).
+    - Confirm no console errors and no broken network calls (where applicable).
+    - Confirm tests (unit/e2e) are present or explain why not.
+
+### What to Validate (UI Checklist)
+
+- **Functional flow:** clicks, inputs, navigation, error states, loading states
+- **Layout:** alignment, spacing, overflow, long strings, empty states
+- **Responsiveness:** at least 1–2 breakpoints if the UI is responsive
+- **Accessibility basics:** keyboard navigation, focus visible, labels/aria where applicable
+- **Regression risk:** confirm related screens/components still behave as expected
+
+### If Dedicated UI Validation Is Needed
+
+If the change is UI-heavy or visual correctness is critical:
+- Add a separate **Verifier** workstream (UI validation), sequential after implementation.
+- The Verifier MUST run the UI and report findings (screens/flows tested, issues found).
+
 ### 5. Frame Requirements
 
 Include ALL user requirements when delegating.

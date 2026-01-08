@@ -1,0 +1,239 @@
+/**
+ * Gallery Masonry Layout
+ * Implements flexible grid packing that minimizes vertical gaps
+ * while preserving original artwork aspect ratios
+ */
+
+/* ==========================================================================
+   ARTWORK CARD ASPECT RATIO HANDLING
+   ========================================================================== */
+
+/*
+ * Strategy:
+ * - Images load with intrinsic aspect ratios
+ * - Cards use aspect-ratio CSS to reserve space before image loads (prevent layout shift)
+ * - Grid row spanning is calculated based on aspect ratio categories
+ * - Small row units (defined in layout.css) allow precise vertical fitting
+ */
+
+/* Default aspect ratio - prevents layout shift during loading */
+.artwork-card {
+  /* This will be overridden by inline styles based on actual image aspect ratio */
+  aspect-ratio: 4 / 3;
+}
+
+/* Image fills card maintaining its aspect ratio */
+.artwork-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ==========================================================================
+   ASPECT RATIO CATEGORIES - ROW SPAN ASSIGNMENTS
+   ========================================================================== */
+
+/*
+ * These classes are dynamically assigned based on image aspect ratios
+ * to optimize vertical packing in the grid
+ */
+
+/* Square images (aspect ratio ~1:1, range 0.9 - 1.1) */
+.artwork-card[data-aspect-category="square"] {
+  aspect-ratio: 1 / 1;
+}
+
+/* Portrait images (aspect ratio < 0.9) */
+.artwork-card[data-aspect-category="portrait"] {
+  aspect-ratio: 3 / 4;
+}
+
+/* Tall portrait images (aspect ratio < 0.7) */
+.artwork-card[data-aspect-category="tall-portrait"] {
+  aspect-ratio: 2 / 3;
+}
+
+/* Landscape images (aspect ratio > 1.1 and <= 1.4) */
+.artwork-card[data-aspect-category="landscape"] {
+  aspect-ratio: 4 / 3;
+}
+
+/* Wide landscape images (aspect ratio > 1.4) */
+.artwork-card[data-aspect-category="wide-landscape"] {
+  aspect-ratio: 16 / 9;
+}
+
+/* Panoramic images (aspect ratio > 2) */
+.artwork-card[data-aspect-category="panoramic"] {
+  aspect-ratio: 21 / 9;
+}
+
+/* ==========================================================================
+   GRID ROW SPANNING - MOBILE
+   ========================================================================== */
+
+/*
+ * Mobile: Single column, all cards same span for simplicity
+ * Row units: clamp(80px, 10vw, 120px) from layout.css
+ */
+
+.artwork-card[data-aspect-category="square"] {
+  grid-row: span 3;
+}
+
+.artwork-card[data-aspect-category="portrait"] {
+  grid-row: span 4;
+}
+
+.artwork-card[data-aspect-category="tall-portrait"] {
+  grid-row: span 5;
+}
+
+.artwork-card[data-aspect-category="landscape"] {
+  grid-row: span 3;
+}
+
+.artwork-card[data-aspect-category="wide-landscape"] {
+  grid-row: span 2;
+}
+
+.artwork-card[data-aspect-category="panoramic"] {
+  grid-row: span 2;
+}
+
+/* ==========================================================================
+   GRID ROW SPANNING - TABLET (2 columns, 640px+)
+   ========================================================================== */
+
+/*
+ * Row units: clamp(90px, 12vw, 140px) from layout.css
+ */
+
+@media (min-width: 640px) {
+  .artwork-card[data-aspect-category="square"] {
+    grid-row: span 3;
+  }
+
+  .artwork-card[data-aspect-category="portrait"] {
+    grid-row: span 4;
+  }
+
+  .artwork-card[data-aspect-category="tall-portrait"] {
+    grid-row: span 5;
+  }
+
+  .artwork-card[data-aspect-category="landscape"] {
+    grid-row: span 3;
+  }
+
+  .artwork-card[data-aspect-category="wide-landscape"] {
+    grid-row: span 2;
+  }
+
+  .artwork-card[data-aspect-category="panoramic"] {
+    grid-row: span 2;
+  }
+}
+
+/* ==========================================================================
+   GRID ROW SPANNING - TABLET 3-COLUMN (768px - 1023px)
+   ========================================================================== */
+
+/*
+ * Row units: clamp(100px, 12vw, 150px) from layout.css
+ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .artwork-card[data-aspect-category="square"] {
+    grid-row: span 3;
+  }
+
+  .artwork-card[data-aspect-category="portrait"] {
+    grid-row: span 4;
+  }
+
+  .artwork-card[data-aspect-category="tall-portrait"] {
+    grid-row: span 5;
+  }
+
+  .artwork-card[data-aspect-category="landscape"] {
+    grid-row: span 3;
+  }
+
+  .artwork-card[data-aspect-category="wide-landscape"] {
+    grid-row: span 2;
+  }
+
+  .artwork-card[data-aspect-category="panoramic"] {
+    grid-row: span 2;
+  }
+}
+
+/* ==========================================================================
+   GRID ROW SPANNING - DESKTOP (1024px+, 4 columns)
+   ========================================================================== */
+
+/*
+ * Row units: clamp(110px, 12vw, 160px) from layout.css
+ */
+
+@media (min-width: 1024px) {
+  .artwork-card[data-aspect-category="square"] {
+    grid-row: span 3;
+  }
+
+  .artwork-card[data-aspect-category="portrait"] {
+    grid-row: span 4;
+  }
+
+  .artwork-card[data-aspect-category="tall-portrait"] {
+    grid-row: span 5;
+  }
+
+  .artwork-card[data-aspect-category="landscape"] {
+    grid-row: span 3;
+  }
+
+  .artwork-card[data-aspect-category="wide-landscape"] {
+    grid-row: span 2;
+  }
+
+  .artwork-card[data-aspect-category="panoramic"] {
+    grid-row: span 2;
+  }
+}
+
+/* ==========================================================================
+   LOADING STATE - PREVENT LAYOUT SHIFT
+   ========================================================================== */
+
+/*
+ * Placeholder while images load
+ * Uses aspect-ratio to reserve space
+ */
+
+.artwork-card__image[data-loading] {
+  background: var(--bg-elevated);
+  /* Aspect ratio is set inline based on data attribute */
+}
+
+/* Fade in after load */
+.artwork-card__image {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.artwork-card__image.loaded {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .artwork-card__image {
+    transition: none;
+  }
+}
