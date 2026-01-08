@@ -1,0 +1,314 @@
+/*
+ * Gallery UX Refinements
+ * Improves clarity, orientation, and rhythm while maintaining calm aesthetic
+ */
+
+/* ==========================================================================
+   AVAILABLE VS SOLD SEPARATION
+   ========================================================================== */
+
+/* Section divider between available and sold works */
+.gallery-section-divider {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin: var(--space-12) 0 var(--space-8);
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.gallery-section-divider__line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--border-subtle) 20%,
+    var(--border-subtle) 80%,
+    transparent 100%
+  );
+}
+
+.gallery-section-divider__label {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  opacity: 0.7;
+  padding: 0 var(--space-3);
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .gallery-section-divider__label {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* Subtle label for section headers */
+.gallery-section-label {
+  grid-column: 1 / -1;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  opacity: 0.6;
+  margin-bottom: var(--space-2);
+  padding-left: var(--space-2);
+}
+
+/* ==========================================================================
+   COLLECTION FILTER REFINEMENTS
+   ========================================================================== */
+
+/* Reduce visual weight of filter UI */
+.filter-bar {
+  padding: var(--space-3) 0;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+[data-theme="dark"] .filter-bar {
+  background: var(--bg-primary);
+  border-bottom-color: var(--border-default);
+}
+
+.filter-controls {
+  gap: var(--space-2);
+}
+
+.filter-controls .tag {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  padding: var(--space-2) var(--space-3);
+  min-height: 36px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+}
+
+.filter-controls .tag:hover {
+  border-color: var(--border-default);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.filter-controls .tag-active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   GRID LAYOUT IMPROVEMENTS
+   ========================================================================== */
+
+/* Reduce excessive vertical gaps */
+@media (min-width: 640px) {
+  .bento-grid {
+    gap: var(--space-4);
+    row-gap: var(--space-5);
+  }
+}
+
+@media (min-width: 1024px) {
+  .bento-grid {
+    gap: var(--space-5);
+    row-gap: var(--space-6);
+  }
+}
+
+/* Collection divider captions for orientation */
+.collection-divider {
+  grid-column: 1 / -1;
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  opacity: 0.5;
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-2);
+  padding-left: var(--space-1);
+  position: relative;
+}
+
+.collection-divider::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 32px;
+  height: 1px;
+  background: var(--accent-primary);
+  opacity: 0.3;
+}
+
+/* ==========================================================================
+   HOVER INFORMATION ENHANCEMENT
+   ========================================================================== */
+
+/* Add dimensions to hover overlay */
+.artwork-card__overlay-dimensions {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  margin: var(--space-1) 0 var(--space-2);
+  letter-spacing: 0.02em;
+}
+
+/* Improved hierarchy: Title → Dimensions → Collection */
+.artwork-card__overlay {
+  padding: var(--space-5);
+}
+
+.artwork-card__overlay-title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: white;
+  margin: 0 0 var(--space-2);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.artwork-card__overlay-collection {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+/* Adjust overlay opacity for better readability without being too aggressive */
+.artwork-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(26, 24, 22, 0.92) 0%,
+    rgba(26, 24, 22, 0.65) 40%,
+    rgba(26, 24, 22, 0.25) 70%,
+    transparent 100%
+  );
+}
+
+[data-theme="dark"] .artwork-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.6) 40%,
+    rgba(0, 0, 0, 0.2) 70%,
+    transparent 100%
+  );
+}
+
+/* ==========================================================================
+   MOBILE OPTIMIZATIONS
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Simpler divider on mobile */
+  .gallery-section-divider {
+    margin: var(--space-8) 0 var(--space-6);
+    gap: var(--space-4);
+  }
+
+  .gallery-section-divider__label {
+    font-size: 0.75rem;
+  }
+
+  /* Hide collection dividers on mobile for cleaner look */
+  .collection-divider {
+    display: none;
+  }
+
+  /* Tighter grid on mobile */
+  .bento-grid {
+    gap: var(--space-3);
+    row-gap: var(--space-4);
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & ANIMATIONS
+   ========================================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-section-divider {
+    animation: none;
+    opacity: 1;
+  }
+
+  .collection-divider {
+    animation: none;
+  }
+}
+
+/* Focus states for accessibility */
+.filter-controls .tag:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   SOLD WORKS VISUAL TREATMENT
+   ========================================================================== */
+
+/* Subtle visual distinction for sold works */
+.artwork-card--sold {
+  opacity: 0.88;
+}
+
+.artwork-card--sold:hover {
+  opacity: 1;
+}
+
+/* Ensure sold badge is prominent but not aggressive */
+.artwork-card__badge--sold {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme="dark"] .artwork-card__badge--sold {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+/* ==========================================================================
+   PRICE VISIBILITY (HIDDEN IN MAIN GRID)
+   ========================================================================== */
+
+/* Hide price in main gallery grid as per requirements */
+.artwork-card__price {
+  display: none !important;
+}
+
+/* Price is only shown in lightbox/detail view */
+.lightbox__price {
+  display: block;
+}

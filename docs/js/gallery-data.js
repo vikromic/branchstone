@@ -151,6 +151,9 @@ export class GalleryDataManager {
     if (artwork.prints) {
       article.setAttribute('data-prints-available', 'true');
     }
+    if (artwork.dimensions) {
+      article.setAttribute('data-dimensions', artwork.dimensions);
+    }
 
     // Create unique artwork ID from name
     const artworkId = `artwork-${this.collectionToSlug(artwork.name)}`;
@@ -254,14 +257,43 @@ export class GalleryDataManager {
 
     console.log('[GalleryData] Container found, clearing and rendering', this.artworks.length, 'artworks');
 
-    // Clear existing content
+    // Clear existing content (safe - no user input)
     container.innerHTML = '';
 
-    // Render each artwork
-    this.artworks.forEach((artwork, index) => {
-      const card = this.createArtworkCard(artwork, index);
-      container.appendChild(card);
-    });
+    // Separate artworks into available and sold
+    const availableWorks = this.artworks.filter(art => !art.sold);
+    const soldWorks = this.artworks.filter(art => art.sold);
+
+    // Render available works section
+    if (availableWorks.length > 0) {
+      const availableLabel = this.createSectionLabel('Available Works');
+      container.appendChild(availableLabel);
+
+      availableWorks.forEach((artwork, index) => {
+        const card = this.createArtworkCard(artwork, index);
+        container.appendChild(card);
+      });
+    }
+
+    // Add divider if both sections exist
+    if (availableWorks.length > 0 && soldWorks.length > 0) {
+      const divider = this.createSectionDivider('Collected Works');
+      container.appendChild(divider);
+    }
+
+    // Render sold works section
+    if (soldWorks.length > 0) {
+      // Only add label if no divider was added (i.e., no available works)
+      if (availableWorks.length === 0) {
+        const soldLabel = this.createSectionLabel('Collected Works');
+        container.appendChild(soldLabel);
+      }
+
+      soldWorks.forEach((artwork, index) => {
+        const card = this.createArtworkCard(artwork, availableWorks.length + index);
+        container.appendChild(card);
+      });
+    }
 
     console.log('[GalleryData] Gallery rendered successfully');
 
@@ -270,6 +302,40 @@ export class GalleryDataManager {
       detail: { count: this.artworks.length }
     });
     document.dispatchEvent(event);
+  }
+
+  /**
+   * Create section label element
+   */
+  createSectionLabel(text) {
+    const label = document.createElement('div');
+    label.className = 'gallery-section-label';
+    label.textContent = text;
+    return label;
+  }
+
+  /**
+   * Create section divider element
+   */
+  createSectionDivider(text) {
+    const divider = document.createElement('div');
+    divider.className = 'gallery-section-divider';
+
+    const lineLeft = document.createElement('div');
+    lineLeft.className = 'gallery-section-divider__line';
+
+    const label = document.createElement('div');
+    label.className = 'gallery-section-divider__label';
+    label.textContent = text;
+
+    const lineRight = document.createElement('div');
+    lineRight.className = 'gallery-section-divider__line';
+
+    divider.appendChild(lineLeft);
+    divider.appendChild(label);
+    divider.appendChild(lineRight);
+
+    return divider;
   }
 
   /**

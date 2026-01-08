@@ -983,6 +983,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
       // Get card data
       const title = card.querySelector('.artwork-card__title')?.textContent || '';
       const collection = card.querySelector('.artwork-card__collection')?.textContent || '';
+      const dimensions = card.getAttribute('data-dimensions') || '';
 
       // Create overlay element
       const overlay = document.createElement('div');
@@ -993,6 +994,17 @@ import { FeaturedCarousel } from './featured-carousel.js';
       const titleEl = document.createElement('h3');
       titleEl.className = 'artwork-card__overlay-title';
       titleEl.textContent = title; // Safe: textContent escapes HTML
+
+      // Add dimensions if available
+      if (dimensions) {
+        const dimensionsEl = document.createElement('p');
+        dimensionsEl.className = 'artwork-card__overlay-dimensions';
+        dimensionsEl.textContent = dimensions; // Safe: textContent escapes HTML
+        overlay.appendChild(titleEl);
+        overlay.appendChild(dimensionsEl);
+      } else {
+        overlay.appendChild(titleEl);
+      }
 
       const collectionEl = document.createElement('p');
       collectionEl.className = 'artwork-card__overlay-collection';
@@ -1017,7 +1029,6 @@ import { FeaturedCarousel } from './featured-carousel.js';
       svg.appendChild(path);
       ctaSpan.appendChild(svg);
 
-      overlay.appendChild(titleEl);
       overlay.appendChild(collectionEl);
       overlay.appendChild(ctaSpan);
 
