@@ -17,7 +17,7 @@
     },
     {
       "name": "By Marks and Fire",
-      "highlighted": true,
+      "highlighted": false,
       "collection": "Of Ash and Flowers",
       "description": "Experience doesn’t come gently.\nIt scalds, splits, leaves gold in its wake.\n\nWhat stays behind is proof \nof mistakes, of survival,\nof becoming something textured,\nsomething true.\n",
       "materials": "Old acacia, oak catkins, Bohemian truffle pigment, acrylic on canvas",
@@ -145,7 +145,7 @@
       "year": "2022",
       "main_image": "img/prolisok/prolisok.webp",
       "images": [],
-      "sold": false,
+      "sold": true,
       "prints": true,
       "price": "150",
       "scale": "medium"
@@ -216,7 +216,7 @@
       "collection": "Of Ash and Flowers",
       "description": "It begins with a whisper.\nNature waking slowly, brushing off the last frost, dreaming of dandelions and light.\nTiny first messengers move through the hush: a beetle, a melt, a yellow bloom.\n\nAnd then the world splits open.\nA blaze, wild and vengeful, turning air to ash, green to black.\nEven the sky forgets how to hold still.\n\nFor a while, silence feels like loss.\nBut beneath the burn, roots remember.\n\nLife is patient.\nWhat seems lost is only waiting.\nAnd when it returns, it rises hungry, wild, and full of fire-fed strength.\n\nThis work holds part of that story -\ncrafted around a redwood root from a centuries-old tree that did not survive the flames, but still speaks through form, colour and texture.",
       "materials": "Red wood root piece, burned wood pigment, burned wood pieces, acrylic on canvas.",
-      "dimensions": "334 x 24 in",
+      "dimensions": "34 x 24 in",
       "year": "2025",
       "main_image": "img/spring_fire/art3.webp",
       "images": [],
@@ -332,7 +332,7 @@
     },
     {
       "name": "Choice",
-      "highlighted": true,
+      "highlighted": false,
       "collection": "Following Her Steps",
       "description": "Here, movement is no longer a reaction — it becomes a choice.",
       "materials": "Acrylic, cast elements, coil pieces, air plant on photographic print mounted on foam board.",
@@ -347,7 +347,7 @@
     },
     {
       "name": "Return",
-      "highlighted": true,
+      "highlighted": false,
       "collection": "Following Her Steps",
       "description": "A return, centered on what matters.",
       "materials": "Acrylic, cast elements, coil pieces, air plant, maple leaf on photographic print mounted on foam board.",
@@ -362,7 +362,7 @@
     },
     {
       "name": "Light",
-      "highlighted": true,
+      "highlighted": false,
       "collection": "Following Her Steps",
       "description": "Still searching for light in a loud world.",
       "materials": "Acrylic, cast elements, coil pieces, air plant on photographic print mounted on foam board.",
@@ -422,7 +422,7 @@
     },
     {
       "name": "Release",
-      "highlighted": true,
+      "highlighted": false,
       "collection": "Following Her Steps",
       "description": "Letting movement become lighter, no matter what she is told she should do.",
       "materials": "Acrylic, cast elements, coil pieces, air plant on photographic print mounted on foam board.",
@@ -437,13 +437,13 @@
     },
     {
       "name": "Clarity",
-      "highlighted": true,
+      "highlighted": false,
       "collection": "Following Her Steps",
       "description": "Edges exposed, direction clear.",
       "materials": "Acrylic, cast elements, coil pieces, air plant on photographic print mounted on foam board.",
       "dimensions": "8 x 8 in",
       "year": "2026",
-      "main_image": "docs/img/following_her_steps/iris_9/clarity.jpeg",
+      "main_image": "img/following_her_steps/iris_9/clarity.jpeg",
       "images": [],
       "sold": false,
       "prints": true,

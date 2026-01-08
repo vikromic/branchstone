@@ -9,6 +9,7 @@ export class GalleryDataManager {
   constructor() {
     this.artworks = [];
     this.collections = [];
+    this.collectionsMetadata = new Map(); // Map: collection name -> { name, description }
   }
 
   /**
@@ -34,6 +35,43 @@ export class GalleryDataManager {
       console.error('[GalleryData] Error loading artworks:', error);
       throw error;
     }
+  }
+
+  /**
+   * Load collections metadata from JSON file
+   */
+  async loadCollectionsMetadata() {
+    try {
+      console.log('[GalleryData] Fetching collections metadata...');
+      const response = await fetch('./json_data/collections.json');
+      if (!response.ok) {
+        console.warn('[GalleryData] Collections metadata not found, using defaults');
+        return;
+      }
+      const data = await response.json();
+      if (data.collections && Array.isArray(data.collections)) {
+        data.collections.forEach(collection => {
+          this.collectionsMetadata.set(collection.name, {
+            name: collection.name,
+            description: collection.description || ''
+          });
+        });
+        console.log('[GalleryData] Collections metadata loaded:', this.collectionsMetadata.size, 'collections');
+      }
+    } catch (error) {
+      console.warn('[GalleryData] Error loading collections metadata:', error);
+      // Non-critical failure - continue without metadata
+    }
+  }
+
+  /**
+   * Get collection metadata by name
+   */
+  getCollectionMetadata(collectionName) {
+    return this.collectionsMetadata.get(collectionName) || {
+      name: collectionName,
+      description: ''
+    };
   }
 
   /**

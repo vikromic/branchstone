@@ -158,6 +158,9 @@ import { FeaturedCarousel } from './featured-carousel.js';
       console.log('[Gallery] Init result:', success);
 
       if (success) {
+        // Store gallery manager instance for filter persistence and header updates
+        galleryManagerInstance = galleryManager;
+
         console.log('[Gallery] Initializing gallery-dependent features...');
         // Re-initialize features that depend on gallery cards
         // These need to be called after gallery is rendered
@@ -216,8 +219,116 @@ import { FeaturedCarousel } from './featured-carousel.js';
 
   // Shared gallery filtering state (accessible to both desktop and mobile filters)
   let isGalleryFiltering = false;
+  let galleryManagerInstance = null; // Store reference to gallery manager for header updates
 
-  const filterGallery = (filter) => {
+  /**
+   * Get collection name from URL query parameter
+   */
+  const getCollectionFromURL = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('collection');
+  };
+
+  /**
+   * Get collection name from localStorage
+   */
+  const getCollectionFromStorage = () => {
+    return storage.getItem('branchstone.gallery.selectedCollection');
+  };
+
+  /**
+   * Save collection to localStorage
+   */
+  const saveCollectionToStorage = (collectionName) => {
+    if (collectionName && collectionName !== 'all') {
+      storage.setItem('branchstone.gallery.selectedCollection', collectionName);
+    } else {
+      storage.removeItem('branchstone.gallery.selectedCollection');
+    }
+  };
+
+  /**
+   * Update URL with collection query parameter
+   */
+  const updateURLWithCollection = (collectionName) => {
+    const url = new URL(window.location);
+
+    if (collectionName && collectionName !== 'all') {
+      url.searchParams.set('collection', collectionName);
+    } else {
+      url.searchParams.delete('collection');
+    }
+
+    // Use replaceState to avoid spamming browser history
+    window.history.replaceState({}, '', url);
+  };
+
+  /**
+   * Update gallery header based on selected collection
+   */
+  const updateGalleryHeader = (collectionName) => {
+    const titleElement = document.getElementById('gallery-title');
+    const subtitleElement = document.querySelector('.gallery-hero .subheading');
+
+    if (!titleElement || !subtitleElement) return;
+
+    if (!collectionName || collectionName === 'all') {
+      // Reset to default
+      titleElement.textContent = 'The Works';
+      subtitleElement.textContent = 'Nature inspired soul art. Each piece is meticulously crafted by hand, creating timeless works that blend traditional craft with modern design.';
+    } else {
+      // Get collection metadata from gallery manager
+      if (galleryManagerInstance) {
+        const metadata = galleryManagerInstance.getCollectionMetadata(collectionName);
+        titleElement.textContent = metadata.name;
+        subtitleElement.textContent = metadata.description || '';
+      } else {
+        // Fallback if metadata not available
+        titleElement.textContent = collectionName;
+        subtitleElement.textContent = '';
+      }
+    }
+  };
+
+  /**
+   * Validate collection name against available collections
+   */
+  const isValidCollection = (collectionName) => {
+    if (!collectionName || collectionName === 'all') return true;
+
+    if (galleryManagerInstance) {
+      const collections = galleryManagerInstance.getCollections();
+      return collections.includes(collectionName);
+    }
+
+    return false;
+  };
+
+  /**
+   * Get initial collection selection on page load
+   * Priority: URL param > localStorage > default 'all'
+   */
+  const getInitialCollection = () => {
+    // 1. Check URL parameter
+    const urlCollection = getCollectionFromURL();
+    if (urlCollection && isValidCollection(urlCollection)) {
+      console.log('[Gallery] Using collection from URL:', urlCollection);
+      return urlCollection;
+    }
+
+    // 2. Check localStorage
+    const storedCollection = getCollectionFromStorage();
+    if (storedCollection && isValidCollection(storedCollection)) {
+      console.log('[Gallery] Using collection from localStorage:', storedCollection);
+      return storedCollection;
+    }
+
+    // 3. Default to 'all'
+    console.log('[Gallery] Using default collection: all');
+    return 'all';
+  };
+
+  const filterGallery = (filter, updatePersistence = true) => {
     if (isGalleryFiltering) return;
     isGalleryFiltering = true;
 
@@ -267,6 +378,19 @@ import { FeaturedCarousel } from './featured-carousel.js';
       }
     });
 
+    // Update persistence and header if requested
+    if (updatePersistence) {
+      // Convert filter slug back to collection name
+      const collectionName = filter === 'all' ? 'all' :
+        galleryManagerInstance?.getCollections().find(c =>
+          galleryManagerInstance.collectionToSlug(c) === filter
+        ) || filter;
+
+      saveCollectionToStorage(collectionName);
+      updateURLWithCollection(collectionName);
+      updateGalleryHeader(collectionName);
+    }
+
     // Reset flag after animations complete
     const totalDuration = fadeDuration + (artworkCards.length * staggerDelay);
     setTimeout(() => { isGalleryFiltering = false; }, totalDuration);
@@ -278,27 +402,38 @@ import { FeaturedCarousel } from './featured-carousel.js';
 
     if (filterButtons.length === 0 || artworkCards.length === 0) return;
 
-    const updateActiveButton = (activeButton) => {
+    const updateActiveButton = (activeFilter) => {
       filterButtons.forEach(button => {
-        button.classList.remove('tag-active');
-        button.setAttribute('aria-pressed', 'false');
+        const buttonFilter = button.getAttribute('data-filter');
+        if (buttonFilter === activeFilter) {
+          button.classList.add('tag-active');
+          button.setAttribute('aria-pressed', 'true');
+        } else {
+          button.classList.remove('tag-active');
+          button.setAttribute('aria-pressed', 'false');
+        }
       });
-
-      activeButton.classList.add('tag-active');
-      activeButton.setAttribute('aria-pressed', 'true');
     };
 
     filterButtons.forEach(button => {
       button.addEventListener('click', () => {
         const filter = button.getAttribute('data-filter');
         filterGallery(filter);
-        updateActiveButton(button);
+        updateActiveButton(filter);
       });
     });
 
-    // Show all artworks initially
-    console.log('[Gallery] Showing all artworks initially');
-    filterGallery('all');
+    // Get initial collection from URL/localStorage
+    const initialCollection = getInitialCollection();
+    const initialFilter = initialCollection === 'all' ? 'all' :
+      galleryManagerInstance?.collectionToSlug(initialCollection) || 'all';
+
+    console.log('[Gallery] Applying initial filter:', initialFilter, '(from collection:', initialCollection + ')');
+
+    // Apply initial filter and update header
+    updateGalleryHeader(initialCollection);
+    filterGallery(initialFilter, false); // false = don't update persistence (already loaded from it)
+    updateActiveButton(initialFilter);
   };
 
   // ========================================
@@ -1206,6 +1341,12 @@ import { FeaturedCarousel } from './featured-carousel.js';
       updateFilterCount();
     };
 
+    // Initialize with current filter state
+    const initialCollection = getInitialCollection();
+    const initialFilter = initialCollection === 'all' ? 'all' :
+      galleryManagerInstance?.collectionToSlug(initialCollection) || 'all';
+    syncFilters(initialFilter);
+
     // Event listeners
     toggle.addEventListener('click', () => {
       const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
@@ -2011,7 +2152,7 @@ import { FeaturedCarousel } from './featured-carousel.js';
       // This is informational only - the page still works with fallback content
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         // Only show detailed error in development
-        console.warn('[Feedbacks] Development mode: Check that feedbacks.json exists and is accessible');
+        console.warn('[Feedbacks] Development mode: Check that collections.json exists and is accessible');
       }
     }
   };
