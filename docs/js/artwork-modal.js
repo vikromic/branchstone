@@ -54,7 +54,10 @@ export class ArtworkCarousel {
   }
 
   render() {
+    console.log('[ArtworkCarousel] Rendering carousel with', this.images?.length || 0, 'images');
+
     if (!this.images || this.images.length === 0) {
+      console.log('[ArtworkCarousel] No images, rendering empty state');
       return this.renderEmpty();
     }
 
@@ -80,11 +83,16 @@ export class ArtworkCarousel {
 
     // Add controls if multiple images
     if (this.images.length > 1) {
+      console.log('[ArtworkCarousel] Multiple images detected, adding controls');
       this.addControls(carousel);
+    } else {
+      console.log('[ArtworkCarousel] Single image, no controls needed');
     }
 
     this.container.appendChild(carousel);
     this.attachEventListeners();
+
+    console.log('[ArtworkCarousel] Carousel rendered successfully');
   }
 
   addControls(carousel) {
@@ -453,6 +461,8 @@ export class ArtworkModalManager {
     const description = card.querySelector('.artwork-card__description')?.textContent || '';
     const price = card.querySelector('.artwork-card__price')?.textContent || '';
     const dimensions = card.getAttribute('data-dimensions') || '';
+    const materials = card.getAttribute('data-materials') || '';
+    const year = card.getAttribute('data-year') || '';
     const mainImage = card.querySelector('.artwork-card__image')?.src || '';
     const sold = card.classList.contains('artwork-card--sold') || card.querySelector('.artwork-card__badge--sold');
     const printsAvailable = card.getAttribute('data-prints-available') === 'true';
@@ -460,10 +470,20 @@ export class ArtworkModalManager {
     // Extract slug from title
     const slug = this.titleToSlug(title);
 
-    // Build image paths (from artworks.json structure)
-    // For now, we'll use main image only since we don't have access to full artwork object
-    // The gallery-data.js should pass this info via data attributes
-    const images = [mainImage];
+    // Parse image paths from data-images attribute (JSON array)
+    let images = [mainImage]; // Fallback to main image
+    const imagesData = card.getAttribute('data-images');
+    if (imagesData) {
+      try {
+        const parsedImages = JSON.parse(imagesData);
+        if (Array.isArray(parsedImages) && parsedImages.length > 0) {
+          images = parsedImages;
+          console.log('[ArtworkModal] Parsed', images.length, 'images from data-images attribute');
+        }
+      } catch (error) {
+        console.warn('[ArtworkModal] Failed to parse data-images attribute:', error);
+      }
+    }
 
     return {
       name: title,
@@ -472,8 +492,8 @@ export class ArtworkModalManager {
       description,
       price,
       dimensions,
-      materials: '', // Not available in card
-      year: '', // Not available in card
+      materials,
+      year,
       images,
       sold: !!sold,
       prints: printsAvailable
@@ -647,12 +667,12 @@ export class ArtworkModalManager {
     if (artwork.dimensions) metaParts.push(sanitizeText(artwork.dimensions));
     metaEl.textContent = metaParts.join(' · ');
 
-    // Price
+    // Price (hide entirely if sold to avoid duplicate "Sold" text)
     const priceEl = this.modal.querySelector('.artwork-modal__price');
     if (artwork.sold) {
-      priceEl.textContent = 'Sold';
-      priceEl.classList.add('artwork-modal__price--sold');
+      priceEl.hidden = true; // Hide price section when sold (badge already shows "Sold")
     } else {
+      priceEl.hidden = false;
       const priceText = artwork.price.replace('$', '');
       priceEl.textContent = priceText ? `$${priceText}` : 'Price on request';
       priceEl.classList.remove('artwork-modal__price--sold');

@@ -178,6 +178,32 @@ export class GalleryDataManager {
   }
 
   /**
+   * Build full image paths from main_image and images array
+   * @param {Object} artwork - The artwork object
+   * @returns {Array<string>} Array of full image paths
+   */
+  buildImagePaths(artwork) {
+    if (!artwork.main_image || typeof artwork.main_image !== 'string') {
+      return [];
+    }
+
+    // Extract directory from main_image
+    const lastSlash = artwork.main_image.lastIndexOf('/');
+    const directory = artwork.main_image.substring(0, lastSlash);
+
+    // Build array: [main_image, ...additional images]
+    const allImages = [artwork.main_image];
+
+    if (artwork.images && Array.isArray(artwork.images)) {
+      artwork.images.forEach(filename => {
+        allImages.push(`${directory}/${filename}`);
+      });
+    }
+
+    return allImages;
+  }
+
+  /**
    * Parse dimensions string and calculate aspect ratio
    * Supports formats like "20 x 16 in", "16 x 20 in", etc.
    * Returns width/height ratio or null if parsing fails
@@ -424,6 +450,20 @@ export class GalleryDataManager {
     }
     if (artwork.dimensions) {
       article.setAttribute('data-dimensions', artwork.dimensions);
+    }
+    if (artwork.materials) {
+      article.setAttribute('data-materials', artwork.materials);
+    }
+    if (artwork.year) {
+      article.setAttribute('data-year', artwork.year);
+    }
+
+    // Store all image paths for modal carousel
+    if (artwork.main_image) {
+      const allImagePaths = this.buildImagePaths(artwork);
+      if (allImagePaths.length > 0) {
+        article.setAttribute('data-images', JSON.stringify(allImagePaths));
+      }
     }
 
     // Apply aspect ratio (extracted method)
