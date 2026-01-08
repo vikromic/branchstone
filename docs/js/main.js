@@ -316,7 +316,11 @@ import { ArtworkModalManager } from './artwork-modal.js';
 
   /**
    * Get initial collection selection on page load
-   * Priority: URL param > localStorage > default 'all'
+   * Priority: URL param > default 'all'
+   *
+   * Note: localStorage is intentionally NOT used for initial load to ensure
+   * clean URLs always show all artworks. This provides predictable UX.
+   * Collection state is still persisted to URL params for explicit filtering.
    */
   const getInitialCollection = () => {
     // 1. Check URL parameter
@@ -326,14 +330,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
       return urlCollection;
     }
 
-    // 2. Check localStorage
-    const storedCollection = getCollectionFromStorage();
-    if (storedCollection && isValidCollection(storedCollection)) {
-      console.log('[Gallery] Using collection from localStorage:', storedCollection);
-      return storedCollection;
-    }
-
-    // 3. Default to 'all'
+    // 2. Default to 'all' (localStorage intentionally skipped)
     console.log('[Gallery] Using default collection: all');
     return 'all';
   };
