@@ -107,10 +107,18 @@
 }
 
 /* ==========================================================================
-   GRID LAYOUT IMPROVEMENTS
+   GRID LAYOUT IMPROVEMENTS - STABLE UNIFORM GRID
    ========================================================================== */
 
-/* Reduce excessive vertical gaps */
+/*
+ * Stable Grid Strategy:
+ * - Use uniform aspect-ratio on all cards (prevents overlap)
+ * - Consistent gaps and padding
+ * - Prevent layout shift during image load
+ * - Hover effects contained within card bounds
+ */
+
+/* Ensure stable layout with consistent gaps */
 @media (min-width: 640px) {
   .bento-grid {
     gap: var(--space-4);
@@ -123,6 +131,22 @@
     gap: var(--space-5);
     row-gap: var(--space-6);
   }
+}
+
+/* Prevent layout shift during image loading */
+.artwork-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Prevent flicker on load */
+  background: var(--bg-tertiary);
+}
+
+/* Loading state placeholder */
+.artwork-card__image[data-loading] {
+  background: var(--bg-elevated);
+  min-height: 200px;
 }
 
 /* Collection divider captions for orientation */
@@ -167,7 +191,33 @@
 
 /* Improved hierarchy: Title → Dimensions → Collection */
 .artwork-card__overlay {
+  position: absolute;
+  inset: 0;
   padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* Prevent layout reflow on hover */
+  pointer-events: none;
+  will-change: opacity, transform;
+  /* Gradient background for readability */
+  background: linear-gradient(
+    to top,
+    rgba(26, 24, 22, 0.92) 0%,
+    rgba(26, 24, 22, 0.65) 40%,
+    rgba(26, 24, 22, 0.25) 70%,
+    transparent 100%
+  );
+}
+
+[data-theme="dark"] .artwork-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.6) 40%,
+    rgba(0, 0, 0, 0.2) 70%,
+    transparent 100%
+  );
 }
 
 .artwork-card__overlay-title {
@@ -188,25 +238,16 @@
   margin: 0;
 }
 
-/* Adjust overlay opacity for better readability without being too aggressive */
-.artwork-card__overlay {
-  background: linear-gradient(
-    to top,
-    rgba(26, 24, 22, 0.92) 0%,
-    rgba(26, 24, 22, 0.65) 40%,
-    rgba(26, 24, 22, 0.25) 70%,
-    transparent 100%
-  );
-}
-
-[data-theme="dark"] .artwork-card__overlay {
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0.6) 40%,
-    rgba(0, 0, 0, 0.2) 70%,
-    transparent 100%
-  );
+/* Ensure CTA is clickable */
+.artwork-card__overlay-cta {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* ==========================================================================
