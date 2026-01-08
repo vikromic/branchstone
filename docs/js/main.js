@@ -475,79 +475,9 @@ import { FeaturedCarousel } from './featured-carousel.js';
     const statItems = document.querySelectorAll('[data-stat-item]');
     if (statItems.length === 0) return;
 
-    // Feature detection: check if IntersectionObserver is supported
-    if (!('IntersectionObserver' in window)) {
-      console.warn('[Stats] IntersectionObserver not supported, showing stats immediately');
-      // Fallback: show all stats immediately without animation
-      statItems.forEach(item => {
-        item.classList.add('is-visible');
-        const numberEl = item.querySelector('[data-stat-number]');
-        if (numberEl) {
-          const targetValue = parseInt(numberEl.getAttribute('data-stat-number'));
-          const text = numberEl.textContent;
-          const hasPlus = text.includes('+');
-          const hasPercent = text.includes('%');
-          const suffix = hasPlus ? '+' : hasPercent ? '%' : '';
-          numberEl.textContent = targetValue + suffix;
-        }
-      });
-      return;
-    }
-
-    if (prefersReducedMotion()) {
-      // If reduced motion is preferred, just show the stats immediately
-      statItems.forEach(item => item.classList.add('is-visible'));
-      return;
-    }
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.3
-    };
-
-    const animateValue = (element, start, end, duration, suffix = '') => {
-      const range = end - start;
-      const increment = range / (duration / 16); // 60fps
-      let current = start;
-
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= end) {
-          current = end;
-          clearInterval(timer);
-        }
-        element.textContent = Math.floor(current) + suffix;
-      }, 16);
-    };
-
-    const handleIntersection = (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-
-          // Animate the number
-          const numberEl = entry.target.querySelector('[data-stat-number]');
-          if (numberEl) {
-            const targetValue = parseInt(numberEl.getAttribute('data-stat-number'));
-            const text = numberEl.textContent;
-            const hasPlus = text.includes('+');
-            const hasPercent = text.includes('%');
-            const suffix = hasPlus ? '+' : hasPercent ? '%' : '';
-
-            // Start animation
-            animateValue(numberEl, 0, targetValue, 1500, suffix);
-          }
-
-          observer.unobserve(entry.target);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
-
+    // Show all stats immediately without animation
     statItems.forEach(item => {
-      observer.observe(item);
+      item.classList.add('is-visible');
     });
   };
 
