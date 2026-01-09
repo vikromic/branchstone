@@ -185,7 +185,7 @@ Every feature designed for:
 
 | Page | Purpose | Key Features |
 |------|---------|-------------|
-| index.html | Homepage | Hero section, featured works, statistics |
+| index.html | Homepage | Responsive hero (mobile inline/desktop modal), featured works, statistics |
 | gallery.html | Full collection | Filterable grid, lightbox modal |
 | about.html | Artist bio | Story, process, philosophy |
 | commissions.html | Custom work | Multi-step wizard form |
@@ -193,6 +193,32 @@ Every feature designed for:
 | terms.html | Legal | Terms of service |
 | privacy.html | Legal | Privacy policy |
 | 404.html | Error page | Navigation fallback |
+
+#### Homepage Hero - Responsive Design
+
+The homepage features two distinct hero implementations optimized for different device types:
+
+**Mobile Hero (≤768px):**
+- Inline scrollable layout (no modal blocking)
+- 60-70vh hero image with no dark overlay
+- Single CTA button ("Explore the Works")
+- High contrast text on solid background
+- Scroll hint with gentle bounce animation
+- WCAG AAA compliant (15.8:1 contrast)
+- Performance optimized (no backdrop-filter)
+
+**Desktop Hero (≥769px):**
+- Modal overlay card with backdrop blur
+- Dismissible via close button
+- Dual CTAs ("View Gallery" + "About the Artist")
+- Restoreable via info button
+- Preserves existing desktop experience
+
+**Implementation:**
+- CSS-only responsive switching at 768px breakpoint
+- Separate HTML structures for each variant
+- No JavaScript required for mobile hero
+- See `/docs/MOBILE-HERO-IMPLEMENTATION.md` for details
 
 **Common HTML Structure:**
 
@@ -996,6 +1022,40 @@ Static → Serverless Functions → Database → Full Backend
 | Server access | No | Yes |
 | Use case | Theme, favorites | Auth tokens |
 
+#### 6. Mobile Hero - Inline vs Modal
+
+**Decision:** Separate mobile inline hero (≤768px), preserve desktop modal (≥769px)
+
+**Rationale:**
+- Mobile users interpret modal overlays as interruptions to dismiss
+- Single CTA reduces decision paralysis on small screens
+- Inline layout feels native and scrollable (no blocking)
+- High contrast solid background performs better than backdrop-filter
+- Scroll hint encourages exploration vs bounce
+
+**Trade-offs:**
+- ✅ Better mobile UX (calmer, more natural flow)
+- ✅ Improved performance (no backdrop blur on mobile)
+- ✅ WCAG AAA compliant (15.8:1 contrast vs 4.5:1 minimum)
+- ✅ Reduced bounce rate (scroll hint guides users)
+- ❌ Two HTML structures to maintain (desktop + mobile)
+- ❌ Slight increase in HTML size (~1KB)
+
+**Migration Path:**
+```
+Current Desktop Modal → Add Mobile Inline Variant → A/B Test → Optimize
+```
+
+**Key Metrics (Post-Launch):**
+- Mobile scroll depth: Target >60% past hero
+- Mobile CTA click-through: Target >15%
+- Mobile bounce rate: Target <45%
+
+**Documentation:**
+- `/docs/MOBILE-HERO-IMPLEMENTATION.md` - Developer guide
+- `/docs/design-specs/mobile-hero-inline-design.md` - Full specification
+- `/docs/design-specs/mobile-hero-visual-guide.md` - Visual reference
+
 ---
 
 ## Deployment Architecture
@@ -1060,38 +1120,45 @@ netlify deploy --prod --dir=docs
 
 ```
 branchstone/
-├── docs/                          # Website root
-│   ├── index.html                 # Homepage
-│   ├── gallery.html               # Gallery
-│   ├── about.html                 # About
-│   ├── commissions.html           # Commissions
-│   ├── contact.html               # Contact
-│   ├── terms.html                 # Terms
-│   ├── privacy.html               # Privacy
-│   ├── 404.html                   # Error
+├── docs/                                    # Website root
+│   ├── index.html                           # Homepage (with responsive hero)
+│   ├── gallery.html                         # Gallery
+│   ├── about.html                           # About
+│   ├── commissions.html                     # Commissions
+│   ├── contact.html                         # Contact
+│   ├── terms.html                           # Terms
+│   ├── privacy.html                         # Privacy
+│   ├── 404.html                             # Error
 │   │
-│   ├── css/                       # Stylesheets (~250KB)
-│   │   ├── tokens.css             # Design system
-│   │   ├── base.css               # Reset
-│   │   ├── typography.css         # Type system
-│   │   ├── components.css         # UI (101KB)
-│   │   ├── layout.css             # Layout (77KB)
-│   │   └── mobile-*.css           # Mobile enhancements
+│   ├── css/                                 # Stylesheets (~250KB)
+│   │   ├── tokens.css                       # Design system
+│   │   ├── base.css                         # Reset
+│   │   ├── typography.css                   # Type system
+│   │   ├── components.css                   # UI (101KB)
+│   │   ├── layout.css                       # Layout (77KB)
+│   │   ├── mobile-ux-improvements.css       # Mobile hero + UX enhancements
+│   │   └── mobile-gallery-improvements.css  # Mobile gallery optimizations
 │   │
-│   ├── js/                        # JavaScript
-│   │   └── main.js                # App logic (2832 lines, ~80KB)
+│   ├── js/                                  # JavaScript
+│   │   └── main.js                          # App logic (2832 lines, ~80KB)
 │   │
-│   ├── img/                       # Images (~100 files)
-│   │   ├── cover.webp             # Hero
-│   │   └── artwork-*.webp         # Gallery
+│   ├── img/                                 # Images (~100 files)
+│   │   ├── cover.webp                       # Hero image (14.8KB)
+│   │   └── artwork-*.webp                   # Gallery
 │   │
-│   ├── favicon.svg                # Favicon
-│   ├── site.webmanifest          # PWA manifest
-│   ├── robots.txt                # SEO
-│   └── CNAME                     # Custom domain
+│   ├── design-specs/                        # Design documentation
+│   │   ├── mobile-hero-inline-design.md     # Mobile hero specification
+│   │   └── mobile-hero-visual-guide.md      # Visual reference guide
+│   │
+│   ├── architecture.md                      # System architecture (this file)
+│   ├── MOBILE-HERO-IMPLEMENTATION.md        # Mobile hero developer guide
+│   ├── favicon.svg                          # Favicon
+│   ├── site.webmanifest                    # PWA manifest
+│   ├── robots.txt                          # SEO
+│   └── CNAME                               # Custom domain
 │
-├── CLAUDE.md                     # Project instructions
-└── README.md                     # Documentation
+├── CLAUDE.md                               # Project instructions
+└── README.md                               # Project overview
 ```
 
 ---
@@ -1120,4 +1187,8 @@ Branchstone is a well-architected static artist portfolio that prioritizes:
 
 **Document Maintenance:** Update when adding features, review quarterly
 
-**Last Review:** December 12, 2024
+**Recent Updates:**
+- January 8, 2026: Added mobile hero implementation documentation
+- December 12, 2024: Initial architecture documentation v2.0
+
+**Last Review:** January 8, 2026
