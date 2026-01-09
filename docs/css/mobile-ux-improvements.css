@@ -971,39 +971,26 @@
     stroke-width: 2px;
   }
 
-  /* Compact mobile statistics row - lighter, supporting information */
+  /* Subtle mobile statistics text - very quiet supporting information */
   .section-hero__stats-mobile {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--space-4);
-    padding: var(--space-4) var(--space-4) var(--space-5);
+    padding: var(--space-5) var(--space-4) var(--space-6);
     background: var(--bg-primary);
-    border-top: 1px solid var(--border-subtle);
-    flex-wrap: wrap;
+    margin-top: var(--space-2);
   }
 
-  .section-hero__stat-mobile {
+  .section-hero__stat-text {
     font-family: var(--font-body);
-    font-size: 0.8125rem; /* 13px - smaller, lighter */
-    font-weight: 400;
+    font-size: 0.6875rem; /* 11px - very small, caption-like */
+    font-weight: 300; /* Light weight */
+    line-height: 1.5;
     color: var(--text-tertiary);
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-    opacity: 0.85;
-  }
-
-  .section-hero__stat-mobile strong {
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
-
-  /* Divider between stats */
-  .section-hero__stat-divider {
-    width: 1px;
-    height: 12px;
-    background: var(--border-subtle);
-    opacity: 0.5;
+    letter-spacing: 0.015em;
+    text-align: center;
+    opacity: 0.65; /* Very subtle */
+    max-width: 90%;
   }
 
   @keyframes gentleBounce {
@@ -1039,11 +1026,11 @@
 
   [data-theme="dark"] .section-hero__stats-mobile {
     background: var(--bg-primary);
-    border-top-color: var(--border-default);
   }
 
-  [data-theme="dark"] .section-hero__stat-divider {
-    background: var(--border-default);
+  [data-theme="dark"] .section-hero__stat-text {
+    color: var(--text-tertiary);
+    opacity: 0.55; /* Even more subtle in dark mode */
   }
 
   /* Reduced motion support */
