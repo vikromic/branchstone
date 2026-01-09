@@ -1,14 +1,14 @@
 /**
  * Collection Descriptions - Mobile Gallery Feature
  * Shows editorial descriptions when filtering by collection
- * Mobile-only (max-width: 768px)
+ * Mobile-only (max-width: 767px)
  */
 
 /* ========================================
    COLLECTION DESCRIPTION CONTAINER
    ======================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* Container for collection description */
   .collection-description {
     padding: var(--space-3) var(--space-4) var(--space-5);
@@ -20,7 +20,7 @@
     transition: opacity 0.3s ease, max-height 0.3s ease;
   }
 
-  .collection-description.visible {
+  .collection-description.is-visible {
     display: block;
     opacity: 1;
     max-height: 1000px; /* Large enough for any description */
@@ -38,7 +38,7 @@
   }
 
   /* Collapsed state - ~3 lines */
-  .collection-description__text.collapsed {
+  .collection-description__text.is-collapsed {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -46,7 +46,7 @@
   }
 
   /* Expanded state - full text */
-  .collection-description__text.expanded {
+  .collection-description__text.is-expanded {
     display: block;
     overflow: visible;
   }
@@ -120,8 +120,8 @@
 }
 
 /* Desktop: Hide collection descriptions entirely */
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .collection-description {
-    display: none !important;
+    display: none;
   }
 }

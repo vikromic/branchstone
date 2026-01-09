@@ -4,6 +4,42 @@
    ========================================================================== */
 
 /* ==========================================================================
+   CSS CUSTOM PROPERTIES - Mobile Design Tokens
+   ========================================================================== */
+
+:root {
+  /* Mobile-specific spacing */
+  --mobile-nav-height: 56px;
+  --mobile-nav-offset: 72px; /* nav height + safe area padding */
+
+  /* WCAG AA touch target minimums */
+  --touch-target-min: 44px;
+  --touch-target-preferred: 48px;
+  --touch-target-large: 56px;
+
+  /* Carousel dot specifications */
+  --carousel-dot-inactive-size: 6px;
+  --carousel-dot-active-width: 22px;
+  --carousel-dot-active-height: 6px;
+  --carousel-dot-gap: 8px;
+  --carousel-dot-container-width: 22px; /* Matches active width for consistent layout */
+  --carousel-dot-container-height: 22px;
+  --carousel-dot-spacing-vertical: 12px;
+
+  /* Carousel dot colors */
+  --carousel-dot-inactive-bg: rgba(255, 255, 255, 0.35);
+  --carousel-dot-inactive-opacity: 0.45;
+  --carousel-dot-active-bg: var(--accent-primary);
+  --carousel-dot-active-opacity: 1;
+  --carousel-dot-hover-opacity: 0.8;
+  --carousel-dot-hover-scale: 1.15;
+
+  /* Mobile breakpoint - standardized across all files */
+  /* Strategy: Use 767px for max-width (mobile), 768px for min-width (tablet+) */
+  /* This ensures no overlap: 0-767px = mobile, 768px+ = desktop */
+}
+
+/* ==========================================================================
    1. MOBILE BOTTOM NAVIGATION BAR
    ========================================================================== */
 
@@ -13,7 +49,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 56px;
+  height: var(--mobile-nav-height);
   background: var(--bg-elevated);
   border-top: 1px solid var(--border-default);
   box-shadow: 0 -2px 10px rgba(26, 24, 22, 0.1);
@@ -32,7 +68,7 @@
 }
 
 /* Hide on scroll down */
-.mobile-bottom-nav--hidden {
+.mobile-bottom-nav.is-hidden {
   transform: translateY(100%);
 }
 
@@ -62,8 +98,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
-  min-width: 48px;
-  min-height: 48px;
+  min-width: var(--touch-target-preferred);
+  min-height: var(--touch-target-preferred);
   padding: 0.25rem 0.5rem;
   color: var(--text-secondary);
   text-decoration: none;
@@ -92,11 +128,11 @@
 }
 
 /* Active state */
-.mobile-bottom-nav__link--active {
+.mobile-bottom-nav__link.is-active {
   color: var(--accent-primary);
 }
 
-.mobile-bottom-nav__link--active .mobile-bottom-nav__icon {
+.mobile-bottom-nav__link.is-active .mobile-bottom-nav__icon {
   transform: translateY(-2px);
 }
 
@@ -106,7 +142,7 @@
   line-height: 1;
 }
 
-/* Show only on mobile */
+/* Show only on mobile - Breakpoint: 767px max for mobile */
 @media (max-width: 767px) {
   .mobile-bottom-nav {
     display: block;
@@ -114,12 +150,12 @@
 
   /* Add bottom padding to body to prevent content hiding */
   body {
-    padding-bottom: 56px;
+    padding-bottom: var(--mobile-nav-height);
   }
 
   /* Adjust back-to-top button position - same as sticky-inquiry-button */
   .back-to-top {
-    bottom: calc(var(--space-4, 1rem) + 72px + env(safe-area-inset-bottom, 0px)) !important;
+    bottom: calc(var(--space-4, 1rem) + var(--mobile-nav-offset) + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -132,15 +168,15 @@
   .tag,
   [data-filter],
   [data-mobile-filter] {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: var(--touch-target-min);
+    min-width: var(--touch-target-min);
     padding: 0.625rem 1rem;
     touch-action: manipulation;
   }
 
   /* Mobile filter chips */
   .mobile-filter-chip {
-    min-height: 44px;
+    min-height: var(--touch-target-min);
     min-width: 80px;
     padding: 0.75rem 1.25rem;
   }
@@ -149,10 +185,10 @@
   .artwork-card__favorite,
   .header__favorites,
   .favorite-item__remove {
-    min-width: 56px;
-    min-height: 56px;
-    width: 56px;
-    height: 56px;
+    min-width: var(--touch-target-large);
+    min-height: var(--touch-target-large);
+    width: var(--touch-target-large);
+    height: var(--touch-target-large);
     padding: 0;
     display: flex;
     align-items: center;
@@ -198,10 +234,10 @@
     position: absolute;
     top: var(--space-4);
     right: var(--space-4);
-    min-width: 56px;
-    min-height: 56px;
-    width: 56px;
-    height: 56px;
+    min-width: var(--touch-target-large);
+    min-height: var(--touch-target-large);
+    width: var(--touch-target-large);
+    height: var(--touch-target-large);
     background: linear-gradient(
       135deg,
       rgba(184, 134, 107, 0.5) 0%,
@@ -232,8 +268,8 @@
     position: absolute;
     bottom: var(--space-4);
     right: var(--space-4);
-    min-width: 56px;
-    min-height: 56px;
+    min-width: var(--touch-target-large);
+    min-height: var(--touch-target-large);
     padding: var(--space-3);
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid var(--accent-primary);
@@ -266,7 +302,7 @@
   .header__nav-link,
   .mobile-menu__link,
   .footer__nav-link {
-    min-height: 44px;
+    min-height: var(--touch-target-min);
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
@@ -275,7 +311,7 @@
   /* All interactive buttons */
   button,
   .btn {
-    min-height: 44px;
+    min-height: var(--touch-target-min);
     padding: 0.75rem 1.5rem;
   }
 
@@ -287,198 +323,188 @@
      ========================================================================== */
 
   /* All carousel dots - button container (transparent tap target) */
+  .carousel__dot,
   .artwork-modal__carousel-dot,
   .featured-carousel__dot,
-  .carousel__dot,
   [class*="carousel"][class*="dot"] {
-    /* Remove all inherited styles */
-    min-height: unset !important;
-    min-width: unset !important;
-
-    /* Tap target size (44x44px WCAG AA minimum, using padding for space) */
-    width: 22px !important; /* Matches active dot width for consistent layout */
-    height: 22px !important;
-    padding: 0 !important;
+    /* Button tap target size */
+    width: var(--carousel-dot-container-width);
+    height: var(--carousel-dot-container-height);
+    min-height: unset;
+    min-width: unset;
+    padding: 0;
 
     /* Transparent button - visual dot is in ::before */
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
+    background: transparent;
+    border: none;
+    border-radius: 0;
 
     /* CRISP rendering - remove ALL blur/filter/shadow */
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    filter: none !important;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    filter: none;
 
     /* Smooth transitions */
-    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
 
     /* Force hardware rendering for crisp edges */
-    transform: translateZ(0) !important;
+    transform: translateZ(0);
     -webkit-font-smoothing: antialiased;
     backface-visibility: hidden;
     will-change: transform;
 
     /* Position context for ::before */
-    position: relative !important;
-    z-index: 10 !important;
+    position: relative;
+    z-index: 10;
 
     /* Center the pseudo-element dot */
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Visual dot - inactive (6px circle) */
+  .carousel__dot::before,
   .artwork-modal__carousel-dot::before,
   .featured-carousel__dot::before,
-  .carousel__dot::before,
   [class*="carousel"][class*="dot"]::before {
-    content: '' !important;
-    display: block !important;
+    content: '';
+    display: block;
 
     /* EXACT inactive dot size */
-    width: 6px !important;
-    height: 6px !important;
+    width: var(--carousel-dot-inactive-size);
+    height: var(--carousel-dot-inactive-size);
 
     /* EXACT inactive dot appearance */
-    background: rgba(255, 255, 255, 0.35) !important;
-    opacity: 0.45 !important;
-    border-radius: 999px !important; /* Full circle */
+    background: var(--carousel-dot-inactive-bg);
+    opacity: var(--carousel-dot-inactive-opacity);
+    border-radius: 999px; /* Full circle */
 
     /* CRISP rendering */
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    filter: none !important;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    filter: none;
 
     /* Smooth transitions */
-    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Force hardware rendering */
-    transform: translateZ(0) !important;
+    transform: translateZ(0);
     backface-visibility: hidden;
   }
 
   /* Remove any ::after pseudo-elements */
+  .carousel__dot::after,
   .artwork-modal__carousel-dot::after,
   .featured-carousel__dot::after,
-  .carousel__dot::after,
   [class*="carousel"][class*="dot"]::after {
-    display: none !important;
+    display: none;
   }
 
   /* Dark theme - lighter inactive dots (affects ::before) */
+  [data-theme="dark"] .carousel__dot::before,
   [data-theme="dark"] .artwork-modal__carousel-dot::before,
   [data-theme="dark"] .featured-carousel__dot::before,
-  [data-theme="dark"] .carousel__dot::before,
   [data-theme="dark"] [class*="carousel"][class*="dot"]::before {
-    background: rgba(255, 255, 255, 0.35) !important;
-    opacity: 0.45 !important;
+    background: var(--carousel-dot-inactive-bg);
+    opacity: var(--carousel-dot-inactive-opacity);
   }
 
   /* ACTIVE dot - elongated pill with brand accent (EXACT 22px × 6px) */
-  .artwork-modal__carousel-dot.active::before,
-  .artwork-modal__carousel-dot--active::before,
-  .featured-carousel__dot.active::before,
-  .featured-carousel__dot--active::before,
-  .carousel__dot.active::before,
-  .carousel__dot--active::before,
-  [class*="carousel"][class*="dot"].active::before,
-  [class*="carousel"][class*="dot"][class*="active"]::before {
-    width: 22px !important; /* EXACT spec: 22px not 18px */
-    height: 6px !important;
-    border-radius: 999px !important; /* Full pill */
-    background: var(--accent-primary) !important; /* Brand beige */
-    opacity: 1 !important;
+  .carousel__dot.is-active::before,
+  .artwork-modal__carousel-dot.is-active::before,
+  .featured-carousel__dot.is-active::before,
+  [class*="carousel"][class*="dot"].is-active::before {
+    width: var(--carousel-dot-active-width);
+    height: var(--carousel-dot-active-height);
+    border-radius: 999px; /* Full pill */
+    background: var(--carousel-dot-active-bg);
+    opacity: var(--carousel-dot-active-opacity);
 
     /* Crisp rendering */
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    filter: none !important;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    filter: none;
   }
 
   /* Dark theme active - same beige accent */
-  [data-theme="dark"] .artwork-modal__carousel-dot.active::before,
-  [data-theme="dark"] .artwork-modal__carousel-dot--active::before,
-  [data-theme="dark"] .featured-carousel__dot.active::before,
-  [data-theme="dark"] .featured-carousel__dot--active::before,
-  [data-theme="dark"] .carousel__dot.active::before,
-  [data-theme="dark"] .carousel__dot--active::before,
-  [data-theme="dark"] [class*="carousel"][class*="dot"].active::before,
-  [data-theme="dark"] [class*="carousel"][class*="dot"][class*="active"]::before {
-    background: var(--accent-primary) !important;
-    opacity: 1 !important;
+  [data-theme="dark"] .carousel__dot.is-active::before,
+  [data-theme="dark"] .artwork-modal__carousel-dot.is-active::before,
+  [data-theme="dark"] .featured-carousel__dot.is-active::before,
+  [data-theme="dark"] [class*="carousel"][class*="dot"].is-active::before {
+    background: var(--carousel-dot-active-bg);
+    opacity: var(--carousel-dot-active-opacity);
   }
 
   /* Hover state - slightly more visible, scale the ::before element */
+  .carousel__dot:hover::before,
   .artwork-modal__carousel-dot:hover::before,
   .featured-carousel__dot:hover::before,
-  .carousel__dot:hover::before,
   [class*="carousel"][class*="dot"]:hover::before {
-    opacity: 0.8 !important;
-    transform: translateZ(0) scale(1.15) !important; /* Keep translateZ for crisp rendering */
+    opacity: var(--carousel-dot-hover-opacity);
+    transform: translateZ(0) scale(var(--carousel-dot-hover-scale));
   }
 
   /* Container spacing - consistent across all carousels */
+  .carousel__pagination,
   .artwork-modal__carousel-dots,
   .featured-carousel__pagination,
-  .carousel__pagination,
   [class*="carousel"][class*="pagination"],
   [class*="carousel"][class*="dots"] {
-    display: flex !important;
-    gap: 8px !important; /* EXACT gap */
-    justify-content: center !important;
-    align-items: center !important;
-    margin-top: 12px !important; /* 10-14px spec range */
-    margin-bottom: 12px !important; /* 10-14px spec range */
-    padding: 0 !important;
+    display: flex;
+    gap: var(--carousel-dot-gap);
+    justify-content: center;
+    align-items: center;
+    margin-top: var(--carousel-dot-spacing-vertical);
+    margin-bottom: var(--carousel-dot-spacing-vertical);
+    padding: 0;
 
     /* CRISP container rendering */
-    position: relative !important;
-    z-index: 10 !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    filter: none !important;
-    isolation: isolate !important; /* Create stacking context, prevent parent blur inheritance */
+    position: relative;
+    z-index: 10;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    filter: none;
+    isolation: isolate; /* Create stacking context, prevent parent blur inheritance */
   }
 
   .btn--sm {
-    min-height: 44px;
+    min-height: var(--touch-target-min);
     padding: 0.625rem 1.25rem;
   }
 
   .btn--icon {
-    min-width: 44px;
-    min-height: 44px;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
   }
 
   /* Close buttons */
   .favorites-panel__close,
   .mobile-menu__close,
   .mobile-filter-dropdown__close {
-    min-width: 44px;
-    min-height: 44px;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
   }
 
   /* Header action buttons */
   .header__theme-toggle,
   .header__menu-toggle {
-    min-width: 44px;
-    min-height: 44px;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
     padding: 0.625rem;
   }
 
   /* Newsletter form */
   .newsletter__button {
-    min-height: 44px;
+    min-height: var(--touch-target-min);
   }
 
   .newsletter__input {
-    min-height: 44px;
+    min-height: var(--touch-target-min);
   }
 
   /* Form inputs */
@@ -487,7 +513,7 @@
   input[type="tel"],
   textarea,
   select {
-    min-height: 44px;
+    min-height: var(--touch-target-min);
   }
 
   /* Radio and checkbox larger touch areas */
@@ -500,7 +526,7 @@
   /* Radio/checkbox labels - make clickable area larger */
   label:has(input[type="radio"]),
   label:has(input[type="checkbox"]) {
-    min-height: 44px;
+    min-height: var(--touch-target-min);
     display: flex;
     align-items: center;
     padding: 0.5rem 0;
@@ -527,19 +553,19 @@
   .btn,
   .tag,
   .mobile-filter-chip {
-    transition-duration: 210ms !important;
+    transition-duration: 210ms;
   }
 
   /* Modal/panel transitions */
   .favorites-panel,
   .mobile-menu {
-    transition-duration: 210ms !important;
+    transition-duration: 210ms;
   }
 
   /* Hover effects - instant on mobile */
   .artwork-card:hover,
   .btn:hover {
-    transition-duration: 105ms !important;
+    transition-duration: 105ms;
   }
 }
 
@@ -568,7 +594,7 @@
   }
 
   /* Hide header when scrolling down */
-  .header--hidden {
+  .header.is-hidden {
     transform: translateY(-100%);
   }
 
@@ -733,7 +759,7 @@
 @media (max-width: 767px) {
   .mobile-bottom-nav {
     padding-bottom: env(safe-area-inset-bottom);
-    height: calc(56px + env(safe-area-inset-bottom));
+    height: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
   }
 
   .header {
@@ -742,7 +768,7 @@
 
   /* Adjust body padding for safe areas */
   body {
-    padding-bottom: calc(56px + env(safe-area-inset-bottom));
+    padding-bottom: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
   }
 }
 
@@ -760,7 +786,7 @@
     border: 2px solid transparent;
   }
 
-  .mobile-bottom-nav__link--active {
+  .mobile-bottom-nav__link.is-active {
     border-color: var(--accent-primary);
     background: rgba(184, 134, 107, 0.1);
   }
@@ -778,7 +804,7 @@
 @media (max-width: 767px) {
   /* Enhanced footer spacing and breathing room */
   .footer {
-    padding: var(--space-12) 0 calc(var(--space-10) + 72px); /* Extra bottom padding for mobile nav */
+    padding: var(--space-12) 0 calc(var(--space-10) + var(--mobile-nav-offset)); /* Extra bottom padding for mobile nav */
   }
 
   .footer__container {
@@ -840,7 +866,7 @@
     font-size: var(--text-base);
     padding: var(--space-3) var(--space-4);
     display: block;
-    min-height: 48px; /* WCAG compliant touch target */
+    min-height: var(--touch-target-preferred); /* WCAG compliant touch target */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -867,10 +893,10 @@
   }
 
   .footer__social-link {
-    min-width: 56px;
-    min-height: 56px;
-    width: 56px;
-    height: 56px;
+    min-width: var(--touch-target-large);
+    min-height: var(--touch-target-large);
+    width: var(--touch-target-large);
+    height: var(--touch-target-large);
     border: 2px solid var(--border-default);
     transition: all var(--transition-normal);
   }
@@ -899,7 +925,7 @@
     text-decoration: none;
     display: inline-block;
     padding: var(--space-3) var(--space-4);
-    min-height: 44px;
+    min-height: var(--touch-target-min);
     transition: color var(--transition-normal);
   }
 
@@ -982,9 +1008,9 @@
      ========================================================================== */
 
   .toast-container {
-    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
-    left: var(--space-4) !important;
-    right: var(--space-4) !important;
+    bottom: calc(var(--mobile-nav-offset) + env(safe-area-inset-bottom, 0px));
+    left: var(--space-4);
+    right: var(--space-4);
   }
 
   .toast {
@@ -999,11 +1025,12 @@
    Replaces modal overlay with scrollable, art-first layout on mobile
    ========================================================================== */
 
+/* Breakpoint: 768px max for mobile */
 @media (max-width: 768px) {
 
   /* Hide desktop hero overlay on mobile */
   .section-hero--desktop {
-    display: none !important;
+    display: none;
   }
 
   /* Mobile inline hero */
@@ -1090,7 +1117,7 @@
     font-size: var(--text-base);
     font-weight: 600;
     letter-spacing: 0.02em;
-    min-height: 48px;
+    min-height: var(--touch-target-preferred);
     min-width: 200px;
     background: linear-gradient(135deg, var(--copper-400), var(--copper-500));
     color: white;
@@ -1263,14 +1290,14 @@
 
 } /* End mobile hero breakpoint */
 
-/* Desktop: Show desktop hero, hide mobile hero */
-@media (min-width: 769px) {
+/* Desktop: Show desktop hero, hide mobile hero - Breakpoint: 768px min for desktop */
+@media (min-width: 768px) {
   .section-hero--mobile {
-    display: none !important;
+    display: none;
   }
 
   .section-hero--desktop {
-    display: flex !important;
+    display: flex;
   }
 }
 
@@ -1282,14 +1309,14 @@
 /* Hide "Artist by the Numbers" stats section on mobile - we have inline hero stats instead */
 @media (max-width: 768px) {
   .section-stats {
-    display: none !important;
+    display: none;
   }
 }
 
 /* Show stats section on desktop */
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   .section-stats {
-    display: block !important;
+    display: block;
   }
 }
 
@@ -1300,16 +1327,16 @@
 @media (max-width: 768px) {
   /* FIX MODAL BACKDROP BLUR - Remove blur from overlay to prevent dot smearing */
   .artwork-modal__overlay {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    background: rgba(0, 0, 0, 0.9) !important; /* Solid dark background instead of blur */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.9); /* Solid dark background instead of blur */
   }
 
   /* Ensure modal content has its own stacking context (dots won't inherit parent blur) */
   .artwork-modal__content {
-    isolation: isolate !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    isolation: isolate;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   /* HIDE ALL CAROUSEL ARROWS ON MOBILE - swipe-only interaction */
@@ -1317,81 +1344,81 @@
   .featured-carousel__nav--next,
   .artwork-modal__carousel-prev,
   .artwork-modal__carousel-next {
-    display: none !important;
+    display: none;
   }
 
   /* CLOSE BUTTON: Keep visible, no circular background */
   .artwork-modal__close {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border-radius: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-    width: 48px !important;
-    height: 48px !important;
-    min-width: 48px !important;
-    min-height: 48px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    width: var(--touch-target-preferred);
+    height: var(--touch-target-preferred);
+    min-width: var(--touch-target-preferred);
+    min-height: var(--touch-target-preferred);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .artwork-modal__close:hover {
-    background: transparent !important;
-    transform: none !important;
+    background: transparent;
+    transform: none;
   }
 
   .artwork-modal__close:focus-visible {
-    outline: none !important;
+    outline: none;
   }
 
   .artwork-modal__close svg {
-    width: 32px !important;
-    height: 32px !important;
-    stroke-width: 2.5 !important;
-    stroke: var(--text-primary) !important;
+    width: 32px;
+    height: 32px;
+    stroke-width: 2.5;
+    stroke: var(--text-primary);
   }
 
   /* FAVORITE BUTTON: Remove background, just heart icon */
   .artwork-card__favorite,
   .featured-carousel__favorite {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    width: 56px !important;
-    height: 56px !important;
-    min-width: 56px !important;
-    min-height: 56px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    width: var(--touch-target-large);
+    height: var(--touch-target-large);
+    min-width: var(--touch-target-large);
+    min-height: var(--touch-target-large);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .artwork-card__favorite:hover,
   .featured-carousel__favorite:hover {
-    background: transparent !important;
-    box-shadow: none !important;
-    transform: scale(1.1) !important;  /* Slight scale on tap */
+    background: transparent;
+    box-shadow: none;
+    transform: scale(1.1);  /* Slight scale on tap */
   }
 
   .artwork-card__favorite svg,
   .featured-carousel__favorite svg {
-    width: 32px !important;   /* Slightly bigger (was ~24px) */
-    height: 32px !important;
-    stroke-width: 2 !important;
-    stroke: var(--text-primary) !important;
+    width: 32px;   /* Slightly bigger (was ~24px) */
+    height: 32px;
+    stroke-width: 2;
+    stroke: var(--text-primary);
   }
 
   /* When favorited (filled heart) */
   .artwork-card__favorite.is-favorited svg,
   .featured-carousel__favorite.is-favorited svg {
-    fill: var(--accent-primary) !important;  /* Copper fill */
-    stroke: var(--accent-primary) !important;
+    fill: var(--accent-primary);  /* Copper fill */
+    stroke: var(--accent-primary);
   }
 
   /* ==========================================================================
@@ -1401,20 +1428,20 @@
 
   /* GRID CONTAINER: Single gap value controls ALL spacing */
   .bento-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 10px !important;  /* Single, constant gap value */
-    grid-auto-rows: auto !important;  /* Natural flow, no masonry */
-    grid-auto-flow: row !important;  /* Sequential, no dense packing */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;  /* Single, constant gap value */
+    grid-auto-rows: auto;  /* Natural flow, no masonry */
+    grid-auto-flow: row;  /* Sequential, no dense packing */
   }
 
   /* CARD: ZERO margins - spacing controlled ONLY by grid gap */
   .artwork-card {
-    margin: 0 !important;
-    padding: 0 !important;
+    margin: 0;
+    padding: 0;
     /* Remove grid-row spanning - all cards flow naturally */
-    grid-row: auto !important;
-    grid-column: span 1 !important;
+    grid-row: auto;
+    grid-column: span 1;
   }
 
   /* Override all size variants on mobile - single column, equal spacing */
@@ -1424,10 +1451,10 @@
   .bento-large,
   .bento-wide,
   .bento-tall {
-    grid-column: span 1 !important;
-    grid-row: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    grid-column: span 1;
+    grid-row: auto;
+    margin: 0;
+    padding: 0;
   }
 
   /* IMAGE CONTAINER: Prevent overflow, maintain aspect ratio */
@@ -1439,10 +1466,10 @@
   }
 
   .artwork-card__image {
-    width: 100% !important;
-    height: auto !important;
-    display: block !important;
-    object-fit: contain !important;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
     max-width: 100%;
   }
 }

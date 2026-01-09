@@ -8,7 +8,7 @@
    MOBILE GALLERY HERO - MINIMAL DESIGN
    ======================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* Dramatically reduce hero section on mobile */
   .gallery-hero {
     padding: var(--space-8) 0 var(--space-6);
@@ -79,19 +79,19 @@
 
   /* HIDE dropdown button - replaced with horizontal scroll */
   .mobile-filter-toggle {
-    display: none !important;
+    display: none;
   }
 
   /* HIDE dropdown panel - replaced with horizontal scroll */
   .mobile-filter-dropdown {
-    display: none !important;
+    display: none;
   }
 
   /* SHOW desktop filter controls on mobile with horizontal scroll */
   .filter-controls {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    justify-content: flex-start !important;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     align-items: center;
     gap: var(--space-2);
     padding: 0 var(--space-4);
@@ -111,7 +111,7 @@
   /* Mobile filter chip - liquid glass style */
   .filter-controls .tag {
     flex-shrink: 0;
-    min-height: 48px; /* Large touch target */
+    min-height: var(--touch-target-preferred); /* Large touch target */
     padding: 12px 20px;
     font-size: 15px;
     font-weight: 500;
@@ -130,8 +130,7 @@
   }
 
 
-  .filter-controls .tag-active,
-  .filter-controls .tag.tag-active {
+  .filter-controls .tag.is-active {
     background: linear-gradient(135deg, rgba(184, 134, 107, 1) 0%, rgba(166, 119, 87, 1) 100%);
     color: white;
     border: 1.5px solid rgba(255, 255, 255, 0.25);
@@ -291,8 +290,7 @@
   }
 
   /* Enhanced dark mode active chips */
-  [data-theme="dark"] .filter-controls .tag-active,
-  [data-theme="dark"] .filter-controls .tag.tag-active {
+  [data-theme="dark"] .filter-controls .tag.is-active {
     background: linear-gradient(135deg, rgba(184, 134, 107, 1) 0%, rgba(166, 119, 87, 1) 100%);
     border: 1.5px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 16px rgba(184, 134, 107, 0.5), 0 2px 8px rgba(184, 134, 107, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4);
@@ -364,8 +362,7 @@
     transform: none;
   }
 
-  .filter-controls .tag-active,
-  .filter-controls .tag.tag-active {
+  .filter-controls .tag.is-active {
     transform: none !important;
   }
 
@@ -412,7 +409,7 @@
    DESKTOP STYLES (>= 768px)
    ======================================== */
 
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   /* Hide mobile filter button on desktop */
   .mobile-filter-toggle {
     display: none;
@@ -442,7 +439,7 @@
   .filter-controls .tag {
     flex-shrink: 0;
     white-space: nowrap;
-    min-height: 44px;
+    min-height: var(--touch-target-min);
     padding: var(--space-2) var(--space-4);
     font-size: var(--text-sm);
     font-weight: 500;
@@ -454,8 +451,7 @@
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .filter-controls .tag-active,
-  .filter-controls .tag.tag-active {
+  .filter-controls .tag.is-active {
     background: var(--accent-primary);
     color: white;
     border-color: var(--accent-primary);
@@ -483,7 +479,7 @@
     background: linear-gradient(to left, var(--bg-primary), transparent);
   }
 
-  [data-theme="dark"] .filter-controls .tag-active {
+  [data-theme="dark"] .filter-controls .tag.is-active {
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   }
 }
@@ -496,7 +492,7 @@
 @media (max-width: 767px) {
   /* Add bottom padding to gallery section for mobile nav */
   .gallery-section {
-    padding-bottom: calc(var(--space-16, 4rem) + 72px);
+    padding-bottom: calc(var(--space-16, 4rem) + var(--mobile-nav-offset));
   }
 
   /* Footer extra padding */
@@ -506,7 +502,7 @@
 
   /* Sticky inquiry button above mobile nav */
   .sticky-inquiry-button {
-    bottom: calc(var(--space-4, 1rem) + 72px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(var(--space-4, 1rem) + var(--mobile-nav-offset) + env(safe-area-inset-bottom, 0px));
   }
 
   /* Back to top button positioning - handled in components.css */
