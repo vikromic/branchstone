@@ -25,60 +25,57 @@
  * Row heights are proportional to ensure visual hierarchy
  */
 
-/* Default fallback for cards without scale data */
-.artwork-card {
-  grid-column: span 1;
-  grid-row: span 26; /* Medium default */
-}
+/* ==========================================================================
+   MOBILE: NO MASONRY BEHAVIOR
+   Mobile gallery uses natural flow with equal spacing (mobile-ux-improvements.css)
+   ========================================================================== */
 
-/* Small artworks - compact vertical space */
-.artwork-card[data-size="small"] {
-  grid-column: span 1;
-  grid-row: span 20;
-  /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
-}
-
-/* Medium artworks - standard size */
-.artwork-card[data-size="medium"] {
-  grid-column: span 1;
-  grid-row: span 28;
-  /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
-}
-
-/* Large artworks - prominent display */
-.artwork-card[data-size="large"] {
-  grid-column: span 1;
-  grid-row: span 36;
-  /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
+@media (max-width: 767px) {
+  /* Mobile: All cards flow naturally, no grid-row spanning */
+  .artwork-card,
+  .artwork-card[data-size="small"],
+  .artwork-card[data-size="medium"],
+  .artwork-card[data-size="large"] {
+    grid-column: span 1 !important;
+    grid-row: auto !important;
+  }
 }
 
 /* ==========================================================================
-   TABLET (640px+, 2 COLUMNS)
+   DESKTOP: Masonry grid-row spanning (768px+)
    ========================================================================== */
 
-@media (min-width: 640px) {
-  /* Small artworks */
+@media (min-width: 768px) {
+  /* Default fallback for cards without scale data */
+  .artwork-card {
+    grid-column: span 1;
+    grid-row: span 26; /* Medium default */
+  }
+
+  /* Small artworks - compact vertical space */
   .artwork-card[data-size="small"] {
     grid-column: span 1;
-    grid-row: span 18;
+    grid-row: span 20;
+    /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
   }
 
-  /* Medium artworks */
+  /* Medium artworks - standard size */
   .artwork-card[data-size="medium"] {
     grid-column: span 1;
-    grid-row: span 26;
+    grid-row: span 28;
+    /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
   }
 
-  /* Large artworks - can span 2 columns */
+  /* Large artworks - prominent display */
   .artwork-card[data-size="large"] {
-    grid-column: span 2;
-    grid-row: span 20;
+    grid-column: span 1;
+    grid-row: span 36;
     /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
   }
 }
 
 /* ==========================================================================
-   TABLET 3-COLUMN (768px - 1023px)
+   TABLET (768px+, 2-3 COLUMNS) - Masonry enabled
    ========================================================================== */
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -102,7 +99,7 @@
 }
 
 /* ==========================================================================
-   DESKTOP (1024px+, 4 COLUMNS)
+   DESKTOP (1024px+, 4 COLUMNS) - Masonry enabled
    ========================================================================== */
 
 @media (min-width: 1024px) {

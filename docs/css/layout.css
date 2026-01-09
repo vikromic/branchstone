@@ -222,8 +222,11 @@
    ========================================================================== */
 
 /*
- * Masonry-style Grid Strategy:
- * - Uses smaller, flexible row units (auto-fill pattern)
+ * Mobile (≤767px): Simple row-based grid with equal spacing
+ * - Mobile override in mobile-ux-improvements.css (gap: 10px, grid-auto-rows: auto)
+ *
+ * Desktop (≥768px): Masonry-style Grid Strategy
+ * - Uses smaller, flexible row units (10px baseline)
  * - Items span multiple rows based on their aspect ratio
  * - grid-auto-flow: dense fills gaps intelligently
  * - Preserves original aspect ratios without cropping
@@ -234,9 +237,9 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(0.5rem, 1.5vw, 0.75rem);
-  /* Small baseline row units (10px) for precise vertical fitting */
+  /* Mobile uses auto rows, desktop uses 10px baseline (overridden by mobile-ux-improvements.css on mobile) */
   grid-auto-rows: 10px;
-  /* Dense packing to minimize gaps without overlaps */
+  /* Mobile uses row flow, desktop uses dense (overridden by mobile-ux-improvements.css on mobile) */
   grid-auto-flow: dense;
 }
 

@@ -154,10 +154,8 @@
     padding-bottom: var(--space-16);
   }
 
-  /* Ensure bento grid works well on mobile */
-  .bento-grid {
-    gap: var(--space-4);
-  }
+  /* Mobile gallery grid spacing handled by mobile-ux-improvements.css */
+  /* DO NOT override gap here - see mobile-ux-improvements.css line 1237 */
 
   /* ========================================
      MOBILE ARTWORK CARDS - LARGER IMAGES

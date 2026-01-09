@@ -521,9 +521,11 @@
    ========================================================================== */
 
 @media (max-width: 767px) {
-  /* Larger tap areas for cards */
+  /* REMOVED: padding on artwork-card - grid gap handles all spacing */
+  /* Cards have ZERO margin - spacing is ONLY controlled by grid gap */
   .artwork-card {
-    padding: 0.5rem;
+    margin: 0;
+    padding: 0;
     position: relative;
   }
 
@@ -1226,8 +1228,55 @@
     stroke: var(--accent-primary) !important;
   }
 
-  /* GALLERY GRID: Compact, equal spacing between cards on mobile */
+  /* ==========================================================================
+     MOBILE GALLERY GRID - EQUAL SPACING REBUILD
+     Clean CSS Grid with gap-only spacing, zero card margins
+     ========================================================================== */
+
+  /* GRID CONTAINER: Single gap value controls ALL spacing */
   .bento-grid {
-    gap: 0.5rem !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;  /* Single, constant gap value */
+    grid-auto-rows: auto !important;  /* Natural flow, no masonry */
+    grid-auto-flow: row !important;  /* Sequential, no dense packing */
+  }
+
+  /* CARD: ZERO margins - spacing controlled ONLY by grid gap */
+  .artwork-card {
+    margin: 0 !important;
+    padding: 0 !important;
+    /* Remove grid-row spanning - all cards flow naturally */
+    grid-row: auto !important;
+    grid-column: span 1 !important;
+  }
+
+  /* Override all size variants on mobile - single column, equal spacing */
+  .artwork-card[data-size="small"],
+  .artwork-card[data-size="medium"],
+  .artwork-card[data-size="large"],
+  .bento-large,
+  .bento-wide,
+  .bento-tall {
+    grid-column: span 1 !important;
+    grid-row: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* IMAGE CONTAINER: Prevent overflow, maintain aspect ratio */
+  .artwork-card__image-wrapper {
+    width: 100%;
+    overflow: hidden;
+    display: block;
+    position: relative;
+  }
+
+  .artwork-card__image {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    object-fit: contain !important;
+    max-width: 100%;
   }
 }
