@@ -1141,11 +1141,11 @@
 
 /* ==========================================================================
    13. ENLARGED CAROUSEL CONTROLS (MOBILE ONLY)
-   Bigger close button and arrow icons for better visibility on mobile
+   Match desktop sizes exactly for consistency across devices
    ========================================================================== */
 
 @media (max-width: 768px) {
-  /* CLOSE BUTTON: Bigger X icon, no circular background */
+  /* CLOSE BUTTON: Match desktop 40px button, 20px SVG */
   .artwork-modal__close {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1154,10 +1154,10 @@
     border: none !important;
     box-shadow: none !important;
     outline: none !important;
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    min-height: 44px;
+    width: 40px !important;   /* Match desktop exactly */
+    height: 40px !important;  /* Match desktop exactly */
+    min-width: 40px !important;
+    min-height: 40px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1170,30 +1170,49 @@
   }
 
   .artwork-modal__close svg {
-    width: 32px !important;  /* 2x bigger (was ~16px) */
-    height: 32px !important;
-    stroke-width: 2.5 !important;  /* Slightly thicker for visibility */
+    width: 20px !important;   /* Match desktop exactly */
+    height: 20px !important;  /* Match desktop exactly */
+    stroke-width: 2 !important;  /* Match desktop */
     stroke: var(--text-primary) !important;
   }
 
-  /* NAVIGATION ARROWS: Bigger icons, keep circle size */
-  .featured-carousel .featured-carousel__nav--prev svg,
-  .featured-carousel .featured-carousel__nav--next svg,
-  .artwork-modal__carousel-prev svg,
-  .artwork-modal__carousel-next svg {
-    width: 28px !important;  /* 2-3x bigger (was ~10-12px) */
-    height: 28px !important;
-    stroke-width: 2.5 !important;  /* Thicker for visibility */
-    stroke: currentColor !important;
-  }
-
-  /* Ensure arrow button circles stay the same size - just center the bigger SVG */
-  .featured-carousel__nav--prev,
-  .featured-carousel__nav--next,
+  /* ARTWORK MODAL ARROWS: Match desktop 44px buttons, 24px SVG */
   .artwork-modal__carousel-prev,
   .artwork-modal__carousel-next {
+    width: 44px !important;   /* Match desktop */
+    height: 44px !important;  /* Match desktop */
+    min-width: 44px !important;
+    min-height: 44px !important;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .artwork-modal__carousel-prev svg,
+  .artwork-modal__carousel-next svg {
+    width: 24px !important;   /* Match desktop */
+    height: 24px !important;  /* Match desktop */
+    stroke-width: 2 !important;
+    stroke: currentColor !important;
+  }
+
+  /* FEATURED CAROUSEL ARROWS: Match desktop 48px buttons (3rem), 24px SVG */
+  .featured-carousel .featured-carousel__nav--prev,
+  .featured-carousel .featured-carousel__nav--next {
+    width: 48px !important;   /* Match desktop (3rem) */
+    height: 48px !important;  /* Match desktop (3rem) */
+    min-width: 48px !important;
+    min-height: 48px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .featured-carousel .featured-carousel__nav--prev svg,
+  .featured-carousel .featured-carousel__nav--next svg {
+    width: 24px !important;   /* Match desktop (1.5rem) */
+    height: 24px !important;  /* Match desktop (1.5rem) */
+    stroke-width: 2 !important;
+    stroke: currentColor !important;
   }
 }
