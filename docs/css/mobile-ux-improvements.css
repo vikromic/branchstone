@@ -1226,9 +1226,8 @@
     stroke: var(--accent-primary) !important;
   }
 
-  /* GALLERY GRID: Equal spacing between cards on mobile */
+  /* GALLERY GRID: Compact, equal spacing between cards on mobile */
   .bento-grid {
-    gap: 1rem !important;
-    row-gap: 1rem !important;
+    gap: 0.5rem !important;
   }
 }
