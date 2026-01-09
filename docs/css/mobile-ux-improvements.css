@@ -1140,12 +1140,19 @@
 }
 
 /* ==========================================================================
-   13. ENLARGED CAROUSEL CONTROLS (MOBILE ONLY)
-   Bigger controls than desktop for better mobile visibility
+   13. MOBILE CAROUSEL CONTROLS - Swipe-only (no arrows)
    ========================================================================== */
 
 @media (max-width: 768px) {
-  /* CLOSE BUTTON: 3x bigger - Large X icon, no background */
+  /* HIDE ALL CAROUSEL ARROWS ON MOBILE - swipe-only interaction */
+  .featured-carousel__nav--prev,
+  .featured-carousel__nav--next,
+  .artwork-modal__carousel-prev,
+  .artwork-modal__carousel-next {
+    display: none !important;
+  }
+
+  /* CLOSE BUTTON: Keep visible, no circular background */
   .artwork-modal__close {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1154,10 +1161,10 @@
     border: none !important;
     box-shadow: none !important;
     outline: none !important;
-    width: 100px !important;
-    height: 100px !important;
-    min-width: 100px !important;
-    min-height: 100px !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1173,68 +1180,9 @@
   }
 
   .artwork-modal__close svg {
-    width: 96px !important;   /* 3x bigger (32px × 3 = 96px) */
-    height: 96px !important;
-    stroke-width: 3 !important;
+    width: 32px !important;
+    height: 32px !important;
+    stroke-width: 2.5 !important;
     stroke: var(--text-primary) !important;
-  }
-
-  /* ARTWORK MODAL ARROWS: 3x bigger - Large icons in circles */
-  .artwork-modal__carousel-prev,
-  .artwork-modal__carousel-next {
-    width: 90px !important;
-    height: 90px !important;
-    min-width: 90px !important;
-    min-height: 90px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  .artwork-modal__carousel-prev svg,
-  .artwork-modal__carousel-next svg {
-    width: 84px !important;   /* 3x bigger (28px × 3 = 84px) */
-    height: 84px !important;
-    stroke-width: 3 !important;
-    stroke: currentColor !important;
-  }
-
-  /* FEATURED CAROUSEL ARROWS: 3x bigger - Large icons in circles */
-  /* Use .featured-carousel__nav base class with chained modifier for MAXIMUM specificity */
-  .featured-carousel .featured-carousel__nav.featured-carousel__nav--prev,
-  .featured-carousel .featured-carousel__nav.featured-carousel__nav--next {
-    width: 96px !important;
-    height: 96px !important;
-    min-width: 96px !important;
-    min-height: 96px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
-
-  .featured-carousel .featured-carousel__nav.featured-carousel__nav--prev svg,
-  .featured-carousel .featured-carousel__nav.featured-carousel__nav--next svg {
-    width: 96px !important;   /* 3x bigger (32px × 3 = 96px) */
-    height: 96px !important;
-    stroke-width: 3 !important;
-    stroke: currentColor !important;
-  }
-}
-
-/* Small mobile - additional override with CHAINED selectors */
-@media (max-width: 480px) {
-  .featured-carousel .featured-carousel__nav.featured-carousel__nav--prev,
-  .featured-carousel .featured-carousel__nav.featured-carousel__nav--next {
-    width: 96px !important;
-    height: 96px !important;
-    min-width: 96px !important;
-    min-height: 96px !important;
-  }
-
-  .featured-carousel .featured-carousel__nav.featured-carousel__nav--prev svg,
-  .featured-carousel .featured-carousel__nav.featured-carousel__nav--next svg {
-    width: 96px !important;
-    height: 96px !important;
-    stroke-width: 3 !important;
   }
 }
