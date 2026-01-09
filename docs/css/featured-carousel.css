@@ -498,22 +498,8 @@
 }
 
 /* ==========================================================================
-   MOBILE OVERRIDE - Keep dots small like artwork modal
+   MOBILE OVERRIDE
+   Mobile carousel indicators are now handled by unified mobile-ux-improvements.css
    ========================================================================== */
 
-/* Mobile override: Keep dots small like artwork modal */
-@media (max-width: 767px) {
-  .featured-carousel__dot {
-    min-height: unset !important;
-    padding: 0 !important;
-    width: 8px !important;
-    height: 8px !important;
-    border-radius: 50% !important;
-  }
-
-  .featured-carousel__dot--active {
-    width: 24px !important;
-    height: 8px !important;
-    border-radius: 4px !important;
-  }
-}
+/* Note: Mobile carousel dot styles are in mobile-ux-improvements.css for consistency */
