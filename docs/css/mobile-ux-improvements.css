@@ -1225,4 +1225,10 @@
     fill: var(--accent-primary) !important;  /* Copper fill */
     stroke: var(--accent-primary) !important;
   }
+
+  /* GALLERY GRID: Minimal gaps on mobile */
+  .bento-grid {
+    gap: 0 !important;
+    row-gap: 0 !important;
+  }
 }
