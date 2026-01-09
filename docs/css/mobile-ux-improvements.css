@@ -1138,3 +1138,50 @@
     display: block !important;
   }
 }
+
+/* ==========================================================================
+   13. ENLARGED CAROUSEL CONTROLS (MOBILE ONLY)
+   Bigger close button and arrow icons for better visibility on mobile
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  /* CLOSE BUTTON: Bigger X icon, no circular background */
+  .artwork-modal__close {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .artwork-modal__close svg {
+    width: 32px !important;  /* 2x bigger (was ~16px) */
+    height: 32px !important;
+    stroke-width: 2.5 !important;  /* Slightly thicker for visibility */
+  }
+
+  /* NAVIGATION ARROWS: Bigger icons, keep circle size */
+  .featured-carousel__nav--prev svg,
+  .featured-carousel__nav--next svg,
+  .artwork-modal__carousel-prev svg,
+  .artwork-modal__carousel-next svg {
+    width: 28px !important;  /* 2-3x bigger (was ~10-12px) */
+    height: 28px !important;
+    stroke-width: 2.5 !important;  /* Thicker for visibility */
+  }
+
+  /* Ensure arrow button circles stay the same size - just center the bigger SVG */
+  .featured-carousel__nav--prev,
+  .featured-carousel__nav--next,
+  .artwork-modal__carousel-prev,
+  .artwork-modal__carousel-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
