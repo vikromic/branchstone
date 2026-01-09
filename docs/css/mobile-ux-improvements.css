@@ -347,7 +347,10 @@
 
   /* ACTIVE dot - elongated pill with brand accent (EXACT 22px width) */
   .artwork-modal__carousel-dot.active,
+  .artwork-modal__carousel-dot--active,
+  .featured-carousel__dot.active,
   .featured-carousel__dot--active,
+  .carousel__dot.active,
   .carousel__dot--active,
   [class*="carousel"][class*="dot"].active,
   [class*="carousel"][class*="dot"][class*="active"] {
@@ -366,7 +369,10 @@
 
   /* Dark theme active - same beige accent */
   [data-theme="dark"] .artwork-modal__carousel-dot.active,
+  [data-theme="dark"] .artwork-modal__carousel-dot--active,
+  [data-theme="dark"] .featured-carousel__dot.active,
   [data-theme="dark"] .featured-carousel__dot--active,
+  [data-theme="dark"] .carousel__dot.active,
   [data-theme="dark"] .carousel__dot--active,
   [data-theme="dark"] [class*="carousel"][class*="dot"].active,
   [data-theme="dark"] [class*="carousel"][class*="dot"][class*="active"] {
