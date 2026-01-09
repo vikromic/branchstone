@@ -496,3 +496,22 @@
     background-position: 200% 0;
   }
 }
+
+/* ==========================================================================
+   MOBILE OVERRIDE - Keep dots small like artwork modal
+   ========================================================================== */
+
+/* Mobile override: Keep dots small like artwork modal */
+@media (max-width: 767px) {
+  .featured-carousel__dot {
+    min-height: unset !important;
+    padding: 0 !important;
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  .featured-carousel__dot--active {
+    width: 24px !important;
+    height: 8px !important;
+  }
+}

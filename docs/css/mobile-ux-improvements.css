@@ -292,19 +292,6 @@
     height: 8px !important;
   }
 
-  /* Exception: Featured carousel dots should also remain small */
-  .featured-carousel__dot {
-    min-height: unset !important;
-    padding: 0 !important;
-    width: 8px !important;
-    height: 8px !important;
-  }
-
-  .featured-carousel__dot--active {
-    width: 24px !important;
-    height: 8px !important;
-  }
-
   .btn--sm {
     min-height: 44px;
     padding: 0.625rem 1.25rem;
