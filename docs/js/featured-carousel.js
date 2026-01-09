@@ -319,7 +319,7 @@ export class FeaturedCarousel {
       dot.type = 'button';
 
       if (i === 0) {
-        dot.classList.add('featured-carousel__dot--active');
+        dot.classList.add('is-active');
       }
 
       pagination.appendChild(dot);
@@ -580,7 +580,7 @@ export class FeaturedCarousel {
       dot.type = 'button';
 
       if (i === currentPage) {
-        dot.classList.add('featured-carousel__dot--active');
+        dot.classList.add('is-active');
       }
 
       dot.addEventListener('click', () => {

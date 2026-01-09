@@ -315,10 +315,10 @@ import { ArtworkModalManager } from './artwork-modal.js';
 
     if (!collectionName || collectionName === 'all') {
       // Hide description when showing all works
-      descriptionContainer.classList.remove('visible');
+      descriptionContainer.classList.remove('is-visible');
       descriptionText.textContent = '';
-      descriptionText.classList.add('collapsed');
-      descriptionText.classList.remove('expanded');
+      descriptionText.classList.add('is-collapsed');
+      descriptionText.classList.remove('is-expanded');
       // Remove toggle button if present
       const existingToggle = descriptionContainer.querySelector('.collection-description__toggle');
       if (existingToggle) existingToggle.remove();
@@ -333,7 +333,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
           descriptionText.textContent = description;
 
           // Show container
-          descriptionContainer.classList.add('visible');
+          descriptionContainer.classList.add('is-visible');
 
           // Check if text is long enough to need truncation (~3 lines check)
           // Rough estimate: ~80 chars per line on mobile
@@ -341,8 +341,8 @@ import { ArtworkModalManager } from './artwork-modal.js';
 
           if (needsTruncation) {
             // Add collapsed class and toggle button
-            descriptionText.classList.add('collapsed');
-            descriptionText.classList.remove('expanded');
+            descriptionText.classList.add('is-collapsed');
+            descriptionText.classList.remove('is-expanded');
 
             // Remove existing toggle if present
             const existingToggle = descriptionContainer.querySelector('.collection-description__toggle');
@@ -359,19 +359,19 @@ import { ArtworkModalManager } from './artwork-modal.js';
             // Toggle handler
             toggleButton.addEventListener('click', (e) => {
               e.preventDefault();
-              const isExpanded = descriptionText.classList.contains('expanded');
+              const isExpanded = descriptionText.classList.contains('is-expanded');
 
               if (isExpanded) {
                 // Collapse
-                descriptionText.classList.remove('expanded');
-                descriptionText.classList.add('collapsed');
+                descriptionText.classList.remove('is-expanded');
+                descriptionText.classList.add('is-collapsed');
                 toggleButton.textContent = ' Read more';
                 toggleButton.setAttribute('aria-expanded', 'false');
                 toggleButton.setAttribute('aria-label', 'Read more about this collection');
               } else {
                 // Expand
-                descriptionText.classList.remove('collapsed');
-                descriptionText.classList.add('expanded');
+                descriptionText.classList.remove('is-collapsed');
+                descriptionText.classList.add('is-expanded');
                 toggleButton.textContent = ' Show less';
                 toggleButton.setAttribute('aria-expanded', 'true');
                 toggleButton.setAttribute('aria-label', 'Show less about this collection');
@@ -382,12 +382,12 @@ import { ArtworkModalManager } from './artwork-modal.js';
             descriptionContainer.appendChild(toggleButton);
           } else {
             // Short text, no toggle needed
-            descriptionText.classList.remove('collapsed');
-            descriptionText.classList.add('expanded');
+            descriptionText.classList.remove('is-collapsed');
+            descriptionText.classList.add('is-expanded');
           }
         } else {
           // No description available
-          descriptionContainer.classList.remove('visible');
+          descriptionContainer.classList.remove('is-visible');
         }
       }
     }
@@ -505,10 +505,10 @@ import { ArtworkModalManager } from './artwork-modal.js';
       filterButtons.forEach(button => {
         const buttonFilter = button.getAttribute('data-filter');
         if (buttonFilter === activeFilter) {
-          button.classList.add('tag-active');
+          button.classList.add('is-active');
           button.setAttribute('aria-pressed', 'true');
         } else {
-          button.classList.remove('tag-active');
+          button.classList.remove('is-active');
           button.setAttribute('aria-pressed', 'false');
         }
       });
@@ -1445,10 +1445,10 @@ import { ArtworkModalManager } from './artwork-modal.js';
       // Update desktop buttons
       desktopFilterButtons.forEach(button => {
         if (button.getAttribute('data-filter') === activeFilter) {
-          button.classList.add('tag-active');
+          button.classList.add('is-active');
           button.setAttribute('aria-pressed', 'true');
         } else {
-          button.classList.remove('tag-active');
+          button.classList.remove('is-active');
           button.setAttribute('aria-pressed', 'false');
         }
       });
@@ -1852,7 +1852,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
         // Show success message
         if (successMessage) {
           successMessage.hidden = false;
-          successMessage.classList.add('visible');
+          successMessage.classList.add('is-visible');
         }
 
         // Clear saved draft
@@ -1891,7 +1891,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
 
         if (successMessage) {
           successMessage.hidden = true;
-          successMessage.classList.remove('visible');
+          successMessage.classList.remove('is-visible');
         }
 
         showStep(1);
@@ -2050,7 +2050,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
       const isActive = currentPage === item.page ||
                        (currentPage === '' && item.page === 'index.html');
       if (isActive) {
-        a.classList.add('mobile-bottom-nav__link--active');
+        a.classList.add('is-active');
         a.setAttribute('aria-current', 'page');
       }
 
@@ -2080,14 +2080,14 @@ import { ArtworkModalManager } from './artwork-modal.js';
       if (currentScrollY > SCROLL_THRESHOLD_BOTTOM_NAV) {
         if (currentScrollY > lastScrollY && currentScrollY > SCROLL_THRESHOLD_BOTTOM_NAV_HIDE) {
           // Scrolling down - hide nav
-          nav.classList.add('mobile-bottom-nav--hidden');
+          nav.classList.add('is-hidden');
         } else if (currentScrollY < lastScrollY) {
           // Scrolling up - show nav
-          nav.classList.remove('mobile-bottom-nav--hidden');
+          nav.classList.remove('is-hidden');
         }
       } else {
         // At top of page - always show
-        nav.classList.remove('mobile-bottom-nav--hidden');
+        nav.classList.remove('is-hidden');
       }
 
       lastScrollY = currentScrollY;

@@ -589,7 +589,7 @@ export class GalleryDataManager {
     const button = document.createElement('button');
     const slug = this.collectionToSlug(collection);
 
-    button.className = isActive ? 'tag tag-active' : 'tag';
+    button.className = isActive ? 'tag is-active' : 'tag';
     button.setAttribute('data-filter', slug);
     button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     button.textContent = collection;

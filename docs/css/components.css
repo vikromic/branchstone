@@ -3780,7 +3780,7 @@ details[open] summary {
   animation: wizardSuccessIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.wizard-success.visible {
+.wizard-success.is-visible {
   display: block;
 }
 
