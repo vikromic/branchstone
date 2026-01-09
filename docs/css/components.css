@@ -4740,34 +4740,40 @@ details[open] summary {
   transform: translateY(-50%) scale(1.1);
 }
 
-/* Carousel dots */
-.artwork-modal__carousel-dots {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-top: 1rem;
-}
+/* Carousel dots - Desktop styles (mobile styles in mobile-ux-improvements.css) */
+@media (min-width: 768px) {
+  .artwork-modal__carousel-dots {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
-.artwork-modal__carousel-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--text-tertiary);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 200ms ease;
-  padding: 0;
-}
+  .artwork-modal__carousel-dot {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 200ms ease;
+    padding: 0;
+  }
 
-.artwork-modal__carousel-dot.active {
-  background: var(--accent-primary);
-  width: 24px;
-  border-radius: 4px;
-}
+  .artwork-modal__carousel-dot.active {
+    background: var(--accent-primary);
+    width: 24px;
+    border-radius: 4px;
+  }
 
-.artwork-modal__carousel-dot:hover {
-  background: var(--accent-primary);
-  opacity: 0.7;
+  .artwork-modal__carousel-dot:hover {
+    background: var(--accent-primary);
+    opacity: 0.8;
+  }
 }
 
 /* Details section */
