@@ -1145,7 +1145,7 @@
    ========================================================================== */
 
 @media (max-width: 768px) {
-  /* CLOSE BUTTON: Large X icon, no background */
+  /* CLOSE BUTTON: 3x bigger - Large X icon, no background */
   .artwork-modal__close {
     background: transparent !important;
     backdrop-filter: none !important;
@@ -1154,10 +1154,10 @@
     border: none !important;
     box-shadow: none !important;
     outline: none !important;
-    width: 48px !important;
-    height: 48px !important;
-    min-width: 48px !important;
-    min-height: 48px !important;
+    width: 100px !important;
+    height: 100px !important;
+    min-width: 100px !important;
+    min-height: 100px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1173,19 +1173,19 @@
   }
 
   .artwork-modal__close svg {
-    width: 32px !important;   /* BIGGER than desktop (desktop = 20px) */
-    height: 32px !important;
-    stroke-width: 2.5 !important;
+    width: 96px !important;   /* 3x bigger (32px × 3 = 96px) */
+    height: 96px !important;
+    stroke-width: 3 !important;
     stroke: var(--text-primary) !important;
   }
 
-  /* ARTWORK MODAL ARROWS: Large icons in circles */
+  /* ARTWORK MODAL ARROWS: 3x bigger - Large icons in circles */
   .artwork-modal__carousel-prev,
   .artwork-modal__carousel-next {
-    width: 52px !important;
-    height: 52px !important;
-    min-width: 52px !important;
-    min-height: 52px !important;
+    width: 90px !important;
+    height: 90px !important;
+    min-width: 90px !important;
+    min-height: 90px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1193,20 +1193,20 @@
 
   .artwork-modal__carousel-prev svg,
   .artwork-modal__carousel-next svg {
-    width: 28px !important;   /* BIGGER than desktop (desktop = 24px) */
-    height: 28px !important;
-    stroke-width: 2.5 !important;
+    width: 84px !important;   /* 3x bigger (28px × 3 = 84px) */
+    height: 84px !important;
+    stroke-width: 3 !important;
     stroke: currentColor !important;
   }
 
-  /* FEATURED CAROUSEL ARROWS: Large icons in circles */
+  /* FEATURED CAROUSEL ARROWS: 3x bigger - Large icons in circles */
   /* Use .featured-carousel__nav base class with chained modifier for MAXIMUM specificity */
   .featured-carousel .featured-carousel__nav.featured-carousel__nav--prev,
   .featured-carousel .featured-carousel__nav.featured-carousel__nav--next {
-    width: 56px !important;
-    height: 56px !important;
-    min-width: 56px !important;
-    min-height: 56px !important;
+    width: 96px !important;
+    height: 96px !important;
+    min-width: 96px !important;
+    min-height: 96px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1214,9 +1214,9 @@
 
   .featured-carousel .featured-carousel__nav.featured-carousel__nav--prev svg,
   .featured-carousel .featured-carousel__nav.featured-carousel__nav--next svg {
-    width: 32px !important;   /* BIGGER than desktop (desktop = 24px) */
-    height: 32px !important;
-    stroke-width: 2.5 !important;
+    width: 96px !important;   /* 3x bigger (32px × 3 = 96px) */
+    height: 96px !important;
+    stroke-width: 3 !important;
     stroke: currentColor !important;
   }
 }
@@ -1225,16 +1225,16 @@
 @media (max-width: 480px) {
   .featured-carousel .featured-carousel__nav.featured-carousel__nav--prev,
   .featured-carousel .featured-carousel__nav.featured-carousel__nav--next {
-    width: 56px !important;
-    height: 56px !important;
-    min-width: 56px !important;
-    min-height: 56px !important;
+    width: 96px !important;
+    height: 96px !important;
+    min-width: 96px !important;
+    min-height: 96px !important;
   }
 
   .featured-carousel .featured-carousel__nav.featured-carousel__nav--prev svg,
   .featured-carousel .featured-carousel__nav.featured-carousel__nav--next svg {
-    width: 32px !important;
-    height: 32px !important;
-    stroke-width: 2.5 !important;
+    width: 96px !important;
+    height: 96px !important;
+    stroke-width: 3 !important;
   }
 }
