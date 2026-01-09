@@ -1144,13 +1144,16 @@
    Bigger close button and arrow icons for better visibility on mobile
    ========================================================================== */
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   /* CLOSE BUTTON: Bigger X icon, no circular background */
   .artwork-modal__close {
     background: transparent !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
     width: 44px;
     height: 44px;
     min-width: 44px;
@@ -1170,16 +1173,18 @@
     width: 32px !important;  /* 2x bigger (was ~16px) */
     height: 32px !important;
     stroke-width: 2.5 !important;  /* Slightly thicker for visibility */
+    stroke: var(--text-primary) !important;
   }
 
   /* NAVIGATION ARROWS: Bigger icons, keep circle size */
-  .featured-carousel__nav--prev svg,
-  .featured-carousel__nav--next svg,
+  .featured-carousel .featured-carousel__nav--prev svg,
+  .featured-carousel .featured-carousel__nav--next svg,
   .artwork-modal__carousel-prev svg,
   .artwork-modal__carousel-next svg {
     width: 28px !important;  /* 2-3x bigger (was ~10-12px) */
     height: 28px !important;
     stroke-width: 2.5 !important;  /* Thicker for visibility */
+    stroke: currentColor !important;
   }
 
   /* Ensure arrow button circles stay the same size - just center the bigger SVG */
