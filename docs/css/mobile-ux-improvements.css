@@ -1202,6 +1202,8 @@
   }
 
   /* FEATURED CAROUSEL ARROWS: Match desktop 48px buttons (3rem), 24px SVG */
+  /* Target BOTH base class AND modifier classes for maximum specificity */
+  .featured-carousel .featured-carousel__nav,
   .featured-carousel .featured-carousel__nav--prev,
   .featured-carousel .featured-carousel__nav--next {
     width: 48px !important;   /* Match desktop (3rem) */
@@ -1213,11 +1215,32 @@
     justify-content: center;
   }
 
+  .featured-carousel .featured-carousel__nav svg,
   .featured-carousel .featured-carousel__nav--prev svg,
   .featured-carousel .featured-carousel__nav--next svg {
     width: 24px !important;   /* Match desktop (1.5rem) */
     height: 24px !important;  /* Match desktop (1.5rem) */
     stroke-width: 2 !important;
     stroke: currentColor !important;
+  }
+}
+
+/* Additional override for small mobile to defeat featured-carousel.css @ 480px */
+@media (max-width: 480px) {
+  .featured-carousel .featured-carousel__nav,
+  .featured-carousel .featured-carousel__nav--prev,
+  .featured-carousel .featured-carousel__nav--next {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+  }
+
+  .featured-carousel .featured-carousel__nav svg,
+  .featured-carousel .featured-carousel__nav--prev svg,
+  .featured-carousel .featured-carousel__nav--next svg {
+    width: 24px !important;
+    height: 24px !important;
+    stroke-width: 2 !important;
   }
 }
