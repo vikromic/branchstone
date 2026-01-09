@@ -1104,3 +1104,22 @@
     display: flex !important;
   }
 }
+
+/* ==========================================================================
+   12. HIDE STATS GRID ON MOBILE
+   Mobile uses inline hero stats; desktop shows "Artist by the Numbers" section
+   ========================================================================== */
+
+/* Hide "Artist by the Numbers" stats section on mobile - we have inline hero stats instead */
+@media (max-width: 768px) {
+  .section-stats {
+    display: none !important;
+  }
+}
+
+/* Show stats section on desktop */
+@media (min-width: 769px) {
+  .section-stats {
+    display: block !important;
+  }
+}
