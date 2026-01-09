@@ -824,3 +824,184 @@
     justify-content: center;
   }
 }
+
+/* ==========================================================================
+   11. MOBILE HERO - INLINE NATIVE DESIGN
+   Replaces modal overlay with scrollable, art-first layout on mobile
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+  /* Hide desktop hero overlay on mobile */
+  .section-hero--desktop {
+    display: none !important;
+  }
+
+  /* Mobile inline hero */
+  .section-hero--mobile {
+    display: block;
+    min-height: auto;
+    padding: 0;
+    position: relative;
+    overflow: visible;
+  }
+
+  /* Image container - inline, not background */
+  .section-hero__image-container {
+    width: 100%;
+    height: clamp(60vh, 65vh, 70vh);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .section-hero__image-mobile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    filter: brightness(1.0) contrast(1.05) saturate(1.15);
+    display: block;
+  }
+
+  /* Text block - solid background, high contrast */
+  .section-hero__text-block {
+    background: var(--bg-primary);
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+  }
+
+  .section-hero--mobile .section-hero__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-4);
+  }
+
+  .section-hero--mobile .section-hero__subheading {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 4vw, 1.125rem);
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    letter-spacing: 0.005em;
+    max-width: 480px;
+    margin: 0 auto var(--space-6);
+  }
+
+  /* Single CTA - thumb-friendly placement */
+  .section-hero__cta-mobile {
+    display: flex;
+    justify-content: center;
+    padding: 0 var(--space-4) var(--space-8);
+  }
+
+  .btn--hero-primary {
+    padding: 1rem 2rem;
+    font-size: var(--text-base);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    min-height: 48px;
+    min-width: 200px;
+    background: linear-gradient(135deg, var(--copper-400), var(--copper-500));
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    text-decoration: none;
+  }
+
+  .btn--hero-primary:hover,
+  .btn--hero-primary:active {
+    background: linear-gradient(135deg, var(--copper-300), var(--copper-400));
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .btn--hero-primary:focus-visible {
+    outline: 3px solid var(--accent-primary);
+    outline-offset: 4px;
+  }
+
+  .btn--hero-primary svg {
+    width: 16px;
+    height: 16px;
+    stroke-width: 2.5px;
+  }
+
+  /* Scroll hint - subtle bounce animation */
+  .section-hero__scroll-hint {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-4) 0 var(--space-6);
+    opacity: 0.6;
+    animation: gentleBounce 2s ease-in-out infinite;
+  }
+
+  .section-hero__scroll-hint svg {
+    width: 24px;
+    height: 24px;
+    color: var(--text-tertiary);
+    stroke-width: 2px;
+  }
+
+  @keyframes gentleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  /* Dark theme support */
+  [data-theme="dark"] .section-hero__text-block {
+    background: var(--bg-primary);
+  }
+
+  [data-theme="dark"] .section-hero--mobile .section-hero__heading {
+    color: var(--text-primary);
+  }
+
+  [data-theme="dark"] .section-hero--mobile .section-hero__subheading {
+    color: var(--text-secondary);
+  }
+
+  [data-theme="dark"] .section-hero__image-mobile {
+    filter: brightness(0.85) contrast(1.08) saturate(1.0);
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .section-hero__scroll-hint {
+      animation: none;
+    }
+  }
+
+  /* Very short screens - reduce hero image height */
+  @media (max-height: 600px) {
+    .section-hero__image-container {
+      height: 50vh;
+    }
+
+    .section-hero__text-block {
+      padding: var(--space-6) var(--space-4);
+    }
+  }
+
+} /* End mobile hero breakpoint */
+
+/* Desktop: Show desktop hero, hide mobile hero */
+@media (min-width: 769px) {
+  .section-hero--mobile {
+    display: none !important;
+  }
+
+  .section-hero--desktop {
+    display: flex !important;
+  }
+}

@@ -186,8 +186,8 @@
   <!-- Main Content -->
   <main id="main-content">
 
-    <!-- Hero Section -->
-    <section class="section-hero" aria-label="Hero">
+    <!-- Hero Section - Desktop (modal overlay) -->
+    <section class="section-hero section-hero--desktop" aria-label="Hero">
       <div class="section-hero__background">
         <img src="img/cover.webp" alt="Branchstone mixed-media art featuring natural forest materials, moss, and wood textures from Santa Rosa, California" class="section-hero__background-image" fetchpriority="high" loading="eager">
       </div>
@@ -231,6 +231,46 @@
         <span class="hero-show-info__icon" aria-hidden="true">i</span>
         <span class="hero-show-info__text">Show Info</span>
       </button>
+    </section>
+
+    <!-- Hero Section - Mobile (inline, scrollable) -->
+    <section class="section-hero section-hero--mobile" aria-label="Hero">
+      <!-- Hero Image (inline, not background) -->
+      <div class="section-hero__image-container">
+        <img
+          src="img/cover.webp"
+          alt="Branchstone mixed-media art featuring natural forest materials, moss, and wood textures from Santa Rosa, California"
+          class="section-hero__image-mobile"
+          loading="eager"
+          fetchpriority="high"
+          width="800"
+          height="600">
+      </div>
+
+      <!-- Text Block (solid background, high contrast) -->
+      <div class="section-hero__text-block">
+        <h1 class="section-hero__heading">Where Forest Meets Art</h1>
+        <p class="section-hero__subheading">
+          One-of-a-kind mixed-media artworks made with foraged natural materials.
+        </p>
+
+        <!-- Single CTA (thumb-friendly) -->
+        <div class="section-hero__cta-mobile">
+          <a href="gallery.html" class="btn btn--hero-primary btn--with-icon" id="mobile-hero-cta">
+            Explore the Works
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll Hint (subtle bounce animation) -->
+      <div class="section-hero__scroll-hint" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+      </div>
     </section>
 
     <!-- Artist by the Numbers Section -->

@@ -2278,6 +2278,9 @@ import { ArtworkModalManager } from './artwork-modal.js';
   // ========================================
 
   const initHeroCardClose = () => {
+    // Skip hero close/show logic on mobile - mobile uses inline hero instead
+    if (window.innerWidth <= 768) return;
+
     const heroContent = document.querySelector('.section-hero__content');
     const closeButton = document.querySelector('.hero-card-close');
     const showButton = document.querySelector('.hero-show-info');
