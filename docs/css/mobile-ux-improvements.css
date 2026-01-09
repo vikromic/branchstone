@@ -1169,6 +1169,11 @@
     transform: none !important;
   }
 
+  /* Remove focus-visible outline on mobile */
+  .artwork-modal__close:focus-visible {
+    outline: none !important;
+  }
+
   .artwork-modal__close svg {
     width: 20px !important;   /* Match desktop exactly */
     height: 20px !important;  /* Match desktop exactly */
