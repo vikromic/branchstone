@@ -301,6 +301,99 @@ import { ArtworkModalManager } from './artwork-modal.js';
   };
 
   /**
+   * Update collection description (mobile-only feature)
+   * Shows/hides collection description with expand/collapse functionality
+   */
+  const updateCollectionDescription = (collectionName) => {
+    // Only run on mobile
+    if (window.innerWidth > 768) return;
+
+    const descriptionContainer = document.getElementById('collection-description');
+    const descriptionText = document.getElementById('collection-description-text');
+
+    if (!descriptionContainer || !descriptionText) return;
+
+    if (!collectionName || collectionName === 'all') {
+      // Hide description when showing all works
+      descriptionContainer.classList.remove('visible');
+      descriptionText.textContent = '';
+      descriptionText.classList.add('collapsed');
+      descriptionText.classList.remove('expanded');
+      // Remove toggle button if present
+      const existingToggle = descriptionContainer.querySelector('.collection-description__toggle');
+      if (existingToggle) existingToggle.remove();
+    } else {
+      // Show description for specific collection
+      if (galleryManagerInstance) {
+        const metadata = galleryManagerInstance.getCollectionMetadata(collectionName);
+        const description = metadata.description || '';
+
+        if (description) {
+          // Set text content
+          descriptionText.textContent = description;
+
+          // Show container
+          descriptionContainer.classList.add('visible');
+
+          // Check if text is long enough to need truncation (~3 lines check)
+          // Rough estimate: ~80 chars per line on mobile
+          const needsTruncation = description.length > 240;
+
+          if (needsTruncation) {
+            // Add collapsed class and toggle button
+            descriptionText.classList.add('collapsed');
+            descriptionText.classList.remove('expanded');
+
+            // Remove existing toggle if present
+            const existingToggle = descriptionContainer.querySelector('.collection-description__toggle');
+            if (existingToggle) existingToggle.remove();
+
+            // Create toggle button
+            const toggleButton = document.createElement('button');
+            toggleButton.className = 'collection-description__toggle';
+            toggleButton.textContent = ' Read more';
+            toggleButton.setAttribute('type', 'button');
+            toggleButton.setAttribute('aria-expanded', 'false');
+            toggleButton.setAttribute('aria-label', 'Read more about this collection');
+
+            // Toggle handler
+            toggleButton.addEventListener('click', (e) => {
+              e.preventDefault();
+              const isExpanded = descriptionText.classList.contains('expanded');
+
+              if (isExpanded) {
+                // Collapse
+                descriptionText.classList.remove('expanded');
+                descriptionText.classList.add('collapsed');
+                toggleButton.textContent = ' Read more';
+                toggleButton.setAttribute('aria-expanded', 'false');
+                toggleButton.setAttribute('aria-label', 'Read more about this collection');
+              } else {
+                // Expand
+                descriptionText.classList.remove('collapsed');
+                descriptionText.classList.add('expanded');
+                toggleButton.textContent = ' Show less';
+                toggleButton.setAttribute('aria-expanded', 'true');
+                toggleButton.setAttribute('aria-label', 'Show less about this collection');
+              }
+            });
+
+            // Append toggle button inline after the text
+            descriptionContainer.appendChild(toggleButton);
+          } else {
+            // Short text, no toggle needed
+            descriptionText.classList.remove('collapsed');
+            descriptionText.classList.add('expanded');
+          }
+        } else {
+          // No description available
+          descriptionContainer.classList.remove('visible');
+        }
+      }
+    }
+  };
+
+  /**
    * Validate collection name against available collections
    */
   const isValidCollection = (collectionName) => {
@@ -394,6 +487,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
       saveCollectionToStorage(collectionName);
       updateURLWithCollection(collectionName);
       updateGalleryHeader(collectionName);
+      updateCollectionDescription(collectionName);
     }
 
     // Reset flag after animations complete
@@ -437,6 +531,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
 
     // Apply initial filter and update header
     updateGalleryHeader(initialCollection);
+    updateCollectionDescription(initialCollection);
     filterGallery(initialFilter, false); // false = don't update persistence (already loaded from it)
     updateActiveButton(initialFilter);
   };

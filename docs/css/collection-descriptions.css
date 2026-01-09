@@ -1,0 +1,127 @@
+/**
+ * Collection Descriptions - Mobile Gallery Feature
+ * Shows editorial descriptions when filtering by collection
+ * Mobile-only (max-width: 768px)
+ */
+
+/* ========================================
+   COLLECTION DESCRIPTION CONTAINER
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Container for collection description */
+  .collection-description {
+    padding: var(--space-3) var(--space-4) var(--space-5);
+    background: var(--bg-primary);
+    display: none; /* Hidden by default */
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+  }
+
+  .collection-description.visible {
+    display: block;
+    opacity: 1;
+    max-height: 1000px; /* Large enough for any description */
+  }
+
+  /* Description text block */
+  .collection-description__text {
+    font-family: var(--font-body);
+    font-size: 0.9375rem; /* 15px - small-medium body text */
+    line-height: 1.6;
+    color: var(--text-secondary);
+    letter-spacing: 0.005em;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  /* Collapsed state - ~3 lines */
+  .collection-description__text.collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Expanded state - full text */
+  .collection-description__text.expanded {
+    display: block;
+    overflow: visible;
+  }
+
+  /* Read more/less button - inline text button */
+  .collection-description__toggle {
+    display: inline;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.9375rem; /* Match text size */
+    font-weight: 500;
+    color: var(--accent-primary);
+    cursor: pointer;
+    text-decoration: none;
+    line-height: inherit;
+    letter-spacing: inherit;
+    transition: color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .collection-description__toggle:hover,
+  .collection-description__toggle:active {
+    color: var(--copper-600);
+    text-decoration: none;
+  }
+
+  .collection-description__toggle:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Animation for expand/collapse */
+  @media (prefers-reduced-motion: no-preference) {
+    .collection-description__text {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  }
+
+  /* Dark theme adjustments */
+  [data-theme="dark"] .collection-description {
+    background: var(--bg-primary);
+  }
+
+  [data-theme="dark"] .collection-description__text {
+    color: var(--text-secondary);
+  }
+
+  [data-theme="dark"] .collection-description__toggle {
+    color: var(--accent-primary);
+  }
+
+  [data-theme="dark"] .collection-description__toggle:hover,
+  [data-theme="dark"] .collection-description__toggle:active {
+    color: var(--copper-300);
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .collection-description,
+    .collection-description__text,
+    .collection-description__toggle {
+      transition: none !important;
+    }
+  }
+}
+
+/* Desktop: Hide collection descriptions entirely */
+@media (min-width: 769px) {
+  .collection-description {
+    display: none !important;
+  }
+}

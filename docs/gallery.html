@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=14">
     <link rel="stylesheet" href="css/mobile-gallery-improvements.css">
     <link rel="stylesheet" href="css/gallery-ux-refinements.css">
+    <link rel="stylesheet" href="css/collection-descriptions.css">
     <link rel="stylesheet" href="css/artist-feedback.css?v=1">
 
     <!-- Scripts -->
@@ -219,6 +220,13 @@
                 </div>
             </div>
         </section>
+
+        <!-- Collection Description (Mobile Only) -->
+        <div class="collection-description" id="collection-description" aria-live="polite">
+            <p class="collection-description__text collapsed" id="collection-description-text">
+                <!-- Description text will be injected by JavaScript -->
+            </p>
+        </div>
 
         <!-- Filter Bar -->
         <section class="filter-bar" aria-label="Filter gallery by collection">
