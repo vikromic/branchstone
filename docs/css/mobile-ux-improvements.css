@@ -1185,4 +1185,44 @@
     stroke-width: 2.5 !important;
     stroke: var(--text-primary) !important;
   }
+
+  /* FAVORITE BUTTON: Remove background, just heart icon */
+  .artwork-card__favorite,
+  .featured-carousel__favorite {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    min-height: 56px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .artwork-card__favorite:hover,
+  .featured-carousel__favorite:hover {
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: scale(1.1) !important;  /* Slight scale on tap */
+  }
+
+  .artwork-card__favorite svg,
+  .featured-carousel__favorite svg {
+    width: 32px !important;   /* Slightly bigger (was ~24px) */
+    height: 32px !important;
+    stroke-width: 2 !important;
+    stroke: var(--text-primary) !important;
+  }
+
+  /* When favorited (filled heart) */
+  .artwork-card__favorite.is-favorited svg,
+  .featured-carousel__favorite.is-favorited svg {
+    fill: var(--accent-primary) !important;  /* Copper fill */
+    stroke: var(--accent-primary) !important;
+  }
 }
