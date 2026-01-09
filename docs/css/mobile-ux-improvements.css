@@ -280,27 +280,60 @@
   }
 
   /* ==========================================================================
-     UNIFIED CAROUSEL INDICATORS - MOBILE ONLY
-     Small, minimal, elegant indicators for all carousels on mobile
-     Active dot = elongated pill, inactive = small circles
+     UNIFIED CAROUSEL PAGINATION - MOBILE ONLY
+     Crisp, clean dots for ALL mobile carousels (Featured Works, Gallery, Artwork Modal)
+     EXACT SPECIFICATIONS: inactive 6px circle, active 22px pill, gap 8px
      ========================================================================== */
 
-  /* All carousel dots - unified base style */
+  /* All carousel dots - unified base style with CRISP rendering */
   .artwork-modal__carousel-dot,
   .featured-carousel__dot,
   .carousel__dot,
   [class*="carousel"][class*="dot"] {
+    /* Remove all inherited styles */
     min-height: unset !important;
-    padding: 0 !important;
+    min-width: unset !important;
+
+    /* EXACT inactive dot size */
     width: 6px !important;
     height: 6px !important;
-    border-radius: 50% !important;
-    background: rgba(0, 0, 0, 0.2) !important;
+    padding: 8px !important; /* Larger tap target, visual dot stays 6px */
+
+    /* EXACT inactive dot appearance */
+    background: rgba(255, 255, 255, 0.35) !important;
+    opacity: 0.45 !important;
+    border-radius: 999px !important; /* Full circle */
     border: none !important;
-    cursor: pointer;
-    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+    /* CRISP rendering - remove ALL blur/filter/shadow */
     box-shadow: none !important;
-    opacity: 0.5 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+
+    /* Smooth transitions */
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer;
+
+    /* Force hardware rendering for crisp edges */
+    transform: translateZ(0) !important;
+    -webkit-font-smoothing: antialiased;
+    backface-visibility: hidden;
+    will-change: width, opacity;
+
+    /* Override any pseudo-element effects */
+    position: relative !important;
+    z-index: 10 !important;
+  }
+
+  /* Remove pseudo-elements that might cause blur */
+  .artwork-modal__carousel-dot::before,
+  .artwork-modal__carousel-dot::after,
+  .featured-carousel__dot::before,
+  .featured-carousel__dot::after,
+  .carousel__dot::before,
+  .carousel__dot::after {
+    display: none !important;
   }
 
   /* Dark theme - lighter inactive dots */
@@ -308,24 +341,30 @@
   [data-theme="dark"] .featured-carousel__dot,
   [data-theme="dark"] .carousel__dot,
   [data-theme="dark"] [class*="carousel"][class*="dot"] {
-    background: rgba(255, 255, 255, 0.25) !important;
-    opacity: 0.6 !important;
+    background: rgba(255, 255, 255, 0.35) !important;
+    opacity: 0.45 !important;
   }
 
-  /* Active dot - elongated pill shape with brand accent color */
+  /* ACTIVE dot - elongated pill with brand accent (EXACT 22px width) */
   .artwork-modal__carousel-dot.active,
   .featured-carousel__dot--active,
   .carousel__dot--active,
   [class*="carousel"][class*="dot"].active,
   [class*="carousel"][class*="dot"][class*="active"] {
-    width: 18px !important;
+    width: 22px !important; /* EXACT spec: 22px not 18px */
     height: 6px !important;
-    border-radius: 3px !important;
-    background: var(--accent-primary) !important;
+    border-radius: 999px !important; /* Full pill */
+    background: var(--accent-primary) !important; /* Brand beige */
     opacity: 1 !important;
+
+    /* Crisp rendering */
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
   }
 
-  /* Dark theme - same accent color but slightly more visible */
+  /* Dark theme active - same beige accent */
   [data-theme="dark"] .artwork-modal__carousel-dot.active,
   [data-theme="dark"] .featured-carousel__dot--active,
   [data-theme="dark"] .carousel__dot--active,
@@ -335,13 +374,13 @@
     opacity: 1 !important;
   }
 
-  /* Hover state - slightly more visible */
+  /* Hover state - slightly more visible, NO transform blur */
   .artwork-modal__carousel-dot:hover,
   .featured-carousel__dot:hover,
   .carousel__dot:hover,
   [class*="carousel"][class*="dot"]:hover {
     opacity: 0.8 !important;
-    transform: scale(1.15) !important;
+    transform: translateZ(0) scale(1.1) !important; /* Keep translateZ for crisp rendering */
   }
 
   /* Container spacing - consistent across all carousels */
@@ -351,12 +390,20 @@
   [class*="carousel"][class*="pagination"],
   [class*="carousel"][class*="dots"] {
     display: flex !important;
-    gap: 8px !important;
+    gap: 8px !important; /* EXACT gap */
     justify-content: center !important;
     align-items: center !important;
-    margin-top: 12px !important;
-    margin-bottom: 0 !important;
-    padding: 8px 0 !important;
+    margin-top: 12px !important; /* 10-14px spec range */
+    margin-bottom: 12px !important; /* 10-14px spec range */
+    padding: 0 !important;
+
+    /* CRISP container rendering */
+    position: relative !important;
+    z-index: 10 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    isolation: isolate !important; /* Create stacking context, prevent parent blur inheritance */
   }
 
   .btn--sm {
@@ -1211,6 +1258,20 @@
    ========================================================================== */
 
 @media (max-width: 768px) {
+  /* FIX MODAL BACKDROP BLUR - Remove blur from overlay to prevent dot smearing */
+  .artwork-modal__overlay {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.9) !important; /* Solid dark background instead of blur */
+  }
+
+  /* Ensure modal content has its own stacking context (dots won't inherit parent blur) */
+  .artwork-modal__content {
+    isolation: isolate !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
   /* HIDE ALL CAROUSEL ARROWS ON MOBILE - swipe-only interaction */
   .featured-carousel__nav--prev,
   .featured-carousel__nav--next,
