@@ -281,15 +281,15 @@
 
   /* Exception: Carousel dots should remain small */
   .artwork-modal__carousel-dot {
-    min-height: unset;
-    padding: 0;
-    width: 8px;
-    height: 8px;
+    min-height: unset !important;
+    padding: 0 !important;
+    width: 8px !important;
+    height: 8px !important;
   }
 
   .artwork-modal__carousel-dot.active {
-    width: 24px;
-    height: 8px;
+    width: 24px !important;
+    height: 8px !important;
   }
 
   .btn--sm {
