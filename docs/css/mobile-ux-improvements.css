@@ -283,9 +283,10 @@
      UNIFIED CAROUSEL PAGINATION - MOBILE ONLY
      Crisp, clean dots for ALL mobile carousels (Featured Works, Gallery, Artwork Modal)
      EXACT SPECIFICATIONS: inactive 6px circle, active 22px pill, gap 8px
+     STRATEGY: Use ::before pseudo-element for visual dot, button provides tap target
      ========================================================================== */
 
-  /* All carousel dots - unified base style with CRISP rendering */
+  /* All carousel dots - button container (transparent tap target) */
   .artwork-modal__carousel-dot,
   .featured-carousel__dot,
   .carousel__dot,
@@ -294,16 +295,15 @@
     min-height: unset !important;
     min-width: unset !important;
 
-    /* EXACT inactive dot size */
-    width: 6px !important;
-    height: 6px !important;
-    padding: 8px !important; /* Larger tap target, visual dot stays 6px */
+    /* Tap target size (44x44px WCAG AA minimum, using padding for space) */
+    width: 22px !important; /* Matches active dot width for consistent layout */
+    height: 22px !important;
+    padding: 0 !important;
 
-    /* EXACT inactive dot appearance */
-    background: rgba(255, 255, 255, 0.35) !important;
-    opacity: 0.45 !important;
-    border-radius: 999px !important; /* Full circle */
+    /* Transparent button - visual dot is in ::before */
+    background: transparent !important;
     border: none !important;
+    border-radius: 0 !important;
 
     /* CRISP rendering - remove ALL blur/filter/shadow */
     box-shadow: none !important;
@@ -319,41 +319,75 @@
     transform: translateZ(0) !important;
     -webkit-font-smoothing: antialiased;
     backface-visibility: hidden;
-    will-change: width, opacity;
+    will-change: transform;
 
-    /* Override any pseudo-element effects */
+    /* Position context for ::before */
     position: relative !important;
     z-index: 10 !important;
+
+    /* Center the pseudo-element dot */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
-  /* Remove pseudo-elements that might cause blur */
+  /* Visual dot - inactive (6px circle) */
   .artwork-modal__carousel-dot::before,
-  .artwork-modal__carousel-dot::after,
   .featured-carousel__dot::before,
-  .featured-carousel__dot::after,
   .carousel__dot::before,
-  .carousel__dot::after {
+  [class*="carousel"][class*="dot"]::before {
+    content: '' !important;
+    display: block !important;
+
+    /* EXACT inactive dot size */
+    width: 6px !important;
+    height: 6px !important;
+
+    /* EXACT inactive dot appearance */
+    background: rgba(255, 255, 255, 0.35) !important;
+    opacity: 0.45 !important;
+    border-radius: 999px !important; /* Full circle */
+
+    /* CRISP rendering */
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+
+    /* Smooth transitions */
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+    /* Force hardware rendering */
+    transform: translateZ(0) !important;
+    backface-visibility: hidden;
+  }
+
+  /* Remove any ::after pseudo-elements */
+  .artwork-modal__carousel-dot::after,
+  .featured-carousel__dot::after,
+  .carousel__dot::after,
+  [class*="carousel"][class*="dot"]::after {
     display: none !important;
   }
 
-  /* Dark theme - lighter inactive dots */
-  [data-theme="dark"] .artwork-modal__carousel-dot,
-  [data-theme="dark"] .featured-carousel__dot,
-  [data-theme="dark"] .carousel__dot,
-  [data-theme="dark"] [class*="carousel"][class*="dot"] {
+  /* Dark theme - lighter inactive dots (affects ::before) */
+  [data-theme="dark"] .artwork-modal__carousel-dot::before,
+  [data-theme="dark"] .featured-carousel__dot::before,
+  [data-theme="dark"] .carousel__dot::before,
+  [data-theme="dark"] [class*="carousel"][class*="dot"]::before {
     background: rgba(255, 255, 255, 0.35) !important;
     opacity: 0.45 !important;
   }
 
-  /* ACTIVE dot - elongated pill with brand accent (EXACT 22px width) */
-  .artwork-modal__carousel-dot.active,
-  .artwork-modal__carousel-dot--active,
-  .featured-carousel__dot.active,
-  .featured-carousel__dot--active,
-  .carousel__dot.active,
-  .carousel__dot--active,
-  [class*="carousel"][class*="dot"].active,
-  [class*="carousel"][class*="dot"][class*="active"] {
+  /* ACTIVE dot - elongated pill with brand accent (EXACT 22px × 6px) */
+  .artwork-modal__carousel-dot.active::before,
+  .artwork-modal__carousel-dot--active::before,
+  .featured-carousel__dot.active::before,
+  .featured-carousel__dot--active::before,
+  .carousel__dot.active::before,
+  .carousel__dot--active::before,
+  [class*="carousel"][class*="dot"].active::before,
+  [class*="carousel"][class*="dot"][class*="active"]::before {
     width: 22px !important; /* EXACT spec: 22px not 18px */
     height: 6px !important;
     border-radius: 999px !important; /* Full pill */
@@ -368,25 +402,25 @@
   }
 
   /* Dark theme active - same beige accent */
-  [data-theme="dark"] .artwork-modal__carousel-dot.active,
-  [data-theme="dark"] .artwork-modal__carousel-dot--active,
-  [data-theme="dark"] .featured-carousel__dot.active,
-  [data-theme="dark"] .featured-carousel__dot--active,
-  [data-theme="dark"] .carousel__dot.active,
-  [data-theme="dark"] .carousel__dot--active,
-  [data-theme="dark"] [class*="carousel"][class*="dot"].active,
-  [data-theme="dark"] [class*="carousel"][class*="dot"][class*="active"] {
+  [data-theme="dark"] .artwork-modal__carousel-dot.active::before,
+  [data-theme="dark"] .artwork-modal__carousel-dot--active::before,
+  [data-theme="dark"] .featured-carousel__dot.active::before,
+  [data-theme="dark"] .featured-carousel__dot--active::before,
+  [data-theme="dark"] .carousel__dot.active::before,
+  [data-theme="dark"] .carousel__dot--active::before,
+  [data-theme="dark"] [class*="carousel"][class*="dot"].active::before,
+  [data-theme="dark"] [class*="carousel"][class*="dot"][class*="active"]::before {
     background: var(--accent-primary) !important;
     opacity: 1 !important;
   }
 
-  /* Hover state - slightly more visible, NO transform blur */
-  .artwork-modal__carousel-dot:hover,
-  .featured-carousel__dot:hover,
-  .carousel__dot:hover,
-  [class*="carousel"][class*="dot"]:hover {
+  /* Hover state - slightly more visible, scale the ::before element */
+  .artwork-modal__carousel-dot:hover::before,
+  .featured-carousel__dot:hover::before,
+  .carousel__dot:hover::before,
+  [class*="carousel"][class*="dot"]:hover::before {
     opacity: 0.8 !important;
-    transform: translateZ(0) scale(1.1) !important; /* Keep translateZ for crisp rendering */
+    transform: translateZ(0) scale(1.15) !important; /* Keep translateZ for crisp rendering */
   }
 
   /* Container spacing - consistent across all carousels */
