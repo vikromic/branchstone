@@ -849,9 +849,27 @@
   /* Image container - inline, not background */
   .section-hero__image-container {
     width: 100%;
-    height: clamp(60vh, 65vh, 70vh);
+    height: clamp(50vh, 52vh, 55vh); /* Reduced from 60-70vh for better viewport fit */
     overflow: hidden;
     position: relative;
+  }
+
+  /* Subtle warm gradient overlay for soft transition to text */
+  .section-hero__image-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(184, 134, 107, 0.08) 40%,
+      rgba(184, 134, 107, 0.12) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
   }
 
   .section-hero__image-mobile {
@@ -866,40 +884,40 @@
   /* Text block - solid background, high contrast */
   .section-hero__text-block {
     background: var(--bg-primary);
-    padding: var(--space-8) var(--space-4);
+    padding: var(--space-6) var(--space-4) var(--space-4);
     text-align: center;
   }
 
   .section-hero--mobile .section-hero__heading {
     font-family: var(--font-display);
-    font-size: clamp(1.75rem, 7vw, 2.5rem);
+    font-size: clamp(1.625rem, 6.5vw, 2.25rem); /* Slightly reduced for better balance */
     font-weight: 400;
     line-height: 1.2;
     color: var(--text-primary);
     letter-spacing: -0.01em;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-3);
   }
 
   .section-hero--mobile .section-hero__subheading {
     font-family: var(--font-body);
-    font-size: clamp(1rem, 4vw, 1.125rem);
+    font-size: clamp(0.9375rem, 3.8vw, 1.0625rem); /* Slightly reduced */
     font-weight: 400;
-    line-height: 1.6;
+    line-height: 1.55;
     color: var(--text-secondary);
     letter-spacing: 0.005em;
     max-width: 480px;
-    margin: 0 auto var(--space-6);
+    margin: 0 auto var(--space-5);
   }
 
   /* Single CTA - thumb-friendly placement */
   .section-hero__cta-mobile {
     display: flex;
     justify-content: center;
-    padding: 0 var(--space-4) var(--space-8);
+    padding: 0 var(--space-4) var(--space-5);
   }
 
   .btn--hero-primary {
-    padding: 1rem 2rem;
+    padding: 0.875rem 1.75rem;
     font-size: var(--text-base);
     font-weight: 600;
     letter-spacing: 0.02em;
@@ -941,16 +959,51 @@
   .section-hero__scroll-hint {
     display: flex;
     justify-content: center;
-    padding: var(--space-4) 0 var(--space-6);
-    opacity: 0.6;
+    padding: var(--space-3) 0 var(--space-4);
+    opacity: 0.5;
     animation: gentleBounce 2s ease-in-out infinite;
   }
 
   .section-hero__scroll-hint svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     color: var(--text-tertiary);
     stroke-width: 2px;
+  }
+
+  /* Compact mobile statistics row - lighter, supporting information */
+  .section-hero__stats-mobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-4) var(--space-5);
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+  }
+
+  .section-hero__stat-mobile {
+    font-family: var(--font-body);
+    font-size: 0.8125rem; /* 13px - smaller, lighter */
+    font-weight: 400;
+    color: var(--text-tertiary);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    opacity: 0.85;
+  }
+
+  .section-hero__stat-mobile strong {
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  /* Divider between stats */
+  .section-hero__stat-divider {
+    width: 1px;
+    height: 12px;
+    background: var(--border-subtle);
+    opacity: 0.5;
   }
 
   @keyframes gentleBounce {
@@ -959,6 +1012,15 @@
   }
 
   /* Dark theme support */
+  [data-theme="dark"] .section-hero__image-container::after {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(184, 134, 107, 0.06) 40%,
+      rgba(184, 134, 107, 0.10) 100%
+    );
+  }
+
   [data-theme="dark"] .section-hero__text-block {
     background: var(--bg-primary);
   }
@@ -973,6 +1035,15 @@
 
   [data-theme="dark"] .section-hero__image-mobile {
     filter: brightness(0.85) contrast(1.08) saturate(1.0);
+  }
+
+  [data-theme="dark"] .section-hero__stats-mobile {
+    background: var(--bg-primary);
+    border-top-color: var(--border-default);
+  }
+
+  [data-theme="dark"] .section-hero__stat-divider {
+    background: var(--border-default);
   }
 
   /* Reduced motion support */
