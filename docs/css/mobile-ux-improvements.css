@@ -1147,7 +1147,8 @@
     border: none;
     border-radius: 50%;
     margin: 0 0.25rem;
-    padding: 0;
+    padding: 19px; /* Creates 44px touch target (6px + 38px padding) */
+    background-clip: content-box; /* Keeps background color only on 6px dot */
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
@@ -1271,6 +1272,7 @@
     width: 44px;
     height: 44px;
     background: transparent !important;
+    backdrop-filter: none !important; /* Remove blur from base styles */
     border: none;
     opacity: 0.7;
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -1346,12 +1348,39 @@
     .featured-carousel__dot:hover,
     .artwork-modal__carousel-dot:hover,
     .artwork-carousel__indicator:hover,
+    .artwork-modal__close:hover {
+      transform: none !important;
+    }
+
+    /* Preserve vertical centering for arrows */
     .artwork-modal__carousel-prev:hover,
     .artwork-modal__carousel-next:hover,
     .artwork-carousel__nav--prev:hover,
-    .artwork-carousel__nav--next:hover,
-    .artwork-modal__close:hover {
-      transform: none !important;
+    .artwork-carousel__nav--next:hover {
+      transform: translateY(-50%) !important;
+    }
+  }
+
+  /* ======================================================================
+     13.7 SMALL MOBILE - ENFORCE CONSISTENCY (≤480px)
+     ====================================================================== */
+
+  /* Override featured-carousel.css which loads after mobile-ux-improvements.css
+     and sets 10px dots on small screens. We need 6px dots at all mobile sizes. */
+  @media (max-width: 480px) {
+    .featured-carousel__dot,
+    .artwork-modal__carousel-dot,
+    .artwork-carousel__indicator {
+      width: 6px !important;
+      height: 6px !important;
+    }
+
+    .featured-carousel__dot--active,
+    .artwork-modal__carousel-dot.active,
+    .artwork-carousel__indicator--active {
+      width: 6px !important;
+      height: 6px !important;
+      border-radius: 50% !important;
     }
   }
 
