@@ -279,6 +279,19 @@
     padding: 0.75rem 1.5rem;
   }
 
+  /* Exception: Carousel dots should remain small */
+  .artwork-modal__carousel-dot {
+    min-height: unset;
+    padding: 0;
+    width: 8px;
+    height: 8px;
+  }
+
+  .artwork-modal__carousel-dot.active {
+    width: 24px;
+    height: 8px;
+  }
+
   .btn--sm {
     min-height: 44px;
     padding: 0.625rem 1.25rem;
