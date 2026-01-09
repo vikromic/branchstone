@@ -285,11 +285,13 @@
     padding: 0 !important;
     width: 8px !important;
     height: 8px !important;
+    border-radius: 50% !important;
   }
 
   .artwork-modal__carousel-dot.active {
     width: 24px !important;
     height: 8px !important;
+    border-radius: 4px !important;
   }
 
   .btn--sm {
