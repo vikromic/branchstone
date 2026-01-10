@@ -427,6 +427,80 @@ export const generateSecureToken = (length = 32) => {
   }
 };
 
+/**
+ * Validate URL query parameter value
+ * Prevents XSS and injection attacks through URL parameters
+ * @param {string} value - URL parameter value to validate
+ * @param {Object} options - Validation options
+ * @param {number} options.maxLength - Maximum allowed length (default: 100)
+ * @param {RegExp} options.allowedPattern - Pattern to match (default: alphanumeric + hyphen)
+ * @returns {{valid: boolean, value: string, error: string|null}}
+ */
+export const validateURLParameter = (value, options = {}) => {
+  const {
+    maxLength = 100,
+    allowedPattern = /^[a-zA-Z0-9\-_]+$/
+  } = options;
+
+  if (!value || typeof value !== 'string') {
+    return {
+      valid: false,
+      value: '',
+      error: 'Parameter value is required'
+    };
+  }
+
+  const trimmedValue = value.trim();
+
+  // Check length
+  if (trimmedValue.length === 0) {
+    return {
+      valid: false,
+      value: '',
+      error: 'Parameter value cannot be empty'
+    };
+  }
+
+  if (trimmedValue.length > maxLength) {
+    return {
+      valid: false,
+      value: trimmedValue.substring(0, maxLength),
+      error: `Parameter must be ${maxLength} characters or less`
+    };
+  }
+
+  // Check pattern
+  if (!allowedPattern.test(trimmedValue)) {
+    return {
+      valid: false,
+      value: sanitizeText(trimmedValue),
+      error: 'Parameter contains invalid characters'
+    };
+  }
+
+  return {
+    valid: true,
+    value: trimmedValue,
+    error: null
+  };
+};
+
+/**
+ * Safely get and validate URL parameter
+ * @param {string} paramName - Parameter name to retrieve
+ * @param {Object} options - Validation options (same as validateURLParameter)
+ * @returns {string|null} Validated parameter value or null if invalid
+ */
+export const getURLParameter = (paramName, options = {}) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const value = urlParams.get(paramName);
+
+  if (!value) return null;
+
+  const result = validateURLParameter(value, options);
+  return result.valid ? result.value : null;
+};
+
 export default {
   isValidImageUrl,
   isValidUrl,
@@ -438,6 +512,8 @@ export default {
   unescapeHTML,
   stripHTML,
   validateInput,
+  validateURLParameter,
+  getURLParameter,
   checkHoneypot,
   RateLimiter,
   generateSecureToken

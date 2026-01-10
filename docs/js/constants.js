@@ -163,3 +163,34 @@ export const ARTWORK_CARD = {
   SVG_STROKE_WIDTH: '2',
   IMAGE_LOADING: 'lazy'
 };
+
+// URL paths - centralized to prevent hardcoding throughout the codebase
+export const URLS = {
+  GALLERY: 'gallery.html',
+  CONTACT: 'contact.html',
+  INDEX: 'index.html',
+  COMMISSIONS: 'commissions.html',
+  ARTWORKS_JSON: './artworks.json',
+  FEEDBACKS_JSON: 'feedbacks.json',
+  PLACEHOLDER_IMAGE: 'img/placeholder.webp'
+};
+
+// Swipe gesture thresholds
+export const SWIPE = {
+  HORIZONTAL_THRESHOLD: 50,
+  VERTICAL_THRESHOLD: 100,
+  CLOSE_THRESHOLD: 100
+};
+
+// Text truncation thresholds
+export const TEXT = {
+  DESCRIPTION_LONG_THRESHOLD: 300,
+  MOBILE_DESCRIPTION_TRUNCATE: 240
+};
+
+// Scroll thresholds
+export const SCROLL_THRESHOLDS = {
+  STICKY: 300,
+  BOTTOM_NAV: 150,
+  BOTTOM_NAV_HIDE: 200
+};

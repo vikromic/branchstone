@@ -16,9 +16,9 @@
  */
 
 // Import foundational modules
-import { THEME, SCROLL, ANIMATION, STORAGE_KEYS, TIMING, GALLERY, TOUCH, SVG_NAMESPACE, ARTWORK_CARD } from './constants.js';
+import { THEME, SCROLL, ANIMATION, STORAGE_KEYS, TIMING, GALLERY, TOUCH, SVG_NAMESPACE, ARTWORK_CARD, URLS, SWIPE, TEXT, SCROLL_THRESHOLDS } from './constants.js';
 import { debounce, prefersReducedMotion, trapFocus, smoothScrollTo } from './utils.js';
-import { isValidImageUrl, sanitizeText } from './security.js';
+import { isValidImageUrl, sanitizeText, isValidEmail, getURLParameter } from './security.js';
 import * as storage from './storage.js';
 
 // ========================================
@@ -29,10 +29,10 @@ import * as storage from './storage.js';
 const STORAGE_PREFIX = 'branchstone_';
 
 // Scroll and interaction thresholds (using constants from constants.js)
-const SCROLL_THRESHOLD_STICKY = SCROLL.TRIGGER_BACK_TO_TOP;
-const SCROLL_THRESHOLD_BOTTOM_NAV = SCROLL.HEADER_HIDE_THRESHOLD;
-const SCROLL_THRESHOLD_BOTTOM_NAV_HIDE = 200; // TODO: Move to constants.js
-const SWIPE_THRESHOLD_CLOSE = TOUCH.SWIPE_CLOSE_THRESHOLD;
+const SCROLL_THRESHOLD_STICKY = SCROLL_THRESHOLDS.STICKY;
+const SCROLL_THRESHOLD_BOTTOM_NAV = SCROLL_THRESHOLDS.BOTTOM_NAV;
+const SCROLL_THRESHOLD_BOTTOM_NAV_HIDE = SCROLL_THRESHOLDS.BOTTOM_NAV_HIDE;
+const SWIPE_THRESHOLD_CLOSE = SWIPE.CLOSE_THRESHOLD;
 
 // Import feature modules
 import { FavoritesManager } from './favorites-manager.js';
@@ -233,6 +233,13 @@ import { ArtworkModalManager } from './artwork-modal.js';
 
   /**
    * Get collection name from URL query parameter
+   * Safely retrieves the 'collection' parameter from the current page URL
+   *
+   * @returns {string|null} Collection name from URL or null if not present
+   *
+   * @example
+   * // URL: gallery.html?collection=nature
+   * getCollectionFromURL(); // Returns: 'nature'
    */
   const getCollectionFromURL = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -303,6 +310,26 @@ import { ArtworkModalManager } from './artwork-modal.js';
   /**
    * Update collection description (mobile-only feature)
    * Shows/hides collection description with expand/collapse functionality
+   *
+   * @param {string|null} collectionName - Collection name to display description for, or null/'all' to hide
+   *
+   * @description
+   * Mobile-only UX enhancement that shows detailed collection descriptions below the filter dropdown.
+   * Features:
+   * - Auto-detects if text is long (>240 chars) and adds "Read more/Show less" toggle
+   * - Creates toggle button dynamically only when needed
+   * - Removes toggle button when switching to short descriptions or 'all' view
+   * - Only runs on mobile viewports (<=768px width)
+   *
+   * The 240-character threshold assumes ~80 chars per line on mobile, truncating at ~3 lines.
+   *
+   * @example
+   * // Show description for Nature Spirits collection
+   * updateCollectionDescription('Nature Spirits');
+   *
+   * @example
+   * // Hide description when showing all works
+   * updateCollectionDescription('all');
    */
   const updateCollectionDescription = (collectionName) => {
     // Only run on mobile
@@ -337,7 +364,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
 
           // Check if text is long enough to need truncation (~3 lines check)
           // Rough estimate: ~80 chars per line on mobile
-          const needsTruncation = description.length > 240;
+          const needsTruncation = description.length > TEXT.MOBILE_DESCRIPTION_TRUNCATE;
 
           if (needsTruncation) {
             // Add collapsed class and toggle button
@@ -428,6 +455,32 @@ import { ArtworkModalManager } from './artwork-modal.js';
     return 'all';
   };
 
+  /**
+   * Filter gallery artworks by collection with smooth animations
+   * Handles both showing/hiding cards and updating persistence layer (URL + localStorage)
+   *
+   * @param {string} filter - Collection filter slug ('all' or collection slug like 'nature-spirits')
+   * @param {boolean} [updatePersistence=true] - Whether to update URL and localStorage
+   *
+   * @description
+   * This function orchestrates the gallery filtering process:
+   * 1. Shows/hides artwork cards based on collection filter
+   * 2. Animates transitions with stagger effect for visual polish
+   * 3. Updates URL query parameters for deep linking
+   * 4. Persists selection to localStorage for session continuity
+   * 5. Updates gallery header and mobile description
+   *
+   * Animation respects prefers-reduced-motion for accessibility.
+   * Uses debouncing via isGalleryFiltering flag to prevent rapid successive calls.
+   *
+   * @example
+   * // Filter to show only "Nature Spirits" collection
+   * filterGallery('nature-spirits');
+   *
+   * @example
+   * // Show all artworks without updating persistence (used on initial load)
+   * filterGallery('all', false);
+   */
   const filterGallery = (filter, updatePersistence = true) => {
     if (isGalleryFiltering) return;
     isGalleryFiltering = true;
@@ -670,11 +723,6 @@ import { ArtworkModalManager } from './artwork-modal.js';
     const messageEl = document.getElementById('newsletter-message');
     const emailInput = form.querySelector('input[type="email"]');
     const submitBtn = form.querySelector('button[type="submit"]');
-
-    // Email validation
-    const isValidEmail = (email) => {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    };
 
     // Show message
     const showMessage = (text, type) => {
@@ -1028,7 +1076,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
       });
 
       // Navigate to contact page
-      window.location.href = 'contact.html';
+      window.location.href = URLS.CONTACT;
     };
 
     // Event listeners
@@ -1695,11 +1743,6 @@ import { ArtworkModalManager } from './artwork-modal.js';
       return isValid;
     };
 
-    // Email validation helper
-    const isValidEmail = (email) => {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    };
-
     // Update summary on final step
     const updateSummary = () => {
       if (!summaryContainer) return;
@@ -1986,7 +2029,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
         });
 
         // Navigate to contact page
-        window.location.href = 'contact.html';
+        window.location.href = URLS.CONTACT;
       });
     });
   };
@@ -2227,7 +2270,7 @@ import { ArtworkModalManager } from './artwork-modal.js';
     try {
       console.log('[Feedbacks] Loading feedbacks from JSON...');
 
-      const response = await fetch('feedbacks.json');
+      const response = await fetch(URLS.FEEDBACKS_JSON);
       if (!response.ok) {
         throw new Error(`Failed to load feedbacks: ${response.status} ${response.statusText}`);
       }

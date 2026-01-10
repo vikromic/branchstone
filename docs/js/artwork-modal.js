@@ -19,7 +19,8 @@
 console.log('[ArtworkModal] Loading artwork-modal.js version 2.2.0');
 
 import { sanitizeText } from './security.js';
-import { SVG_NAMESPACE, ARTWORK_CARD } from './constants.js';
+import { SVG_NAMESPACE, ARTWORK_CARD, TEXT, URLS } from './constants.js';
+import { SwipeHandler } from './touch-handler.js';
 
 /**
  * ArtworkCarousel - Handles image carousel for modal
@@ -30,10 +31,6 @@ export class ArtworkCarousel {
     this.container = container;
     this.currentIndex = 0;
 
-    // Touch/swipe tracking
-    this.touchStart = { x: 0, y: 0 };
-    this.touchEnd = { x: 0, y: 0 };
-
     // Image elements for cross-fade
     this.currentImage = null;
     this.nextImage = null;
@@ -41,10 +38,8 @@ export class ArtworkCarousel {
     // Preload cache
     this.imageCache = new Map();
 
-    // Bind touch handlers
-    this.handleTouchStart = this.handleTouchStart.bind(this);
-    this.handleTouchMove = this.handleTouchMove.bind(this);
-    this.handleTouchEnd = this.handleTouchEnd.bind(this);
+    // SwipeHandler instance (will be initialized in render)
+    this.swipeHandler = null;
   }
 
   /**
@@ -215,12 +210,13 @@ export class ArtworkCarousel {
       dot.addEventListener('click', () => this.goTo(index));
     });
 
-    // Attach touch/swipe handlers to the main image container
+    // Attach swipe handler to the main image container
     const imageContainer = this.container.querySelector('.artwork-modal__main-image-container');
     if (imageContainer) {
-      imageContainer.addEventListener('touchstart', this.handleTouchStart, { passive: true });
-      imageContainer.addEventListener('touchmove', this.handleTouchMove, { passive: false });
-      imageContainer.addEventListener('touchend', this.handleTouchEnd, { passive: true });
+      this.swipeHandler = new SwipeHandler(imageContainer, {
+        onSwipeLeft: () => this.next(),
+        onSwipeRight: () => this.previous()
+      });
     }
   }
 
@@ -386,55 +382,14 @@ export class ArtworkCarousel {
   }
 
   /**
-   * Handle touch start
-   * @param {TouchEvent} e - Touch event
+   * Cleanup carousel and swipe handler
    */
-  handleTouchStart(e) {
-    this.touchStart.x = e.changedTouches[0].screenX;
-    this.touchStart.y = e.changedTouches[0].screenY;
-  }
-
-  /**
-   * Handle touch move - prevent default for horizontal swipes
-   * @param {TouchEvent} e - Touch event
-   */
-  handleTouchMove(e) {
-    const deltaY = Math.abs(e.changedTouches[0].screenY - this.touchStart.y);
-    const deltaX = Math.abs(e.changedTouches[0].screenX - this.touchStart.x);
-
-    // Only prevent default if horizontal swipe is more pronounced than vertical
-    // This allows vertical scrolling while enabling horizontal carousel swipes
-    if (deltaX > deltaY) {
-      e.preventDefault();
+  destroy() {
+    if (this.swipeHandler) {
+      this.swipeHandler.destroy();
+      this.swipeHandler = null;
     }
-  }
-
-  /**
-   * Handle touch end - detect swipe direction
-   * @param {TouchEvent} e - Touch event
-   */
-  handleTouchEnd(e) {
-    this.touchEnd.x = e.changedTouches[0].screenX;
-    this.touchEnd.y = e.changedTouches[0].screenY;
-    this.handleSwipe();
-  }
-
-  /**
-   * Handle swipe gesture
-   */
-  handleSwipe() {
-    const swipeThreshold = 50; // Minimum swipe distance in pixels
-    const deltaX = this.touchEnd.x - this.touchStart.x;
-    const deltaY = Math.abs(this.touchEnd.y - this.touchStart.y);
-
-    // Only register horizontal swipe if it's more pronounced than vertical movement
-    if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > deltaY) {
-      if (deltaX > 0) {
-        this.previous(); // Swipe right = previous image
-      } else {
-        this.next();  // Swipe left = next image
-      }
-    }
+    this.imageCache.clear();
   }
 }
 
@@ -931,10 +886,10 @@ export class ArtworkModalManager {
     const sanitizedDesc = sanitizeText(description);
 
     // Check if description is long (>300 chars)
-    const isLong = sanitizedDesc.length > 300;
+    const isLong = sanitizedDesc.length > TEXT.DESCRIPTION_LONG_THRESHOLD;
 
     if (isLong) {
-      const shortText = sanitizedDesc.substring(0, 300) + '...';
+      const shortText = sanitizedDesc.substring(0, TEXT.DESCRIPTION_LONG_THRESHOLD) + '...';
       descEl.textContent = shortText;
       descEl.setAttribute('data-full-text', sanitizedDesc);
       descEl.setAttribute('data-short-text', shortText);
@@ -1009,7 +964,7 @@ export class ArtworkModalManager {
 
     params.set('message', message);
 
-    window.location.href = `contact.html?${params.toString()}`;
+    window.location.href = `${URLS.CONTACT}?${params.toString()}`;
   }
 
   /**

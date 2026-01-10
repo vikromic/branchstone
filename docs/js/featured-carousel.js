@@ -5,6 +5,8 @@
 
 import { sanitizeText, isValidImageUrl } from './security.js';
 import { prefersReducedMotion } from './utils.js';
+import { URLS, ANIMATION } from './constants.js';
+import { SwipeHandler } from './touch-handler.js';
 
 export class FeaturedCarousel {
   constructor(containerSelector = '#featured-carousel') {
@@ -14,12 +16,11 @@ export class FeaturedCarousel {
     this.slidesPerView = this.getSlidesPerView();
     this.autoplayInterval = null;
     this.autoplayEnabled = false;
-    this.autoplayDelay = 5000; // 5 seconds
+    this.autoplayDelay = ANIMATION.TOAST_DURATION * 2.5; // 5 seconds
     this.isTransitioning = false;
 
-    // Touch/swipe tracking
-    this.touchStart = { x: 0, y: 0 };
-    this.touchEnd = { x: 0, y: 0 };
+    // SwipeHandler instance
+    this.swipeHandler = null;
 
     // Elements cache
     this.elements = {};
@@ -27,9 +28,6 @@ export class FeaturedCarousel {
     // Bind methods
     this.handleResize = this.handleResize.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
-    this.handleTouchStart = this.handleTouchStart.bind(this);
-    this.handleTouchMove = this.handleTouchMove.bind(this);
-    this.handleTouchEnd = this.handleTouchEnd.bind(this);
   }
 
   /**
@@ -50,7 +48,7 @@ export class FeaturedCarousel {
   async loadArtworks() {
     try {
       console.log('[FeaturedCarousel] Loading artworks...');
-      const response = await fetch('./artworks.json');
+      const response = await fetch(URLS.ARTWORKS_JSON);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -167,7 +165,7 @@ export class FeaturedCarousel {
     // Create link wrapper for card navigation
     const link = document.createElement('a');
     const artworkSlug = this.slugify(artwork.name);
-    link.href = `gallery.html?artwork=${artworkSlug}`;
+    link.href = `${URLS.GALLERY}?artwork=${artworkSlug}`;
     link.className = 'featured-carousel__link';
     link.setAttribute('aria-label', `View ${artwork.name} in gallery`);
 
@@ -185,7 +183,7 @@ export class FeaturedCarousel {
       img.src = imagePath;
     } else {
       console.warn('[FeaturedCarousel] Invalid image URL:', imagePath);
-      img.src = 'img/placeholder.webp'; // Fallback
+      img.src = URLS.PLACEHOLDER_IMAGE; // Fallback
     }
 
     img.alt = sanitizeText(artwork.name);
@@ -362,10 +360,13 @@ export class FeaturedCarousel {
     // Keyboard navigation
     document.addEventListener('keydown', this.handleKeydown);
 
-    // Touch/swipe support
-    this.elements.track?.addEventListener('touchstart', this.handleTouchStart, { passive: true });
-    this.elements.track?.addEventListener('touchmove', this.handleTouchMove, { passive: false });
-    this.elements.track?.addEventListener('touchend', this.handleTouchEnd, { passive: true });
+    // Touch/swipe support using SwipeHandler
+    if (this.elements.track) {
+      this.swipeHandler = new SwipeHandler(this.elements.track, {
+        onSwipeLeft: () => this.navigate(1),
+        onSwipeRight: () => this.navigate(-1)
+      });
+    }
 
     // Pause autoplay on hover
     this.container.addEventListener('mouseenter', () => this.stopAutoplay());
@@ -400,58 +401,6 @@ export class FeaturedCarousel {
     }
   }
 
-  /**
-   * Handle touch start
-   * @param {TouchEvent} e - Touch event
-   */
-  handleTouchStart(e) {
-    this.touchStart.x = e.changedTouches[0].screenX;
-    this.touchStart.y = e.changedTouches[0].screenY;
-    this.stopAutoplay(); // Stop autoplay on touch
-  }
-
-  /**
-   * Handle touch move
-   * @param {TouchEvent} e - Touch event
-   */
-  handleTouchMove(e) {
-    // Prevent default to avoid scrolling while swiping
-    const deltaY = Math.abs(e.changedTouches[0].screenY - this.touchStart.y);
-    const deltaX = Math.abs(e.changedTouches[0].screenX - this.touchStart.x);
-
-    // Only prevent if horizontal swipe is more pronounced than vertical
-    if (deltaX > deltaY) {
-      e.preventDefault();
-    }
-  }
-
-  /**
-   * Handle touch end
-   * @param {TouchEvent} e - Touch event
-   */
-  handleTouchEnd(e) {
-    this.touchEnd.x = e.changedTouches[0].screenX;
-    this.touchEnd.y = e.changedTouches[0].screenY;
-    this.handleSwipe();
-  }
-
-  /**
-   * Handle swipe gesture
-   */
-  handleSwipe() {
-    const swipeThreshold = 50; // Minimum swipe distance
-    const deltaX = this.touchEnd.x - this.touchStart.x;
-    const deltaY = Math.abs(this.touchEnd.y - this.touchStart.y);
-
-    // Only register horizontal swipe if it's more pronounced than vertical
-    if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > deltaY) {
-      if (deltaX > 0) {
-        this.navigate(-1); // Swipe right = previous
-      } else {
-        this.navigate(1);  // Swipe left = next
-      }
-    }
-  }
 
   /**
    * Handle window resize
@@ -629,7 +578,7 @@ export class FeaturedCarousel {
     text.textContent = 'No featured artworks available at the moment.';
 
     const link = document.createElement('a');
-    link.href = 'gallery.html';
+    link.href = URLS.GALLERY;
     link.className = 'btn btn--primary';
     link.textContent = 'View Full Gallery';
 
@@ -672,16 +621,20 @@ export class FeaturedCarousel {
     document.removeEventListener('keydown', this.handleKeydown);
     window.removeEventListener('resize', this.handleResize);
 
-    this.elements.track?.removeEventListener('touchstart', this.handleTouchStart);
-    this.elements.track?.removeEventListener('touchmove', this.handleTouchMove);
-    this.elements.track?.removeEventListener('touchend', this.handleTouchEnd);
+    // Cleanup swipe handler
+    if (this.swipeHandler) {
+      this.swipeHandler.destroy();
+      this.swipeHandler = null;
+    }
 
     // Stop autoplay
     this.stopAutoplay();
 
-    // Clear container
+    // Clear container (safe - clearing internal content we control)
     if (this.container) {
-      this.container.innerHTML = '';
+      while (this.container.firstChild) {
+        this.container.removeChild(this.container.firstChild);
+      }
     }
   }
 }
