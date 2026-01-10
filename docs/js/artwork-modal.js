@@ -145,13 +145,13 @@ export class ArtworkCarousel {
     nextSvg.appendChild(nextPolyline);
     nextBtn.appendChild(nextSvg);
 
-    // Dots navigation
+    // Dots navigation - USE EXACT SAME CLASS NAMES AS FEATURED CAROUSEL
     const dotsContainer = document.createElement('div');
-    dotsContainer.className = 'artwork-modal__carousel-dots';
+    dotsContainer.className = 'featured-carousel__pagination';
 
     this.images.forEach((_, index) => {
       const dot = document.createElement('button');
-      dot.className = 'artwork-modal__carousel-dot';
+      dot.className = 'featured-carousel__dot';
       // Don't set initial active state here - let updateCarouselDots() handle it
       dot.setAttribute('aria-label', `Go to image ${index + 1}`);
       dot.setAttribute('data-index', index.toString());
@@ -180,7 +180,7 @@ export class ArtworkCarousel {
 
     const prevBtn = this.container.querySelector('.artwork-modal__carousel-prev');
     const nextBtn = this.container.querySelector('.artwork-modal__carousel-next');
-    const dots = this.container.querySelectorAll('.artwork-modal__carousel-dot');
+    const dots = this.container.querySelectorAll('.featured-carousel__dot');
 
     if (prevBtn) prevBtn.addEventListener('click', () => this.previous());
     if (nextBtn) nextBtn.addEventListener('click', () => this.next());
@@ -240,7 +240,7 @@ export class ArtworkCarousel {
     console.log('[Carousel] ========== updateCarouselDots START ==========');
     console.log('[Carousel] currentIndex:', this.currentIndex);
 
-    const dots = this.container.querySelectorAll('.artwork-modal__carousel-dot');
+    const dots = this.container.querySelectorAll('.featured-carousel__dot');
     console.log('[Carousel] Found dots:', dots.length);
     console.log('[Carousel] Dots array:', Array.from(dots).map((d, i) => ({
       index: i,
