@@ -33,6 +33,13 @@ export class ArtworkCarousel {
     this.touchStart = { x: 0, y: 0 };
     this.touchEnd = { x: 0, y: 0 };
 
+    // Image elements for cross-fade
+    this.currentImage = null;
+    this.nextImage = null;
+
+    // Preload cache
+    this.imageCache = new Map();
+
     // Bind touch handlers
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
@@ -86,14 +93,27 @@ export class ArtworkCarousel {
     const imageContainer = document.createElement('div');
     imageContainer.className = 'artwork-modal__main-image-container';
 
-    const img = document.createElement('img');
-    img.src = this.images[0];
-    img.alt = 'Artwork';
-    img.className = 'artwork-modal__main-image';
-    img.loading = 'eager';
+    // Create two image elements for cross-fade transitions
+    const currentImg = document.createElement('img');
+    currentImg.src = this.images[0];
+    currentImg.alt = 'Artwork';
+    currentImg.className = 'artwork-modal__main-image artwork-modal__main-image--current';
+    currentImg.loading = 'eager';
 
-    imageContainer.appendChild(img);
+    const nextImg = document.createElement('img');
+    nextImg.alt = 'Artwork';
+    nextImg.className = 'artwork-modal__main-image artwork-modal__main-image--next';
+    nextImg.loading = 'eager';
+    nextImg.style.opacity = '0';
+    nextImg.style.pointerEvents = 'none';
+
+    imageContainer.appendChild(currentImg);
+    imageContainer.appendChild(nextImg);
     carousel.appendChild(imageContainer);
+
+    // Store references
+    this.currentImage = currentImg;
+    this.nextImage = nextImg;
 
     // Add controls if multiple images
     if (this.images.length > 1) {
@@ -108,6 +128,11 @@ export class ArtworkCarousel {
 
     // Ensure initial dot state is synchronized with currentIndex
     this.updateCarouselDots();
+
+    // Preload adjacent images for smooth transitions
+    if (this.images.length > 1) {
+      this.preloadAdjacentImages();
+    }
 
     console.log('[ArtworkCarousel] Carousel rendered successfully');
   }
@@ -220,20 +245,82 @@ export class ArtworkCarousel {
   }
 
   updateImage() {
-    const img = this.container.querySelector('.artwork-modal__main-image');
+    if (!this.currentImage || !this.nextImage) return;
 
-    if (img) {
-      // Add fade transition for smooth image change
-      img.style.opacity = '0';
+    const newImageUrl = this.images[this.currentIndex];
 
+    // Preload the new image to ensure it's ready
+    this.preloadImage(newImageUrl).then(() => {
+      // Set the next image source
+      this.nextImage.src = newImageUrl;
+
+      // Cross-fade: fade in next while fading out current
+      this.nextImage.style.opacity = '1';
+      this.nextImage.style.pointerEvents = 'auto';
+      this.currentImage.style.opacity = '0';
+
+      // After transition completes, swap the images
       setTimeout(() => {
-        img.src = this.images[this.currentIndex];
-        img.style.opacity = '1';
-      }, 150);
-    }
+        // Swap references
+        const temp = this.currentImage;
+        this.currentImage = this.nextImage;
+        this.nextImage = temp;
+
+        // Reset the now-hidden image
+        this.nextImage.style.opacity = '0';
+        this.nextImage.style.pointerEvents = 'none';
+
+        // Preload adjacent images for faster navigation
+        this.preloadAdjacentImages();
+      }, 350); // Match CSS transition duration
+    }).catch(() => {
+      // Fallback: instant switch if preload fails
+      this.currentImage.src = newImageUrl;
+    });
 
     // Update dots to reflect current index
     this.updateCarouselDots();
+  }
+
+  /**
+   * Preload an image and cache it
+   * @param {string} url - Image URL to preload
+   * @returns {Promise} - Resolves when image is loaded
+   */
+  preloadImage(url) {
+    // Check cache first
+    if (this.imageCache.has(url)) {
+      return Promise.resolve(this.imageCache.get(url));
+    }
+
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        this.imageCache.set(url, img);
+        resolve(img);
+      };
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  /**
+   * Preload adjacent images (previous and next) for instant transitions
+   */
+  preloadAdjacentImages() {
+    if (this.images.length <= 1) return;
+
+    // Preload previous image
+    const prevIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    this.preloadImage(this.images[prevIndex]).catch(() => {
+      console.warn('[Carousel] Failed to preload previous image');
+    });
+
+    // Preload next image
+    const nextIndex = (this.currentIndex + 1) % this.images.length;
+    this.preloadImage(this.images[nextIndex]).catch(() => {
+      console.warn('[Carousel] Failed to preload next image');
+    });
   }
 
   updateCarouselDots() {

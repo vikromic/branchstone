@@ -4592,12 +4592,23 @@ details[open] summary {
 }
 
 .artwork-modal__main-image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 150ms ease-in-out;
+  transition: opacity 350ms ease-in-out;
   user-select: none;
   -webkit-user-drag: none;
+}
+
+.artwork-modal__main-image--current {
+  z-index: 1;
+}
+
+.artwork-modal__main-image--next {
+  z-index: 2;
 }
 
 .artwork-modal__no-image {
