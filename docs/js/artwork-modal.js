@@ -101,6 +101,9 @@ export class ArtworkCarousel {
     this.container.appendChild(carousel);
     this.attachEventListeners();
 
+    // Ensure initial dot state is synchronized with currentIndex
+    this.updateCarouselDots();
+
     console.log('[ArtworkCarousel] Carousel rendered successfully');
   }
 
@@ -207,7 +210,6 @@ export class ArtworkCarousel {
 
   updateImage() {
     const img = this.container.querySelector('.artwork-modal__main-image');
-    const dots = this.container.querySelectorAll('.artwork-modal__carousel-dot');
 
     if (img) {
       // Add fade transition for smooth image change
@@ -219,6 +221,12 @@ export class ArtworkCarousel {
       }, 150);
     }
 
+    // Update dots to reflect current index
+    this.updateCarouselDots();
+  }
+
+  updateCarouselDots() {
+    const dots = this.container.querySelectorAll('.artwork-modal__carousel-dot');
     dots.forEach((dot, index) => {
       dot.classList.toggle('is-active', index === this.currentIndex);
     });
