@@ -144,7 +144,7 @@ export class ArtworkCarousel {
     this.images.forEach((_, index) => {
       const dot = document.createElement('button');
       dot.className = 'artwork-modal__carousel-dot';
-      if (index === 0) dot.classList.add('active');
+      if (index === 0) dot.classList.add('is-active');
       dot.setAttribute('aria-label', `Go to image ${index + 1}`);
       dot.setAttribute('data-index', index.toString());
       dotsContainer.appendChild(dot);
@@ -220,7 +220,7 @@ export class ArtworkCarousel {
     }
 
     dots.forEach((dot, index) => {
-      dot.classList.toggle('active', index === this.currentIndex);
+      dot.classList.toggle('is-active', index === this.currentIndex);
     });
   }
 
