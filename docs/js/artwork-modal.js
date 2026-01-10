@@ -149,7 +149,7 @@ export class ArtworkCarousel {
     this.images.forEach((_, index) => {
       const dot = document.createElement('button');
       dot.className = 'artwork-modal__carousel-dot';
-      if (index === 0) dot.classList.add('is-active');
+      // Don't set initial active state here - let updateCarouselDots() handle it
       dot.setAttribute('aria-label', `Go to image ${index + 1}`);
       dot.setAttribute('data-index', index.toString());
       dotsContainer.appendChild(dot);
@@ -233,11 +233,21 @@ export class ArtworkCarousel {
     console.log('[Carousel] updateCarouselDots() called with currentIndex =', this.currentIndex);
     const dots = this.container.querySelectorAll('.artwork-modal__carousel-dot');
     console.log('[Carousel] Found', dots.length, 'dots');
+
+    // First, remove is-active from all dots
+    dots.forEach(dot => {
+      dot.classList.remove('is-active');
+    });
+
+    // Then, add is-active to the current dot
+    if (dots[this.currentIndex]) {
+      dots[this.currentIndex].classList.add('is-active');
+      console.log('[Carousel] Set dot', this.currentIndex, 'as active');
+    }
+
+    // Verify final state
     dots.forEach((dot, index) => {
-      const shouldBeActive = index === this.currentIndex;
-      const wasActive = dot.classList.contains('is-active');
-      dot.classList.toggle('is-active', shouldBeActive);
-      console.log('[Carousel] Dot', index, ': wasActive=', wasActive, ', shouldBeActive=', shouldBeActive, ', isActive=', dot.classList.contains('is-active'));
+      console.log('[Carousel] Dot', index, 'final state: isActive=', dot.classList.contains('is-active'));
     });
   }
 
