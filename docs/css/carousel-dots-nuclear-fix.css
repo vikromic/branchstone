@@ -1,0 +1,104 @@
+/**
+ * NUCLEAR CSS FIX FOR CAROUSEL DOTS
+ *
+ * Purpose: Force carousel dot styles with maximum specificity
+ * Issue: JavaScript is working (is-active class is being added), but CSS styles are not applying
+ * Solution: Ultra-high specificity with !important on every property
+ *
+ * Created: 2026-01-10
+ */
+
+/* =============================================================================
+   DOT CONTAINER (BUTTON ELEMENT)
+   ============================================================================= */
+
+/* Maximum specificity selector for dot container */
+body div.artwork-modal .artwork-modal__carousel-dot,
+body .artwork-modal .artwork-modal__carousel-dot,
+body .artwork-modal__carousel-dot {
+  width: 22px !important;
+  height: 22px !important;
+  padding: 0 !important;
+  margin: 0 4px !important;
+  background: transparent !important;
+  border: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  position: relative !important;
+}
+
+/* =============================================================================
+   VISUAL DOT (INACTIVE STATE)
+   ============================================================================= */
+
+/* Maximum specificity for inactive dot ::before pseudo-element */
+body div.artwork-modal .artwork-modal__carousel-dot::before,
+body .artwork-modal .artwork-modal__carousel-dot::before,
+body .artwork-modal__carousel-dot::before {
+  content: '' !important;
+  display: block !important;
+  width: 6px !important;
+  height: 6px !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  opacity: 0.45 !important;
+  border-radius: 999px !important;
+  transition: all 200ms ease !important;
+  position: relative !important;
+}
+
+/* =============================================================================
+   VISUAL DOT (ACTIVE STATE) - THE CRITICAL STYLE
+   ============================================================================= */
+
+/* Maximum specificity for active dot - this is the one that's not working */
+body div.artwork-modal .artwork-modal__carousel-dot.is-active::before,
+body .artwork-modal .artwork-modal__carousel-dot.is-active::before,
+body .artwork-modal__carousel-dot.is-active::before {
+  width: 22px !important;
+  height: 6px !important;
+  background: #B8866B !important;
+  opacity: 1 !important;
+  border-radius: 999px !important;
+  transition: all 200ms ease !important;
+}
+
+/* =============================================================================
+   HOVER STATES (OPTIONAL ENHANCEMENTS)
+   ============================================================================= */
+
+/* Hover state for inactive dots */
+body div.artwork-modal .artwork-modal__carousel-dot:hover::before,
+body .artwork-modal .artwork-modal__carousel-dot:hover::before,
+body .artwork-modal__carousel-dot:hover::before {
+  opacity: 0.65 !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Hover state for active dot (maintain pill shape) */
+body div.artwork-modal .artwork-modal__carousel-dot.is-active:hover::before,
+body .artwork-modal .artwork-modal__carousel-dot.is-active:hover::before,
+body .artwork-modal__carousel-dot.is-active:hover::before {
+  opacity: 1 !important;
+  background: #C8967B !important;
+}
+
+/* =============================================================================
+   FOCUS STATES (ACCESSIBILITY)
+   ============================================================================= */
+
+/* Focus-visible for keyboard navigation */
+body div.artwork-modal .artwork-modal__carousel-dot:focus-visible,
+body .artwork-modal .artwork-modal__carousel-dot:focus-visible,
+body .artwork-modal__carousel-dot:focus-visible {
+  outline: 2px solid #B8866B !important;
+  outline-offset: 2px !important;
+}
+
+/* Remove default focus outline */
+body div.artwork-modal .artwork-modal__carousel-dot:focus,
+body .artwork-modal .artwork-modal__carousel-dot:focus,
+body .artwork-modal__carousel-dot:focus {
+  outline: none !important;
+}
