@@ -1307,55 +1307,6 @@ import { ArtworkModalManager } from './artwork-modal.js';
     });
   };
 
-  // ========================================
-  // STICKY INQUIRY BUTTON (Mobile Gallery)
-  // ========================================
-
-  const initStickyInquiryButton = () => {
-    const stickyButton = document.getElementById('sticky-inquiry-btn');
-    if (!stickyButton) return;
-
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-
-    /**
-     * Update sticky button visibility based on scroll position
-     * Uses requestAnimationFrame to throttle updates and prevent memory leaks
-     */
-    const updateStickyButton = () => {
-      const currentScrollY = window.scrollY;
-
-      // Show button after scrolling past threshold
-      if (currentScrollY > SCROLL_THRESHOLD_STICKY) {
-        stickyButton.classList.add('is-visible');
-      } else {
-        stickyButton.classList.remove('is-visible');
-      }
-
-      lastScrollY = currentScrollY;
-      ticking = false;
-    };
-
-    /**
-     * Scroll event handler with requestAnimationFrame throttling
-     * MEMORY LEAK PREVENTION: The 'ticking' flag ensures only one rAF is scheduled at a time
-     */
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(updateStickyButton);
-        ticking = true;
-      }
-    };
-
-    // Add scroll listener with passive flag for better scroll performance
-    // NOTE: This listener is page-lifetime scoped; cleanup not needed for multi-page app
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    // Click handler - redirect to contact page
-    stickyButton.addEventListener('click', () => {
-      window.location.href = 'contact.html';
-    });
-  };
 
   // ========================================
   // MOBILE FILTER DROPDOWN
@@ -2487,7 +2438,6 @@ import { ArtworkModalManager } from './artwork-modal.js';
       initFavoritesPanel();      // Favorites management panel
       initInquiryPrefill();      // Contact form pre-fill from favorites
       initBackToTop();           // Back to top button
-      initStickyInquiryButton(); // Sticky inquiry CTA on mobile
 
       // Mobile UX enhancements
       initMobileBottomNav();        // Bottom navigation bar

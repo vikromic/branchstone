@@ -48,16 +48,8 @@
   outline-offset: 2px;
 }
 
-/* HIGH-005: Sticky Inquiry Button Overlap - Adjust Positioning */
+/* Back to top button positioning */
 @media (max-width: 767px) {
-  .sticky-inquiry-button {
-    /* Position above bottom nav (56px) + safe area */
-    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
-    right: var(--space-4);
-    z-index: 90; /* Below mobile nav (100) but above content */
-  }
-
-  /* Back to top button - different position to avoid overlap */
   .back-to-top,
   [data-back-to-top] {
     /* Position to the left side to avoid overlap */
@@ -661,7 +653,6 @@ body {
   .mobile-bottom-nav,
   .favorites-panel,
   .back-to-top,
-  .sticky-inquiry-button,
   .hero-show-info {
     display: none !important;
   }

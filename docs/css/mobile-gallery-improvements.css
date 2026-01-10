@@ -500,11 +500,6 @@
     padding-bottom: calc(var(--space-8, 2rem) + env(safe-area-inset-bottom, 0px));
   }
 
-  /* Sticky inquiry button above mobile nav */
-  .sticky-inquiry-button {
-    bottom: calc(var(--space-4, 1rem) + var(--mobile-nav-offset) + env(safe-area-inset-bottom, 0px));
-  }
-
   /* Back to top button positioning - handled in components.css */
 
   /* Newsletter section */
