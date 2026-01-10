@@ -2,6 +2,9 @@
  * Artwork Modal System
  * Production-ready modal overlay for artwork details with URL persistence
  *
+ * VERSION: 2.1.0-debug (2026-01-10)
+ * Debug logging enabled for carousel dot synchronization
+ *
  * Features:
  * - URL query parameter state management (?art=<slug>)
  * - Image carousel with keyboard navigation
@@ -11,6 +14,8 @@
  * - Contact form pre-fill integration
  * - Mobile-responsive design
  */
+
+console.log('[ArtworkModal] Loading artwork-modal.js version 2.1.0-debug');
 
 import { sanitizeText } from './security.js';
 import { SVG_NAMESPACE, ARTWORK_CARD } from './constants.js';
