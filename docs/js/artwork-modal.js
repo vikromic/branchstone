@@ -194,17 +194,23 @@ export class ArtworkCarousel {
   }
 
   previous() {
+    const oldIndex = this.currentIndex;
     this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    console.log('[Carousel] previous() - index changed from', oldIndex, 'to', this.currentIndex);
     this.updateImage();
   }
 
   next() {
+    const oldIndex = this.currentIndex;
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    console.log('[Carousel] next() - index changed from', oldIndex, 'to', this.currentIndex);
     this.updateImage();
   }
 
   goTo(index) {
+    const oldIndex = this.currentIndex;
     this.currentIndex = index;
+    console.log('[Carousel] goTo() - index changed from', oldIndex, 'to', this.currentIndex);
     this.updateImage();
   }
 
@@ -226,17 +232,41 @@ export class ArtworkCarousel {
   }
 
   updateCarouselDots() {
+    console.log('[Carousel] ========== updateCarouselDots START ==========');
+    console.log('[Carousel] currentIndex:', this.currentIndex);
+
     const dots = this.container.querySelectorAll('.artwork-modal__carousel-dot');
+    console.log('[Carousel] Found dots:', dots.length);
+    console.log('[Carousel] Dots array:', Array.from(dots).map((d, i) => ({
+      index: i,
+      hasActive: d.classList.contains('is-active'),
+      classes: d.className
+    })));
 
     // First, remove is-active from all dots
-    dots.forEach(dot => {
+    dots.forEach((dot, index) => {
+      const hadActive = dot.classList.contains('is-active');
       dot.classList.remove('is-active');
+      if (hadActive) {
+        console.log('[Carousel] Removed is-active from dot', index);
+      }
     });
 
     // Then, add is-active to the current dot
     if (dots[this.currentIndex]) {
       dots[this.currentIndex].classList.add('is-active');
+      console.log('[Carousel] Added is-active to dot', this.currentIndex);
+      console.log('[Carousel] Dot classes after add:', dots[this.currentIndex].className);
+    } else {
+      console.warn('[Carousel] No dot found at index', this.currentIndex);
     }
+
+    console.log('[Carousel] After update:', Array.from(dots).map((d, i) => ({
+      index: i,
+      hasActive: d.classList.contains('is-active'),
+      classes: d.className
+    })));
+    console.log('[Carousel] ========== updateCarouselDots END ==========');
   }
 
   handleKeyboardNavigation(e) {
