@@ -1895,6 +1895,47 @@ import { ArtworkModalManager } from './artwork-modal.js';
     const modalManager = new ArtworkModalManager();
     modalManager.init();
     console.log('[ArtworkModal] Modal system initialized');
+
+    // Check for artwork URL parameter (from Featured Works carousel)
+    checkForArtworkAutoOpen();
+  };
+
+  /**
+   * Check URL for artwork parameter and auto-open modal
+   * Handles deep links from Featured Works carousel on home page
+   */
+  const checkForArtworkAutoOpen = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const artworkSlug = urlParams.get('artwork');
+
+    if (!artworkSlug) return;
+
+    console.log('[Gallery] Auto-opening artwork from URL parameter:', artworkSlug);
+
+    // Find the artwork card by slug
+    const artworkCard = document.querySelector(`[data-artwork-id="artwork-${artworkSlug}"]`)?.closest('.artwork-card');
+
+    if (artworkCard) {
+      console.log('[Gallery] Found artwork card, triggering click to open modal');
+
+      // Small delay to ensure modal system is fully initialized
+      setTimeout(() => {
+        artworkCard.click();
+
+        // Clean up URL parameter after opening modal
+        // The modal will add its own 'art' parameter
+        const url = new URL(window.location);
+        url.searchParams.delete('artwork');
+        window.history.replaceState({}, '', url);
+      }, 200);
+    } else {
+      console.warn('[Gallery] Artwork card not found for slug:', artworkSlug);
+
+      // Clean up invalid URL parameter
+      const url = new URL(window.location);
+      url.searchParams.delete('artwork');
+      window.history.replaceState({}, '', url);
+    }
   };
 
   // ========================================

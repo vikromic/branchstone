@@ -166,7 +166,8 @@ export class FeaturedCarousel {
 
     // Create link wrapper for card navigation
     const link = document.createElement('a');
-    link.href = 'gallery.html';
+    const artworkSlug = this.slugify(artwork.name);
+    link.href = `gallery.html?artwork=${artworkSlug}`;
     link.className = 'featured-carousel__link';
     link.setAttribute('aria-label', `View ${artwork.name} in gallery`);
 
