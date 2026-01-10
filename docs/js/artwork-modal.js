@@ -2,12 +2,13 @@
  * Artwork Modal System
  * Production-ready modal overlay for artwork details with URL persistence
  *
- * VERSION: 2.1.0-debug (2026-01-10)
- * Debug logging enabled for carousel dot synchronization
+ * VERSION: 2.2.0 (2026-01-10)
+ * Fixed carousel fade blink with hardware acceleration and synchronized opacity changes
  *
  * Features:
  * - URL query parameter state management (?art=<slug>)
  * - Image carousel with keyboard navigation
+ * - Smooth cross-fade transitions (no blink/flicker)
  * - Focus trap and accessibility compliance
  * - Body scroll locking
  * - Multiple close methods (X, overlay, ESC)
@@ -15,7 +16,7 @@
  * - Mobile-responsive design
  */
 
-console.log('[ArtworkModal] Loading artwork-modal.js version 2.1.0-debug');
+console.log('[ArtworkModal] Loading artwork-modal.js version 2.2.0');
 
 import { sanitizeText } from './security.js';
 import { SVG_NAMESPACE, ARTWORK_CARD } from './constants.js';
@@ -251,13 +252,24 @@ export class ArtworkCarousel {
 
     // Preload the new image to ensure it's ready
     this.preloadImage(newImageUrl).then(() => {
+      // CRITICAL: Set next image to opacity 0 FIRST, before changing src
+      this.nextImage.style.opacity = '0';
+      this.nextImage.style.pointerEvents = 'none';
+
       // Set the next image source
       this.nextImage.src = newImageUrl;
 
-      // Cross-fade: fade in next while fading out current
-      this.nextImage.style.opacity = '1';
-      this.nextImage.style.pointerEvents = 'auto';
-      this.currentImage.style.opacity = '0';
+      // Force a reflow to ensure opacity 0 is applied before transition
+      // eslint-disable-next-line no-unused-expressions
+      this.nextImage.offsetHeight;
+
+      // Use requestAnimationFrame to ensure the browser has painted
+      requestAnimationFrame(() => {
+        // Cross-fade: fade in next while fading out current
+        this.nextImage.style.opacity = '1';
+        this.nextImage.style.pointerEvents = 'auto';
+        this.currentImage.style.opacity = '0';
+      });
 
       // After transition completes, swap the images
       setTimeout(() => {

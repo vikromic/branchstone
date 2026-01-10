@@ -4580,7 +4580,7 @@ details[open] summary {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  background: var(--surface-tertiary);
+  background: #000; /* Force pure black to prevent any background flash during transitions */
   border-radius: var(--radius-md);
   overflow: hidden;
   touch-action: pan-y; /* Allow vertical scroll but enable horizontal swipe gestures */
@@ -4601,6 +4601,12 @@ details[open] summary {
   transition: opacity 350ms ease-in-out;
   user-select: none;
   -webkit-user-drag: none;
+  /* Hardware acceleration to prevent flickering on mobile */
+  transform: translateZ(0);
+  will-change: opacity;
+  /* Ensure smooth rendering */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .artwork-modal__main-image--current {
