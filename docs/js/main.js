@@ -1916,17 +1916,29 @@ import { ArtworkModalManager } from './artwork-modal.js';
     const artworkCard = document.querySelector(`[data-artwork-id="artwork-${artworkSlug}"]`)?.closest('.artwork-card');
 
     if (artworkCard) {
-      console.log('[Gallery] Found artwork card, triggering click to open modal');
+      console.log('[Gallery] Found artwork card, scrolling to position and opening modal');
 
       // Small delay to ensure modal system is fully initialized
       setTimeout(() => {
-        artworkCard.click();
+        // Scroll artwork card into view BEFORE opening modal
+        // This ensures the gallery shows the artwork's position when modal closes
+        artworkCard.scrollIntoView({
+          behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+          block: 'center', // Center the card in the viewport
+          inline: 'nearest'
+        });
 
-        // Clean up URL parameter after opening modal
-        // The modal will add its own 'art' parameter
-        const url = new URL(window.location);
-        url.searchParams.delete('artwork');
-        window.history.replaceState({}, '', url);
+        // Wait for scroll to complete before opening modal
+        // Smooth scroll typically takes 300-500ms
+        setTimeout(() => {
+          artworkCard.click();
+
+          // Clean up URL parameter after opening modal
+          // The modal will add its own 'art' parameter
+          const url = new URL(window.location);
+          url.searchParams.delete('artwork');
+          window.history.replaceState({}, '', url);
+        }, 400);
       }, 200);
     } else {
       console.warn('[Gallery] Artwork card not found for slug:', artworkSlug);
