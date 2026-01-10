@@ -64,7 +64,6 @@ export class ArtworkCarousel {
 
   render() {
     console.log('[ArtworkCarousel] Rendering carousel with', this.images?.length || 0, 'images');
-    console.log('[ArtworkCarousel] Initial currentIndex =', this.currentIndex);
 
     if (!this.images || this.images.length === 0) {
       console.log('[ArtworkCarousel] No images, rendering empty state');
@@ -103,7 +102,6 @@ export class ArtworkCarousel {
     this.attachEventListeners();
 
     // Ensure initial dot state is synchronized with currentIndex
-    console.log('[ArtworkCarousel] About to call updateCarouselDots() in render()');
     this.updateCarouselDots();
 
     console.log('[ArtworkCarousel] Carousel rendered successfully');
@@ -201,9 +199,7 @@ export class ArtworkCarousel {
   }
 
   next() {
-    console.log('[Carousel] BEFORE next(): currentIndex =', this.currentIndex);
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
-    console.log('[Carousel] AFTER next(): currentIndex =', this.currentIndex);
     this.updateImage();
   }
 
@@ -230,9 +226,7 @@ export class ArtworkCarousel {
   }
 
   updateCarouselDots() {
-    console.log('[Carousel] updateCarouselDots() called with currentIndex =', this.currentIndex);
     const dots = this.container.querySelectorAll('.artwork-modal__carousel-dot');
-    console.log('[Carousel] Found', dots.length, 'dots');
 
     // First, remove is-active from all dots
     dots.forEach(dot => {
@@ -242,13 +236,7 @@ export class ArtworkCarousel {
     // Then, add is-active to the current dot
     if (dots[this.currentIndex]) {
       dots[this.currentIndex].classList.add('is-active');
-      console.log('[Carousel] Set dot', this.currentIndex, 'as active');
     }
-
-    // Verify final state
-    dots.forEach((dot, index) => {
-      console.log('[Carousel] Dot', index, 'final state: isActive=', dot.classList.contains('is-active'));
-    });
   }
 
   handleKeyboardNavigation(e) {
@@ -305,19 +293,13 @@ export class ArtworkCarousel {
     const deltaX = this.touchEnd.x - this.touchStart.x;
     const deltaY = Math.abs(this.touchEnd.y - this.touchStart.y);
 
-    console.log('[Carousel] handleSwipe(): deltaX =', deltaX, ', deltaY =', deltaY);
-
     // Only register horizontal swipe if it's more pronounced than vertical movement
     if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > deltaY) {
       if (deltaX > 0) {
-        console.log('[Carousel] Swipe right detected - calling previous()');
         this.previous(); // Swipe right = previous image
       } else {
-        console.log('[Carousel] Swipe left detected - calling next()');
         this.next();  // Swipe left = next image
       }
-    } else {
-      console.log('[Carousel] Swipe not registered (below threshold or too vertical)');
     }
   }
 }
