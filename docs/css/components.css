@@ -4773,7 +4773,7 @@ details[open] summary {
     padding: 0;
   }
 
-  .artwork-modal__carousel-dot.active {
+  .artwork-modal__carousel-dot.is-active {
     background: var(--accent-primary);
     width: 24px;
     border-radius: 4px;
