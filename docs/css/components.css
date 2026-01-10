@@ -4682,12 +4682,21 @@ details[open] summary {
   background: var(--surface-tertiary);
   border-radius: var(--radius-md);
   overflow: hidden;
+  touch-action: pan-y; /* Allow vertical scroll but enable horizontal swipe gestures */
+  cursor: grab;
+}
+
+.artwork-modal__main-image-container:active {
+  cursor: grabbing;
 }
 
 .artwork-modal__main-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 150ms ease-in-out;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .artwork-modal__no-image {

@@ -23,6 +23,15 @@ export class ArtworkCarousel {
     this.images = images; // Array of full image paths
     this.container = container;
     this.currentIndex = 0;
+
+    // Touch/swipe tracking
+    this.touchStart = { x: 0, y: 0 };
+    this.touchEnd = { x: 0, y: 0 };
+
+    // Bind touch handlers
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
   }
 
   /**
@@ -171,6 +180,14 @@ export class ArtworkCarousel {
     dots.forEach((dot, index) => {
       dot.addEventListener('click', () => this.goTo(index));
     });
+
+    // Attach touch/swipe handlers to the main image container
+    const imageContainer = this.container.querySelector('.artwork-modal__main-image-container');
+    if (imageContainer) {
+      imageContainer.addEventListener('touchstart', this.handleTouchStart, { passive: true });
+      imageContainer.addEventListener('touchmove', this.handleTouchMove, { passive: false });
+      imageContainer.addEventListener('touchend', this.handleTouchEnd, { passive: true });
+    }
   }
 
   previous() {
@@ -193,7 +210,13 @@ export class ArtworkCarousel {
     const dots = this.container.querySelectorAll('.artwork-modal__carousel-dot');
 
     if (img) {
-      img.src = this.images[this.currentIndex];
+      // Add fade transition for smooth image change
+      img.style.opacity = '0';
+
+      setTimeout(() => {
+        img.src = this.images[this.currentIndex];
+        img.style.opacity = '1';
+      }, 150);
     }
 
     dots.forEach((dot, index) => {
@@ -210,6 +233,58 @@ export class ArtworkCarousel {
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
       this.next();
+    }
+  }
+
+  /**
+   * Handle touch start
+   * @param {TouchEvent} e - Touch event
+   */
+  handleTouchStart(e) {
+    this.touchStart.x = e.changedTouches[0].screenX;
+    this.touchStart.y = e.changedTouches[0].screenY;
+  }
+
+  /**
+   * Handle touch move - prevent default for horizontal swipes
+   * @param {TouchEvent} e - Touch event
+   */
+  handleTouchMove(e) {
+    const deltaY = Math.abs(e.changedTouches[0].screenY - this.touchStart.y);
+    const deltaX = Math.abs(e.changedTouches[0].screenX - this.touchStart.x);
+
+    // Only prevent default if horizontal swipe is more pronounced than vertical
+    // This allows vertical scrolling while enabling horizontal carousel swipes
+    if (deltaX > deltaY) {
+      e.preventDefault();
+    }
+  }
+
+  /**
+   * Handle touch end - detect swipe direction
+   * @param {TouchEvent} e - Touch event
+   */
+  handleTouchEnd(e) {
+    this.touchEnd.x = e.changedTouches[0].screenX;
+    this.touchEnd.y = e.changedTouches[0].screenY;
+    this.handleSwipe();
+  }
+
+  /**
+   * Handle swipe gesture
+   */
+  handleSwipe() {
+    const swipeThreshold = 50; // Minimum swipe distance in pixels
+    const deltaX = this.touchEnd.x - this.touchStart.x;
+    const deltaY = Math.abs(this.touchEnd.y - this.touchStart.y);
+
+    // Only register horizontal swipe if it's more pronounced than vertical movement
+    if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > deltaY) {
+      if (deltaX > 0) {
+        this.previous(); // Swipe right = previous image
+      } else {
+        this.next();  // Swipe left = next image
+      }
     }
   }
 }
