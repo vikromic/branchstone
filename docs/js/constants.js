@@ -170,8 +170,8 @@ export const URLS = {
   CONTACT: 'contact.html',
   INDEX: 'index.html',
   COMMISSIONS: 'commissions.html',
-  ARTWORKS_JSON: './artworks.json',
-  FEEDBACKS_JSON: 'feedbacks.json',
+  ARTWORKS_JSON: 'json_data/artworks.json',
+  FEEDBACKS_JSON: 'json_data/feedbacks.json',
   PLACEHOLDER_IMAGE: 'img/placeholder.webp'
 };
 

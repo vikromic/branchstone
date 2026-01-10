@@ -34,7 +34,7 @@ export class GalleryDataManager {
   async loadArtworks() {
     try {
       console.log('[GalleryData] Fetching artworks.json...');
-      const response = await fetch('./artworks.json');
+        const response = await fetch('./json_data/artworks.json');
       console.log('[GalleryData] Response status:', response.status);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
