@@ -249,14 +249,11 @@
 
 /* ==========================================================================
    MOBILE PAGINATION DOTS
+   Now using unified carousel dots from mobile-ux-improvements.css
    ========================================================================== */
 
 .highlights__pagination {
   display: none;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-2);
-  margin-top: var(--space-6);
 }
 
 @media (max-width: 767px) {
@@ -265,33 +262,7 @@
   }
 }
 
-.highlights__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--border-default);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: background var(--duration-fast) var(--ease-smooth),
-              transform var(--duration-fast) var(--ease-smooth);
-}
-
-.highlights__dot:hover {
-  background: var(--accent-primary);
-  transform: scale(1.2);
-}
-
-.highlights__dot.is-active {
-  background: var(--accent-primary);
-  width: 24px;
-  border-radius: 4px;
-}
-
-.highlights__dot:focus-visible {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
-}
+/* All dot styling now handled by mobile-ux-improvements.css unified carousel CSS */
 
 /* ==========================================================================
    DARK THEME
@@ -309,14 +280,7 @@
               0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-[data-theme="dark"] .highlights__dot {
-  background: var(--border-strong);
-}
-
-[data-theme="dark"] .highlights__dot:hover,
-[data-theme="dark"] .highlights__dot.is-active {
-  background: var(--accent-primary);
-}
+/* Dark theme dot styling now handled by mobile-ux-improvements.css unified carousel CSS */
 
 /* ==========================================================================
    EMPTY STATE

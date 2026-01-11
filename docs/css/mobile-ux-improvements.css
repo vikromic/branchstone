@@ -326,6 +326,7 @@
   .carousel__dot,
   .artwork-modal__carousel-dot,
   .featured-carousel__dot,
+  .highlights__dot,
   [class*="carousel"][class*="dot"] {
     /* Button tap target size */
     width: var(--carousel-dot-container-width);
@@ -369,6 +370,7 @@
   .carousel__dot::before,
   .artwork-modal__carousel-dot::before,
   .featured-carousel__dot::before,
+  .highlights__dot::before,
   [class*="carousel"][class*="dot"]::before {
     content: '';
     display: block;
@@ -400,6 +402,7 @@
   .carousel__dot::after,
   .artwork-modal__carousel-dot::after,
   .featured-carousel__dot::after,
+  .highlights__dot::after,
   [class*="carousel"][class*="dot"]::after {
     display: none;
   }
@@ -408,6 +411,7 @@
   [data-theme="dark"] .carousel__dot::before,
   [data-theme="dark"] .artwork-modal__carousel-dot::before,
   [data-theme="dark"] .featured-carousel__dot::before,
+  [data-theme="dark"] .highlights__dot::before,
   [data-theme="dark"] [class*="carousel"][class*="dot"]::before {
     background: var(--carousel-dot-inactive-bg);
     opacity: var(--carousel-dot-inactive-opacity);
@@ -417,6 +421,7 @@
   .carousel__dot.is-active::before,
   .artwork-modal__carousel-dot.is-active::before,
   .featured-carousel__dot.is-active::before,
+  .highlights__dot.is-active::before,
   [class*="carousel"][class*="dot"].is-active::before {
     width: var(--carousel-dot-active-width);
     height: var(--carousel-dot-active-height);
@@ -435,6 +440,7 @@
   [data-theme="dark"] .carousel__dot.is-active::before,
   [data-theme="dark"] .artwork-modal__carousel-dot.is-active::before,
   [data-theme="dark"] .featured-carousel__dot.is-active::before,
+  [data-theme="dark"] .highlights__dot.is-active::before,
   [data-theme="dark"] [class*="carousel"][class*="dot"].is-active::before {
     background: var(--carousel-dot-active-bg);
     opacity: var(--carousel-dot-active-opacity);
@@ -444,6 +450,7 @@
   .carousel__dot:hover::before,
   .artwork-modal__carousel-dot:hover::before,
   .featured-carousel__dot:hover::before,
+  .highlights__dot:hover::before,
   [class*="carousel"][class*="dot"]:hover::before {
     opacity: var(--carousel-dot-hover-opacity);
     transform: translateZ(0) scale(var(--carousel-dot-hover-scale));
@@ -453,6 +460,7 @@
   .carousel__pagination,
   .artwork-modal__carousel-dots,
   .featured-carousel__pagination,
+  .highlights__pagination,
   [class*="carousel"][class*="pagination"],
   [class*="carousel"][class*="dots"] {
     display: flex;
