@@ -346,48 +346,41 @@
   margin-top: 2rem;
 }
 
-.highlights__dot {
-  width: 0.75rem;
-  height: 0.75rem;
-  padding: 0;
-  background: var(--border-default);
-  border: none;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all var(--duration-normal) var(--ease-smooth);
-}
+/* Desktop dots - unified styling */
+@media (min-width: 768px) {
+  .highlights__dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    padding: 0;
+    background: var(--border-default);
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-smooth);
+  }
 
-.highlights__dot:hover {
-  background: var(--accent-primary);
-  transform: scale(1.2);
-}
+  .highlights__dot:hover {
+    background: var(--accent-primary);
+    transform: scale(1.2);
+  }
 
-.highlights__dot.is-active {
-  width: 2rem;
-  background: var(--accent-primary);
-  border-radius: var(--radius-full);
-}
+  .highlights__dot.is-active {
+    width: 2rem;
+    background: var(--accent-primary);
+    border-radius: var(--radius-full);
+  }
 
-.highlights__dot:focus-visible {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
+  .highlights__dot:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
 }
 
 /* Mobile pagination adjustments */
 @media (max-width: 767px) {
-  .highlights__pagination {
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-  }
-
-  .highlights__dot {
-    width: 0.625rem;
-    height: 0.625rem;
-  }
-
-  .highlights__dot.is-active {
-    width: 1.5rem;
-  }
+  /* REMOVED: Mobile dot styling now handled by unified carousel CSS in mobile-ux-improvements.css */
+  /* This ensures Highlights dots match Featured Works dots exactly */
+  /* The unified CSS uses ::before pseudo-elements for crisp 6px dots and 22×6px active pills */
 }
 
 /* ==========================================================================
