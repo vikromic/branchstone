@@ -26,12 +26,14 @@
     <link rel="stylesheet" href="css/artist-feedback.css?v=1">
     <link rel="stylesheet" href="css/about-fold.css">
     <link rel="stylesheet" href="css/highlights.css">
+    <link rel="stylesheet" href="css/testimonials.css">
 
     <!-- Scripts -->
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/artist-feedback.js"></script>
     <script type="module" src="js/about-fold.js"></script>
     <script type="module" src="js/highlights.js"></script>
+    <script type="module" src="js/testimonials.js"></script>
   <script type="module" src="js/qa-enhancements.js"></script>
   <link rel="stylesheet" href="css/qa-fixes.css?v=1">
   
@@ -387,7 +389,11 @@
                 <h2 id="testimonials-heading" class="section__title section__title--centered">What Collectors Say</h2>
 
                 <div class="grid grid--three-column">
-                    <!-- Testimonials will be loaded dynamically from collections.json -->
+                    <!-- Testimonials will be loaded dynamically from feedbacks.json -->
+                </div>
+
+                <div class="testimonials__pagination" role="tablist" aria-label="Testimonials pagination">
+                    <!-- Pagination dots will be added dynamically on mobile -->
                 </div>
             </div>
         </section>

@@ -1,0 +1,199 @@
+/**
+ * Testimonials Section - About page
+ * Desktop: 3-column grid layout (unchanged)
+ * Mobile: Horizontal scroll-snap carousel with pagination dots
+ */
+
+/* ==========================================================================
+   TESTIMONIALS SECTION
+   ========================================================================== */
+
+.section--testimonials {
+  padding-top: clamp(3rem, 8vw, 6rem);
+  padding-bottom: clamp(3rem, 8vw, 6rem);
+  background: var(--bg-primary);
+}
+
+/* ==========================================================================
+   DESKTOP GRID LAYOUT (unchanged)
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .grid--three-column {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  /* Ensure testimonials show as grid on desktop */
+  .section--testimonials .grid--three-column {
+    gap: 2rem;
+  }
+}
+
+/* ==========================================================================
+   MOBILE SCROLL CAROUSEL
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .testimonials-grid {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-4);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: var(--space-2);
+    margin-left: calc(-1 * clamp(1rem, 5vw, 2rem));
+    margin-right: calc(-1 * clamp(1rem, 5vw, 2rem));
+    padding-left: clamp(1rem, 5vw, 2rem);
+    padding-right: clamp(1rem, 5vw, 2rem);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .testimonials-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .testimonials-grid {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .testimonial-card {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+}
+
+/* ==========================================================================
+   TESTIMONIAL CARD
+   ========================================================================== */
+
+.testimonial-card {
+  position: relative;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  transition: transform var(--duration-normal) var(--ease-smooth),
+              box-shadow var(--duration-normal) var(--ease-smooth);
+  box-shadow: 0 1px 3px rgba(26, 24, 22, 0.04),
+              0 1px 2px rgba(26, 24, 22, 0.03);
+  border: 1px solid var(--border-subtle);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(26, 24, 22, 0.08),
+              0 2px 4px rgba(26, 24, 22, 0.06);
+}
+
+/* Quote icon */
+.testimonial-card__quote-icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--accent-primary);
+  opacity: 0.3;
+  margin-bottom: var(--space-4);
+}
+
+/* Review text */
+.testimonial-card__review {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--text-primary);
+  margin: 0 0 var(--space-5) 0;
+  font-style: italic;
+}
+
+/* Author information */
+.testimonial-card__author {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.testimonial-card__name {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.testimonial-card__location {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+/* ==========================================================================
+   PAGINATION DOTS (Mobile only)
+   ========================================================================== */
+
+.testimonials__pagination {
+  display: none; /* Hidden by default (desktop) */
+}
+
+@media (max-width: 767px) {
+  .testimonials__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  /* Mobile pagination dots - unified styling handled by mobile-ux-improvements.css */
+  /* Uses ::before pseudo-elements for crisp 6px dots and 22×6px active pills */
+}
+
+/* ==========================================================================
+   DARK THEME
+   ========================================================================== */
+
+[data-theme="dark"] .testimonial-card {
+  background: var(--bg-secondary);
+  border-color: var(--border-subtle);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2),
+              0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .testimonial-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+              0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================================================
+   EMPTY STATE
+   ========================================================================== */
+
+.testimonials__empty {
+  text-align: center;
+  padding: var(--space-16) var(--space-8);
+  color: var(--text-tertiary);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+}
+
+/* ==========================================================================
+   ACCESSIBILITY - REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-card,
+  .testimonials__dot {
+    transition: none;
+  }
+
+  .testimonial-card:hover {
+    transform: none;
+  }
+
+  .testimonials-grid {
+    scroll-behavior: auto;
+  }
+}
