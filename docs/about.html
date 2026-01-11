@@ -25,11 +25,13 @@
     <link rel="stylesheet" href="css/mobile-gallery-improvements.css">
     <link rel="stylesheet" href="css/artist-feedback.css?v=1">
     <link rel="stylesheet" href="css/about-fold.css">
+    <link rel="stylesheet" href="css/highlights.css">
 
     <!-- Scripts -->
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/artist-feedback.js"></script>
     <script type="module" src="js/about-fold.js"></script>
+    <script type="module" src="js/highlights.js"></script>
   <script type="module" src="js/qa-enhancements.js"></script>
   <link rel="stylesheet" href="css/qa-fixes.css?v=1">
   
@@ -250,6 +252,24 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Highlights Section -->
+        <section class="section section--highlights" aria-labelledby="highlights-heading">
+            <div class="container">
+                <div class="highlights__header">
+                    <h2 id="highlights-heading" class="highlights__title">Highlights</h2>
+                    <p class="highlights__subtitle">Press, exhibitions, and features</p>
+                </div>
+
+                <div class="highlights__grid">
+                    <!-- Highlights will be loaded dynamically from highlights.json -->
+                </div>
+
+                <div class="highlights__pagination" role="tablist" aria-label="Highlights pagination">
+                    <!-- Pagination dots will be added dynamically on mobile -->
                 </div>
             </div>
         </section>
