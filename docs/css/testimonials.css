@@ -44,10 +44,9 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     padding-bottom: var(--space-2);
-    margin-left: calc(-1 * clamp(1rem, 5vw, 2rem));
-    margin-right: calc(-1 * clamp(1rem, 5vw, 2rem));
-    padding-left: clamp(1rem, 5vw, 2rem);
-    padding-right: clamp(1rem, 5vw, 2rem);
+    /* Add left/right padding equal to gap for visual balance */
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
   }
 
   /* Hide scrollbar but keep functionality */
