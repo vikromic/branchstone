@@ -1,35 +1,82 @@
 /**
  * Highlights Section - Load and render highlights from JSON
- * Handles desktop grid and mobile scroll-snap carousel with pagination
+ * Desktop: Carousel with navigation arrows and pagination dots (matching Featured Works)
+ * Mobile: Horizontal scroll-snap carousel with pagination
  */
+
+import { SwipeHandler } from './touch-handler.js';
+import { prefersReducedMotion } from './utils.js';
 
 class HighlightsManager {
   constructor() {
     this.highlights = [];
+    this.container = null;
     this.gridElement = null;
     this.paginationElement = null;
     this.currentIndex = 0;
+    this.slidesPerView = this.getSlidesPerView();
+    this.isTransitioning = false;
+    this.autoplayInterval = null;
+    this.autoplayEnabled = true; // Enable autoplay like Featured Works
+    this.autoplayDelay = 5000; // 5 seconds
+
+    // SwipeHandler instance
+    this.swipeHandler = null;
+
+    // Elements cache
+    this.elements = {};
+
+    // Bind methods
+    this.handleResize = this.handleResize.bind(this);
+    this.handleKeydown = this.handleKeydown.bind(this);
+  }
+
+  /**
+   * Get slides per view based on viewport width
+   * @returns {number} Number of slides to show
+   */
+  getSlidesPerView() {
+    const width = window.innerWidth;
+    if (width < 768) return 1;      // Mobile: 1 slide
+    if (width < 1024) return 2;     // Tablet: 2 slides
+    if (width < 1280) return 2;     // Medium desktop: 2 slides
+    return 3;                        // Large desktop: 3 slides
   }
 
   /**
    * Initialize the highlights manager
    */
   async init() {
+    this.container = document.querySelector('.section--highlights');
     this.gridElement = document.querySelector('.highlights__grid');
     this.paginationElement = document.querySelector('.highlights__pagination');
 
     if (!this.gridElement) {
-      console.warn('Highlights grid element not found');
+      console.warn('[Highlights] Grid element not found');
       return;
     }
 
     try {
       await this.loadHighlights();
-      this.renderHighlights();
-      this.setupMobilePagination();
-      this.setupScrollSync();
+
+      if (this.highlights.length === 0) {
+        this.renderEmptyState();
+        return;
+      }
+
+      this.renderCarousel();
+      this.cacheElements();
+      this.attachEventListeners();
+      this.updateNavigation();
+
+      // Start autoplay if enabled
+      if (this.autoplayEnabled && window.innerWidth >= 768) {
+        this.startAutoplay();
+      }
+
+      console.log('[Highlights] Initialized successfully');
     } catch (error) {
-      console.error('Error initializing highlights:', error);
+      console.error('[Highlights] Initialization error:', error);
       this.renderEmptyState();
     }
   }
@@ -51,7 +98,7 @@ class HighlightsManager {
 
       this.highlights = this.sortHighlights(data.highlights);
     } catch (error) {
-      console.error('Error loading highlights:', error);
+      console.error('[Highlights] Error loading highlights:', error);
       throw error;
     }
   }
@@ -106,36 +153,80 @@ class HighlightsManager {
   }
 
   /**
-   * Render highlights to the grid
+   * Render the carousel structure
    */
-  renderHighlights() {
+  renderCarousel() {
     if (!this.gridElement) return;
 
-    if (this.highlights.length === 0) {
-      this.renderEmptyState();
+    // Check if mobile (use scroll-snap, not carousel)
+    if (window.innerWidth < 768) {
+      this.renderMobileScroll();
       return;
     }
 
-    // Clear existing content
-    this.gridElement.textContent = '';
+    // Desktop carousel
+    this.gridElement.innerHTML = '';
+    this.gridElement.className = 'highlights__carousel-track';
 
-    // Create and append each card
-    this.highlights.forEach(highlight => {
-      const card = this.createHighlightCard(highlight);
+    // Create wrapper if not exists
+    let wrapper = this.gridElement.parentElement;
+    if (!wrapper.classList.contains('highlights__carousel')) {
+      const newWrapper = document.createElement('div');
+      newWrapper.className = 'highlights__carousel';
+      newWrapper.setAttribute('aria-label', 'Highlights carousel');
+
+      this.gridElement.parentElement.insertBefore(newWrapper, this.gridElement);
+      newWrapper.appendChild(this.gridElement);
+      wrapper = newWrapper;
+    }
+
+    // Render cards
+    this.highlights.forEach((highlight, index) => {
+      const card = this.createHighlightCard(highlight, index);
       this.gridElement.appendChild(card);
     });
+
+    // Create navigation arrows
+    if (!wrapper.querySelector('.highlights__nav--prev')) {
+      const prevButton = this.createNavButton('prev');
+      const nextButton = this.createNavButton('next');
+      wrapper.appendChild(prevButton);
+      wrapper.appendChild(nextButton);
+    }
+
+    // Update pagination for desktop
+    this.updatePagination();
+  }
+
+  /**
+   * Render mobile scroll-snap layout
+   */
+  renderMobileScroll() {
+    if (!this.gridElement) return;
+
+    this.gridElement.innerHTML = '';
+    this.gridElement.className = 'highlights__grid';
+
+    this.highlights.forEach((highlight, index) => {
+      const card = this.createHighlightCard(highlight, index);
+      this.gridElement.appendChild(card);
+    });
+
+    this.setupMobilePagination();
+    this.setupScrollSync();
   }
 
   /**
    * Create a highlight card element (safe DOM construction)
    */
-  createHighlightCard(highlight) {
+  createHighlightCard(highlight, index) {
     const hasLink = highlight.link?.url;
     const isExternal = highlight.link?.external !== false;
 
     // Create article element
     const article = document.createElement('article');
     article.className = 'highlight-card';
+    article.setAttribute('data-index', index);
 
     // Create image wrapper
     const imageWrapper = document.createElement('div');
@@ -145,7 +236,7 @@ class HighlightsManager {
     img.src = highlight.image || 'img/placeholder.jpg';
     img.alt = highlight.title || '';
     img.className = 'highlight-card__image';
-    img.loading = 'lazy';
+    img.loading = index < this.slidesPerView ? 'eager' : 'lazy';
 
     imageWrapper.appendChild(img);
 
@@ -253,18 +344,280 @@ class HighlightsManager {
   }
 
   /**
-   * Render empty state when no highlights
+   * Create navigation button
+   * @param {string} direction - 'prev' or 'next'
+   * @returns {HTMLElement} Button element
    */
-  renderEmptyState() {
-    if (!this.gridElement) return;
+  createNavButton(direction) {
+    const button = document.createElement('button');
+    button.className = `highlights__nav highlights__nav--${direction}`;
+    button.setAttribute('aria-label', direction === 'prev' ? 'Previous slide' : 'Next slide');
+    button.type = 'button';
 
-    this.gridElement.textContent = '';
+    // Create SVG icon
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('aria-hidden', 'true');
 
-    const emptyDiv = document.createElement('div');
-    emptyDiv.className = 'highlights__empty';
-    emptyDiv.textContent = 'No highlights available at this time.';
+    const path = document.createElementNS(svgNS, 'path');
+    path.setAttribute('d', direction === 'prev' ? 'M15 18l-6-6 6-6' : 'M9 18l6-6-6-6');
 
-    this.gridElement.appendChild(emptyDiv);
+    svg.appendChild(path);
+    button.appendChild(svg);
+
+    return button;
+  }
+
+  /**
+   * Cache DOM elements
+   */
+  cacheElements() {
+    const wrapper = document.querySelector('.highlights__carousel');
+    if (wrapper) {
+      this.elements = {
+        track: wrapper.querySelector('.highlights__carousel-track'),
+        cards: wrapper.querySelectorAll('.highlight-card'),
+        prevButton: wrapper.querySelector('.highlights__nav--prev'),
+        nextButton: wrapper.querySelector('.highlights__nav--next'),
+        pagination: this.paginationElement,
+        dots: this.paginationElement?.querySelectorAll('.highlights__dot') || []
+      };
+    }
+  }
+
+  /**
+   * Attach event listeners
+   */
+  attachEventListeners() {
+    // Desktop carousel controls
+    if (window.innerWidth >= 768) {
+      // Navigation buttons
+      this.elements.prevButton?.addEventListener('click', () => this.navigate(-1));
+      this.elements.nextButton?.addEventListener('click', () => this.navigate(1));
+
+      // Pagination dots
+      this.elements.dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          const index = parseInt(dot.getAttribute('data-index'));
+          this.goToSlide(index * this.slidesPerView);
+        });
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', this.handleKeydown);
+
+      // Touch/swipe support
+      if (this.elements.track) {
+        this.swipeHandler = new SwipeHandler(this.elements.track, {
+          onSwipeLeft: () => this.navigate(1),
+          onSwipeRight: () => this.navigate(-1)
+        });
+      }
+
+      // Pause autoplay on hover
+      if (this.container) {
+        this.container.addEventListener('mouseenter', () => this.stopAutoplay());
+        this.container.addEventListener('mouseleave', () => {
+          if (this.autoplayEnabled) this.startAutoplay();
+        });
+      }
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', this.handleResize);
+  }
+
+  /**
+   * Handle keyboard navigation
+   * @param {KeyboardEvent} e - Keyboard event
+   */
+  handleKeydown(e) {
+    if (!this.container) return;
+
+    // Only handle if carousel is in viewport
+    const rect = this.container.getBoundingClientRect();
+    const isInViewport = rect.top < window.innerHeight && rect.bottom >= 0;
+
+    if (!isInViewport) return;
+
+    switch (e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        this.navigate(-1);
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        this.navigate(1);
+        break;
+    }
+  }
+
+  /**
+   * Handle window resize
+   */
+  handleResize() {
+    const newSlidesPerView = this.getSlidesPerView();
+
+    if (newSlidesPerView !== this.slidesPerView) {
+      this.slidesPerView = newSlidesPerView;
+
+      // Re-render for mobile/desktop switch
+      if ((window.innerWidth < 768 && this.elements.track) ||
+          (window.innerWidth >= 768 && !this.elements.track)) {
+        this.renderCarousel();
+        this.cacheElements();
+        this.attachEventListeners();
+        this.updateNavigation();
+        return;
+      }
+
+      // Adjust current index to prevent out of bounds
+      const maxIndex = Math.max(0, this.highlights.length - this.slidesPerView);
+      this.currentIndex = Math.min(this.currentIndex, maxIndex);
+
+      // Re-render pagination
+      this.updatePagination();
+
+      // Update position
+      if (window.innerWidth >= 768) {
+        this.updateCarouselPosition(false); // No animation on resize
+        this.updateNavigation();
+      }
+    }
+  }
+
+  /**
+   * Navigate to next/previous slide
+   * @param {number} direction - 1 for next, -1 for previous
+   */
+  navigate(direction) {
+    if (this.isTransitioning || window.innerWidth < 768) return;
+
+    const maxIndex = Math.max(0, this.highlights.length - this.slidesPerView);
+    let targetIndex;
+
+    if (direction < 0) {
+      // Moving backward (previous)
+      targetIndex = this.currentIndex - this.slidesPerView;
+      if (targetIndex < 0) {
+        targetIndex = maxIndex; // Wrap to end
+      }
+    } else {
+      // Moving forward (next)
+      targetIndex = this.currentIndex + this.slidesPerView;
+      if (targetIndex > maxIndex) {
+        targetIndex = 0; // Wrap to beginning
+      }
+    }
+
+    this.goToSlide(targetIndex);
+  }
+
+  /**
+   * Go to specific slide index
+   * @param {number} index - Target slide index
+   */
+  goToSlide(index) {
+    if (this.isTransitioning || window.innerWidth < 768) return;
+
+    const maxIndex = Math.max(0, this.highlights.length - this.slidesPerView);
+    this.currentIndex = Math.max(0, Math.min(index, maxIndex));
+
+    this.updateCarouselPosition();
+    this.updateNavigation();
+    this.updatePagination();
+
+    // Reset autoplay
+    if (this.autoplayEnabled) {
+      this.startAutoplay();
+    }
+  }
+
+  /**
+   * Update carousel position with animation
+   * @param {boolean} animate - Whether to animate the transition
+   */
+  updateCarouselPosition(animate = true) {
+    if (!this.elements.track || window.innerWidth < 768) return;
+
+    const cardWidth = 100 / this.slidesPerView; // Percentage
+    const offset = -(this.currentIndex * cardWidth);
+
+    this.isTransitioning = true;
+
+    if (animate && !prefersReducedMotion()) {
+      this.elements.track.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+    } else {
+      this.elements.track.style.transition = 'none';
+    }
+
+    this.elements.track.style.transform = `translateX(${offset}%)`;
+
+    // Reset transition flag after animation
+    setTimeout(() => {
+      this.isTransitioning = false;
+    }, 500);
+  }
+
+  /**
+   * Update navigation button states
+   */
+  updateNavigation() {
+    if (!this.elements.prevButton || !this.elements.nextButton) return;
+
+    // Disable buttons if not enough highlights to scroll
+    const hasEnoughItems = this.highlights.length > this.slidesPerView;
+    this.elements.prevButton.disabled = !hasEnoughItems;
+    this.elements.nextButton.disabled = !hasEnoughItems;
+  }
+
+  /**
+   * Update pagination dots
+   */
+  updatePagination() {
+    if (!this.paginationElement) return;
+
+    // Mobile: one dot per item
+    if (window.innerWidth < 768) {
+      this.setupMobilePagination();
+      return;
+    }
+
+    // Desktop: dots for pages
+    this.paginationElement.innerHTML = '';
+    this.paginationElement.style.display = 'flex';
+
+    const totalPages = Math.ceil(this.highlights.length / this.slidesPerView);
+    const currentPage = Math.floor(this.currentIndex / this.slidesPerView);
+
+    for (let i = 0; i < totalPages; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'highlights__dot';
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.setAttribute('aria-selected', i === currentPage ? 'true' : 'false');
+      dot.setAttribute('data-index', i);
+      dot.type = 'button';
+
+      if (i === currentPage) {
+        dot.classList.add('is-active');
+      }
+
+      dot.addEventListener('click', () => {
+        this.goToSlide(i * this.slidesPerView);
+      });
+
+      this.paginationElement.appendChild(dot);
+    }
+
+    // Update cache
+    this.elements.dots = this.paginationElement.querySelectorAll('.highlights__dot');
   }
 
   /**
@@ -275,11 +628,11 @@ class HighlightsManager {
 
     // Only show pagination on mobile
     if (window.innerWidth >= 768) {
-      this.paginationElement.textContent = '';
       return;
     }
 
-    this.paginationElement.textContent = '';
+    this.paginationElement.innerHTML = '';
+    this.paginationElement.style.display = 'flex';
 
     this.highlights.forEach((_, index) => {
       const button = document.createElement('button');
@@ -314,15 +667,6 @@ class HighlightsManager {
         this.updateActiveDot();
       }, 100);
     });
-
-    // Re-setup pagination on resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        this.setupMobilePagination();
-      }, 250);
-    });
   }
 
   /**
@@ -342,7 +686,7 @@ class HighlightsManager {
   }
 
   /**
-   * Update active dot based on scroll position
+   * Update active dot based on scroll position (mobile)
    */
   updateActiveDot() {
     if (!this.gridElement || !this.paginationElement) return;
@@ -373,6 +717,63 @@ class HighlightsManager {
     });
 
     this.currentIndex = closestIndex;
+  }
+
+  /**
+   * Start autoplay
+   */
+  startAutoplay() {
+    this.stopAutoplay(); // Clear any existing interval
+
+    if (!this.autoplayEnabled || window.innerWidth < 768) return;
+
+    this.autoplayInterval = setInterval(() => {
+      this.navigate(1);
+    }, this.autoplayDelay);
+  }
+
+  /**
+   * Stop autoplay
+   */
+  stopAutoplay() {
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+      this.autoplayInterval = null;
+    }
+  }
+
+  /**
+   * Render empty state when no highlights
+   */
+  renderEmptyState() {
+    if (!this.gridElement) return;
+
+    this.gridElement.textContent = '';
+    this.gridElement.className = 'highlights__grid';
+
+    const emptyDiv = document.createElement('div');
+    emptyDiv.className = 'highlights__empty';
+    emptyDiv.textContent = 'No highlights available at this time.';
+
+    this.gridElement.appendChild(emptyDiv);
+  }
+
+  /**
+   * Cleanup event listeners
+   */
+  destroy() {
+    // Remove event listeners
+    document.removeEventListener('keydown', this.handleKeydown);
+    window.removeEventListener('resize', this.handleResize);
+
+    // Cleanup swipe handler
+    if (this.swipeHandler) {
+      this.swipeHandler.destroy();
+      this.swipeHandler = null;
+    }
+
+    // Stop autoplay
+    this.stopAutoplay();
   }
 }
 
