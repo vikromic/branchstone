@@ -6,6 +6,7 @@
 
 import { SwipeHandler } from './touch-handler.js';
 import { prefersReducedMotion } from './utils.js';
+import { BREAKPOINTS } from './constants.js';
 
 class HighlightsManager {
   constructor() {
@@ -26,6 +27,9 @@ class HighlightsManager {
     // Elements cache
     this.elements = {};
 
+    // AbortController for cleanup
+    this.abortController = new AbortController();
+
     // Bind methods
     this.handleResize = this.handleResize.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
@@ -37,10 +41,10 @@ class HighlightsManager {
    */
   getSlidesPerView() {
     const width = window.innerWidth;
-    if (width < 768) return 1;      // Mobile: 1 slide
-    if (width < 1024) return 2;     // Tablet: 2 slides
-    if (width < 1280) return 2;     // Medium desktop: 2 slides
-    return 3;                        // Large desktop: 3 slides
+    if (width < BREAKPOINTS.MOBILE) return 1;      // Mobile: 1 slide
+    if (width < BREAKPOINTS.TABLET) return 2;      // Tablet: 2 slides
+    if (width < 1280) return 2;                    // Medium desktop: 2 slides
+    return 3;                                      // Large desktop: 3 slides
   }
 
   /**
@@ -70,11 +74,9 @@ class HighlightsManager {
       this.updateNavigation();
 
       // Start autoplay if enabled
-      if (this.autoplayEnabled && window.innerWidth >= 768) {
+      if (this.autoplayEnabled && window.innerWidth >= BREAKPOINTS.MOBILE) {
         this.startAutoplay();
       }
-
-      console.log('[Highlights] Initialized successfully');
     } catch (error) {
       console.error('[Highlights] Initialization error:', error);
       this.renderEmptyState();
@@ -159,7 +161,7 @@ class HighlightsManager {
     if (!this.gridElement) return;
 
     // Check if mobile (use scroll-snap, not carousel)
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < BREAKPOINTS.MOBILE) {
       this.renderMobileScroll();
       return;
     }
@@ -211,6 +213,10 @@ class HighlightsManager {
       const card = this.createHighlightCard(highlight, index);
       this.gridElement.appendChild(card);
     });
+
+    // Invalidate caches when content changes
+    this._cachedMobileCards = null;
+    this._cachedMobileDots = null;
 
     this.setupMobilePagination();
     this.setupScrollSync();
@@ -396,7 +402,7 @@ class HighlightsManager {
    */
   attachEventListeners() {
     // Desktop carousel controls
-    if (window.innerWidth >= 768) {
+    if (window.innerWidth >= BREAKPOINTS.MOBILE) {
       // Navigation buttons
       this.elements.prevButton?.addEventListener('click', () => this.navigate(-1));
       this.elements.nextButton?.addEventListener('click', () => this.navigate(1));
@@ -410,7 +416,7 @@ class HighlightsManager {
       });
 
       // Keyboard navigation
-      document.addEventListener('keydown', this.handleKeydown);
+      document.addEventListener('keydown', this.handleKeydown, { signal: this.abortController.signal });
 
       // Touch/swipe support
       if (this.elements.track) {
@@ -429,8 +435,8 @@ class HighlightsManager {
       }
     }
 
-    // Handle window resize
-    window.addEventListener('resize', this.handleResize);
+    // Handle window resize with cleanup signal
+    window.addEventListener('resize', this.handleResize, { signal: this.abortController.signal });
   }
 
   /**
@@ -468,8 +474,8 @@ class HighlightsManager {
       this.slidesPerView = newSlidesPerView;
 
       // Re-render for mobile/desktop switch
-      if ((window.innerWidth < 768 && this.elements.track) ||
-          (window.innerWidth >= 768 && !this.elements.track)) {
+      if ((window.innerWidth < BREAKPOINTS.MOBILE && this.elements.track) ||
+          (window.innerWidth >= BREAKPOINTS.MOBILE && !this.elements.track)) {
         this.renderCarousel();
         this.cacheElements();
         this.attachEventListeners();
@@ -485,7 +491,7 @@ class HighlightsManager {
       this.updatePagination();
 
       // Update position
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= BREAKPOINTS.MOBILE) {
         this.updateCarouselPosition(false); // No animation on resize
         this.updateNavigation();
       }
@@ -497,7 +503,7 @@ class HighlightsManager {
    * @param {number} direction - 1 for next, -1 for previous
    */
   navigate(direction) {
-    if (this.isTransitioning || window.innerWidth < 768) return;
+    if (this.isTransitioning || window.innerWidth < BREAKPOINTS.MOBILE) return;
 
     const maxIndex = Math.max(0, this.highlights.length - this.slidesPerView);
     let targetIndex;
@@ -524,7 +530,7 @@ class HighlightsManager {
    * @param {number} index - Target slide index
    */
   goToSlide(index) {
-    if (this.isTransitioning || window.innerWidth < 768) return;
+    if (this.isTransitioning || window.innerWidth < BREAKPOINTS.MOBILE) return;
 
     const maxIndex = Math.max(0, this.highlights.length - this.slidesPerView);
     this.currentIndex = Math.max(0, Math.min(index, maxIndex));
@@ -544,7 +550,7 @@ class HighlightsManager {
    * @param {boolean} animate - Whether to animate the transition
    */
   updateCarouselPosition(animate = true) {
-    if (!this.elements.track || window.innerWidth < 768) return;
+    if (!this.elements.track || window.innerWidth < BREAKPOINTS.MOBILE) return;
 
     const cardWidth = 100 / this.slidesPerView; // Percentage
     const offset = -(this.currentIndex * cardWidth);
@@ -584,7 +590,7 @@ class HighlightsManager {
     if (!this.paginationElement) return;
 
     // Mobile: one dot per item
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < BREAKPOINTS.MOBILE) {
       this.setupMobilePagination();
       return;
     }
@@ -627,7 +633,7 @@ class HighlightsManager {
     if (!this.paginationElement || this.highlights.length === 0) return;
 
     // Only show pagination on mobile
-    if (window.innerWidth >= 768) {
+    if (window.innerWidth >= BREAKPOINTS.MOBILE) {
       return;
     }
 
@@ -652,6 +658,9 @@ class HighlightsManager {
 
       this.paginationElement.appendChild(button);
     });
+
+    // Invalidate cache when dots are recreated
+    this._cachedMobileDots = null;
   }
 
   /**
@@ -690,9 +699,17 @@ class HighlightsManager {
    */
   updateActiveDot() {
     if (!this.gridElement || !this.paginationElement) return;
-    if (window.innerWidth >= 768) return;
+    if (window.innerWidth >= BREAKPOINTS.MOBILE) return;
 
-    const cards = this.gridElement.querySelectorAll('.highlight-card');
+    // Cache queries for performance
+    if (!this._cachedMobileCards) {
+      this._cachedMobileCards = this.gridElement.querySelectorAll('.highlight-card');
+    }
+    if (!this._cachedMobileDots) {
+      this._cachedMobileDots = this.paginationElement.querySelectorAll('.highlights__dot');
+    }
+
+    const cards = this._cachedMobileCards;
     const scrollLeft = this.gridElement.scrollLeft;
 
     // Find the card that's most in view
@@ -709,8 +726,8 @@ class HighlightsManager {
       }
     });
 
-    // Update dots
-    this.paginationElement.querySelectorAll('.highlights__dot').forEach((dot, index) => {
+    // Update dots (use cached query)
+    this._cachedMobileDots.forEach((dot, index) => {
       const isActive = index === closestIndex;
       dot.classList.toggle('is-active', isActive);
       dot.setAttribute('aria-pressed', isActive);
@@ -725,7 +742,7 @@ class HighlightsManager {
   startAutoplay() {
     this.stopAutoplay(); // Clear any existing interval
 
-    if (!this.autoplayEnabled || window.innerWidth < 768) return;
+    if (!this.autoplayEnabled || window.innerWidth < BREAKPOINTS.MOBILE) return;
 
     this.autoplayInterval = setInterval(() => {
       this.navigate(1);
@@ -762,9 +779,8 @@ class HighlightsManager {
    * Cleanup event listeners
    */
   destroy() {
-    // Remove event listeners
-    document.removeEventListener('keydown', this.handleKeydown);
-    window.removeEventListener('resize', this.handleResize);
+    // Remove all event listeners via AbortController
+    this.abortController.abort();
 
     // Cleanup swipe handler
     if (this.swipeHandler) {
@@ -777,15 +793,19 @@ class HighlightsManager {
   }
 }
 
-// Initialize on DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
+// Initialize only if container exists on page
+function initHighlights() {
+  const container = document.querySelector('.section--highlights');
+  if (container) {
     const manager = new HighlightsManager();
     manager.init();
-  });
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHighlights);
 } else {
-  const manager = new HighlightsManager();
-  manager.init();
+  initHighlights();
 }
 
 export default HighlightsManager;

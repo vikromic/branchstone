@@ -240,8 +240,10 @@ export class GalleryDataManager {
       return null;
     }
 
-    // Return width/height ratio
-    return width / height;
+    // Calculate ratio and clamp to reasonable bounds (0.1 to 10)
+    // Prevents extreme aspect ratios from breaking layout
+    const ratio = width / height;
+    return Math.max(0.1, Math.min(10, ratio));
   }
 
 

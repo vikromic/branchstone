@@ -16,8 +16,6 @@
  * - Mobile-responsive design
  */
 
-console.log('[ArtworkModal] Loading artwork-modal.js version 2.2.0');
-
 import { sanitizeText } from './security.js';
 import { SVG_NAMESPACE, ARTWORK_CARD, TEXT, URLS } from './constants.js';
 import { SwipeHandler } from './touch-handler.js';
@@ -35,8 +33,8 @@ export class ArtworkCarousel {
     this.currentImage = null;
     this.nextImage = null;
 
-    // Preload cache
-    this.imageCache = new Map();
+    // Preload cache (stores loaded images and failed states)
+    this.imageCache = new Map(); // Map<url, {status: 'loaded'|'failed', data: Image|null}>
 
     // SwipeHandler instance (will be initialized in render)
     this.swipeHandler = null;
@@ -71,10 +69,7 @@ export class ArtworkCarousel {
   }
 
   render() {
-    console.log('[ArtworkCarousel] Rendering carousel with', this.images?.length || 0, 'images');
-
     if (!this.images || this.images.length === 0) {
-      console.log('[ArtworkCarousel] No images, rendering empty state');
       return this.renderEmpty();
     }
 
@@ -113,10 +108,7 @@ export class ArtworkCarousel {
 
     // Add controls if multiple images
     if (this.images.length > 1) {
-      console.log('[ArtworkCarousel] Multiple images detected, adding controls');
       this.addControls(carousel);
-    } else {
-      console.log('[ArtworkCarousel] Single image, no controls needed');
     }
 
     this.container.appendChild(carousel);
@@ -129,8 +121,6 @@ export class ArtworkCarousel {
     if (this.images.length > 1) {
       this.preloadAdjacentImages();
     }
-
-    console.log('[ArtworkCarousel] Carousel rendered successfully');
   }
 
   addControls(carousel) {
@@ -221,23 +211,17 @@ export class ArtworkCarousel {
   }
 
   previous() {
-    const oldIndex = this.currentIndex;
     this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
-    console.log('[Carousel] previous() - index changed from', oldIndex, 'to', this.currentIndex);
     this.updateImage();
   }
 
   next() {
-    const oldIndex = this.currentIndex;
     this.currentIndex = (this.currentIndex + 1) % this.images.length;
-    console.log('[Carousel] next() - index changed from', oldIndex, 'to', this.currentIndex);
     this.updateImage();
   }
 
   goTo(index) {
-    const oldIndex = this.currentIndex;
     this.currentIndex = index;
-    console.log('[Carousel] goTo() - index changed from', oldIndex, 'to', this.currentIndex);
     this.updateImage();
   }
 
@@ -291,23 +275,32 @@ export class ArtworkCarousel {
   }
 
   /**
-   * Preload an image and cache it
+   * Preload an image and cache it (with error boundary tracking)
    * @param {string} url - Image URL to preload
-   * @returns {Promise} - Resolves when image is loaded
+   * @returns {Promise} - Resolves when image is loaded, rejects with error state
    */
   preloadImage(url) {
     // Check cache first
     if (this.imageCache.has(url)) {
-      return Promise.resolve(this.imageCache.get(url));
+      const cached = this.imageCache.get(url);
+      if (cached.status === 'loaded') {
+        return Promise.resolve(cached.data);
+      } else if (cached.status === 'failed') {
+        return Promise.reject(new Error('Image previously failed to load'));
+      }
     }
 
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => {
-        this.imageCache.set(url, img);
+        this.imageCache.set(url, { status: 'loaded', data: img });
         resolve(img);
       };
-      img.onerror = reject;
+      img.onerror = (error) => {
+        this.imageCache.set(url, { status: 'failed', data: null });
+        console.error('[Carousel] Failed to preload image:', url);
+        reject(error);
+      };
       img.src = url;
     });
   }
@@ -332,41 +325,19 @@ export class ArtworkCarousel {
   }
 
   updateCarouselDots() {
-    console.log('[Carousel] ========== updateCarouselDots START ==========');
-    console.log('[Carousel] currentIndex:', this.currentIndex);
-
     const dots = this.container.querySelectorAll('.featured-carousel__dot');
-    console.log('[Carousel] Found dots:', dots.length);
-    console.log('[Carousel] Dots array:', Array.from(dots).map((d, i) => ({
-      index: i,
-      hasActive: d.classList.contains('is-active'),
-      classes: d.className
-    })));
 
     // First, remove is-active from all dots
-    dots.forEach((dot, index) => {
-      const hadActive = dot.classList.contains('is-active');
+    dots.forEach(dot => {
       dot.classList.remove('is-active');
-      if (hadActive) {
-        console.log('[Carousel] Removed is-active from dot', index);
-      }
     });
 
     // Then, add is-active to the current dot
     if (dots[this.currentIndex]) {
       dots[this.currentIndex].classList.add('is-active');
-      console.log('[Carousel] Added is-active to dot', this.currentIndex);
-      console.log('[Carousel] Dot classes after add:', dots[this.currentIndex].className);
     } else {
       console.warn('[Carousel] No dot found at index', this.currentIndex);
     }
-
-    console.log('[Carousel] After update:', Array.from(dots).map((d, i) => ({
-      index: i,
-      hasActive: d.classList.contains('is-active'),
-      classes: d.className
-    })));
-    console.log('[Carousel] ========== updateCarouselDots END ==========');
   }
 
   handleKeyboardNavigation(e) {
@@ -425,11 +396,8 @@ export class ArtworkModalManager {
     // Check if modal already exists
     const existingModal = document.querySelector('.artwork-modal');
     if (existingModal) {
-      console.log('[ArtworkModal] Modal already exists in DOM');
       return;
     }
-
-    console.log('[ArtworkModal] Creating modal HTML structure...');
 
     // Create modal container
     const modal = document.createElement('div');
@@ -569,9 +537,6 @@ export class ArtworkModalManager {
     this.modal = modal;
     this.overlay = overlay;
 
-    console.log('[ArtworkModal] Modal HTML created and appended to body');
-    console.log('[ArtworkModal] Modal element:', this.modal);
-
     // Attach close listeners
     closeBtn.addEventListener('click', () => this.close());
     overlay.addEventListener('click', () => this.close());
@@ -581,25 +546,18 @@ export class ArtworkModalManager {
    * Attach global event listeners
    */
   attachGlobalListeners() {
-    console.log('[ArtworkModal] Attaching global click listeners');
-
     // Listen for artwork card clicks
     document.addEventListener('click', (e) => {
       const card = e.target.closest('.artwork-card');
       if (!card) return;
 
-      console.log('[ArtworkModal] Artwork card clicked:', card);
-
       // Don't open modal if clicking action buttons
       if (e.target.closest('.artwork-card__favorite') ||
           e.target.closest('.artwork-card__inquire')) {
-        console.log('[ArtworkModal] Click on action button - ignoring');
         return;
       }
 
-      console.log('[ArtworkModal] Extracting artwork data from card...');
       const artworkData = this.extractArtworkDataFromCard(card);
-      console.log('[ArtworkModal] Artwork data:', artworkData);
 
       if (artworkData) {
         this.open(artworkData);
@@ -657,7 +615,6 @@ export class ArtworkModalManager {
         const parsedImages = JSON.parse(imagesData);
         if (Array.isArray(parsedImages) && parsedImages.length > 0) {
           images = parsedImages;
-          console.log('[ArtworkModal] Parsed', images.length, 'images from data-images attribute');
         }
       } catch (error) {
         console.warn('[ArtworkModal] Failed to parse data-images attribute:', error);
@@ -715,9 +672,6 @@ export class ArtworkModalManager {
    * Open modal with artwork data
    */
   open(artwork, updateURL = true) {
-    console.log('[ArtworkModal] Opening modal for:', artwork.name);
-    console.log('[ArtworkModal] Modal element exists:', !!this.modal);
-
     if (!this.modal) {
       console.error('[ArtworkModal] ERROR: Modal element is null - cannot open');
       return;
@@ -740,10 +694,6 @@ export class ArtworkModalManager {
 
     // Add active class to trigger CSS transition
     this.modal.classList.add('is-active');
-
-    console.log('[ArtworkModal] Modal classes:', this.modal.className);
-    console.log('[ArtworkModal] Modal computed display:', window.getComputedStyle(this.modal).display);
-    console.log('[ArtworkModal] Modal computed opacity:', window.getComputedStyle(this.modal).opacity);
 
     // Lock body scroll
     document.body.style.overflow = 'hidden';
@@ -771,8 +721,6 @@ export class ArtworkModalManager {
    */
   close(updateURL = true) {
     if (!this.isOpen()) return;
-
-    console.log('[ArtworkModal] Closing modal');
 
     this.modal.classList.remove('is-active');
 

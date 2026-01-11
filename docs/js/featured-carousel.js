@@ -5,7 +5,7 @@
 
 import { sanitizeText, isValidImageUrl } from './security.js';
 import { prefersReducedMotion } from './utils.js';
-import { URLS, ANIMATION } from './constants.js';
+import { URLS, ANIMATION, BREAKPOINTS } from './constants.js';
 import { SwipeHandler } from './touch-handler.js';
 
 export class FeaturedCarousel {
@@ -25,6 +25,9 @@ export class FeaturedCarousel {
     // Elements cache
     this.elements = {};
 
+    // AbortController for cleanup
+    this.abortController = new AbortController();
+
     // Bind methods
     this.handleResize = this.handleResize.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
@@ -36,9 +39,9 @@ export class FeaturedCarousel {
    */
   getSlidesPerView() {
     const width = window.innerWidth;
-    if (width < 768) return 1;      // Mobile: 1 slide
-    if (width < 1024) return 2;     // Tablet: 2 slides
-    return 3;                        // Desktop: 3 slides
+    if (width < BREAKPOINTS.MOBILE) return 1;      // Mobile: 1 slide
+    if (width < BREAKPOINTS.TABLET) return 2;      // Tablet: 2 slides
+    return 3;                                       // Desktop: 3 slides
   }
 
   /**
@@ -47,7 +50,6 @@ export class FeaturedCarousel {
    */
   async loadArtworks() {
     try {
-      console.log('[FeaturedCarousel] Loading artworks...');
       const response = await fetch(URLS.ARTWORKS_JSON);
 
       if (!response.ok) {
@@ -61,7 +63,6 @@ export class FeaturedCarousel {
         artwork => artwork.highlighted === true && artwork.sold === false
       );
 
-      console.log('[FeaturedCarousel] Loaded', this.artworks.length, 'highlighted artworks');
       return this.artworks;
     } catch (error) {
       console.error('[FeaturedCarousel] Error loading artworks:', error);
@@ -103,8 +104,6 @@ export class FeaturedCarousel {
       if (this.autoplayEnabled) {
         this.startAutoplay();
       }
-
-      console.log('[FeaturedCarousel] Initialized successfully');
     } catch (error) {
       console.error('[FeaturedCarousel] Initialization failed:', error);
       this.showErrorState();
@@ -357,8 +356,8 @@ export class FeaturedCarousel {
       });
     });
 
-    // Keyboard navigation
-    document.addEventListener('keydown', this.handleKeydown);
+    // Keyboard navigation with cleanup signal
+    document.addEventListener('keydown', this.handleKeydown, { signal: this.abortController.signal });
 
     // Touch/swipe support using SwipeHandler
     if (this.elements.track) {
@@ -374,8 +373,8 @@ export class FeaturedCarousel {
       if (this.autoplayEnabled) this.startAutoplay();
     });
 
-    // Handle window resize
-    window.addEventListener('resize', this.handleResize);
+    // Handle window resize with cleanup signal
+    window.addEventListener('resize', this.handleResize, { signal: this.abortController.signal });
   }
 
   /**
@@ -617,9 +616,8 @@ export class FeaturedCarousel {
    * Cleanup event listeners
    */
   destroy() {
-    // Remove event listeners
-    document.removeEventListener('keydown', this.handleKeydown);
-    window.removeEventListener('resize', this.handleResize);
+    // Remove all event listeners via AbortController
+    this.abortController.abort();
 
     // Cleanup swipe handler
     if (this.swipeHandler) {

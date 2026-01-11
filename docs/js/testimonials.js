@@ -4,6 +4,8 @@
  * Mobile: Horizontal scroll-snap carousel with pagination dots
  */
 
+import { BREAKPOINTS } from './constants.js';
+
 class TestimonialsManager {
   constructor() {
     this.testimonials = [];
@@ -11,6 +13,9 @@ class TestimonialsManager {
     this.gridElement = null;
     this.paginationElement = null;
     this.currentIndex = 0;
+
+    // AbortController for cleanup
+    this.abortController = new AbortController();
 
     // Bind methods
     this.handleResize = this.handleResize.bind(this);
@@ -40,15 +45,13 @@ class TestimonialsManager {
       this.renderTestimonials();
 
       // Setup mobile-specific features
-      if (window.innerWidth < 768) {
+      if (window.innerWidth < BREAKPOINTS.MOBILE) {
         this.setupMobilePagination();
         this.setupScrollSync();
       }
 
-      // Handle window resize
-      window.addEventListener('resize', this.handleResize);
-
-      console.log('[Testimonials] Initialized successfully');
+      // Handle window resize with cleanup signal
+      window.addEventListener('resize', this.handleResize, { signal: this.abortController.signal });
     } catch (error) {
       console.error('[Testimonials] Initialization error:', error);
       this.renderEmptyState();
@@ -90,7 +93,7 @@ class TestimonialsManager {
     }
 
     // Add class for mobile carousel
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < BREAKPOINTS.MOBILE) {
       this.gridElement.classList.add('testimonials-grid');
     } else {
       this.gridElement.classList.remove('testimonials-grid');
@@ -101,6 +104,10 @@ class TestimonialsManager {
       const card = this.createTestimonialCard(testimonial, index);
       this.gridElement.appendChild(card);
     });
+
+    // Invalidate caches when content changes
+    this._cachedMobileCards = null;
+    this._cachedMobileDots = null;
   }
 
   /**
@@ -161,7 +168,7 @@ class TestimonialsManager {
     if (!this.paginationElement || this.testimonials.length === 0) return;
 
     // Only show pagination on mobile
-    if (window.innerWidth >= 768) {
+    if (window.innerWidth >= BREAKPOINTS.MOBILE) {
       this.paginationElement.style.display = 'none';
       return;
     }
@@ -191,6 +198,9 @@ class TestimonialsManager {
 
       this.paginationElement.appendChild(button);
     });
+
+    // Invalidate cache when dots are recreated
+    this._cachedMobileDots = null;
   }
 
   /**
@@ -229,9 +239,17 @@ class TestimonialsManager {
    */
   updateActiveDot() {
     if (!this.gridElement || !this.paginationElement) return;
-    if (window.innerWidth >= 768) return;
+    if (window.innerWidth >= BREAKPOINTS.MOBILE) return;
 
-    const cards = this.gridElement.querySelectorAll('.testimonial-card');
+    // Cache queries for performance
+    if (!this._cachedMobileCards) {
+      this._cachedMobileCards = this.gridElement.querySelectorAll('.testimonial-card');
+    }
+    if (!this._cachedMobileDots) {
+      this._cachedMobileDots = this.paginationElement.querySelectorAll('.testimonials__dot');
+    }
+
+    const cards = this._cachedMobileCards;
     const scrollLeft = this.gridElement.scrollLeft;
 
     // Find the card that's most in view
@@ -248,8 +266,8 @@ class TestimonialsManager {
       }
     });
 
-    // Update dots
-    this.paginationElement.querySelectorAll('.testimonials__dot').forEach((dot, index) => {
+    // Update dots (use cached query)
+    this._cachedMobileDots.forEach((dot, index) => {
       const isActive = index === closestIndex;
       dot.classList.toggle('is-active', isActive);
       dot.setAttribute('aria-pressed', isActive);
@@ -264,7 +282,7 @@ class TestimonialsManager {
   handleResize() {
     // Re-render for mobile/desktop switch
     const wasMobile = this.gridElement?.classList.contains('testimonials-grid');
-    const isMobile = window.innerWidth < 768;
+    const isMobile = window.innerWidth < BREAKPOINTS.MOBILE;
 
     if (wasMobile !== isMobile) {
       this.renderTestimonials();
@@ -300,19 +318,24 @@ class TestimonialsManager {
    * Cleanup event listeners
    */
   destroy() {
-    window.removeEventListener('resize', this.handleResize);
+    // Remove all event listeners via AbortController
+    this.abortController.abort();
   }
 }
 
-// Initialize on DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
+// Initialize only if container exists on page
+function initTestimonials() {
+  const container = document.querySelector('.section--testimonials');
+  if (container) {
     const manager = new TestimonialsManager();
     manager.init();
-  });
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initTestimonials);
 } else {
-  const manager = new TestimonialsManager();
-  manager.init();
+  initTestimonials();
 }
 
 export default TestimonialsManager;
