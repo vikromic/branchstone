@@ -70,7 +70,8 @@ class TestimonialsManager {
         throw new Error('Invalid testimonials data format');
       }
 
-      this.testimonials = data.feedbacks;
+      // Limit to first 3 testimonials
+      this.testimonials = data.feedbacks.slice(0, 3);
     } catch (error) {
       console.error('[Testimonials] Error loading testimonials:', error);
       throw error;
