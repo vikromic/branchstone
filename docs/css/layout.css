@@ -2101,7 +2101,7 @@
 
   .testimonials-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-6);
+    gap: var(--space-4);
   }
 
   .testimonial-card {
