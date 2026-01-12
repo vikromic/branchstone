@@ -589,14 +589,13 @@ import { initI18n } from './i18n.js';
     const filterContainer = document.querySelector('.filter-controls');
     if (!filterContainer) return;
 
-    // Remove any existing delegated listener to prevent duplicates
-    const existingHandler = filterContainer._filterClickHandler;
-    if (existingHandler) {
-      filterContainer.removeEventListener('click', existingHandler);
-    }
+    // Remove ALL existing click listeners by cloning the node
+    // This is the most reliable way to remove all event listeners
+    const newFilterContainer = filterContainer.cloneNode(true);
+    filterContainer.parentNode.replaceChild(newFilterContainer, filterContainer);
 
-    // Create new delegated click handler
-    const handleFilterClick = (e) => {
+    // Now attach a single new click handler
+    newFilterContainer.addEventListener('click', (e) => {
       const button = e.target.closest('[data-filter]');
       if (!button) return;
 
@@ -626,11 +625,7 @@ import { initI18n } from './i18n.js';
           }
         }
       }
-    };
-
-    // Store handler reference for cleanup on re-init
-    filterContainer._filterClickHandler = handleFilterClick;
-    filterContainer.addEventListener('click', handleFilterClick);
+    });
 
     // Re-initialize filters when gallery is re-rendered (e.g., after language change)
     // Use once: true to prevent duplicate listeners
@@ -1543,14 +1538,12 @@ import { initI18n } from './i18n.js';
     // Mobile filter chip selection - use event delegation
     const dropdownContent = dropdown.querySelector('.mobile-filter-dropdown__content');
     if (dropdownContent) {
-      // Remove any existing delegated listener to prevent duplicates
-      const existingHandler = dropdownContent._mobileFilterClickHandler;
-      if (existingHandler) {
-        dropdownContent.removeEventListener('click', existingHandler);
-      }
+      // Remove ALL existing click listeners by cloning the node
+      const newDropdownContent = dropdownContent.cloneNode(true);
+      dropdownContent.parentNode.replaceChild(newDropdownContent, dropdownContent);
 
-      // Create new delegated click handler
-      const handleMobileFilterClick = (e) => {
+      // Now attach a single new click handler
+      newDropdownContent.addEventListener('click', (e) => {
         const button = e.target.closest('[data-mobile-filter]');
         if (!button) return;
 
@@ -1564,11 +1557,7 @@ import { initI18n } from './i18n.js';
 
         // Close dropdown after short delay
         setTimeout(closeDropdown, 300);
-      };
-
-      // Store handler reference for cleanup on re-init
-      dropdownContent._mobileFilterClickHandler = handleMobileFilterClick;
-      dropdownContent.addEventListener('click', handleMobileFilterClick);
+      });
     }
 
     // Re-initialize mobile filters when gallery is re-rendered (e.g., after language change)
