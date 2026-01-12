@@ -550,12 +550,14 @@ import { initI18n } from './i18n.js';
   };
 
   const initGalleryFiltering = () => {
-    const filterButtons = document.querySelectorAll('[data-filter]');
+    // Select only DESKTOP filter buttons (exclude mobile filter chips)
+    const filterButtons = document.querySelectorAll('.filter-controls [data-filter]');
     const artworkCards = document.querySelectorAll('[data-collection]');
 
     if (filterButtons.length === 0 || artworkCards.length === 0) return;
 
     const updateActiveButton = (activeFilter) => {
+      // Only update desktop filter buttons
       filterButtons.forEach(button => {
         const buttonFilter = button.getAttribute('data-filter');
         if (buttonFilter === activeFilter) {
@@ -566,6 +568,19 @@ import { initI18n } from './i18n.js';
           button.setAttribute('aria-pressed', 'false');
         }
       });
+
+      // Also update mobile filter buttons
+      const mobileFilterButtons = document.querySelectorAll('[data-mobile-filter]');
+      mobileFilterButtons.forEach(button => {
+        const buttonFilter = button.getAttribute('data-filter');
+        if (buttonFilter === activeFilter) {
+          button.classList.add('mobile-filter-chip--active');
+          button.setAttribute('aria-pressed', 'true');
+        } else {
+          button.classList.remove('mobile-filter-chip--active');
+          button.setAttribute('aria-pressed', 'false');
+        }
+      });
     };
 
     filterButtons.forEach(button => {
@@ -573,6 +588,29 @@ import { initI18n } from './i18n.js';
         const filter = button.getAttribute('data-filter');
         filterGallery(filter);
         updateActiveButton(filter);
+
+        // Update mobile filter count badge if mobile dropdown exists
+        const mobileToggle = document.querySelector('.mobile-filter-toggle');
+        if (mobileToggle) {
+          const countBadge = mobileToggle.querySelector('.mobile-filter-toggle__count');
+          const label = mobileToggle.querySelector('.mobile-filter-toggle__label');
+          if (countBadge && label) {
+            // Find the active mobile button to get the display text
+            const activeButton = document.querySelector(`[data-mobile-filter][data-filter="${filter}"]`);
+            const activeFilterName = activeButton ? activeButton.textContent.trim() : 'All';
+
+            if (filter !== 'all' && activeFilterName !== 'All') {
+              label.textContent = activeFilterName;
+              countBadge.textContent = '1';
+              countBadge.hidden = false;
+              countBadge.setAttribute('aria-label', '1 active filter');
+            } else {
+              label.textContent = 'Filters';
+              countBadge.hidden = true;
+              countBadge.removeAttribute('aria-label');
+            }
+          }
+        }
       });
     });
 
@@ -1490,19 +1528,6 @@ import { initI18n } from './i18n.js';
 
         // Close dropdown after short delay
         setTimeout(closeDropdown, 300);
-      });
-    });
-
-    // Sync desktop filter clicks to mobile
-    desktopFilterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const filter = button.getAttribute('data-filter');
-
-        // Apply the filter to the gallery
-        filterGallery(filter);
-
-        // Update UI states
-        syncFilters(filter);
       });
     });
 
