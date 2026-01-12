@@ -7,6 +7,7 @@
 import { SwipeHandler } from './touch-handler.js';
 import { prefersReducedMotion } from './utils.js';
 import { BREAKPOINTS } from './constants.js';
+import { getI18n } from './i18n.js';
 
 class HighlightsManager {
   constructor() {
@@ -77,6 +78,9 @@ class HighlightsManager {
       if (this.autoplayEnabled && window.innerWidth >= BREAKPOINTS.MOBILE) {
         this.startAutoplay();
       }
+
+      // Listen for language changes to reload highlights
+      this.setupLanguageChangeListener();
     } catch (error) {
       console.error('[Highlights] Initialization error:', error);
       this.renderEmptyState();
@@ -84,15 +88,94 @@ class HighlightsManager {
   }
 
   /**
-   * Load highlights from JSON
+   * Set up listener for language change events
+   */
+  setupLanguageChangeListener() {
+    document.addEventListener('languageChanged', async (event) => {
+      console.log('[Highlights] Detected language change event:', event.detail);
+      await this.reloadHighlights();
+    });
+  }
+
+  /**
+   * Reload highlights when language changes
+   */
+  async reloadHighlights() {
+    try {
+      this.stopAutoplay();
+      await this.loadHighlights();
+
+      if (this.highlights.length === 0) {
+        this.renderEmptyState();
+        return;
+      }
+
+      this.currentIndex = 0;
+      this.renderCarousel();
+      this.cacheElements();
+      this.updateNavigation();
+
+      if (this.autoplayEnabled && window.innerWidth >= BREAKPOINTS.MOBILE) {
+        this.startAutoplay();
+      }
+
+      console.log('[Highlights] Reloaded for new language');
+    } catch (error) {
+      console.error('[Highlights] Error reloading highlights:', error);
+    }
+  }
+
+  /**
+   * Detect current language from multiple sources
+   * @returns {string} Language code ('en' or 'uk')
+   */
+  detectLanguage() {
+    // 1. Check URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get('lang');
+    console.log('[Highlights] Language detection - URL param:', urlLang);
+    if (urlLang === 'uk') return 'uk';
+
+    // 2. Check localStorage (uses same key as i18n system)
+    try {
+      const storedLang = localStorage.getItem('branchstone.language');
+      console.log('[Highlights] Language detection - localStorage:', storedLang);
+      if (storedLang === 'uk') return 'uk';
+    } catch (e) {
+      console.log('[Highlights] Language detection - localStorage unavailable');
+    }
+
+    // 3. Check i18n instance
+    const i18n = getI18n();
+    console.log('[Highlights] Language detection - i18n:', i18n?.currentLanguage);
+    if (i18n?.currentLanguage === 'uk') return 'uk';
+
+    // 4. Default to English
+    console.log('[Highlights] Language detection - defaulting to en');
+    return 'en';
+  }
+
+  /**
+   * Load highlights from JSON (language-aware)
    */
   async loadHighlights() {
     try {
-      const response = await fetch('json_data/highlights.json');
+      // Determine which JSON file to load based on current language
+      const currentLang = this.detectLanguage();
+
+      // Use Ukrainian file for 'uk' language, otherwise English
+      const jsonPath = currentLang === 'uk'
+        ? 'json_data/ukr/highlights_uk.json'
+        : 'json_data/highlights.json';
+
+      console.log(`[Highlights] Detected language: ${currentLang}, loading from: ${jsonPath}`);
+
+      const response = await fetch(jsonPath);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      console.log(`[Highlights] Loaded ${data.highlights?.length || 0} highlights from ${jsonPath}`);
 
       if (!data.highlights || !Array.isArray(data.highlights)) {
         throw new Error('Invalid highlights data format');
@@ -226,8 +309,10 @@ class HighlightsManager {
    * Create a highlight card element (safe DOM construction)
    */
   createHighlightCard(highlight, index) {
-    const hasLink = highlight.link?.url;
-    const isExternal = highlight.link?.external !== false;
+    // Support both string URLs and object format { url: "...", external: true }
+    const linkUrl = typeof highlight.link === 'string' ? highlight.link : highlight.link?.url;
+    const hasLink = !!linkUrl;
+    const isExternal = typeof highlight.link === 'string' ? true : highlight.link?.external !== false;
 
     // Create article element
     const article = document.createElement('article');
@@ -306,7 +391,8 @@ class HighlightsManager {
       linkIndicator.className = 'highlight-card__link-indicator';
 
       const linkText = document.createElement('span');
-      linkText.textContent = 'Read more';
+      const i18n = getI18n();
+      linkText.textContent = i18n?.t('about.highlights.readMore', 'Read more') || 'Read more';
       linkIndicator.appendChild(linkText);
 
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -329,7 +415,7 @@ class HighlightsManager {
     // If there's a link, wrap in anchor tag
     if (hasLink) {
       const link = document.createElement('a');
-      link.href = highlight.link.url;
+      link.href = linkUrl;
       link.className = 'highlight-card__link';
       link.setAttribute('aria-label', `${highlight.title} - ${highlight.source || ''}`);
 
