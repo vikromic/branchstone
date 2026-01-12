@@ -550,15 +550,17 @@ import { initI18n } from './i18n.js';
   };
 
   const initGalleryFiltering = () => {
-    // Select only DESKTOP filter buttons (exclude mobile filter chips)
+    // Select DESKTOP filter buttons (exclude mobile filter chips)
+    // Query fresh on each call to handle dynamic re-rendering
     const filterButtons = document.querySelectorAll('.filter-controls [data-filter]');
     const artworkCards = document.querySelectorAll('[data-collection]');
 
     if (filterButtons.length === 0 || artworkCards.length === 0) return;
 
     const updateActiveButton = (activeFilter) => {
-      // Only update desktop filter buttons
-      filterButtons.forEach(button => {
+      // Query fresh to handle dynamically rendered buttons
+      const currentFilterButtons = document.querySelectorAll('.filter-controls [data-filter]');
+      currentFilterButtons.forEach(button => {
         const buttonFilter = button.getAttribute('data-filter');
         if (buttonFilter === activeFilter) {
           button.classList.add('is-active');
@@ -583,36 +585,58 @@ import { initI18n } from './i18n.js';
       });
     };
 
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const filter = button.getAttribute('data-filter');
-        filterGallery(filter);
-        updateActiveButton(filter);
+    // Use event delegation on the parent container to handle dynamically rendered buttons
+    const filterContainer = document.querySelector('.filter-controls');
+    if (!filterContainer) return;
 
-        // Update mobile filter count badge if mobile dropdown exists
-        const mobileToggle = document.querySelector('.mobile-filter-toggle');
-        if (mobileToggle) {
-          const countBadge = mobileToggle.querySelector('.mobile-filter-toggle__count');
-          const label = mobileToggle.querySelector('.mobile-filter-toggle__label');
-          if (countBadge && label) {
-            // Find the active mobile button to get the display text
-            const activeButton = document.querySelector(`[data-mobile-filter][data-filter="${filter}"]`);
-            const activeFilterName = activeButton ? activeButton.textContent.trim() : 'All';
+    // Remove any existing delegated listener to prevent duplicates
+    const existingHandler = filterContainer._filterClickHandler;
+    if (existingHandler) {
+      filterContainer.removeEventListener('click', existingHandler);
+    }
 
-            if (filter !== 'all' && activeFilterName !== 'All') {
-              label.textContent = activeFilterName;
-              countBadge.textContent = '1';
-              countBadge.hidden = false;
-              countBadge.setAttribute('aria-label', '1 active filter');
-            } else {
-              label.textContent = 'Filters';
-              countBadge.hidden = true;
-              countBadge.removeAttribute('aria-label');
-            }
+    // Create new delegated click handler
+    const handleFilterClick = (e) => {
+      const button = e.target.closest('[data-filter]');
+      if (!button) return;
+
+      const filter = button.getAttribute('data-filter');
+      filterGallery(filter);
+      updateActiveButton(filter);
+
+      // Update mobile filter count badge if mobile dropdown exists
+      const mobileToggle = document.querySelector('.mobile-filter-toggle');
+      if (mobileToggle) {
+        const countBadge = mobileToggle.querySelector('.mobile-filter-toggle__count');
+        const label = mobileToggle.querySelector('.mobile-filter-toggle__label');
+        if (countBadge && label) {
+          // Find the active mobile button to get the display text
+          const activeButton = document.querySelector(`[data-mobile-filter][data-filter="${filter}"]`);
+          const activeFilterName = activeButton ? activeButton.textContent.trim() : 'All';
+
+          if (filter !== 'all' && activeFilterName !== 'All') {
+            label.textContent = activeFilterName;
+            countBadge.textContent = '1';
+            countBadge.hidden = false;
+            countBadge.setAttribute('aria-label', '1 active filter');
+          } else {
+            label.textContent = 'Filters';
+            countBadge.hidden = true;
+            countBadge.removeAttribute('aria-label');
           }
         }
-      });
-    });
+      }
+    };
+
+    // Store handler reference for cleanup on re-init
+    filterContainer._filterClickHandler = handleFilterClick;
+    filterContainer.addEventListener('click', handleFilterClick);
+
+    // Re-initialize filters when gallery is re-rendered (e.g., after language change)
+    // Use once: true to prevent duplicate listeners
+    document.addEventListener('galleryRendered', () => {
+      initGalleryFiltering();
+    }, { once: true });
 
     // Get initial collection from URL/localStorage
     const initialCollection = getInitialCollection();
@@ -1403,8 +1427,6 @@ import { initI18n } from './i18n.js';
     const toggle = document.querySelector('.mobile-filter-toggle');
     const dropdown = document.getElementById('mobile-filter-dropdown');
     const closeButton = dropdown?.querySelector('.mobile-filter-dropdown__close');
-    const mobileFilterButtons = document.querySelectorAll('[data-mobile-filter]');
-    const desktopFilterButtons = document.querySelectorAll('[data-filter]');
 
     if (!toggle || !dropdown) return;
 
@@ -1443,9 +1465,10 @@ import { initI18n } from './i18n.js';
       const label = toggle.querySelector('.mobile-filter-toggle__label');
       if (!countBadge || !label) return;
 
-      // Find active filter
+      // Find active filter (query fresh to handle dynamically rendered buttons)
       let activeFilterName = 'All';
-      mobileFilterButtons.forEach(button => {
+      const currentMobileFilterButtons = document.querySelectorAll('[data-mobile-filter]');
+      currentMobileFilterButtons.forEach(button => {
         if (button.classList.contains('mobile-filter-chip--active')) {
           const filter = button.getAttribute('data-filter');
           if (filter !== 'all') {
@@ -1469,8 +1492,9 @@ import { initI18n } from './i18n.js';
 
     // Sync mobile and desktop filters
     const syncFilters = (activeFilter) => {
-      // Update mobile buttons
-      mobileFilterButtons.forEach(button => {
+      // Query fresh to handle dynamically rendered buttons
+      const currentMobileFilterButtons = document.querySelectorAll('[data-mobile-filter]');
+      currentMobileFilterButtons.forEach(button => {
         if (button.getAttribute('data-filter') === activeFilter) {
           button.classList.add('mobile-filter-chip--active');
           button.setAttribute('aria-pressed', 'true');
@@ -1481,7 +1505,8 @@ import { initI18n } from './i18n.js';
       });
 
       // Update desktop buttons
-      desktopFilterButtons.forEach(button => {
+      const currentDesktopFilterButtons = document.querySelectorAll('.filter-controls [data-filter]');
+      currentDesktopFilterButtons.forEach(button => {
         if (button.getAttribute('data-filter') === activeFilter) {
           button.classList.add('is-active');
           button.setAttribute('aria-pressed', 'true');
@@ -1515,9 +1540,20 @@ import { initI18n } from './i18n.js';
       }
     });
 
-    // Mobile filter chip selection
-    mobileFilterButtons.forEach(button => {
-      button.addEventListener('click', () => {
+    // Mobile filter chip selection - use event delegation
+    const dropdownContent = dropdown.querySelector('.mobile-filter-dropdown__content');
+    if (dropdownContent) {
+      // Remove any existing delegated listener to prevent duplicates
+      const existingHandler = dropdownContent._mobileFilterClickHandler;
+      if (existingHandler) {
+        dropdownContent.removeEventListener('click', existingHandler);
+      }
+
+      // Create new delegated click handler
+      const handleMobileFilterClick = (e) => {
+        const button = e.target.closest('[data-mobile-filter]');
+        if (!button) return;
+
         const filter = button.getAttribute('data-filter');
 
         // Apply the filter to the gallery
@@ -1528,8 +1564,18 @@ import { initI18n } from './i18n.js';
 
         // Close dropdown after short delay
         setTimeout(closeDropdown, 300);
-      });
-    });
+      };
+
+      // Store handler reference for cleanup on re-init
+      dropdownContent._mobileFilterClickHandler = handleMobileFilterClick;
+      dropdownContent.addEventListener('click', handleMobileFilterClick);
+    }
+
+    // Re-initialize mobile filters when gallery is re-rendered (e.g., after language change)
+    // Use once: true to prevent duplicate listeners
+    document.addEventListener('galleryRendered', () => {
+      initMobileFilterDropdown();
+    }, { once: true });
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
