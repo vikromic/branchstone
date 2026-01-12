@@ -1516,28 +1516,28 @@ import { initI18n } from './i18n.js';
       galleryManagerInstance?.collectionToSlug(initialCollection) || 'all';
     updateActiveFilterButton(initialFilter);
 
-    // Event listeners - only attach once using data attributes
-    if (!toggle.hasAttribute('data-click-attached')) {
+    // Event listeners - only attach once using global flags
+    if (!mobileToggleClickAttached) {
       toggle.addEventListener('click', () => {
         const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
         isExpanded ? closeDropdown() : openDropdown();
       });
-      toggle.setAttribute('data-click-attached', 'true');
+      mobileToggleClickAttached = true;
     }
 
-    if (closeButton && !closeButton.hasAttribute('data-click-attached')) {
+    if (closeButton && !mobileCloseClickAttached) {
       closeButton.addEventListener('click', closeDropdown);
-      closeButton.setAttribute('data-click-attached', 'true');
+      mobileCloseClickAttached = true;
     }
 
     // Close on backdrop click - only attach once
-    if (!dropdown.hasAttribute('data-backdrop-attached')) {
+    if (!mobileDropdownBackdropAttached) {
       dropdown.addEventListener('click', (e) => {
         if (e.target === dropdown || e.target.classList.contains('mobile-filter-dropdown')) {
           closeDropdown();
         }
       });
-      dropdown.setAttribute('data-backdrop-attached', 'true');
+      mobileDropdownBackdropAttached = true;
     }
 
     // Mobile filter chip selection - attach handler to document ONCE
@@ -1555,10 +1555,11 @@ import { initI18n } from './i18n.js';
         // Update UI states using shared helper
         updateActiveFilterButton(filter);
 
-        // Close dropdown after short delay
-        if (mobileDropdownRef && !mobileDropdownRef.hidden) {
+        // Close dropdown after short delay (query fresh to avoid stale reference)
+        const currentDropdown = document.getElementById('mobile-filter-dropdown');
+        if (currentDropdown && !currentDropdown.hidden) {
           setTimeout(() => {
-            mobileDropdownRef.hidden = true;
+            currentDropdown.hidden = true;
             const toggle = document.querySelector('.mobile-filter-toggle');
             if (toggle) toggle.setAttribute('aria-expanded', 'false');
             document.body.style.overflow = '';
@@ -1568,8 +1569,10 @@ import { initI18n } from './i18n.js';
 
       // Keyboard navigation - attach ONCE
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileDropdownRef && !mobileDropdownRef.hidden) {
-          mobileDropdownRef.hidden = true;
+        // Query fresh to avoid stale reference
+        const currentDropdown = document.getElementById('mobile-filter-dropdown');
+        if (e.key === 'Escape' && currentDropdown && !currentDropdown.hidden) {
+          currentDropdown.hidden = true;
           const toggle = document.querySelector('.mobile-filter-toggle');
           if (toggle) toggle.setAttribute('aria-expanded', 'false');
           document.body.style.overflow = '';
@@ -1579,8 +1582,8 @@ import { initI18n } from './i18n.js';
       mobileFilterHandlerAttached = true;
     }
 
-    // Focus trap - only add once per dropdown element
-    if (!dropdown.hasAttribute('data-focus-trap-attached')) {
+    // Focus trap - only attach once using global flag
+    if (!mobileDropdownFocusTrapAttached) {
       dropdown.addEventListener('keydown', (e) => {
         if (e.key !== 'Tab') return;
 
@@ -1602,7 +1605,7 @@ import { initI18n } from './i18n.js';
           }
         }
       });
-      dropdown.setAttribute('data-focus-trap-attached', 'true');
+      mobileDropdownFocusTrapAttached = true;
     }
 
     // Initialize count
