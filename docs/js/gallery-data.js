@@ -165,12 +165,80 @@ export class GalleryDataManager {
 
   /**
    * Convert collection name to filter-friendly slug
+   * Handles both English and translated (Ukrainian) collection names
+   * by mapping them to canonical English slugs used in translation keys
    */
   collectionToSlug(collection) {
+    // Special case for "All"
+    if (!collection || collection === 'all' || collection === 'All' || collection === 'Всі') {
+      return 'all';
+    }
+
+    // Get canonical slug via reverse translation lookup
+    const canonicalSlug = this.getCanonicalCollectionSlug(collection);
+    if (canonicalSlug) {
+      return canonicalSlug;
+    }
+
+    // Fallback: basic slug generation for English names
+    // This regex only works for Latin characters (English)
     return collection
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '');
+  }
+
+  /**
+   * Get canonical collection slug from translated or English name
+   * Maps both English and Ukrainian collection names to their canonical slug
+   * (e.g., "Про Попіл і Квіти" and "Of Ash and Flowers" both map to "ofAshAndFlowers")
+   *
+   * @param {string} collectionName - The collection name (in any language)
+   * @returns {string|null} The canonical slug or null if not found
+   */
+  getCanonicalCollectionSlug(collectionName) {
+    const i18n = getI18n();
+    if (!i18n) return null;
+
+    // Normalize input for comparison
+    const normalized = collectionName.trim();
+
+    // Known collection slugs (from translation keys)
+    const knownSlugs = [
+      'deepOcean',
+      'golden',
+      'ofAshAndFlowers',
+      'storms',
+      'calmOfTheForest',
+      'followingHerSteps'
+    ];
+
+    // Check each known slug's translation against the input
+    for (const slug of knownSlugs) {
+      // Get translation for this slug
+      const translationKey = `gallery.filters.${slug}`;
+      const translated = i18n.t(translationKey);
+
+      // Compare with normalized input (case-insensitive)
+      if (translated && translated.toLowerCase() === normalized.toLowerCase()) {
+        return slug;
+      }
+
+      // Also check if input matches the slug itself (camelCase English name)
+      // Convert camelCase to title case for comparison
+      const titleCased = slug
+        .replace(/([A-Z])/g, ' $1')
+        .trim()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+
+      if (titleCased.toLowerCase() === normalized.toLowerCase()) {
+        return slug;
+      }
+    }
+
+    return null;
   }
 
   /**
