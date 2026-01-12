@@ -42,7 +42,7 @@ import { ScrollManager } from './scroll-manager.js';
 import { GalleryDataManager } from './gallery-data.js';
 import { FeaturedCarousel } from './featured-carousel.js';
 import { ArtworkModalManager } from './artwork-modal.js';
-import { initI18n } from './i18n.js';
+import { initI18n, getI18n } from './i18n.js';
 
 (function () {
   'use strict';
@@ -294,9 +294,10 @@ import { initI18n } from './i18n.js';
     if (!titleElement || !subtitleElement) return;
 
     if (!collectionName || collectionName === 'all') {
-      // Reset to default
-      titleElement.textContent = 'The Works';
-      subtitleElement.textContent = 'Nature inspired soul art. Each piece is meticulously crafted by hand, creating timeless works that blend traditional craft with modern design.';
+      // Reset to default - use i18n translations to preserve language
+      const i18n = getI18n();
+      titleElement.textContent = i18n.t('gallery.title', 'The Works');
+      subtitleElement.textContent = i18n.t('gallery.subtitle', 'Nature inspired soul art. Each piece is meticulously crafted by hand, creating timeless works that blend traditional craft with modern design.');
     } else {
       // Get collection metadata from gallery manager
       if (galleryManagerInstance) {
