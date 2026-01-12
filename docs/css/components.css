@@ -4744,6 +4744,7 @@ details[open] summary {
   gap: 0.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
 }
 
 .artwork-modal__collection {
@@ -4758,6 +4759,8 @@ details[open] summary {
   font-size: 0.9375rem;
   color: var(--text-secondary);
   margin: 0;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .artwork-modal__price {
@@ -4781,6 +4784,8 @@ details[open] summary {
   line-height: 1.6;
   color: var(--text-secondary);
   white-space: pre-line;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .artwork-modal__read-more {
