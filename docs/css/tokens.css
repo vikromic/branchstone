@@ -17,8 +17,8 @@
      ======================================== */
 
   /* Background Colors */
-  --bg-primary: #FAF9F7;      /* Main canvas - warm off-white */
-  --bg-secondary: #F5F3F0;    /* Subtle contrast backgrounds */
+  --bg-primary: #F5F3F0;      /* Main canvas - warm off-white (slightly darker) */
+  --bg-secondary: #F0EDE9;    /* Subtle contrast backgrounds */
   --bg-tertiary: #FFFFFF;     /* Pure white for cards */
   --bg-elevated: #FFFFFF;     /* Elevated surfaces */
 
