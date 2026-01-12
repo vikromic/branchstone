@@ -628,10 +628,12 @@ import { initI18n } from './i18n.js';
     });
 
     // Re-initialize filters when gallery is re-rendered (e.g., after language change)
-    // Use once: true to prevent duplicate listeners
+    // NOTE: Don't use once:true because we need to re-init on every gallery render
+    // (language switches, filter clicks can trigger multiple renders)
+    // The clone-and-replace pattern inside initGalleryFiltering prevents duplicate listeners
     document.addEventListener('galleryRendered', () => {
       initGalleryFiltering();
-    }, { once: true });
+    });
 
     // Get initial collection from URL/localStorage
     const initialCollection = getInitialCollection();
@@ -1561,10 +1563,12 @@ import { initI18n } from './i18n.js';
     }
 
     // Re-initialize mobile filters when gallery is re-rendered (e.g., after language change)
-    // Use once: true to prevent duplicate listeners
+    // NOTE: Don't use once:true because we need to re-init on every gallery render
+    // (language switches, filter clicks can trigger multiple renders)
+    // The clone-and-replace pattern inside initMobileFilterDropdown prevents duplicate listeners
     document.addEventListener('galleryRendered', () => {
       initMobileFilterDropdown();
-    }, { once: true });
+    });
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
