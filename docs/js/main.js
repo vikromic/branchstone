@@ -42,6 +42,7 @@ import { ScrollManager } from './scroll-manager.js';
 import { GalleryDataManager } from './gallery-data.js';
 import { FeaturedCarousel } from './featured-carousel.js';
 import { ArtworkModalManager } from './artwork-modal.js';
+import { initI18n } from './i18n.js';
 
 (function () {
   'use strict';
@@ -2503,6 +2504,9 @@ import { ArtworkModalManager } from './artwork-modal.js';
   const init = async () => {
     try {
       console.log('[Main] Initializing... (readyState:', document.readyState + ')');
+
+      // ===== PHASE 0: INTERNATIONALIZATION (must load FIRST) =====
+      await initI18n();          // Load translations and apply to page
 
       // ===== PHASE 1: CRITICAL FEATURES (synchronous, must succeed) =====
       initThemeToggle();         // Theme must load first to prevent flash

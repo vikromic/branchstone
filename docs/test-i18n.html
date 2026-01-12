@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>i18n System Test - Branchstone</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap&subset=latin,cyrillic" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      padding: 2rem;
+      background: #f5f5f5;
+      color: #2c2c2c;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: #1a1a1a;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      margin: 2rem 0 1rem;
+      color: #2c2c2c;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 0.5rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      margin: 1.5rem 0 0.75rem;
+      color: #4a7c59;
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    .test-section {
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      background: #fafafa;
+      border-left: 4px solid #4a7c59;
+    }
+
+    .font-test {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      padding: 1rem;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      margin: 0.5rem 0;
+    }
+
+    .serif {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .sans {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: white;
+      background: #4a7c59;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #3d6649;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .status {
+      padding: 1rem;
+      background: #e8f5e9;
+      border: 1px solid #4a7c59;
+      border-radius: 4px;
+      margin: 1rem 0;
+    }
+
+    .status code {
+      background: white;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    .warning {
+      background: #fff3e0;
+      border-color: #f57c00;
+      color: #e65100;
+    }
+
+    .alphabet {
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      padding: 1rem;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      word-wrap: break-word;
+    }
+
+    .test-strings {
+      display: grid;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ukrainian i18n System Test</h1>
+    <p>This page tests the internationalization system and Cyrillic font support.</p>
+
+    <div class="controls">
+      <button onclick="switchToUkrainian()">Switch to Ukrainian</button>
+      <button onclick="switchToEnglish()">Switch to English</button>
+      <button onclick="testFonts()">Test Font Rendering</button>
+    </div>
+
+    <div class="status" id="status">
+      <strong>Current Language:</strong> <code id="current-lang">Detecting...</code><br>
+      <strong>localStorage:</strong> <code id="storage-lang">Checking...</code><br>
+      <strong>URL Parameter:</strong> <code id="url-lang">Checking...</code>
+    </div>
+
+    <h2>Cyrillic Font Rendering Test</h2>
+
+    <div class="test-section">
+      <h3>Ukrainian Alphabet (Cormorant Garamond - Serif)</h3>
+      <div class="alphabet serif">
+        А Б В Г Ґ Д Е Є Ж З И І Ї Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ь Ю Я<br>
+        а б в г ґ д е є ж з и і ї й к л м н о п р с т у ф х ц ч ш щ ь ю я
+      </div>
+
+      <h3>Ukrainian Alphabet (Inter - Sans-serif)</h3>
+      <div class="alphabet sans">
+        А Б В Г Ґ Д Е Є Ж З И І Ї Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ь Ю Я<br>
+        а б в г ґ д е є ж з и і ї й к л м н о п р с т у ф х ц ч ш щ ь ю я
+      </div>
+    </div>
+
+    <h2>Real Ukrainian Text Samples</h2>
+
+    <div class="test-section">
+      <h3>Navigation (Sans-serif)</h3>
+      <div class="test-strings">
+        <div class="font-test sans">Головна • Галерея • Про мене • Замовлення • Контакти</div>
+      </div>
+
+      <h3>Page Titles (Serif)</h3>
+      <div class="test-strings">
+        <div class="font-test serif">Роботи</div>
+        <div class="font-test serif">Робота з природою, спогадами та часом через текстури</div>
+        <div class="font-test serif">Індивідуальне замовлення</div>
+      </div>
+
+      <h3>Body Text (Sans-serif)</h3>
+      <div class="font-test sans">
+        Мене звати Вікторія. Я створюю мистецтво під ім'ям Branchstone. Моя практика лежить між живописом і природою. Я працюю з текстурними абстрактними формами, використовуючи кору, гілки, каміння та інші природні матеріали.
+      </div>
+
+      <h3>Special Characters Test</h3>
+      <div class="font-test sans">
+        <strong>Apostrophe (ʼ):</strong> Звʼязатися, імʼя, обʼєкт<br>
+        <strong>Soft sign (ь):</strong> сьогодні, тільки, дитинство<br>
+        <strong>Ukrainian-specific (ґ, є, і, ї):</strong> ґрунт, євро, їжак, Україна
+      </div>
+    </div>
+
+    <h2>i18n System Test</h2>
+
+    <div class="test-section">
+      <h3>Translatable Elements</h3>
+      <p><strong>Original (English):</strong> <span data-i18n="nav.home">Home</span></p>
+      <p><strong>Original (English):</strong> <span data-i18n="gallery.title">Gallery</span></p>
+      <p><strong>Original (English):</strong> <span data-i18n="about.title">Working with nature, memory, and time through texture</span></p>
+      <p class="warning">⚠️ Switch to Ukrainian to see translations above.</p>
+    </div>
+
+    <h2>Instructions</h2>
+
+    <div class="test-section">
+      <ol>
+        <li><strong>Font Rendering:</strong> All Cyrillic characters above should render clearly with no boxes or fallback glyphs.</li>
+        <li><strong>Serif vs Sans-serif:</strong> Compare Cormorant Garamond (decorative) vs Inter (clean) rendering.</li>
+        <li><strong>Language Switching:</strong> Click "Switch to Ukrainian" button - page will reload with Ukrainian content.</li>
+        <li><strong>Persistence:</strong> Refresh the page - language preference should persist.</li>
+        <li><strong>URL Routing:</strong> Check URL for <code>?lang=uk</code> parameter.</li>
+      </ol>
+    </div>
+  </div>
+
+  <script type="module">
+    // Initialize i18n (if available)
+    import { initI18n, getCurrentLanguage } from './js/i18n.js';
+
+    async function init() {
+      try {
+        await initI18n();
+        updateStatus();
+      } catch (error) {
+        console.error('i18n initialization failed:', error);
+        const statusEl = document.getElementById('status');
+        statusEl.classList.add('warning');
+        // Safe: Using textContent instead of innerHTML
+        const errorMsg = document.createElement('strong');
+        errorMsg.textContent = 'Error: ';
+        const errorText = document.createTextNode('i18n system failed to load. ' + error.message);
+        statusEl.textContent = '';
+        statusEl.appendChild(errorMsg);
+        statusEl.appendChild(errorText);
+      }
+    }
+
+    function updateStatus() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlLang = urlParams.get('lang') || 'none';
+      const storageLang = localStorage.getItem('branchstone.language') || 'none';
+      const currentLang = getCurrentLanguage();
+
+      document.getElementById('current-lang').textContent = currentLang;
+      document.getElementById('storage-lang').textContent = storageLang;
+      document.getElementById('url-lang').textContent = urlLang;
+    }
+
+    // Make functions global for onclick handlers
+    window.switchToUkrainian = () => {
+      window.location.href = window.location.pathname + '?lang=uk';
+    };
+
+    window.switchToEnglish = () => {
+      window.location.href = window.location.pathname;
+    };
+
+    window.testFonts = () => {
+      alert('✅ If you can read all Ukrainian text above clearly without boxes or fallback fonts, Cyrillic support is working correctly!');
+    };
+
+    // Initialize on load
+    init();
+  </script>
+</body>
+</html>

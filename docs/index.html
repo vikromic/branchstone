@@ -9,7 +9,7 @@
   <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap&subset=latin,cyrillic" rel="stylesheet">
 
   <!-- Preload hero image for performance -->
   <link rel="preload" as="image" href="img/cover.webp" fetchpriority="high">
@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="css/qa-fixes.css?v=1">
   <link rel="stylesheet" href="css/featured-carousel.css?v=3">
   <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=16">
+  <link rel="stylesheet" href="css/language-switcher.css?v=1">
 
   <!-- PNG Favicon Fallbacks (LOW-001) -->
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
@@ -69,6 +70,15 @@
         <span class="header__favorites-count">0</span>
       </button>
 
+      <button class="language-switcher" aria-label="Switch to Ukrainian" type="button">
+        <span class="language-switcher__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </span>
+        <span class="language-switcher__label">EN</span>
+      </button>
 
       <button class="header__theme-toggle" aria-label="Toggle theme" type="button">
         <svg class="header__theme-icon header__theme-icon--sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
