@@ -20,6 +20,7 @@
 
 import { sanitizeText } from './security.js';
 import { GALLERY, SVG_NAMESPACE, ARTWORK_CARD } from './constants.js';
+import { getI18n } from './i18n.js';
 
 export class GalleryDataManager {
   constructor() {
@@ -585,6 +586,26 @@ export class GalleryDataManager {
   }
 
   /**
+   * Get translated filter name
+   */
+  getTranslatedFilterName(collection) {
+    const i18n = getI18n();
+    const slug = this.collectionToSlug(collection);
+
+    // Try to get translation from gallery.filters
+    const translationKey = `gallery.filters.${slug}`;
+    const translated = i18n.t(translationKey);
+
+    // If translation exists and is different from the key, use it
+    if (translated && translated !== translationKey) {
+      return translated;
+    }
+
+    // Fallback to original collection name
+    return collection;
+  }
+
+  /**
    * Create filter button element
    */
   createFilterButton(collection, isActive = false) {
@@ -594,7 +615,7 @@ export class GalleryDataManager {
     button.className = isActive ? 'tag is-active' : 'tag';
     button.setAttribute('data-filter', slug);
     button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    button.textContent = collection;
+    button.textContent = this.getTranslatedFilterName(collection);
 
     return button;
   }
@@ -610,7 +631,7 @@ export class GalleryDataManager {
     button.setAttribute('data-filter', slug);
     button.setAttribute('data-mobile-filter', '');
     button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    button.textContent = collection;
+    button.textContent = this.getTranslatedFilterName(collection);
 
     return button;
   }
