@@ -245,26 +245,28 @@ export class I18nManager {
 
   /**
    * Initialize language switcher UI
-   * Finds existing switcher button and adds event listeners
+   * Finds all switcher buttons (desktop and mobile) and adds event listeners
    */
   initLanguageSwitcher() {
-    const switcher = document.querySelector('.language-switcher');
-    if (!switcher) {
-      console.warn('[i18n] Language switcher element not found');
+    const switchers = document.querySelectorAll('.language-switcher');
+    if (switchers.length === 0) {
+      console.warn('[i18n] Language switcher elements not found');
       return;
     }
 
-    // Update switcher UI to show current language
-    this.updateSwitcherUI(switcher);
+    switchers.forEach(switcher => {
+      // Update switcher UI to show current language
+      this.updateSwitcherUI(switcher);
 
-    // Add click handler
-    switcher.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetLang = this.currentLanguage === LANGUAGES.EN ? LANGUAGES.UK : LANGUAGES.EN;
-      this.switchLanguage(targetLang);
+      // Add click handler
+      switcher.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetLang = this.currentLanguage === LANGUAGES.EN ? LANGUAGES.UK : LANGUAGES.EN;
+        this.switchLanguage(targetLang);
+      });
     });
 
-    console.log('[i18n] Language switcher initialized');
+    console.log(`[i18n] Language switcher initialized (${switchers.length} instances)`);
   }
 
   /**

@@ -175,7 +175,7 @@
 
 .mobile-menu__language-switcher {
   /* Position at bottom of mobile menu */
-  padding: 1rem 1.5rem;
+  padding: 1.5rem 0;
   border-top: 1px solid var(--sage-200, #e0e0e0);
   margin-top: auto;
 }

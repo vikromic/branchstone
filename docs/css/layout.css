@@ -2353,6 +2353,9 @@
   overflow-y: auto;
   box-shadow: -10px 0 40px rgba(0, 0, 0, 0.2);
   z-index: 201;
+  /* Flexbox for language switcher at bottom */
+  display: flex;
+  flex-direction: column;
 }
 .mobile-menu:not([hidden]) .mobile-menu__nav {
   transform: translateX(0);
