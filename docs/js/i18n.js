@@ -14,8 +14,12 @@ const LANGUAGES = {
 };
 
 const STORAGE_KEY = 'branchstone.language';
+const GEO_CHECKED_KEY = 'branchstone.geoChecked';
 const URL_PARAM = 'lang';
 const TRANSLATIONS_BASE_PATH = 'json_data';
+
+// Countries that should default to Ukrainian
+const UKRAINIAN_COUNTRIES = ['UA']; // Ukraine country code
 
 // Default language (English - no separate JSON file needed, uses hardcoded HTML)
 const DEFAULT_LANGUAGE = LANGUAGES.EN;
@@ -33,7 +37,7 @@ export class I18nManager {
 
   /**
    * Initialize i18n system
-   * 1. Detect language from URL > localStorage > default
+   * 1. Detect language from URL > localStorage > geolocation > default
    * 2. Load translations if needed
    * 3. Apply translations to page
    * 4. Initialize language switcher
@@ -42,8 +46,8 @@ export class I18nManager {
     try {
       console.log('[i18n] Initializing internationalization system...');
 
-      // Detect language
-      this.currentLanguage = this.detectLanguage();
+      // Detect language (may trigger geolocation check)
+      this.currentLanguage = await this.detectLanguageWithGeo();
       console.log('[i18n] Detected language:', this.currentLanguage);
 
       // Load translations if not English
@@ -67,6 +71,103 @@ export class I18nManager {
       // Fallback to English on error
       this.currentLanguage = DEFAULT_LANGUAGE;
       return false;
+    }
+  }
+
+  /**
+   * Detect language with geolocation fallback
+   * Priority: URL param > localStorage > geolocation > default
+   */
+  async detectLanguageWithGeo() {
+    // 1. Check URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get(URL_PARAM);
+    if (urlLang && this.isValidLanguage(urlLang)) {
+      console.log('[i18n] Language from URL:', urlLang);
+      this.saveLanguagePreference(urlLang);
+      return urlLang;
+    }
+
+    // 2. Check localStorage for user preference
+    const savedLang = this.getLanguagePreference();
+    if (savedLang && this.isValidLanguage(savedLang)) {
+      console.log('[i18n] Language from localStorage:', savedLang);
+      return savedLang;
+    }
+
+    // 3. Check if we've already done geolocation detection
+    const geoChecked = this.hasGeoBeenChecked();
+    if (!geoChecked) {
+      console.log('[i18n] No saved preference, checking geolocation...');
+      const geoLang = await this.detectLanguageByGeolocation();
+      if (geoLang) {
+        console.log('[i18n] Language from geolocation:', geoLang);
+        this.saveLanguagePreference(geoLang);
+        return geoLang;
+      }
+    }
+
+    // 4. Default
+    console.log('[i18n] Using default language:', DEFAULT_LANGUAGE);
+    return DEFAULT_LANGUAGE;
+  }
+
+  /**
+   * Detect language based on user's country via IP geolocation
+   * @returns {string|null} Language code or null if detection fails
+   */
+  async detectLanguageByGeolocation() {
+    try {
+      // Use ip-api.com (free, no API key required, 45 requests/minute)
+      const response = await fetch('https://ip-api.com/json/?fields=countryCode', {
+        signal: AbortSignal.timeout(3000) // 3 second timeout
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      const countryCode = data.countryCode;
+
+      console.log('[i18n] Detected country:', countryCode);
+
+      // Mark that we've checked geolocation
+      this.markGeoChecked();
+
+      // Check if country should use Ukrainian
+      if (UKRAINIAN_COUNTRIES.includes(countryCode)) {
+        return LANGUAGES.UK;
+      }
+
+      return null; // Use default language
+    } catch (error) {
+      console.warn('[i18n] Geolocation detection failed:', error.message);
+      // Mark as checked even on failure to avoid repeated attempts
+      this.markGeoChecked();
+      return null;
+    }
+  }
+
+  /**
+   * Check if geolocation has already been checked this session
+   */
+  hasGeoBeenChecked() {
+    try {
+      return sessionStorage.getItem(GEO_CHECKED_KEY) === 'true';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
+   * Mark that geolocation has been checked
+   */
+  markGeoChecked() {
+    try {
+      sessionStorage.setItem(GEO_CHECKED_KEY, 'true');
+    } catch (e) {
+      // sessionStorage not available
     }
   }
 
