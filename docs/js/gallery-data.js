@@ -30,12 +30,35 @@ export class GalleryDataManager {
   }
 
   /**
-   * Load artworks from JSON file
+   * Get current language from i18n system
+   */
+  getCurrentLanguage() {
+    const i18n = getI18n();
+    return i18n ? i18n.currentLanguage : 'en';
+  }
+
+  /**
+   * Get artwork JSON path based on current language
+   */
+  getArtworkJsonPath() {
+    const language = this.getCurrentLanguage();
+
+    if (language === 'uk') {
+      return './json_data/ukr/artworks_uk.json';
+    }
+
+    // Default to English
+    return './json_data/artworks.json';
+  }
+
+  /**
+   * Load artworks from JSON file (language-aware)
    */
   async loadArtworks() {
     try {
-      console.log('[GalleryData] Fetching artworks.json...');
-        const response = await fetch('./json_data/artworks.json');
+      const jsonPath = this.getArtworkJsonPath();
+      console.log('[GalleryData] Fetching artworks from:', jsonPath);
+      const response = await fetch(jsonPath);
       console.log('[GalleryData] Response status:', response.status);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -206,7 +229,7 @@ export class GalleryDataManager {
 
   /**
    * Parse dimensions string and calculate aspect ratio
-   * Supports formats like "20 x 16 in", "16 x 20 in", etc.
+   * Supports formats like "20 x 16 in", "16 x 20 in", "60 х 50 см" (Latin x and Cyrillic х)
    * Returns width/height ratio or null if parsing fails
    *
    * @param {string} dimensionsString - The dimensions string to parse
@@ -224,8 +247,9 @@ export class GalleryDataManager {
       return null;
     }
 
-    // Match patterns like "20 x 16 in" or "20x16"
-    const match = trimmed.match(/(\d+\.?\d*)\s*x\s*(\d+\.?\d*)/i);
+    // Match patterns like "20 x 16 in" or "20x16" (Latin x) and "60 х 50 см" (Cyrillic х)
+    // Using [xх] character class to match both Latin 'x' and Cyrillic 'х'
+    const match = trimmed.match(/(\d+\.?\d*)\s*[xх]\s*(\d+\.?\d*)/i);
 
     if (!match) {
       return null;
@@ -693,6 +717,60 @@ export class GalleryDataManager {
   }
 
   /**
+   * Reload gallery when language changes
+   */
+  async reloadForLanguageChange() {
+    try {
+      console.log('[GalleryData] Language changed, reloading artworks...');
+
+      // Show loading state
+      const container = document.querySelector('.bento-grid');
+      if (container) {
+        const loadingMsg = document.createElement('p');
+        loadingMsg.className = 'gallery-loading';
+        loadingMsg.textContent = 'Loading artworks...';
+        container.innerHTML = '';
+        container.appendChild(loadingMsg);
+      }
+
+      // Reload artwork data with new language
+      await this.loadArtworks();
+
+      // Re-render everything
+      this.renderFilters();
+      this.renderMobileFilters();
+      this.renderGallery();
+
+      console.log('[GalleryData] Gallery reloaded successfully for new language');
+      return true;
+    } catch (error) {
+      console.error('[GalleryData] Error reloading gallery for language change:', error);
+
+      // Show error state
+      const container = document.querySelector('.bento-grid');
+      if (container) {
+        const errorMsg = document.createElement('p');
+        errorMsg.className = 'gallery-error';
+        errorMsg.textContent = 'Failed to load artworks. Please refresh the page.';
+        container.innerHTML = '';
+        container.appendChild(errorMsg);
+      }
+
+      return false;
+    }
+  }
+
+  /**
+   * Set up listener for language change events
+   */
+  setupLanguageChangeListener() {
+    document.addEventListener('languageChanged', async (event) => {
+      console.log('[GalleryData] Detected language change event:', event.detail);
+      await this.reloadForLanguageChange();
+    });
+  }
+
+  /**
    * Initialize gallery - load and render everything
    */
   async init() {
@@ -715,6 +793,9 @@ export class GalleryDataManager {
       this.renderFilters();
       this.renderMobileFilters();
       this.renderGallery();
+
+      // Set up language change listener
+      this.setupLanguageChangeListener();
 
       return true;
     } catch (error) {
