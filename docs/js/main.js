@@ -232,6 +232,9 @@ import { initI18n } from './i18n.js';
   let isGalleryFiltering = false;
   let galleryManagerInstance = null; // Store reference to gallery manager for header updates
 
+  // Global flag to ensure galleryRendered listener is only registered once
+  let galleryRenderedListenerRegistered = false;
+
   /**
    * Get collection name from URL query parameter
    * Safely retrieves the 'collection' parameter from the current page URL
@@ -550,11 +553,13 @@ import { initI18n } from './i18n.js';
   };
 
   const initGalleryFiltering = () => {
+    console.log('[FilterDebug] initGalleryFiltering called');
     // Select DESKTOP filter buttons (exclude mobile filter chips)
     // Query fresh on each call to handle dynamic re-rendering
     const filterButtons = document.querySelectorAll('.filter-controls [data-filter]');
     const artworkCards = document.querySelectorAll('[data-collection]');
 
+    console.log('[FilterDebug] Found', filterButtons.length, 'filter buttons and', artworkCards.length, 'artwork cards');
     if (filterButtons.length === 0 || artworkCards.length === 0) return;
 
     const updateActiveButton = (activeFilter) => {
@@ -596,10 +601,15 @@ import { initI18n } from './i18n.js';
 
     // Now attach a single new click handler
     newFilterContainer.addEventListener('click', (e) => {
+      console.log('[FilterDebug] Desktop filter click fired');
       const button = e.target.closest('[data-filter]');
-      if (!button) return;
+      if (!button) {
+        console.log('[FilterDebug] Click target is not a filter button');
+        return;
+      }
 
       const filter = button.getAttribute('data-filter');
+      console.log('[FilterDebug] Filter button clicked:', filter);
       filterGallery(filter);
       updateActiveButton(filter);
 
@@ -625,14 +635,6 @@ import { initI18n } from './i18n.js';
           }
         }
       }
-    });
-
-    // Re-initialize filters when gallery is re-rendered (e.g., after language change)
-    // NOTE: Don't use once:true because we need to re-init on every gallery render
-    // (language switches, filter clicks can trigger multiple renders)
-    // The clone-and-replace pattern inside initGalleryFiltering prevents duplicate listeners
-    document.addEventListener('galleryRendered', () => {
-      initGalleryFiltering();
     });
 
     // Get initial collection from URL/localStorage
@@ -1421,11 +1423,15 @@ import { initI18n } from './i18n.js';
   // ========================================
 
   const initMobileFilterDropdown = () => {
+    console.log('[FilterDebug] initMobileFilterDropdown called');
     const toggle = document.querySelector('.mobile-filter-toggle');
     const dropdown = document.getElementById('mobile-filter-dropdown');
     const closeButton = dropdown?.querySelector('.mobile-filter-dropdown__close');
 
-    if (!toggle || !dropdown) return;
+    if (!toggle || !dropdown) {
+      console.log('[FilterDebug] Mobile filter components not found');
+      return;
+    }
 
     let focusedElementBeforeDropdown = null;
 
@@ -1546,10 +1552,15 @@ import { initI18n } from './i18n.js';
 
       // Now attach a single new click handler
       newDropdownContent.addEventListener('click', (e) => {
+        console.log('[FilterDebug] Mobile filter click fired');
         const button = e.target.closest('[data-mobile-filter]');
-        if (!button) return;
+        if (!button) {
+          console.log('[FilterDebug] Click target is not a mobile filter button');
+          return;
+        }
 
         const filter = button.getAttribute('data-filter');
+        console.log('[FilterDebug] Mobile filter button clicked:', filter);
 
         // Apply the filter to the gallery
         filterGallery(filter);
@@ -1561,14 +1572,6 @@ import { initI18n } from './i18n.js';
         setTimeout(closeDropdown, 300);
       });
     }
-
-    // Re-initialize mobile filters when gallery is re-rendered (e.g., after language change)
-    // NOTE: Don't use once:true because we need to re-init on every gallery render
-    // (language switches, filter clicks can trigger multiple renders)
-    // The clone-and-replace pattern inside initMobileFilterDropdown prevents duplicate listeners
-    document.addEventListener('galleryRendered', () => {
-      initMobileFilterDropdown();
-    });
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -1602,6 +1605,30 @@ import { initI18n } from './i18n.js';
 
     // Initialize count
     updateFilterCount();
+  };
+
+  /**
+   * Register global galleryRendered listener (ONCE per page load)
+   * This listener re-initializes filter UI when gallery re-renders (language change, etc.)
+   *
+   * CRITICAL: This must be called ONCE and only ONCE to avoid exponential listener multiplication.
+   * Previous bug: Adding this listener inside initGalleryFiltering() caused each re-init to add
+   * another listener, leading to 1 → 2 → 4 → 8 → ... listeners and every-other-click behavior.
+   */
+  const registerGalleryRenderedListener = () => {
+    if (galleryRenderedListenerRegistered) {
+      console.log('[FilterDebug] galleryRendered listener already registered, skipping');
+      return;
+    }
+
+    console.log('[FilterDebug] Registering global galleryRendered listener');
+    document.addEventListener('galleryRendered', () => {
+      console.log('[FilterDebug] galleryRendered event fired, re-initializing filters');
+      initGalleryFiltering();
+      initMobileFilterDropdown();
+    });
+
+    galleryRenderedListenerRegistered = true;
   };
 
   // ========================================
@@ -2582,6 +2609,9 @@ import { initI18n } from './i18n.js';
       // ===== PHASE 2: DATA LOADING (async, graceful degradation) =====
       // Gallery data loads artwork cards; failure shows error message but doesn't break page
       await initGalleryData();
+
+      // Register global listener for gallery re-renders (MUST be called only once)
+      registerGalleryRenderedListener();
 
       // Featured carousel on home page; failure is silent (carousel not critical)
       await initFeaturedCarousel();
