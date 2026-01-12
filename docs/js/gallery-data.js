@@ -637,7 +637,6 @@ export class GalleryDataManager {
     console.log('[GalleryData] Gallery rendered successfully');
 
     // Dispatch custom event to notify other modules
-    console.log('[FilterDebug] Dispatching galleryRendered event');
     const event = new CustomEvent('galleryRendered', {
       detail: { count: this.artworks.length }
     });
