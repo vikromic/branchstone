@@ -189,7 +189,7 @@
       "dimensions": "20 x 16 in",
       "year": "2024",
       "main_image": "img/whales/whale1.webp",
-      "images": ["1.webp", "2.webp", "3.webp", "4.webp", "5.webp", "6.webp"],
+      "images": ["1.jpeg", "2.webp", "3.webp", "4.webp", "5.webp", "6.webp"],
       "sold": true,
       "prints": true,
       "price": "320",
@@ -317,7 +317,7 @@
     },
     {
       "name": "Compass",
-      "highlighted": true,
+      "highlighted": false,
       "collection": "Following Her Steps",
       "description": "An escape from pressure, guided by her own compass.",
       "materials": "Acrylic, cast elements, coil pieces, air plant, maple leaf on photographic print mounted on foam board.",
@@ -407,7 +407,7 @@
     },
     {
       "name": "After",
-      "highlighted": true,
+      "highlighted": false,
       "collection": "Following Her Steps",
       "description": "Gathering lost pieces of herself after the storm — and each storm is different.",
       "materials": "Acrylic, cast elements, coil pieces, air plant, maple leaf on photographic print mounted on foam board.",
@@ -463,6 +463,21 @@
       "sold": true,
       "prints": true,
       "price": "100",
+      "scale": "medium"
+    },
+    {
+      "name": "Magnet",
+      "highlighted": true,
+      "collection": "Magnet",
+      "description": "Magnet reflects the idea that opposites are not rivals, but parts of the same structure. They often share one origin, one field, one logic. Their difference is what keeps the system alive, creates tension. \n\nLike a good old concert of yin and yang, these forces are defined by contrast, but neither exists on its own. They are in constant relation, drawn toward each other, shaped by distance, tension, and orientation. The movement between them never stops, even when they do not touch.\n\nThis work is about harmony as interaction, the balance between resistance and drawing. About how opposing qualities search for one another, respond, adjust, and remain connected through an invisible pull.",
+      "materials": "Printed dragons, river sand, coil crumbs, bohemian truffle, acrylic on canvas.",
+      "dimensions": "24 x 18 in",
+      "year": "2026",
+      "main_image": "img/magnet/magnet.jpeg",
+      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg", "5.jpeg", "6.jpeg", "7.jpeg"],
+      "sold": false,
+      "prints": true,
+      "price": "",
       "scale": "medium"
     }
   ]
