@@ -195,8 +195,8 @@
       <!-- Hero Section -->
       <section class="hero hero--small">
         <div class="hero__content">
-          <h1 class="hero__title">Get in Touch</h1>
-          <p class="hero__subtitle">
+          <h1 class="hero__title" data-i18n="contactPage.header.title">Get in Touch</h1>
+          <p class="hero__subtitle" data-i18n="contactPage.header.subtitle">
             I'd love to hear from you. Whether you have a question about
             commissions, pricing, or anything else, I'm here to help.
           </p>
@@ -229,7 +229,7 @@
                 />
 
                 <div class="form__group">
-                  <label for="contact-name" class="form__label"
+                  <label for="contact-name" class="form__label" data-i18n="contactPage.form.fields.name.label"
                     >Name <span class="form__required">*</span></label
                   >
                   <input
@@ -240,6 +240,7 @@
                     required
                     autocomplete="name"
                     placeholder="Your full name"
+                    data-i18n-placeholder="contactPage.form.fields.name.placeholder"
                     aria-invalid="false"
                     aria-describedby="contact-name-error"
                   />
@@ -247,7 +248,7 @@
                 </div>
 
                 <div class="form__group">
-                  <label for="contact-email" class="form__label"
+                  <label for="contact-email" class="form__label" data-i18n="contactPage.form.fields.email.label"
                     >Email <span class="form__required">*</span></label
                   >
                   <input
@@ -258,6 +259,7 @@
                     required
                     autocomplete="email"
                     placeholder="your.email@example.com"
+                    data-i18n-placeholder="contactPage.form.fields.email.placeholder"
                     aria-invalid="false"
                     aria-describedby="contact-email-error"
                   />
@@ -265,7 +267,7 @@
                 </div>
 
                 <div class="form__group">
-                  <label for="contact-subject" class="form__label"
+                  <label for="contact-subject" class="form__label" data-i18n="contactPage.form.fields.subject.label"
                     >Subject <span class="form__required">*</span></label
                   >
                   <select
@@ -286,7 +288,7 @@
                 </div>
 
                 <div class="form__group">
-                  <label for="contact-message" class="form__label"
+                  <label for="contact-message" class="form__label" data-i18n="contactPage.form.fields.message.label"
                     >Message <span class="form__required">*</span></label
                   >
                   <textarea
@@ -296,13 +298,14 @@
                     rows="6"
                     required
                     placeholder="Tell me about your inquiry..."
+                    data-i18n-placeholder="contactPage.form.fields.message.placeholder"
                     aria-invalid="false"
                     aria-describedby="contact-message-error"
                   ></textarea>
                   <span id="contact-message-error" class="form__error" role="alert"></span>
                 </div>
 
-                <button type="submit" class="btn btn--primary">
+                <button type="submit" class="btn btn--primary" data-i18n="contactPage.form.button">
                   Send Message
                 </button>
 
@@ -335,10 +338,10 @@
             <!-- Right Column - Contact Info -->
             <div class="contact-grid__info">
               <div class="contact-info">
-                <h2 class="contact-info__title">Contact Information</h2>
+                <h2 class="contact-info__title" data-i18n="contactPage.contactInfo.title">Contact Information</h2>
 
                 <div class="contact-info__item">
-                  <h3 class="contact-info__label">Email</h3>
+                  <h3 class="contact-info__label" data-i18n="contactPage.contactInfo.email.label">Email</h3>
                   <a
                     href="mailto:thebranchstone@gmail.com"
                     class="contact-info__link"
@@ -348,7 +351,7 @@
                 </div>
 
                 <div class="contact-info__item">
-                  <h3 class="contact-info__label">Instagram</h3>
+                  <h3 class="contact-info__label" data-i18n="contactPage.contactInfo.instagram.label">Instagram</h3>
                   <a
                     href="https://instagram.com/branchstone.art"
                     target="_blank"
@@ -360,27 +363,27 @@
                 </div>
 
                 <div class="contact-info__item">
-                  <h3 class="contact-info__label">Response Time</h3>
-                  <p class="contact-info__text">
+                  <h3 class="contact-info__label" data-i18n="contactPage.contactInfo.responseTime.label">Response Time</h3>
+                  <p class="contact-info__text" data-i18n="contactPage.contactInfo.responseTime.text">
                     I typically respond within 24-48 hours during business days.
                   </p>
                 </div>
 
                 <div class="contact-info__item contact-info__item--faq">
-                  <h3 class="contact-info__label">Quick Links</h3>
+                  <h3 class="contact-info__label" data-i18n="contactPage.quickLinks.title">Quick Links</h3>
                   <ul class="contact-info__list">
                     <li>
-                      <a href="#faq" class="contact-info__link"
+                      <a href="#faq" class="contact-info__link" data-i18n="contactPage.quickLinks.links.0"
                         >Frequently Asked Questions</a
                       >
                     </li>
                     <li>
-                      <a href="commissions.html" class="contact-info__link"
+                      <a href="commissions.html" class="contact-info__link" data-i18n="contactPage.quickLinks.links.1"
                         >Commission Process</a
                       >
                     </li>
                     <li>
-                      <a href="gallery.html" class="contact-info__link"
+                      <a href="gallery.html" class="contact-info__link" data-i18n="contactPage.quickLinks.links.2"
                         >View Gallery</a
                       >
                     </li>
@@ -395,15 +398,15 @@
       <!-- FAQ Section -->
       <section class="section section--faq" id="faq">
         <div class="container">
-          <h2 class="section__title">Frequently Asked Questions</h2>
+          <h2 class="section__title" data-i18n="contactPage.faqExtended.title">Frequently Asked Questions</h2>
 
           <div class="faq">
             <details class="faq__item">
-              <summary class="faq__question">
+              <summary class="faq__question" data-i18n="contactPage.faqExtended.items.0.question">
                 How long does a commission take?
               </summary>
               <div class="faq__answer">
-                <p>
+                <p data-i18n="contactPage.faqExtended.items.0.answer">
                   Commission timelines vary depending on the size and complexity
                   of the piece. Typically, a commissioned artwork takes 4-8
                   weeks from initial consultation to completion. I'll provide a
@@ -414,9 +417,9 @@
             </details>
 
             <details class="faq__item">
-              <summary class="faq__question">What materials do you use?</summary>
+              <summary class="faq__question" data-i18n="contactPage.faqExtended.items.1.question">What materials do you use?</summary>
               <div class="faq__answer">
-                <p>
+                <p data-i18n="contactPage.faqExtended.items.1.answer">
                   I primarily work with high-quality acrylic paints on canvas or
                   wood panels. I also incorporate mixed media techniques
                   including texture pastes, metallics, and natural elements to
@@ -427,11 +430,11 @@
             </details>
 
             <details class="faq__item">
-              <summary class="faq__question">
+              <summary class="faq__question" data-i18n="contactPage.faqExtended.items.2.question">
                 Do you ship internationally?
               </summary>
               <div class="faq__answer">
-                <p>
+                <p data-i18n="contactPage.faqExtended.items.2.answer">
                   Yes, I ship artwork worldwide. All pieces are carefully
                   packaged with professional-grade materials to ensure safe
                   delivery. Shipping costs vary based on destination and artwork
@@ -443,11 +446,11 @@
             </details>
 
             <details class="faq__item">
-              <summary class="faq__question">
+              <summary class="faq__question" data-i18n="contactPage.faqExtended.items.3.question">
                 How do I care for my artwork?
               </summary>
               <div class="faq__answer">
-                <p>
+                <p data-i18n="contactPage.faqExtended.items.3.answer">
                   To keep your artwork looking its best, display it away from
                   direct sunlight and moisture. Dust gently with a soft, dry
                   cloth. Avoid using cleaning products or water on the surface.
@@ -459,11 +462,11 @@
             </details>
 
             <details class="faq__item">
-              <summary class="faq__question">
+              <summary class="faq__question" data-i18n="contactPage.faqExtended.items.4.question">
                 What is your refund policy?
               </summary>
               <div class="faq__answer">
-                <p>
+                <p data-i18n="contactPage.faqExtended.items.4.answer">
                   For original artwork purchases, I offer a 7-day return policy
                   from the date of delivery. The artwork must be returned in its
                   original condition and packaging. For commissions, a 50%
@@ -484,20 +487,21 @@
     <!-- Newsletter Signup -->
     <section class="newsletter" aria-labelledby="newsletter-heading">
       <div class="newsletter__container">
-        <h2 id="newsletter-heading" class="newsletter__title">Stay Inspired</h2>
-        <p class="newsletter__text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
+        <h2 id="newsletter-heading" class="newsletter__title" data-i18n="contactPage.stayInspired.title">Stay Inspired</h2>
+        <p class="newsletter__text" data-i18n="contactPage.stayInspired.text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
         <form class="newsletter__form" id="newsletter-form" novalidate>
           <input
             type="email"
             class="newsletter__input"
             placeholder="Enter your email"
+            data-i18n-placeholder="contactPage.stayInspired.emailPlaceholder"
             aria-label="Email address"
             required
           >
-          <button type="submit" class="newsletter__button">Subscribe</button>
+          <button type="submit" class="newsletter__button" data-i18n="contactPage.stayInspired.button">Subscribe</button>
         </form>
         <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
-        <p class="newsletter__privacy">We respect your privacy. <a href="privacy.html">Privacy Policy</a></p>
+        <p class="newsletter__privacy" data-i18n="contactPage.stayInspired.privacyNote">We respect your privacy. <a href="privacy.html" data-i18n="contactPage.stayInspired.privacyLink">Privacy Policy</a></p>
       </div>
     </section>
 
@@ -520,31 +524,31 @@
           <a href="index.html" class="footer__logo" aria-label="Branchstone Home">
             BRANCHSTONE
           </a>
-          <p class="footer__tagline">Art inspired by natural textures and quiet resilience</p>
+          <p class="footer__tagline" data-i18n="home.footer.tagline">Art inspired by natural textures and quiet resilience</p>
         </div>
 
         <nav class="footer__nav" aria-label="Footer navigation">
           <div class="footer__nav-column">
-            <h3 class="footer__nav-heading">Navigation</h3>
+            <h3 class="footer__nav-heading" data-i18n="home.footer.navigation">Navigation</h3>
             <ul class="footer__nav-list">
-              <li><a href="gallery.html" class="footer__nav-link">Gallery</a></li>
-              <li><a href="about.html" class="footer__nav-link">About</a></li>
-              <li><a href="commissions.html" class="footer__nav-link">Commissions</a></li>
-              <li><a href="contact.html" class="footer__nav-link">Contact</a></li>
+              <li><a href="gallery.html" class="footer__nav-link" data-i18n="nav.gallery">Gallery</a></li>
+              <li><a href="about.html" class="footer__nav-link" data-i18n="nav.about">About</a></li>
+              <li><a href="commissions.html" class="footer__nav-link" data-i18n="nav.commissions">Commissions</a></li>
+              <li><a href="contact.html" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
             </ul>
           </div>
 
           <div class="footer__nav-column">
-            <h3 class="footer__nav-heading">Legal</h3>
+            <h3 class="footer__nav-heading" data-i18n="home.footer.legal">Legal</h3>
             <ul class="footer__nav-list">
-              <li><a href="privacy.html" class="footer__nav-link">Privacy Policy</a></li>
-              <li><a href="terms.html" class="footer__nav-link">Terms of Service</a></li>
+              <li><a href="privacy.html" class="footer__nav-link" data-i18n="home.footer.privacyPolicy">Privacy Policy</a></li>
+              <li><a href="terms.html" class="footer__nav-link" data-i18n="home.footer.termsOfService">Terms of Service</a></li>
             </ul>
           </div>
         </nav>
 
         <div class="footer__social">
-          <h3 class="footer__social-heading">Connect</h3>
+          <h3 class="footer__social-heading" data-i18n="home.footer.connect">Connect</h3>
           <ul class="footer__social-list">
             <li>
               <a href="https://instagram.com/branchstone.art" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Follow on Instagram">
@@ -561,7 +565,7 @@
       </div>
 
       <div class="footer__bottom">
-        <p class="footer__copyright">&copy; <span id="copyright-year">2025</span> Branchstone. All rights reserved.</p>
+        <p class="footer__copyright" data-i18n="home.footer.copyright">&copy; <span id="copyright-year">2025</span> Branchstone. All rights reserved.</p>
       </div>
     </footer>
 
