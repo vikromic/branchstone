@@ -1,469 +1,457 @@
 {
-  "artworks": [
-    {
-      "name": "Born Of Burn",
-      "highlighted": true,
-      "collection": "Of Ash and Flowers",
-      "description": "After a fire, what remains is never the same as what went in.\nWhen the heat fades and everything goes quiet, something slowly begins to return.\n\nThese flowers don’t belong to gardens.\nThey come from burned ground, from places shaped by loss and endurance at the same time.\nAsh becomes their soil.\nLeftover heat traces their beginnings.\n\nThey carry the memory of what happened here,\nand they remind me that beauty can exist even after damage.",
-      "materials": "Ponderosa pine, burned wood pieces, acrylic on canvas",
-      "dimensions": "16 x 20 in",
-      "year": "2025",
-      "main_image": "img/born_of_burn/born.jpeg",
-      "images": ["1.webp", "2.webp", "3.webp", "4.webp"],
-      "sold": false,
-      "prints": true,
-      "price": "200",
-      "scale": "medium"
+  "nav": {
+    "home": "Головна",
+    "gallery": "Галерея",
+    "about": "Про мене",
+    "commissions": "Замовлення",
+    "contact": "Контакти"
+  },
+  "home": {
+    "hero": {
+      "title": "Де ліс зустрічається з мистецтвом",
+      "subtitle": "Унікальні мішані техніки зі знайдених природних матеріалів.",
+      "statsArtworks": "70+ творів виготовлено",
+      "statsYears": "9+ років творчості",
+      "viewGallery": "Переглянути галерею",
+      "aboutArtist": "Про художницю",
+      "artistBadge": "Художниця з Каліфорнії",
+      "exploreWorks": "Ознайомитись з роботами",
+      "statsCollected": "70+ творів",
+      "statsCollectedSub": "зібрано",
+      "statsYearsOf": "9+ років",
+      "statsMastery": "мистецької майстерності",
+      "statsEthical": "100%",
+      "statsEthicalSub": "етично знайдено"
     },
-    {
-      "name": "By Marks and Fire",
-      "highlighted": false,
-      "collection": "Of Ash and Flowers",
-      "description": "Experience doesn’t come gently.\nIt scalds, splits, leaves gold in its wake.\n\nWhat stays behind is proof \nof mistakes, of survival,\nof becoming something textured,\nsomething true.\n",
-      "materials": "Old acacia, oak catkins, Bohemian truffle pigment, acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2023",
-      "main_image": "img/by_marks_and_fire/by_marks.webp",
-      "images": ["1.webp", "2.webp", "3.webp", "4.webp"],
-      "sold": false,
-      "prints": true,
-      "price": "180",
-      "scale": "medium"
+    "stats": {
+      "artworksLabel": "Творів зібрано по всій території США та Європи",
+      "yearsLabel": "Років ручної роботи",
+      "ethicalLabel": "Кожен твір етично добутий"
     },
-    {
-      "name": "Christmas Joy",
-      "highlighted": false,
-      "collection": "Golden",
-      "description": "",
-      "materials": "Old acacia branch, juniper branch, clover flowers, acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2024",
-      "main_image": "img/christmass_joy/4.webp",
-      "images": ["christmas.webp"],
-      "sold": true,
-      "prints": true,
-      "price": "150",
-      "scale": "medium"
+    "trust": {
+      "oneOfKind": "Унікальний",
+      "oneOfKindText": "Унікальні твори зі знайдених окремо матеріалів",
+      "ethicallySourced": "Етично добуто",
+      "ethicallySourcedText": "Впалі гілки, мох і природні знахідки",
+      "directFromArtist": "Безпосередньо від художниці",
+      "directFromArtistText": "Без галерей чи посередників",
+      "madeWithLove": "Зроблено з любов'ю",
+      "madeWithLoveText": "Кожен твір розповідає свою власну історію"
     },
-    {
-      "name": "Core",
-      "highlighted": false,
-      "collection": "The Calm of the Forest",
-      "description": "Like a heart — quiet, strong, and raw.\nTied to everything that matters.\nIt’s where it all begins.",
-      "materials": "Acacia wood, cotton, acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2022",
-      "main_image": "img/core/core_1.webp",
-      "images": ["1.webp", "2.webp", "3.webp"],
-      "sold": false,
-      "prints": true,
-      "price": "190",
-      "scale": "medium"
+    "featured": {
+      "title": "Вибрані роботи",
+      "viewFullGallery": "Переглянути повну галерею"
     },
-    {
-      "name": "Full",
-      "highlighted": true,
-      "collection": "The Calm of the Forest",
-      "description": "",
-      "materials": "Carpathian chaga, moss, spruce branch, \nlichen, acrylic on canvas.",
-      "dimensions": "20 x 16 in",
-      "year": "2023",
-      "main_image": "img/full/full.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "270",
-      "scale": ""
+    "sold": {
+      "title": "Нещодавно знайшли нові домівки",
+      "soldBadge": "ПРОДАНО",
+      "nowIn": "Зараз у будинку в Далласі",
+      "soldAugust": "Продано у серпні 2025",
+      "soldToCollector": "Продано колекціонеру в Остіні, Техас",
+      "soldSummer": "Продано влітку 2025",
+      "nowInPlano": "Зараз у будинку в Плано, Техас",
+      "summer2025": "Літо 2025",
+      "soldToUkraine": "Продано колекціонеру в Україні",
+      "soldAutumn": "Продано минулої осені"
     },
-    {
-      "name": "July Pines",
-      "highlighted": true,
-      "collection": "The Calm of the Forest",
-      "description": "There was a forest that watched me grow.\nTwelve summers in a row, I returned — first as a child, then as a mother.\nIt held my laughter, my tears, my friendships, my first love.\n\nNow, the place that shaped so much of me is gone. Unreachable, unsafe.\n\nBut I still carry the scent of pine, the feel of the earth, the hush of the trees.\n\nThis work is a memory in texture. \nA quiet longing.\nA piece of what I never want to forget.",
-      "materials": "Acacia bark, algae, river sand, bohemian truffle, fresh grass pigment, acrylic on canvas",
-      "dimensions": "24 x 20 in",
-      "year": "2025",
-      "main_image": "img/july_pines/july_pines.webp",
-      "images": ["1.webp", "2.webp"],
-      "sold": true,
-      "prints": true,
-      "price": "400",
-      "scale": "large"
+    "aboutPreview": {
+      "title": "Художниця",
+      "text1": "Мене звати Вікторія, родом з України, а зараз творю у Санта-Розі, Каліфорнія. Моя робота досліджує перетин природи та пам'яті через композиції зі змішаних матеріалів із використанням знайдених матеріалів — дерева, моху, кори та водоростей. Кожен твір розповідає історію трансформації, стійкості та тихої краси, знайденої в природних текстурах.",
+      "text2": "Працюючи з матеріалами, сформованими часом та стихіями, я прагну передати сутність непостійності та сили природи. Моє мистецтво — це запрошення сповільнитися та спостерігати складні деталі, які часто залишаються непоміченими у нашому швидкоплинному світі.",
+      "meetArtist": "Познайомтесь з художницею"
     },
-    {
-      "name": "Moonglow",
-      "highlighted": false,
-      "collection": "The Calm of the Forest",
-      "description": "",
-      "materials": "Air plant, acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2022",
-      "main_image": "img/moonglow/moon_g.webp",
-      "images": ["11.webp","1.webp", "3.webp", "3.webp", "4.webp"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "medium"
+    "testimonials": {
+      "title": "Що кажуть колекціонери"
     },
-    {
-      "name": "Navy of the Dreamland",
-      "highlighted": false,
-      "collection": "Golden",
-      "description": "There’s a moment between sleep and waking when the forest starts to feel like the sea.\nLeaves lift like small sails.\nTwigs and stems stand tall, almost like masts.\nEven the lace feels like foam — light, quiet, passing.\n\nThis piece came from that in-between state.\nIt isn’t about direction or arrival, just drifting — held by memory and a sense of quiet wonder.",
-      "materials": "Acrylic, breadfruit leaves, Ming Aralia leaves, Acacia branches, textile on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2023",
-      "main_image": "img/navy_of_the_dreamland/navy.webp",
-      "images": ["1.webp", "2.webp","4.webp"],
-      "sold": true,
-      "prints": true,
-      "price": "210",
-      "scale": "medium"
+    "instagram": {
+      "title": "Слідкуйте за подорожжю",
+      "subtitle": "За лаштунками, нові твори та лісові прогулянки"
     },
-    {
-      "name": "Of Ash and Flowers",
-      "highlighted": true,
-      "collection": "Of Ash and Flowers",
-      "description": "Some things really do bloom straight through the burn.\nThis piece is about what quietly comes back after an ending — when something has been stripped down, scorched, undone, and still life finds a way to return.\n\nThe textures come from real petals and plants I collected, dried, and preserved. I placed them the way memories tend to settle — not perfectly, but intentionally.\n\nThe dark areas aren’t just shadow. They’re the kind of silence that stays after fire has passed.\nAnd the gold? It might be hope. Or it might just be the way light eventually finds its way in.",
-      "materials": "Acrylic, casting medium, hydrangea flowers on canvas",
-      "dimensions": "36 x 24 in",
-      "year": "2024",
-      "main_image": "img/of_ash_and_flowers/of_ash.webp",
-      "images": ["1.webp", "2.webp", "4.webp"],
-      "sold": true,
-      "prints": true,
-      "price": "390",
-      "scale": "large"
+    "cta": {
+      "title": "Замовте своє бачення",
+      "description": "Зацікавлені у замовленні твору для свого простору? Я тісно працюю з колекціонерами, щоб створити унікальні твори мистецтва, які відображають ваш зв'язок із природою. Кожне замовлення створюється зі смислом, використовуючи ретельно відібрані природні матеріали.",
+      "requestCustom": "Замовити індивідуальну роботу",
+      "secureInquiry": "Безпечний запит",
+      "responseTime": "Відповідь протягом 24 годин"
     },
-    {
-      "name": "Prolisok",
-      "highlighted": false,
-      "collection": "The Calm of the Forest",
-      "description": "A place on Earth of my happy summers.",
-      "materials": "Acacia bark, algae, river sand, bohemian truffle, fresh grass pigment, acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2022",
-      "main_image": "img/prolisok/prolisok.webp",
-      "images": ["1.webp", "2.webp"],
-      "sold": true,
-      "prints": true,
-      "price": "150",
-      "scale": "medium"
+    "newsletter": {
+      "title": "Залишайтесь натхненними",
+      "text": "Отримуйте сповіщення про нові колекції, закулісні моменти та ексклюзивні пропозиції. Без спаму, лише мистецтво.",
+      "placeholder": "Введіть свою електронну адресу",
+      "button": "Підписатися",
+      "privacyText": "Ми поважаємо вашу конфіденційність.",
+      "privacyLink": "Політика конфіденційності"
     },
-    {
-      "name": "Rise in Blue",
-      "highlighted": false,
-      "collection": "Deep Ocean",
-      "description": "There’s something about stillness that feels important.\nThese petals were once soft and open. Now they stand almost like markers — lifted upward, worn by time but not broken, set against a washed blue background. Quiet, but not passive.\n\nThis piece isn’t about dramatic survival. It’s about the kind that happens quietly — in small acts of holding on. In fragile things that keep their form. In decay that still leans toward the light.",
-      "materials": "Monstera stipules, araucaria, buttonbush, Bohemian truffle pigment, and acrylic",
-      "dimensions": "20 x 16 in",
-      "year": "2024",
-      "main_image": "img/rise_in_blue/rise.webp",
-      "images": ["1.webp", "2.webp", "3.webp", "4.webp", "5.webp"],
-      "sold": true,
-      "prints": true,
-      "price": "180",
-      "scale": "medium"
-    },
-    {
-      "name": "Spectral",
-      "highlighted": false,
-      "collection": "The Calm of the Forest",
-      "description": "Shadows stretch tall in the quiet between worlds.\nGolden threads drip like echoes, as if something just passed through. \nNot seen, only felt.\n\nIt lingers in the roots, in the rot,\nin the places where the veil is thin.",
-      "materials": "Carpathian chaga, moss, spruce branch, \nlichen, acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2023",
-      "main_image": "img/spectral/spectral1.webp",
-      "images": ["1.webp", "2.webp"],
-      "sold": true,
-      "prints": true,
-      "price": "120",
-      "scale": "medium"
-    },
-    {
-      "name": "Whales",
-      "highlighted": false,
-      "collection": "Deep Ocean",
-      "description": "A quiet protest.\nRaw and restrained.\nInspired by the weight of captivity pressed on creatures meant to roam the deepest blues.\nTheir forms drift across pale currents, bound not by nature, but by hands that forgot how to listen.",
-      "materials": "Driftwood, jute rope, acrylic, ink,\n acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2024",
-      "main_image": "img/whales/whale1.webp",
-      "images": ["1.webp", "2.webp", "3.webp", "4.webp", "5.webp", "6.webp"],
-      "sold": true,
-      "prints": true,
-      "price": "320",
-      "scale": "large"
-    },
-    {
-      "name": "Winds",
-      "highlighted": false,
-      "collection": "Storms",
-      "description": "The air feels thin and fragile.\nBare branches stretch upward, almost tired,\noutlined against a sky that’s lost its warmth.\n\nThere’s no storm here, no drama —\njust a quiet stillness that settles in.\nNot emptiness, more like a pause.\nNot an ending, just waiting.\n\nThe cold doesn’t cut.\nIt passes through gently,\nleaving behind something you can feel,\neven if you don’t have a name for it.",
-      "materials": "Thorny branch, ink, acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2023",
-      "main_image": "img/winds/winds.webp",
-      "images": ["1.webp", "2.webp", "3.webp", "4.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "210",
-      "scale": "medium"
-    },
-    {
-      "name": "Spring Fire",
-      "highlighted": true,
-      "collection": "Of Ash and Flowers",
-      "description": "It begins with a whisper.\nNature waking slowly, brushing off the last frost, dreaming of dandelions and light.\nTiny first messengers move through the hush: a beetle, a melt, a yellow bloom.\n\nAnd then the world splits open.\nA blaze, wild and vengeful, turning air to ash, green to black.\nEven the sky forgets how to hold still.\n\nFor a while, silence feels like loss.\nBut beneath the burn, roots remember.\n\nLife is patient.\nWhat seems lost is only waiting.\nAnd when it returns, it rises hungry, wild, and full of fire-fed strength.\n\nThis work holds part of that story -\ncrafted around a redwood root from a centuries-old tree that did not survive the flames, but still speaks through form, colour and texture.",
-      "materials": "Red wood root piece, burned wood pigment, burned wood pieces, acrylic on canvas.",
-      "dimensions": "34 x 24 in",
-      "year": "2025",
-      "main_image": "img/spring_fire/spring_fire.webp",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg", "5.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "450",
-      "scale": "large"
-    },
-    {
-      "name": "Mermaid's Dream",
-      "highlighted": true,
-      "collection": "Deep Ocean",
-      "description": "She wakes in a place where the land doesn’t quite know what it is yet —\nroots tangled with seafoam, thoughts drifting like seaweed.\n\nThere’s no name for her, no voice.\nJust the steady pull of the tide.\n\nShe collects small flashes from broken skies and bits of foam,\nweaves them into vines,\nlays them gently over rust-colored ground.\n\nWhat she makes can’t really be held.\nIt only stays with you —\nlater, when the air smells like salt and rain.",
-      "materials": "Bull kelp, ocean sand, burned wood and bohemian truffle pigments, \nacrylic on canvas",
-      "dimensions": "30 x 24 in",
-      "year": "2025",
-      "main_image": "img/mermaids_dream/mermaid.webp",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg", "5.jpeg", "6.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "440",
-      "scale": "large"
-    },
-    {
-      "name": "Golden Monstera",
-      "highlighted": true,
-      "collection": "Golden",
-      "description": "",
-      "materials": "Monstera leaf, buttonbush seeds, bohemian truffle pigment, acrylic on canva.",
-      "dimensions": "20 x 16 in",
-      "year": "2024",
-      "main_image": "img/golden_monstera/art6.webp",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg"],
-      "sold": true,
-      "prints": true,
-      "price": "100",
-      "scale": "medium"
-    },
-    {
-      "name": "Fragments of Light",
-      "highlighted": true,
-      "collection": "Of Ash and Flowers",
-      "description": "This work is dedicated to the loss of Iryna Tsybukh — a figure whose courage, honesty, and love of life became a symbol for many in Ukraine.\n\nThough she was taken by the war, the values she lived by cannot be erased.\nAs Iryna wrote, “To have the strength to be free, one must be brave.”\n\nThe piece reflects the emotional weight of losing something monumental — something that should not have disappeared. Fragments of Iryna’s words appear in the background, carrying the strength and inspiration she shared with others.\n\nThe colors speak of hope and freedom — of what endures, and of what continues to live in our hearts.\nThe textures reflect how deeply grief can tear through the soul.",
-      "materials": "Sago palm seed coating, algae, sand, acrylic on canvas panel",
-      "dimensions": "20 x 16 in",
-      "year": "2024",
-      "main_image": "img/fragments_of_light/fragments.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg"],
-      "sold": true,
-      "prints": true,
-      "price": "240",
-      "scale": "medium"
-    },
-    {
-      "name": "November Forest",
-      "highlighted": false,
-      "collection": "The Calm of the Forest",
-      "description": "",
-      "materials": "Bark, sand, acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2024",
-      "main_image": "img/november_forest/nov.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "210",
-      "scale": "medium"
-    },
-    {
-      "name": "Their Shore",
-      "highlighted": true,
-      "collection": "Deep Ocean",
-      "description": "Where battles end quietly.\nWhere the sea holds no questions.\nJust space — soft, steady, and safe.",
-      "materials": "Eastern cottonwood tree bark, algae, river sand, bohemian truffle, viscum, oak and sweet gum tree catkins, acrylic on canvas",
-      "dimensions": "20 x 24 in",
-      "year": "2025",
-      "main_image": "img/their_shore/their.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg"],
-      "sold": true,
-      "prints": true,
-      "price": "450",
-      "scale": "large"
-    },
-    {
-      "name": "The place that Stays",
-      "highlighted": true,
-      "collection": "Deep Ocean",
-      "description": "Not everything holds.\nmost things shift, crack, move, disappear.\nbut sometimes, something stays.\n\nThis piece is about that —\na place untouched while everything else pulls apart.\nthe quiet in the middle of the mess.\nthe bark, the earth, the still green shape —\nthey hold their ground.\n\nIt's not about peace, not exactly.\nit's about presence.\nabout stillness that doesn't run.",
-      "materials": "Eastern cottonwood tree bark, algae, river sand, bohemian truffle, viscum, oak and sweet gum tree catkins, acrylic on canvas",
-      "dimensions": "20 x 16 in",
-      "year": "2025",
-      "main_image": "img/the_place_that_stays/the_place.jpeg",
-      "images": ["1.jpeg", "2.jpeg"],
-      "sold": true,
-      "prints": true,
-      "price": "300",
-      "scale": "medium"
-    },
-    {
-      "name": "Compass",
-      "highlighted": true,
-      "collection": "Following Her Steps",
-      "description": "An escape from pressure, guided by her own compass.",
-      "materials": "Acrylic, cast elements, coil pieces, air plant, maple leaf on photographic print mounted on foam board.",
-      "dimensions": "8 x 8 in",
-      "year": "2026",
-      "main_image": "img/following_her_steps/iris_1/compass.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "small"
-    },
-    {
-      "name": "Choice",
-      "highlighted": false,
-      "collection": "Following Her Steps",
-      "description": "Here, movement is no longer a reaction — it becomes a choice.",
-      "materials": "Acrylic, cast elements, coil pieces, air plant on photographic print mounted on foam board.",
-      "dimensions": "8 x 8 in",
-      "year": "2026",
-      "main_image": "img/following_her_steps/iris_2/choice.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "small"
-    },
-    {
-      "name": "Return",
-      "highlighted": false,
-      "collection": "Following Her Steps",
-      "description": "A return, centered on what matters.",
-      "materials": "Acrylic, cast elements, coil pieces, air plant, maple leaf on photographic print mounted on foam board.",
-      "dimensions": "8 x 8 in",
-      "year": "2026",
-      "main_image": "img/following_her_steps/iris_3/Return.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "small"
-    },
-    {
-      "name": "Light",
-      "highlighted": false,
-      "collection": "Following Her Steps",
-      "description": "Still searching for light in a loud world.",
-      "materials": "Acrylic, cast elements, coil pieces, air plant on photographic print mounted on foam board.",
-      "dimensions": "8 x 8 in",
-      "year": "2026",
-      "main_image": "img/following_her_steps/iris_4/light.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "small"
-    },
-    {
-      "name": "Dreaming",
-      "highlighted": true,
-      "collection": "Following Her Steps",
-      "description": "Roaming through dreamlands, gathering fragments of clouds lost along the way from childhood.",
-      "materials": "Acrylic, cast elements, coil pieces, air plant on photographic print mounted on foam board.",
-      "dimensions": "8 x 8 in",
-      "year": "2026",
-      "main_image": "img/following_her_steps/iris_5/dreaming.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "small"
-    },
-    {
-      "name": "Grounded",
-      "highlighted": true,
-      "collection": "Following Her Steps",
-      "description": "When the world is not on her side, she holds her ground.",
-      "materials": "Acrylic, cast elements, coil pieces, air plant, maple leaf on photographic print mounted on foam board.",
-      "dimensions": "8 x 8 in",
-      "year": "2026",
-      "main_image": "img/following_her_steps/iris_6/grounded.jpeg",
-      "images": ["1.jpeg", "2.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "small"
-    },
-    {
-      "name": "After",
-      "highlighted": true,
-      "collection": "Following Her Steps",
-      "description": "Gathering lost pieces of herself after the storm — and each storm is different.",
-      "materials": "Acrylic, cast elements, coil pieces, air plant, maple leaf on photographic print mounted on foam board.",
-      "dimensions": "8 x 8 in",
-      "year": "2026",
-      "main_image": "img/following_her_steps/iris_7/after.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "small"
-    },
-    {
-      "name": "Release",
-      "highlighted": false,
-      "collection": "Following Her Steps",
-      "description": "Letting movement become lighter, no matter what she is told she should do.",
-      "materials": "Acrylic, cast elements, coil pieces, air plant on photographic print mounted on foam board.",
-      "dimensions": "8 x 8 in",
-      "year": "2026",
-      "main_image": "img/following_her_steps/iris_8/release.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "small"
-    },
-    {
-      "name": "Clarity",
-      "highlighted": false,
-      "collection": "Following Her Steps",
-      "description": "Edges exposed, direction clear.",
-      "materials": "Acrylic, cast elements, coil pieces, air plant on photographic print mounted on foam board.",
-      "dimensions": "8 x 8 in",
-      "year": "2026",
-      "main_image": "img/following_her_steps/iris_9/clarity.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg"],
-      "sold": false,
-      "prints": true,
-      "price": "100",
-      "scale": "small"
-    },
-    {
-      "name": "Texas Storm",
-      "highlighted": false,
-      "collection": "Golden",
-      "description": "Raw, wild, but short Texas storm.",
-      "materials": "Palm leaves, acrylic, cast on canvas board.",
-      "dimensions": "21 x 16 in",
-      "year": "2023",
-      "main_image": "img/texas_storm/storm.jpeg",
-      "images": ["1.jpeg", "2.jpeg", "3.jpeg", "4.jpeg"],
-      "sold": true,
-      "prints": true,
-      "price": "100",
-      "scale": "medium"
+    "footer": {
+      "tagline": "Мистецтво, натхненне природними текстурами та тихою стійкістю",
+      "navigation": "Навігація",
+      "legal": "Юридична інформація",
+      "privacyPolicy": "Політика конфіденційності",
+      "termsOfService": "Умови надання послуг",
+      "connect": "Зв'язатися",
+      "secureCheckout": "Безпечна оплата",
+      "established": "Засновано у 2013",
+      "copyright": "Branchstone. Всі права захищені."
     }
-  ]
+  },
+  "gallery": {
+    "title": "Роботи",
+    "subtitle": "Натхненне природою мистецтво душі. Кожна робота створена вручну з увагою до матеріалу й часу, поєднуючи ремесло та сучасне бачення.",
+    "filters": {
+      "all": "Всі",
+      "deepOcean": "Велика вода",
+      "golden": "Золото",
+      "ofAshAndFlowers": "Про Попіл і Квіти",
+      "storms": "Бурі",
+      "calmOfTheForest": "Тихий ліс",
+      "followingHerSteps": "По ії слідах"
+    }
+  },
+  "about": {
+    "title": "Робота з природою, спогадами та часом через текстури",
+    "story": "Мене звати Вікторія. Я створюю мистецтво під ім’ям Branchstone. Моя практика лежить між живописом і природою. Я працюю з текстурними абстрактними формами, використовуючи кору, гілки, каміння та інші природні матеріали. Вони є не просто складниками робіт, вони формують їх разом зі мною, впливаючи на процес так само, як і мої руки.\n\nЯ виросла на вугільних землях Донбасу, серед простору степів, запаху полину та червоних териконів, що підіймалися з втомленої землі. Цей ландшафт рано навчив мене помічати текстуру, контраст і красу в звичному. Ці відчуття залишалося зі мною задовго до того, як мистецтво стало усвідомленою практикою.\n\nПізніше я жила в Техасі, де відкрила для себе зовсім інші матеріальні ритми: вибілене сонцем дерево, сухі трави, потрісканий ґрунт. Я спостерігала, збирала, вчилася чути, як кожне місце говорить через матеріал. Тепер, живучи на півночі Каліфорнії, я продовжую цей діалог — з океаном, прибережною корою, кедрами з червоними стовбурами — цінуючи і дивуючись новій різноманітності.\n\nМій процес повільний і інтуїтивний. Я працюю через нашарування, уважність і терпіння, дозволяючи кожному твору розвиватися у власному ритмі. Жодні дві роботи не повторюють одна одну. Кожна несе свій баланс крихкості, ваги та спогадів.\n\nЯ вірю, що мистецтво може існувати поруч із природою — з турботою та повагою. Кожен матеріал, який я використовую, вже прожив своє життя. У своїх роботах я продовжую це життя в новій формі — тій, що запрошує до тиші, споглядання й відчуття заземлення в повсякденному просторі. Branchstone — це про коріння й рух водночас. Про стійкість, що не стає жорсткою. Про простір, у якому тихі історії стають гучніше.",
+    "highlights": {
+      "title": "Основні моменти",
+      "subtitle": "Преса, виставки та публікації"
+    },
+    "creativeProcess": {
+      "title": "Творчій процес",
+      "subtitle": "З лісового килиму до завершеного твору",
+      "cards": {
+        "gathering": {
+          "title": "Збір матеріалів",
+          "text": "Я гуляю лісами й узбережжям, збираючи впалі гілки, кору та мох. У роботі використовую лише ті матеріали, які природа вже залишила після себе"
+        },
+        "composing": {
+          "title": "Композиція",
+          "text": "У студії я знайомлюся з кожним матеріалом ближче — його формою, текстурою, характером. Через ескізи й пошук композиції я намагаюся дати кожному елементу своє місце."
+        },
+        "creating": {
+          "title": "Створення",
+          "text": "Процес складання має медитативний характер. Я нашаровую дерево, мох і кору, вибудовуючи глибину та текстуру. Кожен елемент знаходить своє місце природно, утворюючи цілісну композицію з власною історією."
+        },
+        "finishing": {
+          "title": "Завершення",
+          "text": "Останній крок — це уважна підготовка роботи до життя поза студією. Я зберігаю природну фактуру матеріалів, водночас забезпечуючи їхню стійкість і довговічність."
+        }
+      }
+    },
+    "artPhilosophy": {
+      "title": "Філософія",
+      "subtitle": "Я вірю в мистецтво, що зростає поруч із природою. У своїх роботах я зберігаю й підкреслюю красу матеріалів, продовжуючи їхнє життя в новій формі. Це роздуми про зміну, час і наш зв’язок із природою.",
+      "cards": {
+        "sustainability": {
+          "title": "Сталий підхід",
+          "text": "Я працюю з матеріалами, які природа вже відпустила, не завдаючи шкоди живим рослинам чи середовищу, з якого вони походять."
+        },
+        "authenticity": {
+          "title": "Автентичність",
+          "text": "Жодна робота не повторюється. Я даю матеріалам простір говорити власною мовою, не нав’язуючи їм форму."
+        },
+        "connection": {
+          "title": "Звʼязок",
+          "text": "Кожна робота — це спосіб залишатися ближче до природи навіть у повсякденному просторі дому."
+        }
+      }
+    },
+    "feedbacks": {
+      "title": "Що кажуть колекціонери",
+      "cards": {
+        "feedback_1": {
+          "name": "Сара Мітчелл",
+          "location": "Плено, Техас",
+          "text": "Робота Вікторії принесла частинку лісу в наш дім."
+        },
+        "feedback_2": {
+          "name": "Девід К.",
+          "location": "Даллас, Техас",
+          "text": "Я повісив “Липневі Сосни” у своїй спальні — і мені дуже подобається ця робота. Я служив бойовим медиком під Серебрянським лісом. Ця робота мені нагадує ті пейзажі."
+        },
+        "feedback_3": {
+          "name": "Емілі Родрігез",
+          "location": "Плено, Техас",
+          "text": "Це не просто мистецтво — це розмова з природою."
+        }
+      }
+    },
+    "readyToStart": {
+      "title": "Готові до власного діалогу з природою?",
+      "text": "Перегляньте галерею або створіть разом зі мною роботу, що відгукнеться саме вам.",
+      "viewGallery": "В Галерею",
+      "commissionButton": "Замовити роботу"
+    },
+    "stayInspired": {
+      "title": "Залишайтеся натхненними",
+      "text": "Отримуйте сповіщення про нові колекції, закулісні моменти та особливі пропозиції. Жодного спаму — лише мистецтво.",
+      "emailPlaceholder": "Введіть вашу електронну адресу",
+      "button": "Підписатися",
+      "privacyNote": "Ми поважаємо вашу приватність.",
+      "privacyLink": "Політика конфіденційності"
+    }
+  },
+  "commissions": {
+    "title": "Індивідуальне замовлення",
+    "subtitle": "Створюємо разом твір, який відгукнеться саме вам — від першої ідеї до фінального результату.",
+    "commissionProcess": {
+      "title": "Процес створення",
+      "subtitle": "Від ідеї до завершення — спільний шлях до створення унікальної роботи.",
+      "stage_1": {
+        "title": "Початкова консультація",
+        "text": "Ми обговоримо ваше бачення, бажаний розмір, матеріали та художній напрям, щоб майбутня робота точно відображала ваш задум."
+      },
+      "stage_2": {
+        "title": "Розробка концепції",
+        "text": "Я створю попередні ескізи та запропоную варіанти матеріалів, працюючи з вами над уточненням ідеї."
+      },
+      "stage_3": {
+        "title": "Внесення депозиту",
+        "text": "Депозит у розмірі $50 фіксує ваше місце в черзі та дозволяє мені розпочати підбір матеріалів і підготовку роботи."
+      },
+      "stage_4": {
+        "title": "Створення",
+        "text": "Протягом 4–8 тижнів я працюю над вашим твором з уважністю до деталей, ділячись фото процесу на кожному етапі."
+      },
+      "stage_5": {
+        "title": "Доставка",
+        "text": "Готова робота ретельно пакується із захисними матеріалами та безпечно надсилається в Україну або будь яку іншу точку світу."
+      }
+    },
+    "pricingGuide": {
+      "title": "Ціни",
+      "subtitle": "Рівні вартості залежать від розміру та складності роботи",
+      "tiers": {
+        "small": {
+          "title": "Малий формат",
+          "size": "20 × 25 см",
+          "price": "Від $100",
+          "features": [
+            "Ідеально для невеликих просторів",
+            "Детальна ручна робота",
+            "Преміальні природні матеріали",
+            "Документація роботи"
+          ]
+        },
+        "medium": {
+          "badge": "Найпопулярніше",
+          "title": "Середній формат",
+          "size": "40 × 50 см",
+          "price": "Від $250",
+          "features": [
+            "Акцентна робота для простору",
+            "Насичена текстура та глибина",
+            "Преміальні природні матеріали",
+            "Документація роботи",
+            "Фіксація процесу створення"
+          ]
+        },
+        "large": {
+          "title": "Великий формат",
+          "size": "60 × 75+ см",
+          "price": "Від $400+",
+          "features": [
+            "Домінантний візуальний акцент",
+            "Виняткова деталізація",
+            "Преміальні природні матеріали",
+            "Документація роботи",
+            "Повна фотофіксація процесу",
+            "Можливий індивідуальний розмір"
+          ]
+        }
+      },
+      "note": "Примітка: фінальна вартість залежить від складності роботи, обраних матеріалів та індивідуальних вимог. Усі індивідуальні замовлення включають консультацію, авторський дизайн і надійне пакування.",
+      "whatsIncluded": {
+        "title": "Що входить у замовлення",
+        "subtitle": "Кожне індивідуальне замовлення супроводжується повною увагою та турботою",
+        "items": {
+          "consultation": {
+            "title": "Консультація",
+            "text": "Детальне обговорення, щоб зрозуміти ваше бачення, побажання та простір"
+          },
+          "customDesign": {
+            "title": "Авторський дизайн",
+            "text": "Оригінальна робота, створена спеціально для вас"
+          },
+          "materials": {
+            "title": "Преміальні природні матеріали",
+            "text": "Ретельно відібрані природні матеріали, збережені для довговічної краси"
+          },
+          "artworkRecord": {
+            "title": "Паспорт роботи",
+            "text": "Підписана інформаційна картка, що підтверджує унікальність твору"
+          },
+          "securePackaging": {
+            "title": "Надійне пакування",
+            "text": "Обережне пакування для захисту роботи під час транспортування"
+          },
+          "photoDocumentation": {
+            "title": "Фотофіксація процесу",
+            "text": "Фото етапів створення роботи — за вашим бажанням"
+          }
+        }
+      },
+      "startCommission": {
+        "title": "Почати індивідуальне замовлення",
+        "subtitle": "Поділіться своїм баченням — і давайте створимо щось особливе разом",
+        "steps": {
+          "contact": "Контакт",
+          "type": "Тип роботи",
+          "details": "Деталі",
+          "review": "Перевірка"
+        },
+        "trustLine": "Без зобов’язань • Ваші дані захищені • Відповідь протягом 1–2 днів",
+        "highlights": [
+          {
+            "title": "Відповідь протягом 24–48 годин",
+            "text": "Щоб обговорити ваше бачення та ідею"
+          },
+          {
+            "title": "Без зобов’язань",
+            "text": "Безкоштовна консультація та попередній розрахунок вартості"
+          },
+          {
+            "title": "Безпечно та конфіденційно",
+            "text": "Ваша інформація надійно захищена"
+          },
+          {
+            "title": "Професійний підхід",
+            "text": "Понад 9 років досвіду, 10+ задоволених колекціонерів у 2025 році"
+          }
+        ],
+        "formIntro": {
+          "title": "Почнемо з основ",
+          "subtitle": "Як я можу зв’язатися з вами щодо замовлення?"
+        }
+      },
+      "name": "Імʼя",
+      "continueButton": "Продовжити",
+      "faq": {
+        "title": "Поширені запитання",
+        "items": [
+          {
+            "question": "Чи повертається депозит?",
+            "answer": "Депозит у розмірі $50 не повертається після початку роботи, оскільки покриває первинний підбір матеріалів і час на розробку дизайну. Якщо ж вам потрібно скасувати замовлення до початку створення роботи, депозит може бути повернений або зарахований на майбутнє індивідуальне замовлення."
+          },
+          {
+            "question": "Чи можу я бачити процес створення?",
+            "answer": "Так, звісно. Я ділюся фото процесу на ключових етапах створення. Ви зможете спостерігати, як робота формується, і залишати свої коментарі протягом усього процесу."
+          },
+          {
+            "question": "Що, якщо мені не сподобається результат?",
+            "answer": "Ваше задоволення дуже важливе для мене. Перед початком роботи ми детально обговорюємо концепцію та затверджуємо напрям. Під час створення я надсилаю оновлення, щоб ви могли висловлювати побажання. Невеликі коригування зазвичай можливі, щоб результат справді вам відгукнувся."
+          },
+          {
+            "question": "Чи можливі термінові замовлення?",
+            "answer": "Термінові замовлення можливі залежно від моєї поточної завантаженості та складності проєкту. Будь ласка, вкажіть бажані терміни під час звернення — я постараюся врахувати ваш запит. Для термінових замовлень може застосовуватися додаткова оплата."
+          },
+          {
+            "question": "З якими матеріалами ви працюєте?",
+            "answer": "Я працюю переважно з преміальними природними матеріалами: деревом, каменем, натуральними волокнами та екологічними художніми середовищами. Кожна робота унікальна, а матеріали підбираються відповідно до вашого бачення та вимог конкретного замовлення."
+          },
+          {
+            "question": "Чи здійснюєте ви міжнародну доставку?",
+            "answer": "Так, я здійснюю доставку по всьому світу. Вартість доставки залежить від країни призначення та розміру роботи. Міжнародні відправлення ретельно організовуються, щоб забезпечити безпечне транспортування, і для кожного замовлення надається трекінг."
+          }
+        ]
+      },
+      "finalCTA": {
+        "title": "Готові почати?",
+        "subtitle": "Давайте створимо щось красиве разом. Напишіть, щоб обговорити ваше бачення.",
+        "buttons": {
+          "commission": "Замовити індивідуальну роботу",
+          "inquiry": "Загальний запит"
+        }
+      },
+      "stayInspired": {
+        "title": "Залишайтеся натхненними",
+        "text": "Отримуйте сповіщення про нові колекції, закулісні моменти та особливі пропозиції. Жодного спаму — лише мистецтво.",
+        "emailPlaceholder": "Введіть вашу електронну адресу",
+        "button": "Підписатися",
+        "privacyNote": "Ми поважаємо вашу приватність.",
+        "privacyLink": "Політика конфіденційності"
+      }
+    }
+  },
+  "contactPage": {
+    "header": {
+      "title": "Звʼязатися зі мною",
+      "subtitle": "Буду рада вашому повідомленню. Якщо у вас є запитання щодо індивідуальних замовлень, вартості або будь-чого іншого — я із задоволенням допоможу."
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Імʼя *",
+          "placeholder": "Ваше повне імʼя"
+        },
+        "email": {
+          "label": "Email *",
+          "placeholder": "your.email@example.com"
+        },
+        "subject": {
+          "label": "Тема *",
+          "placeholder": "Оберіть тему"
+        },
+        "message": {
+          "label": "Повідомлення *",
+          "placeholder": "Розкажіть про ваш запит…"
+        }
+      },
+      "button": "Надіслати повідомлення"
+    },
+    "contactInfo": {
+      "title": "Контактна інформація",
+      "email": {
+        "label": "Email",
+        "value": "thebranchstone@gmail.com"
+      },
+      "instagram": {
+        "label": "Instagram",
+        "value": "@branchstone.art"
+      },
+      "responseTime": {
+        "label": "Час відповіді",
+        "text": "Зазвичай я відповідаю протягом 24–48 годин у робочі дні."
+      }
+    },
+    "quickLinks": {
+      "title": "Швидкі посилання",
+      "links": [
+        "Поширені запитання",
+        "Процес індивідуального замовлення",
+        "Переглянути галерею"
+      ]
+    },
+    "faqExtended": {
+      "title": "Поширені запитання",
+      "items": [
+        {
+          "question": "Скільки часу займає індивідуальне замовлення?",
+          "answer": "Тривалість створення залежить від розміру та складності роботи. Зазвичай індивідуальний твір створюється протягом 4–8 тижнів від першої консультації до завершення. Під час початкового обговорення я зможу надати точніші терміни з урахуванням ваших побажань і моєї поточної завантаженості."
+        },
+        {
+          "question": "Які матеріали ви використовуєте?",
+          "answer": "Я працюю переважно з якісними акриловими фарбами на полотні або дерев’яних панелях. Також використовую змішані техніки — текстурні пасти, металеві елементи та природні матеріали для створення багатошарових композицій. Усі матеріали мають архівну якість, щоб забезпечити довговічність роботи."
+        },
+        {
+          "question": "Чи здійснюєте ви міжнародну доставку?",
+          "answer": "Так, я надсилаю роботи по всьому світу. Кожен твір ретельно пакується з використанням професійних матеріалів для безпечного транспортування. Вартість доставки залежить від країни призначення та розміру роботи. Для міжнародних відправлень термін доставки зазвичай становить 2–4 тижні. Зверніть увагу, що можуть застосовуватися митні збори відповідно до правил вашої країни."
+        },
+        {
+          "question": "Як доглядати за роботою?",
+          "answer": "Щоб робота зберігала свій вигляд, розміщуйте її подалі від прямого сонячного світла та вологи. Для очищення використовуйте м’яку суху тканину. Не застосовуйте воду або мийні засоби на поверхні. Якщо робота виконана на полотні, уникайте прямого дотику до пофарбованої поверхні. Для додаткового захисту можна розглянути професійне обрамлення з UV-захисним склом."
+        },
+        {
+          "question": "Яка у вас політика повернення?",
+          "answer": "Для готових оригінальних робіт я пропоную можливість повернення протягом 7 днів з моменту доставки. Робота має бути повернена в оригінальному стані та пакуванні. Для індивідуальних замовлень перед початком роботи вноситься депозит у розмірі 50%, який не підлягає поверненню. Протягом процесу я надсилаю фото етапів створення, щоб ви були впевнені в результаті. Якщо у вас виникнуть запитання або сумніви, будь ласка, зверніться до мене — ми разом знайдемо рішення."
+        }
+      ]
+    },
+    "stayInspired": {
+      "title": "Залишайтеся натхненними",
+      "text": "Отримуйте сповіщення про нові колекції, закулісні моменти та особливі пропозиції. Жодного спаму — лише мистецтво.",
+      "emailPlaceholder": "Введіть вашу електронну адресу",
+      "button": "Підписатися",
+      "privacyNote": "Ми поважаємо вашу приватність.",
+      "privacyLink": "Політика конфіденційності"
+    }
+  }
 }
