@@ -116,7 +116,7 @@ a {
   position: relative;
 }
 
-a:hover {
+a:hover:not(.btn) {
   color: var(--accent-hover);
 }
 

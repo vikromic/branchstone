@@ -1152,6 +1152,7 @@
   .btn--hero-primary:hover,
   .btn--hero-primary:active {
     background: linear-gradient(135deg, var(--copper-300), var(--copper-400));
+    color: var(--text-inverse);
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
   }

@@ -2908,7 +2908,10 @@
   background: var(--accent-primary);
   color: var(--text-inverse);
 }
-.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary:hover {
+  background: var(--accent-hover);
+  color: var(--text-inverse);
+}
 
 .btn-secondary {
   display: inline-flex;
