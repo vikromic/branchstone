@@ -17,8 +17,8 @@
      ======================================== */
 
   /* Background Colors */
-  --bg-primary: #F5F3F0;      /* Main canvas - warm off-white (slightly darker) */
-  --bg-secondary: #F0EDE9;    /* Subtle contrast backgrounds */
+  --bg-primary: #F5F3F0;      /* Main canvas - warm off-white */
+  --bg-secondary: #EFEBE5;    /* Subtle contrast backgrounds */
   --bg-tertiary: #FFFFFF;     /* Pure white for cards */
   --bg-elevated: #FFFFFF;     /* Elevated surfaces */
 
@@ -29,32 +29,59 @@
   --text-inverse: #FFFFFF;    /* Text on dark backgrounds */
 
   /* Accent Colors */
-  --accent-primary: #B8866B;    /* Primary accent - warm copper */
+  --accent-primary: #8C6347;    /* Primary accent - deeper copper for AA contrast */
   --accent-secondary: #5B7A8F;  /* Secondary accent - slate blue */
-  --accent-tertiary: #D4A586;   /* Tertiary accent - light copper */
-  --accent-hover: #A67757;      /* Hover state - darker copper */
+  --accent-tertiary: #BE9476;   /* Tertiary accent - muted copper */
+  --accent-hover: #7B5238;      /* Hover state - darker copper */
 
   /* Copper Color Spectrum (9-tone professional palette) */
   --copper-50: #F5ECE4;    /* Light sand - backgrounds, subtle highlights */
   --copper-100: #E8D5C4;   /* Warm cream - hover backgrounds */
   --copper-200: #D4B89E;   /* Light copper - borders, dividers */
-  --copper-300: #C29776;   /* Medium copper - secondary UI elements */
-  --copper-400: #B8866B;   /* Primary copper - main brand color */
-  --copper-500: #A67757;   /* Dark copper - hover states, emphasis */
-  --copper-600: #8C6347;   /* Deep copper - active states */
-  --copper-700: #6B4A35;   /* Rich earth - strong contrast */
-  --copper-800: #4A3325;   /* Deep earth - text on light backgrounds */
+  --copper-300: #BA8A68;   /* Medium copper - secondary UI elements */
+  --copper-400: #8C6347;   /* Primary copper - brand & CTA */
+  --copper-500: #7B5238;   /* Dark copper - hover states, emphasis */
+  --copper-600: #6B4A35;   /* Deep copper - active states */
+  --copper-700: #5A3E2D;   /* Rich earth - strong contrast */
+  --copper-800: #463024;   /* Deep earth - text on light backgrounds */
   --copper-900: #2D1F17;   /* Almost black - darkest accents */
 
+  /* Sage Color Spectrum (supporting palette used by existing components) */
+  --sage-50: #F2F6F3;
+  --sage-100: #E3EDE6;
+  --sage-200: #CBDDCF;
+  --sage-300: #ABC3B0;
+  --sage-400: #87A88E;
+  --sage-500: #6F8E76;
+  --sage-600: #5A7562;
+  --sage-700: #48604F;
+  --sage-800: #3A4E41;
+  --sage-900: #2A392F;
+
   /* Semantic Colors */
-  --success: #6B8E7F;   /* Success messages */
+  --success: #5A7562;   /* Success messages */
   --warning: #C29563;   /* Warning messages */
   --error: #A65B4F;     /* Error messages */
+  --success-bg: #E8F2EC;
+  --success-text: #2F5B49;
+  --success-border: #A7C5B4;
 
   /* Border Colors */
-  --border-subtle: #E8E5E1;   /* Very subtle borders */
-  --border-default: #D4CFC9;  /* Default border color */
-  --border-strong: #B5ACA3;   /* Strong/emphasized borders */
+  --border-subtle: #E1DBD4;   /* Very subtle borders */
+  --border-default: #C6BCAF;  /* Default border color */
+  --border-strong: #A99C8E;   /* Strong/emphasized borders */
+
+  /* Overlay & compatibility aliases for legacy component vars */
+  --overlay-scrim: rgba(20, 18, 16, 0.72);
+  --font-heading: var(--font-display);
+  --surface: var(--bg-elevated);
+  --surface-primary: var(--bg-elevated);
+  --surface-secondary: var(--bg-secondary);
+  --surface-tertiary: var(--bg-tertiary);
+  --border-color: var(--border-default);
+  --border-light: var(--border-subtle);
+  --text-muted: var(--text-tertiary);
+  --accent-light: var(--copper-100);
 
   /* ========================================
      SHADOWS & ELEVATIONS
@@ -79,8 +106,8 @@
   );
 
   --gradient-copper-rich: linear-gradient(135deg,
-    var(--copper-300) 0%,
-    var(--copper-400) 50%,
+    var(--copper-400) 0%,
+    var(--copper-500) 50%,
     var(--copper-600) 100%
   );
 
@@ -288,6 +315,21 @@
   --border-subtle: #353230;   /* More visible borders */
   --border-default: #4A4540;  /* Default border color */
   --border-strong: #5F5954;   /* Strong borders */
+
+  --success-bg: rgba(90, 117, 98, 0.18);
+  --success-text: #A7C5B4;
+  --success-border: #5A7562;
+
+  /* Keep overlays stronger in dark mode for depth and focus */
+  --overlay-scrim: rgba(0, 0, 0, 0.82);
+  --surface: var(--bg-elevated);
+  --surface-primary: var(--bg-elevated);
+  --surface-secondary: var(--bg-secondary);
+  --surface-tertiary: var(--bg-tertiary);
+  --border-color: var(--border-default);
+  --border-light: var(--border-subtle);
+  --text-muted: var(--text-tertiary);
+  --accent-light: rgba(217, 173, 143, 0.2);
 
   /* Shadows (darker, more pronounced for dark mode) */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.12);

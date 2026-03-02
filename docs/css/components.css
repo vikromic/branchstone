@@ -4501,7 +4501,7 @@ details[open] summary {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: var(--overlay-scrim);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
@@ -4514,6 +4514,7 @@ details[open] summary {
   max-width: 1200px;
   max-height: 90vh;
   background: var(--surface-primary);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   overflow-y: auto;
   transform: scale(0.95) translateY(20px);
@@ -4537,7 +4538,7 @@ details[open] summary {
   align-items: center;
   justify-content: center;
   background: var(--surface-secondary);
-  border: none;
+  border: 1px solid var(--border-default);
   border-radius: 50%;
   cursor: pointer;
   transition: all 200ms ease;
