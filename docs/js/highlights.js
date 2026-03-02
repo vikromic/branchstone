@@ -8,6 +8,7 @@ import { SwipeHandler } from './touch-handler.js';
 import { prefersReducedMotion } from './utils.js';
 import { BREAKPOINTS } from './constants.js';
 import { getI18n } from './i18n.js';
+import { getCarouselPageStarts, resolveCurrentPage, getNextPageStart } from './highlights-pagination.mjs';
 
 class HighlightsManager {
   constructor() {
@@ -493,14 +494,6 @@ class HighlightsManager {
       this.elements.prevButton?.addEventListener('click', () => this.navigate(-1));
       this.elements.nextButton?.addEventListener('click', () => this.navigate(1));
 
-      // Pagination dots
-      this.elements.dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-          const index = parseInt(dot.getAttribute('data-index'));
-          this.goToSlide(index * this.slidesPerView);
-        });
-      });
-
       // Keyboard navigation
       document.addEventListener('keydown', this.handleKeydown, { signal: this.abortController.signal });
 
@@ -590,24 +583,11 @@ class HighlightsManager {
    */
   navigate(direction) {
     if (this.isTransitioning || window.innerWidth < BREAKPOINTS.MOBILE) return;
+    const pageStarts = this.getDesktopPageStarts();
+    if (pageStarts.length <= 1) return;
 
-    const maxIndex = Math.max(0, this.highlights.length - this.slidesPerView);
-    let targetIndex;
-
-    if (direction < 0) {
-      // Moving backward (previous)
-      targetIndex = this.currentIndex - this.slidesPerView;
-      if (targetIndex < 0) {
-        targetIndex = maxIndex; // Wrap to end
-      }
-    } else {
-      // Moving forward (next)
-      targetIndex = this.currentIndex + this.slidesPerView;
-      if (targetIndex > maxIndex) {
-        targetIndex = 0; // Wrap to beginning
-      }
-    }
-
+    const normalizedDirection = direction < 0 ? -1 : 1;
+    const targetIndex = getNextPageStart(pageStarts, this.currentIndex, normalizedDirection);
     this.goToSlide(targetIndex);
   }
 
@@ -685,8 +665,9 @@ class HighlightsManager {
     this.paginationElement.innerHTML = '';
     this.paginationElement.style.display = 'flex';
 
-    const totalPages = Math.ceil(this.highlights.length / this.slidesPerView);
-    const currentPage = Math.floor(this.currentIndex / this.slidesPerView);
+    const pageStarts = this.getDesktopPageStarts();
+    const totalPages = pageStarts.length;
+    const currentPage = this.getCurrentDesktopPageIndex(pageStarts);
 
     for (let i = 0; i < totalPages; i++) {
       const dot = document.createElement('button');
@@ -702,7 +683,7 @@ class HighlightsManager {
       }
 
       dot.addEventListener('click', () => {
-        this.goToSlide(i * this.slidesPerView);
+        this.goToSlide(pageStarts[i]);
       });
 
       this.paginationElement.appendChild(dot);
@@ -710,6 +691,28 @@ class HighlightsManager {
 
     // Update cache
     this.elements.dots = this.paginationElement.querySelectorAll('.highlights__dot');
+  }
+
+  /**
+   * Compute desktop page starts for current data/viewport.
+   * Example: 5 items with 2 cards per view -> [0, 2, 3]
+   */
+  getDesktopPageStarts() {
+    return getCarouselPageStarts(this.highlights.length, this.slidesPerView);
+  }
+
+  /**
+   * Resolve current desktop page index with safe fallback.
+   */
+  getCurrentDesktopPageIndex(pageStarts = this.getDesktopPageStarts()) {
+    if (pageStarts.length === 0) return 0;
+
+    try {
+      return resolveCurrentPage(pageStarts, this.currentIndex);
+    } catch (error) {
+      console.warn('[Highlights] Failed to resolve current page, falling back to page 0', error);
+      return 0;
+    }
   }
 
   /**

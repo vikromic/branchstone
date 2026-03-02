@@ -52,6 +52,19 @@
       "image": "img/highlight/voyge-dallas-2026.jpeg",
       "link": "https://voyagedallas.com/interview/viktoria-branchstone-of-santa-rosa-on-life-lessons-legacy-highlight",
       "isFeatured": true
+    },
+    {
+      "id": "renaCharlesGallery-2026",
+      "type": "gallery",
+      "title": "Rena Charles Gallery",
+      "subtitle": "Exhibition: “Art For Everyone”",
+      "date": "Jan 2026",
+      "source": "VoyageDallas",
+      "location": "Healdsburg, TX",
+      "description": "Centered on connection, inclusivity, and diversity, Art for Everyone is grounded in the belief that art has the power to bring people together, and that every voice and vision belongs.",
+      "image": "img/highlight/voyge-dallas-2026.jpeg",
+      "link": "https://stayhealdsburg.com/event/art-for-everyone-community-open-house",
+      "isFeatured": true
     }
   ]
 }
