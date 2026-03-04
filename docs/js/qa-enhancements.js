@@ -5,7 +5,7 @@
  */
 
 // Import foundational modules
-import { prefersReducedMotion } from './utils.js';
+import { prefersReducedMotion, trapFocus } from './utils.js';
 
 (function () {
   'use strict';
@@ -332,26 +332,8 @@ import { prefersReducedMotion } from './utils.js';
       }
     });
 
-    // Improve focus management
-    dropdown.addEventListener('keydown', (e) => {
-      if (e.key === 'Tab') {
-        const focusableElements = dropdown.querySelectorAll(
-          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-        );
-
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
-
-        // Trap focus within dropdown
-        if (e.shiftKey && document.activeElement === firstElement) {
-          e.preventDefault();
-          lastElement.focus();
-        } else if (!e.shiftKey && document.activeElement === lastElement) {
-          e.preventDefault();
-          firstElement.focus();
-        }
-      }
-    });
+    // Trap focus within dropdown
+    trapFocus(dropdown);
   };
 
   // ========================================

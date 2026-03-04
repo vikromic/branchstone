@@ -19,23 +19,18 @@
   <link rel="manifest" href="site.webmanifest">
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/tokens.css?v=2">
-  <link rel="stylesheet" href="css/base.css?v=2">
-  <link rel="stylesheet" href="css/typography.css?v=2">
-  <link rel="stylesheet" href="css/components.css?v=2">
-  <link rel="stylesheet" href="css/layout.css?v=2">
-  <link rel="stylesheet" href="css/artwork-animations.css?v=2">
-  <link rel="stylesheet" href="css/mobile-gallery-improvements.css?v=2">
-  <link rel="stylesheet" href="css/artist-feedback.css?v=1">
-  <link rel="stylesheet" href="css/qa-fixes.css?v=1">
-  <link rel="stylesheet" href="css/featured-carousel.css?v=3">
-  <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=16">
-  <link rel="stylesheet" href="css/language-switcher.css?v=1">
-
-  <!-- PNG Favicon Fallbacks (LOW-001) -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/tokens.css?v=20">
+  <link rel="stylesheet" href="css/base.css?v=20">
+  <link rel="stylesheet" href="css/typography.css?v=20">
+  <link rel="stylesheet" href="css/components.css?v=20">
+  <link rel="stylesheet" href="css/layout.css?v=20">
+  <link rel="stylesheet" href="css/artwork-animations.css?v=20">
+  <link rel="stylesheet" href="css/mobile-gallery-improvements.css?v=20">
+  <link rel="stylesheet" href="css/artist-feedback.css?v=20">
+  <link rel="stylesheet" href="css/qa-fixes.css?v=20">
+  <link rel="stylesheet" href="css/featured-carousel.css?v=20">
+  <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=20">
+  <link rel="stylesheet" href="css/language-switcher.css?v=20">
 
   <!-- Main Script -->
   <script type="module" src="js/main.js"></script>
@@ -56,6 +51,7 @@
 
       <nav class="header__nav" aria-label="Main navigation">
         <ul class="header__nav-list">
+          <li><a href="index.html" class="header__nav-link header__nav-link--active" aria-current="page" data-i18n="nav.home">Home</a></li>
           <li><a href="gallery.html" class="header__nav-link" data-i18n="nav.gallery">Gallery</a></li>
           <li><a href="about.html" class="header__nav-link" data-i18n="nav.about">About</a></li>
           <li><a href="commissions.html" class="header__nav-link" data-i18n="nav.commissions">Commissions</a></li>
@@ -143,11 +139,11 @@
     <!-- Header -->
     <header class="favorites-panel__header">
       <div class="favorites-panel__title-group">
-        <h2 id="favorites-title" class="favorites-panel__title">
+        <h2 id="favorites-title" class="favorites-panel__title" data-i18n="favorites.title">
           Your Favorites
         </h2>
         <p id="favorites-description" class="favorites-panel__count">
-          <span data-count>0</span> pieces saved
+          <span data-count>0</span> <span data-i18n="favorites.piecesSaved">pieces saved</span>
         </p>
       </div>
       <button
@@ -174,11 +170,11 @@
         <svg class="favorites-empty__icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
-        <h3 class="favorites-empty__title">No Favorites Yet</h3>
-        <p class="favorites-empty__description">
+        <h3 class="favorites-empty__title" data-i18n="favorites.emptyTitle">No Favorites Yet</h3>
+        <p class="favorites-empty__description" data-i18n="favorites.emptyDescription">
           Click the heart icon on artworks to save them here
         </p>
-        <a href="gallery.html" class="btn btn--primary btn--with-icon">
+        <a href="gallery.html" class="btn btn--primary btn--with-icon" data-i18n="favorites.browseCollection">
           Browse the Collection
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon" aria-hidden="true">
             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -193,12 +189,12 @@
       <button
         class="btn btn--secondary btn--block favorites-panel__clear"
         type="button">
-        Clear All
+        <span data-i18n="favorites.clearAll">Clear All</span>
       </button>
       <button
         class="btn btn--primary btn--block favorites-panel__inquire"
         type="button">
-        Inquire About <span data-selected-count>0</span> Piece<span data-plural>s</span>
+        <span data-i18n="favorites.inquireAbout">Inquire About</span> <span data-selected-count>0</span> <span data-i18n="favorites.pieces">Piece<span data-plural>s</span></span>
       </button>
     </footer>
 
@@ -270,7 +266,7 @@
 
       <!-- Text Block (solid background, high contrast) -->
       <div class="section-hero__text-block">
-        <h1 class="section-hero__heading" data-i18n="home.hero.title">Where Forest Meets Art</h1>
+        <span class="section-hero__heading" role="heading" aria-level="2" data-i18n="home.hero.title">Where Forest Meets Art</span>
         <p class="section-hero__subheading" data-i18n="home.hero.subtitle">
           One-of-a-kind mixed-media artworks made with foraged natural materials.
         </p>
@@ -596,35 +592,35 @@
       </div>
     </section>
 
-  </main>
+    <!-- Newsletter Signup -->
+    <section class="newsletter" aria-labelledby="newsletter-heading">
+      <div class="newsletter__container">
+        <h2 id="newsletter-heading" class="newsletter__title" data-i18n="home.newsletter.title">Stay Inspired</h2>
+        <p class="newsletter__text" data-i18n="home.newsletter.text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
+        <form class="newsletter__form" id="newsletter-form" novalidate>
+          <input
+            type="email"
+            class="newsletter__input"
+            data-i18n-placeholder="home.newsletter.placeholder"
+            placeholder="Enter your email"
+            aria-label="Email address"
+            required
+          >
+          <button type="submit" class="newsletter__button" data-i18n="home.newsletter.button">Subscribe</button>
+        </form>
+        <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
+        <p class="newsletter__privacy"><span data-i18n="home.newsletter.privacyText">We respect your privacy.</span> <a href="privacy.html" data-i18n="home.newsletter.privacyLink">Privacy Policy</a></p>
+      </div>
+    </section>
 
-  <!-- Newsletter Signup -->
-  <section class="newsletter" aria-labelledby="newsletter-heading">
-    <div class="newsletter__container">
-      <h2 id="newsletter-heading" class="newsletter__title" data-i18n="home.newsletter.title">Stay Inspired</h2>
-      <p class="newsletter__text" data-i18n="home.newsletter.text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
-      <form class="newsletter__form" id="newsletter-form" novalidate>
-        <input
-          type="email"
-          class="newsletter__input"
-          data-i18n="home.newsletter.placeholder"
-          placeholder="Enter your email"
-          aria-label="Email address"
-          required
-        >
-        <button type="submit" class="newsletter__button" data-i18n="home.newsletter.button">Subscribe</button>
-      </form>
-      <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
-      <p class="newsletter__privacy"><span data-i18n="home.newsletter.privacyText">We respect your privacy.</span> <a href="privacy.html" data-i18n="home.newsletter.privacyLink">Privacy Policy</a></p>
-    </div>
-  </section>
+  </main>
 
   <!-- Back to Top Button -->
   <button
     class="back-to-top"
     data-back-to-top
     aria-label="Back to top"
-    aria-hidden="true"
+    hidden
     type="button">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <polyline points="18 15 12 9 6 15"></polyline>
@@ -696,7 +692,7 @@
     </div>
 
     <div class="footer__bottom">
-      <p class="footer__copyright">&copy; <span id="copyright-year">2025</span> <span data-i18n="home.footer.copyright">Branchstone. All rights reserved.</span></p>
+      <p class="footer__copyright">&copy; <span id="copyright-year">2026</span> <span data-i18n="home.footer.copyright">Branchstone. All rights reserved.</span></p>
     </div>
   </footer>
 

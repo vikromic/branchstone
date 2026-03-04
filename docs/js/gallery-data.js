@@ -19,8 +19,9 @@
  */
 
 import { sanitizeText } from './security.js';
-import { GALLERY, SVG_NAMESPACE, ARTWORK_CARD } from './constants.js';
+import { GALLERY, ARTWORK_CARD } from './constants.js';
 import { getI18n } from './i18n.js';
+import { slugify, createSVG } from './utils.js';
 
 export class GalleryDataManager {
   constructor() {
@@ -181,11 +182,7 @@ export class GalleryDataManager {
     }
 
     // Fallback: basic slug generation for English names
-    // This regex only works for Latin characters (English)
-    return collection
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
+    return slugify(collection);
   }
 
   /**
@@ -341,31 +338,6 @@ export class GalleryDataManager {
 
 
   /**
-   * Create SVG element using namespace
-   *
-   * @param {string} viewBox - SVG viewBox attribute
-   * @param {string[]} paths - Array of path data strings
-   * @returns {SVGElement} The created SVG element
-   */
-  createSVG(viewBox, paths) {
-    const svg = document.createElementNS(SVG_NAMESPACE, 'svg');
-    svg.setAttribute('viewBox', viewBox);
-    svg.setAttribute('fill', 'none');
-    svg.setAttribute('stroke', 'currentColor');
-    svg.setAttribute('stroke-width', ARTWORK_CARD.SVG_STROKE_WIDTH);
-    svg.setAttribute('stroke-linecap', 'round');
-    svg.setAttribute('stroke-linejoin', 'round');
-
-    paths.forEach(pathData => {
-      const path = document.createElementNS(SVG_NAMESPACE, 'path');
-      path.setAttribute('d', pathData);
-      svg.appendChild(path);
-    });
-
-    return svg;
-  }
-
-  /**
    * Calculate and apply aspect ratio to artwork card
    *
    * @param {HTMLElement} article - The article element
@@ -461,8 +433,8 @@ export class GalleryDataManager {
     inquireBtn.setAttribute('data-artwork-id', artworkId);
     inquireBtn.setAttribute('title', 'Inquire about this artwork');
 
-    const inquireSvg = this.createSVG(ARTWORK_CARD.SVG_VIEWBOX_DEFAULT,
-      ['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z']);
+    const inquireSvg = createSVG(ARTWORK_CARD.SVG_VIEWBOX_DEFAULT,
+      [{ d: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z' }]);
     inquireSvg.setAttribute('class', 'artwork-card__inquire-icon');
     inquireBtn.appendChild(inquireSvg);
 
@@ -472,8 +444,8 @@ export class GalleryDataManager {
     favoriteBtn.setAttribute('aria-label', 'Add to favorites');
     favoriteBtn.setAttribute('data-artwork-id', artworkId);
 
-    const favoriteSvg = this.createSVG(ARTWORK_CARD.SVG_VIEWBOX_DEFAULT,
-      ['M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z']);
+    const favoriteSvg = createSVG(ARTWORK_CARD.SVG_VIEWBOX_DEFAULT,
+      [{ d: 'M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z' }]);
     favoriteSvg.setAttribute('class', 'artwork-card__favorite-icon');
     favoriteBtn.appendChild(favoriteSvg);
 

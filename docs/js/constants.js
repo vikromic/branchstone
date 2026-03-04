@@ -5,7 +5,6 @@
  */
 
 export const THEME = {
-  STORAGE_KEY: 'branchstone-theme',
   DEFAULT: 'light',
   DARK: 'dark',
   LIGHT: 'light'
@@ -49,12 +48,6 @@ export const TIMING = {
   ONE_HOUR: 60 * 60 * 1000,
   ONE_DAY: 24 * 60 * 60 * 1000,
   STALE_DATA_TIMEOUT: 60 * 60 * 1000 // 1 hour
-};
-
-export const TOUCH = {
-  HORIZONTAL_THRESHOLD: 50,
-  VERTICAL_THRESHOLD: 100,
-  SWIPE_CLOSE_THRESHOLD: 100
 };
 
 export const FORM = {

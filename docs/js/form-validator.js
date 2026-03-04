@@ -3,6 +3,8 @@
  * Handles validation, real-time feedback, honeypot, and form submission
  */
 
+import { isValidEmail } from './security.js';
+
 export class FormValidator {
   constructor() {
     this.forms = [];
@@ -37,17 +39,6 @@ export class FormValidator {
 
     // Setup form submission
     form.addEventListener('submit', (e) => this._handleSubmit(e, elements));
-  }
-
-  /**
-   * Validate email format
-   * @private
-   * @param {string} email - Email address to validate
-   * @returns {boolean} True if valid
-   */
-  _isValidEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
   }
 
   /**
@@ -118,7 +109,7 @@ export class FormValidator {
 
     // Validate email fields
     form.querySelectorAll('input[type="email"]').forEach(field => {
-      if (field.value && !this._isValidEmail(field.value)) {
+      if (field.value && !isValidEmail(field.value)) {
         this._showFieldError(field, 'Please enter a valid email address');
         isValid = false;
       }
@@ -188,7 +179,7 @@ export class FormValidator {
         if (field.value) {
           if (field.hasAttribute('required') && !field.value.trim()) {
             this._showFieldError(field, 'This field is required');
-          } else if (field.type === 'email' && !this._isValidEmail(field.value)) {
+          } else if (field.type === 'email' && !isValidEmail(field.value)) {
             this._showFieldError(field, 'Please enter a valid email address');
           } else {
             this._clearFieldError(field);
@@ -256,7 +247,7 @@ export class FormValidator {
         this._clearForm(form);
       } else {
         // No backend configured - use mailto fallback
-        this._handleMailtoFallback(formDataObj, successMessage);
+        this._handleMailtoFallback(formDataObj, successMessage, form);
       }
     } catch (error) {
       console.error('Form submission error:', error);
@@ -275,8 +266,9 @@ export class FormValidator {
    * @private
    * @param {Object} formDataObj - Form data object
    * @param {HTMLElement} successMessage - Success message element
+   * @param {HTMLFormElement} form - Form element to clear on success
    */
-  _handleMailtoFallback(formDataObj, successMessage) {
+  _handleMailtoFallback(formDataObj, successMessage, form) {
     const email = 'contact@branchstoneart.com';
     const subject = encodeURIComponent(formDataObj.subject || 'Website Contact Form');
     const name = formDataObj.name || 'A visitor';

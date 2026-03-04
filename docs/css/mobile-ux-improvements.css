@@ -1042,7 +1042,7 @@
    ========================================================================== */
 
 /* Breakpoint: 768px max for mobile */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 
   /* Hide desktop hero overlay on mobile */
   .section-hero--desktop {
@@ -1324,7 +1324,7 @@
    ========================================================================== */
 
 /* Hide "Artist by the Numbers" stats section on mobile - we have inline hero stats instead */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .section-stats {
     display: none;
   }
@@ -1341,7 +1341,7 @@
    13. MOBILE CAROUSEL CONTROLS - Swipe-only (no arrows)
    ========================================================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* FIX MODAL BACKDROP BLUR - Remove blur from overlay to prevent dot smearing */
   .artwork-modal__overlay {
     backdrop-filter: none;

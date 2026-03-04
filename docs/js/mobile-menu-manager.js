@@ -3,12 +3,15 @@
  * Handles mobile menu open/close, focus trapping, and body scroll locking
  */
 
+import { trapFocus } from './utils.js';
+
 export class MobileMenuManager {
   constructor() {
     this.menuToggle = null;
     this.mobileMenu = null;
     this.backdrop = null;
     this.menuLinks = null;
+    this._removeFocusTrap = null;
   }
 
   /**
@@ -33,6 +36,9 @@ export class MobileMenuManager {
     this.menuToggle.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
 
+    // Trap focus within the mobile menu
+    this._removeFocusTrap = trapFocus(this.mobileMenu);
+
     // Focus first link after animation
     setTimeout(() => {
       const firstLink = this.mobileMenu.querySelector('.mobile-menu__link');
@@ -44,6 +50,12 @@ export class MobileMenuManager {
    * Close the mobile menu
    */
   close() {
+    // Remove focus trap before hiding
+    if (this._removeFocusTrap) {
+      this._removeFocusTrap();
+      this._removeFocusTrap = null;
+    }
+
     this.mobileMenu.hidden = true;
     this.menuToggle.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';

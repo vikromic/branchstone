@@ -19,6 +19,7 @@
 import { sanitizeText } from './security.js';
 import { SVG_NAMESPACE, ARTWORK_CARD, TEXT, URLS } from './constants.js';
 import { SwipeHandler } from './touch-handler.js';
+import { slugify } from './utils.js';
 
 /**
  * ArtworkCarousel - Handles image carousel for modal
@@ -38,34 +39,6 @@ export class ArtworkCarousel {
 
     // SwipeHandler instance (will be initialized in render)
     this.swipeHandler = null;
-  }
-
-  /**
-   * Build full image paths from main_image and images array
-   */
-  static buildImagePaths(artwork) {
-    if (!artwork.main_image) return [];
-
-    // Defensive: Ensure main_image is a string before calling lastIndexOf
-    const mainImage = artwork.main_image;
-    if (!mainImage || typeof mainImage !== 'string') {
-      return [];
-    }
-
-    // Extract directory from main_image
-    const lastSlash = mainImage.lastIndexOf('/');
-    const directory = mainImage.substring(0, lastSlash);
-
-    // Build array: [main_image, ...additional images]
-    const allImages = [artwork.main_image];
-
-    if (artwork.images && Array.isArray(artwork.images)) {
-      artwork.images.forEach(filename => {
-        allImages.push(`${directory}/${filename}`);
-      });
-    }
-
-    return allImages;
   }
 
   render() {
@@ -605,7 +578,7 @@ export class ArtworkModalManager {
     const printsAvailable = card.getAttribute('data-prints-available') === 'true';
 
     // Extract slug from title
-    const slug = this.titleToSlug(title);
+    const slug = slugify(title);
 
     // Parse image paths from data-images attribute (JSON array)
     let images = [mainImage]; // Fallback to main image
@@ -634,16 +607,6 @@ export class ArtworkModalManager {
       sold: !!sold,
       prints: printsAvailable
     };
-  }
-
-  /**
-   * Convert title to URL-friendly slug
-   */
-  titleToSlug(title) {
-    return title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
   }
 
   /**

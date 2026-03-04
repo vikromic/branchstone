@@ -309,7 +309,7 @@
 }
 
 /* Mobile: 1 card */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .featured-carousel__card {
     flex: 0 0 100%;
   }

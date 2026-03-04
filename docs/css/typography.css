@@ -463,7 +463,7 @@ mark {
    Improved readability on small screens
    ======================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* Stronger heading weights for better mobile readability */
   h1, h2, h3, h4, .heading-display, .heading-xl {
     font-weight: var(--font-regular); /* 400 instead of 300 */

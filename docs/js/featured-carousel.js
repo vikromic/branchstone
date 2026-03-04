@@ -4,7 +4,7 @@
  */
 
 import { sanitizeText, isValidImageUrl } from './security.js';
-import { prefersReducedMotion } from './utils.js';
+import { prefersReducedMotion, slugify } from './utils.js';
 import { URLS, ANIMATION, BREAKPOINTS } from './constants.js';
 import { SwipeHandler } from './touch-handler.js';
 
@@ -159,11 +159,11 @@ export class FeaturedCarousel {
     article.className = 'featured-carousel__card';
     article.setAttribute('role', 'listitem');
     article.setAttribute('data-index', index);
-    article.setAttribute('data-artwork-id', `artwork-${this.slugify(artwork.name)}`);
+    article.setAttribute('data-artwork-id', `artwork-${slugify(artwork.name)}`);
 
     // Create link wrapper for card navigation
     const link = document.createElement('a');
-    const artworkSlug = this.slugify(artwork.name);
+    const artworkSlug = slugify(artwork.name);
     link.href = `${URLS.GALLERY}?artwork=${artworkSlug}`;
     link.className = 'featured-carousel__link';
     link.setAttribute('aria-label', `View ${artwork.name} in gallery`);
@@ -228,7 +228,7 @@ export class FeaturedCarousel {
     const button = document.createElement('button');
     button.className = 'featured-carousel__favorite';
     button.setAttribute('aria-label', 'Add to favorites');
-    button.setAttribute('data-artwork-id', `artwork-${this.slugify(artwork.name)}`);
+    button.setAttribute('data-artwork-id', `artwork-${slugify(artwork.name)}`);
     button.type = 'button';
 
     // Create SVG icon
@@ -598,18 +598,6 @@ export class FeaturedCarousel {
 
     message.appendChild(text);
     this.container.appendChild(message);
-  }
-
-  /**
-   * Convert text to URL-friendly slug
-   * @param {string} text - Text to slugify
-   * @returns {string} Slugified text
-   */
-  slugify(text) {
-    return text
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '');
   }
 
   /**

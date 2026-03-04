@@ -1,5 +1,13 @@
 # Dependencies
 node_modules/
+package.json
+package-lock.json
+
+# Claude Flow
+.claude/
+.claude-flow/
+.swarm/
+settings.local.json
 
 # IDE
 .idea/

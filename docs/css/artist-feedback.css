@@ -47,7 +47,7 @@
   opacity: 1;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .section-hero .hero-show-info {
     min-width: var(--hero-info-size-mobile-reduced);
     height: var(--hero-info-size-mobile-reduced);
@@ -62,7 +62,7 @@
    ARTIST PHOTO AND TEXT CENTERING ON MOBILE
    ========================================================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .section-about-preview__container {
     text-align: center;
   }
@@ -331,7 +331,7 @@
 }
 
 /* Mobile adjustments for carousel */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .artwork-carousel {
     max-height: 60vh;
   }
@@ -376,7 +376,7 @@
    RESPONSIVE UTILITIES
    ========================================================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .artwork-try-before-buy {
     padding: 1rem;
   }

@@ -33,7 +33,7 @@
 
 /* Premium hover state - subtle scale + elevated shadow + border glow */
 .artwork-card:hover {
-  transform: translateY(-8px) scale(1.03);
+  transform: translateY(-8px) scale(1.01);
   box-shadow: 0 20px 40px rgba(26, 24, 22, 0.15),
               0 8px 16px rgba(26, 24, 22, 0.1),
               0 0 0 1px rgba(139, 113, 90, 0.2);

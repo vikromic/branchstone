@@ -8,28 +8,25 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap&subset=latin,cyrillic" rel="stylesheet">
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="manifest" href="site.webmanifest">
 
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/typography.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/tokens.css?v=20">
+  <link rel="stylesheet" href="css/base.css?v=20">
+  <link rel="stylesheet" href="css/typography.css?v=20">
+  <link rel="stylesheet" href="css/components.css?v=20">
+  <link rel="stylesheet" href="css/layout.css?v=20">
+  <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=20">
+  <link rel="stylesheet" href="css/qa-fixes.css?v=20">
+  <link rel="stylesheet" href="css/language-switcher.css?v=20">
 
   <script type="module" src="js/main.js"></script>
-  <link rel="stylesheet" href="css/qa-fixes.css?v=1">
-  
-  <!-- PNG Favicon Fallbacks (LOW-001) -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
 <body data-theme="light">
 
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <a href="#main-content" class="skip-link" data-skip-link>Skip to main content</a>
 
   <header class="header">
     <div class="header__container">
@@ -39,11 +36,11 @@
 
       <nav class="header__nav" aria-label="Main navigation">
         <ul class="header__nav-list">
-          <li><a href="index.html" class="header__nav-link">Home</a></li>
-          <li><a href="gallery.html" class="header__nav-link">Gallery</a></li>
-          <li><a href="about.html" class="header__nav-link">About</a></li>
-          <li><a href="commissions.html" class="header__nav-link">Commissions</a></li>
-          <li><a href="contact.html" class="header__nav-link">Contact</a></li>
+          <li><a href="index.html" class="header__nav-link" data-i18n="nav.home">Home</a></li>
+          <li><a href="gallery.html" class="header__nav-link" data-i18n="nav.gallery">Gallery</a></li>
+          <li><a href="about.html" class="header__nav-link" data-i18n="nav.about">About</a></li>
+          <li><a href="commissions.html" class="header__nav-link" data-i18n="nav.commissions">Commissions</a></li>
+          <li><a href="contact.html" class="header__nav-link" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </nav>
 
@@ -54,6 +51,15 @@
         <span class="header__favorites-count">0</span>
       </button>
 
+      <button class="language-switcher" aria-label="Switch to Ukrainian" type="button">
+        <span class="language-switcher__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+        </span>
+        <span class="language-switcher__label">EN</span>
+      </button>
 
       <button class="header__theme-toggle" aria-label="Toggle theme" type="button">
         <svg class="header__theme-icon header__theme-icon--sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -84,14 +90,97 @@
     <div class="mobile-menu__backdrop"></div>
     <nav class="mobile-menu__nav" aria-label="Mobile navigation">
       <ul class="mobile-menu__list">
-        <li><a href="index.html" class="mobile-menu__link">Home</a></li>
-        <li><a href="gallery.html" class="mobile-menu__link">Gallery</a></li>
-        <li><a href="about.html" class="mobile-menu__link">About</a></li>
-        <li><a href="commissions.html" class="mobile-menu__link">Commissions</a></li>
-        <li><a href="contact.html" class="mobile-menu__link">Contact</a></li>
+        <li><a href="index.html" class="mobile-menu__link" data-i18n="nav.home">Home</a></li>
+        <li><a href="gallery.html" class="mobile-menu__link" data-i18n="nav.gallery">Gallery</a></li>
+        <li><a href="about.html" class="mobile-menu__link" data-i18n="nav.about">About</a></li>
+        <li><a href="commissions.html" class="mobile-menu__link" data-i18n="nav.commissions">Commissions</a></li>
+        <li><a href="contact.html" class="mobile-menu__link" data-i18n="nav.contact">Contact</a></li>
       </ul>
+      <div class="mobile-menu__language-switcher">
+        <button class="language-switcher" aria-label="Switch to Ukrainian" type="button">
+          <span class="language-switcher__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </span>
+          <span class="language-switcher__label">EN</span>
+        </button>
+      </div>
     </nav>
   </div>
+
+  <!-- Favorites Panel -->
+  <div class="favorites-backdrop" role="presentation" hidden></div>
+
+  <aside
+    class="favorites-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="favorites-title"
+    aria-describedby="favorites-description"
+    hidden>
+
+    <!-- Header -->
+    <header class="favorites-panel__header">
+      <div class="favorites-panel__title-group">
+        <h2 id="favorites-title" class="favorites-panel__title" data-i18n="favorites.title">
+          Your Favorites
+        </h2>
+        <p id="favorites-description" class="favorites-panel__count">
+          <span data-count>0</span> <span data-i18n="favorites.piecesSaved">pieces saved</span>
+        </p>
+      </div>
+      <button
+        class="favorites-panel__close"
+        aria-label="Close favorites panel"
+        type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Content Area -->
+    <div class="favorites-panel__content">
+
+      <!-- Favorites List (populated by JavaScript) -->
+      <ul class="favorites-list" role="list">
+        <!-- Items will be inserted here by JavaScript -->
+      </ul>
+
+      <!-- Empty State -->
+      <div class="favorites-empty">
+        <svg class="favorites-empty__icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <h3 class="favorites-empty__title" data-i18n="favorites.emptyTitle">No Favorites Yet</h3>
+        <p class="favorites-empty__description" data-i18n="favorites.emptyDescription">
+          Click the heart icon on artworks to save them here
+        </p>
+        <a href="gallery.html" class="btn btn--primary" data-i18n="favorites.browseCollection">
+          Browse the Collection
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Footer / Actions -->
+    <footer class="favorites-panel__footer">
+      <button
+        class="btn btn--secondary btn--block favorites-panel__clear"
+        type="button">
+        <span data-i18n="favorites.clearAll">Clear All</span>
+      </button>
+      <button
+        class="btn btn--primary btn--block favorites-panel__inquire"
+        type="button">
+        <span data-i18n="favorites.inquireAbout">Inquire About</span> <span data-selected-count>0</span> <span data-i18n="favorites.pieces">Piece<span data-plural>s</span></span>
+      </button>
+    </footer>
+
+  </aside>
 
   <main id="main-content">
     <section class="hero--small py-section-lg">
@@ -109,20 +198,20 @@
 
           <h2 class="heading-md mb-6">Intellectual Property</h2>
           <p class="mb-6">All artwork, images, and content on this website are the intellectual property of Viktoria (Branchstone) and are protected by copyright laws. You may not:</p>
-          <ul class="mb-8" style="padding-left: 1.5rem; list-style: disc;">
-            <li style="margin-bottom: 0.5rem;">Reproduce, distribute, or display artwork without written permission</li>
-            <li style="margin-bottom: 0.5rem;">Use images for commercial purposes</li>
-            <li style="margin-bottom: 0.5rem;">Create derivative works from the artwork</li>
+          <ul class="mb-8 legal-list">
+            <li class="legal-list-item">Reproduce, distribute, or display artwork without written permission</li>
+            <li class="legal-list-item">Use images for commercial purposes</li>
+            <li class="legal-list-item">Create derivative works from the artwork</li>
           </ul>
 
           <h2 class="heading-md mb-6">Commission Terms</h2>
           <p class="mb-6">When commissioning artwork from Branchstone:</p>
-          <ul class="mb-8" style="padding-left: 1.5rem; list-style: disc;">
-            <li style="margin-bottom: 0.5rem;">A non-refundable deposit is required to begin work</li>
-            <li style="margin-bottom: 0.5rem;">Final payment is due upon completion before shipping</li>
-            <li style="margin-bottom: 0.5rem;">The artist retains reproduction rights unless otherwise agreed in writing</li>
-            <li style="margin-bottom: 0.5rem;">Timelines are estimates and may vary based on complexity</li>
-            <li style="margin-bottom: 0.5rem;">Custom pieces are non-refundable once work has begun</li>
+          <ul class="mb-8 legal-list">
+            <li class="legal-list-item">A non-refundable deposit is required to begin work</li>
+            <li class="legal-list-item">Final payment is due upon completion before shipping</li>
+            <li class="legal-list-item">The artist retains reproduction rights unless otherwise agreed in writing</li>
+            <li class="legal-list-item">Timelines are estimates and may vary based on complexity</li>
+            <li class="legal-list-item">Custom pieces are non-refundable once work has begun</li>
           </ul>
 
           <h2 class="heading-md mb-6">Shipping & Handling</h2>
@@ -140,7 +229,40 @@
         </article>
       </div>
     </section>
+    <!-- Newsletter Signup -->
+    <section class="newsletter" aria-labelledby="newsletter-heading">
+      <div class="newsletter__container">
+        <h2 id="newsletter-heading" class="newsletter__title" data-i18n="home.newsletter.title">Stay Inspired</h2>
+        <p class="newsletter__text" data-i18n="home.newsletter.text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
+        <form class="newsletter__form" id="newsletter-form" novalidate>
+          <input
+            type="email"
+            class="newsletter__input"
+            data-i18n="home.newsletter.placeholder"
+            placeholder="Enter your email"
+            aria-label="Email address"
+            required
+          >
+          <button type="submit" class="newsletter__button" data-i18n="home.newsletter.button">Subscribe</button>
+        </form>
+        <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
+        <p class="newsletter__privacy"><span data-i18n="home.newsletter.privacyText">We respect your privacy.</span> <a href="privacy.html" data-i18n="home.newsletter.privacyLink">Privacy Policy</a></p>
+      </div>
+    </section>
+
   </main>
+
+  <!-- Back to Top Button -->
+  <button
+    class="back-to-top"
+    data-back-to-top
+    aria-label="Back to top"
+    hidden
+    type="button">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
 
   <footer class="footer">
     <div class="footer__container">
@@ -148,31 +270,31 @@
         <a href="index.html" class="footer__logo" aria-label="Branchstone Home">
           BRANCHSTONE
         </a>
-        <p class="footer__tagline">Art inspired by natural textures and quiet resilience</p>
+        <p class="footer__tagline" data-i18n="home.footer.tagline">Art inspired by natural textures and quiet resilience</p>
       </div>
 
       <nav class="footer__nav" aria-label="Footer navigation">
         <div class="footer__nav-column">
-          <h3 class="footer__nav-heading">Navigation</h3>
+          <h3 class="footer__nav-heading" data-i18n="home.footer.navigation">Navigation</h3>
           <ul class="footer__nav-list">
-            <li><a href="gallery.html" class="footer__nav-link">Gallery</a></li>
-            <li><a href="about.html" class="footer__nav-link">About</a></li>
-            <li><a href="commissions.html" class="footer__nav-link">Commissions</a></li>
-            <li><a href="contact.html" class="footer__nav-link">Contact</a></li>
+            <li><a href="gallery.html" class="footer__nav-link" data-i18n="nav.gallery">Gallery</a></li>
+            <li><a href="about.html" class="footer__nav-link" data-i18n="nav.about">About</a></li>
+            <li><a href="commissions.html" class="footer__nav-link" data-i18n="nav.commissions">Commissions</a></li>
+            <li><a href="contact.html" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
           </ul>
         </div>
 
         <div class="footer__nav-column">
-          <h3 class="footer__nav-heading">Legal</h3>
+          <h3 class="footer__nav-heading" data-i18n="home.footer.legal">Legal</h3>
           <ul class="footer__nav-list">
-            <li><a href="privacy.html" class="footer__nav-link">Privacy Policy</a></li>
-            <li><a href="terms.html" class="footer__nav-link">Terms of Service</a></li>
+            <li><a href="privacy.html" class="footer__nav-link" data-i18n="home.footer.privacyPolicy">Privacy Policy</a></li>
+            <li><a href="terms.html" class="footer__nav-link" data-i18n="home.footer.termsOfService">Terms of Service</a></li>
           </ul>
         </div>
       </nav>
 
       <div class="footer__social">
-        <h3 class="footer__social-heading">Connect</h3>
+        <h3 class="footer__social-heading" data-i18n="home.footer.connect">Connect</h3>
         <ul class="footer__social-list">
           <li>
             <a href="https://instagram.com/branchstone.art" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Follow on Instagram">
@@ -185,11 +307,28 @@
         <p class="footer__email">
           <a href="mailto:thebranchstone@gmail.com" class="footer__email-link">thebranchstone@gmail.com</a>
         </p>
+
+        <!-- Trust Badges -->
+        <div class="footer__trust-badges">
+          <div class="trust-badge-small">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span data-i18n="home.footer.secureCheckout">Secure checkout</span>
+          </div>
+          <div class="trust-badge-small">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            <span data-i18n="home.footer.established">Est. 2013</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="footer__bottom">
-      <p class="footer__copyright">&copy; <span id="copyright-year">2025</span> Branchstone. All rights reserved.</p>
+      <p class="footer__copyright">&copy; <span id="copyright-year">2026</span> <span data-i18n="home.footer.copyright">Branchstone. All rights reserved.</span></p>
     </div>
   </footer>
 

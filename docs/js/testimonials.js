@@ -34,6 +34,13 @@ class TestimonialsManager {
       return;
     }
 
+    // Guard: skip if initDynamicFeedbacks already loaded content (prevents double-loading)
+    if (this.gridElement.dataset.feedbacksLoaded) {
+      console.log('[Testimonials] Content already loaded by main.js, skipping');
+      return;
+    }
+    this.gridElement.dataset.feedbacksLoaded = 'true';
+
     try {
       await this.loadTestimonials();
 

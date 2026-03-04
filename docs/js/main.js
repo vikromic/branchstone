@@ -16,7 +16,7 @@
  */
 
 // Import foundational modules
-import { THEME, SCROLL, ANIMATION, STORAGE_KEYS, TIMING, GALLERY, TOUCH, SVG_NAMESPACE, ARTWORK_CARD, URLS, SWIPE, TEXT, SCROLL_THRESHOLDS } from './constants.js';
+import { THEME, SCROLL, ANIMATION, STORAGE_KEYS, TIMING, GALLERY, SVG_NAMESPACE, ARTWORK_CARD, URLS, SWIPE, TEXT, SCROLL_THRESHOLDS, BREAKPOINTS } from './constants.js';
 import { debounce, prefersReducedMotion, trapFocus, smoothScrollTo } from './utils.js';
 import { isValidImageUrl, sanitizeText, isValidEmail, getURLParameter } from './security.js';
 import * as storage from './storage.js';
@@ -120,12 +120,6 @@ import { initI18n, getI18n } from './i18n.js';
   // 2. MOBILE NAVIGATION (Legacy - redirects to unified handler)
   // ========================================
 
-  const initMobileNavigation = () => {
-    // This function is kept for backwards compatibility
-    // The unified initMobileMenu handles all mobile menu functionality
-    return;
-  };
-
   // ========================================
   // MOBILE MENU TOGGLE (Unified)
   // ========================================
@@ -142,11 +136,6 @@ import { initI18n, getI18n } from './i18n.js';
   const initScrollAnimations = () => {
     const scrollManager = new ScrollManager();
     scrollManager.init();
-  };
-
-  const initArtworkScrollAnimations = () => {
-    // Handled by ScrollManager in initScrollAnimations
-    return;
   };
 
   // ========================================
@@ -185,14 +174,14 @@ import { initI18n, getI18n } from './i18n.js';
       } else {
         console.error('[Gallery] Failed to initialize gallery');
         // Display user-facing error message
-        showGalleryError('Unable to load gallery. Please refresh the page to try again.');
+        showGalleryError('Unable to load gallery. Please refresh the page to try again.', 'gallery.error_load');
       }
 
       return galleryManager;
     } catch (error) {
       console.error('[Gallery] Error during initialization:', error);
       // Display user-facing error message
-      showGalleryError('An error occurred while loading the gallery. Please refresh the page.');
+      showGalleryError('An error occurred while loading the gallery. Please refresh the page.', 'gallery.error_generic');
       return null;
     }
   };
@@ -201,7 +190,7 @@ import { initI18n, getI18n } from './i18n.js';
    * Display a user-facing error message in the gallery container
    * Provides graceful fallback when gallery fails to load
    */
-  const showGalleryError = (message) => {
+  const showGalleryError = (message, i18nKey) => {
     const container = document.querySelector('.bento-grid');
     if (!container) return;
 
@@ -209,6 +198,7 @@ import { initI18n, getI18n } from './i18n.js';
     errorDiv.className = 'gallery-error';
     errorDiv.setAttribute('role', 'alert');
     errorDiv.setAttribute('aria-live', 'polite');
+    if (i18nKey) errorDiv.setAttribute('data-i18n', i18nKey);
     errorDiv.style.cssText = `
       padding: 2rem;
       text-align: center;
@@ -338,7 +328,7 @@ import { initI18n, getI18n } from './i18n.js';
    */
   const updateCollectionDescription = (collectionName) => {
     // Only run on mobile
-    if (window.innerWidth > 768) return;
+    if (window.innerWidth >= BREAKPOINTS.MOBILE) return;
 
     const descriptionContainer = document.getElementById('collection-description');
     const descriptionText = document.getElementById('collection-description-text');
@@ -682,20 +672,6 @@ import { initI18n, getI18n } from './i18n.js';
   // ========================================
   // 8. HEADER SCROLL BEHAVIOR
   // ========================================
-
-  const initHeaderScroll = () => {
-    // Handled by ScrollManager in initScrollAnimations
-    return;
-  };
-
-  // ========================================
-  // HERO PARALLAX EFFECT
-  // ========================================
-
-  const initHeroParallax = () => {
-    // Handled by ScrollManager in initScrollAnimations
-    return;
-  };
 
   // ========================================
   // 9. LAZY LOADING ENHANCEMENT
@@ -1142,27 +1118,9 @@ import { initI18n, getI18n } from './i18n.js';
     });
 
     // Focus trap
-    panel?.addEventListener('keydown', (e) => {
-      if (e.key !== 'Tab') return;
-
-      const focusableElements = panel.querySelectorAll(
-        'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
-      );
-      const firstFocusable = focusableElements[0];
-      const lastFocusable = focusableElements[focusableElements.length - 1];
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstFocusable) {
-          e.preventDefault();
-          lastFocusable.focus();
-        }
-      } else {
-        if (document.activeElement === lastFocusable) {
-          e.preventDefault();
-          firstFocusable.focus();
-        }
-      }
-    });
+    if (panel) {
+      trapFocus(panel);
+    }
 
     // Swipe-to-close support for mobile (bottom sheet)
     if (window.innerWidth <= 767) {
@@ -1290,11 +1248,11 @@ import { initI18n, getI18n } from './i18n.js';
       const scrolled = window.pageYOffset > SCROLL_TRIGGER;
 
       if (scrolled) {
+        backToTopButton.removeAttribute('hidden');
         backToTopButton.classList.add('is-visible');
-        backToTopButton.setAttribute('aria-hidden', 'false');
       } else {
         backToTopButton.classList.remove('is-visible');
-        backToTopButton.setAttribute('aria-hidden', 'true');
+        backToTopButton.setAttribute('hidden', '');
       }
     };
 
@@ -1585,27 +1543,7 @@ import { initI18n, getI18n } from './i18n.js';
 
     // Focus trap - only attach once using global flag
     if (!mobileDropdownFocusTrapAttached) {
-      dropdown.addEventListener('keydown', (e) => {
-        if (e.key !== 'Tab') return;
-
-        const focusableElements = dropdown.querySelectorAll(
-          'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
-        );
-        const firstFocusable = focusableElements[0];
-        const lastFocusable = focusableElements[focusableElements.length - 1];
-
-        if (e.shiftKey) {
-          if (document.activeElement === firstFocusable) {
-            e.preventDefault();
-            lastFocusable.focus();
-          }
-        } else {
-          if (document.activeElement === lastFocusable) {
-            e.preventDefault();
-            firstFocusable.focus();
-          }
-        }
-      });
+      trapFocus(dropdown);
       mobileDropdownFocusTrapAttached = true;
     }
 
@@ -2133,7 +2071,7 @@ import { initI18n, getI18n } from './i18n.js';
 
   const initMobileBottomNav = () => {
     // Check if we're on mobile
-    if (window.innerWidth >= 768) return;
+    if (window.innerWidth >= BREAKPOINTS.MOBILE) return;
 
     // Check if bottom nav already exists
     if (document.querySelector('.mobile-bottom-nav')) return;
@@ -2196,7 +2134,7 @@ import { initI18n, getI18n } from './i18n.js';
 
       a.innerHTML = `
         <span class="mobile-bottom-nav__icon">${item.icon}</span>
-        <span class="mobile-bottom-nav__label">${item.label}</span>
+        <span class="mobile-bottom-nav__label" data-i18n="nav.${item.label.toLowerCase()}">${item.label}</span>
       `;
 
       li.appendChild(a);
@@ -2293,7 +2231,7 @@ import { initI18n, getI18n } from './i18n.js';
   // SIMPLE TOAST NOTIFICATION
   // ========================================
 
-  const showSimpleToast = (message, duration = 4000) => {
+  const showSimpleToast = (message, duration = 4000, i18nKey) => {
     // Sanitize message to prevent XSS
     const sanitizedMessage = sanitizeText(message);
 
@@ -2301,6 +2239,7 @@ import { initI18n, getI18n } from './i18n.js';
     toast.className = 'simple-toast';
     // Use textContent (not innerHTML) for XSS protection
     toast.textContent = sanitizedMessage;
+    if (i18nKey) toast.setAttribute('data-i18n', i18nKey);
     // Add ARIA attributes for accessibility
     toast.setAttribute('role', 'status');
     toast.setAttribute('aria-live', 'polite');
@@ -2359,6 +2298,13 @@ import { initI18n, getI18n } from './i18n.js';
       console.log('[Feedbacks] Testimonials grid not found, skipping initialization');
       return;
     }
+
+    // Guard: skip if testimonials.js already loaded content (prevents double-loading on about page)
+    if (testimonialsGrid.dataset.feedbacksLoaded) {
+      console.log('[Feedbacks] Testimonials already loaded by testimonials.js, skipping');
+      return;
+    }
+    testimonialsGrid.dataset.feedbacksLoaded = 'true';
 
     try {
       console.log('[Feedbacks] Loading feedbacks from JSON...');
@@ -2514,7 +2460,7 @@ import { initI18n, getI18n } from './i18n.js';
 
   const initHeroCardClose = () => {
     // Skip hero close/show logic on mobile - mobile uses inline hero instead
-    if (window.innerWidth <= 768) return;
+    if (window.innerWidth < BREAKPOINTS.MOBILE) return;
 
     const heroContent = document.querySelector('.section-hero__content');
     const closeButton = document.querySelector('.hero-card-close');
@@ -2530,7 +2476,7 @@ import { initI18n, getI18n } from './i18n.js';
       // Save state to sessionStorage with namespaced key
       sessionStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
       // Show toast notification
-      showSimpleToast('Tap ⓘ to restore');
+      showSimpleToast('Tap ⓘ to restore', 4000, 'hero.tap_to_restore');
     });
 
     // Show button click
@@ -2603,9 +2549,7 @@ import { initI18n, getI18n } from './i18n.js';
       // ===== PHASE 1: CRITICAL FEATURES (synchronous, must succeed) =====
       initThemeToggle();         // Theme must load first to prevent flash
       initMobileMenu();          // Mobile navigation
-      initMobileNavigation();    // Legacy mobile nav support
       initScrollAnimations();    // Scroll-based UI behaviors
-      initArtworkScrollAnimations(); // Artwork reveal animations
 
       // ===== PHASE 2: DATA LOADING (async, graceful degradation) =====
       // Gallery data loads artwork cards; failure shows error message but doesn't break page
@@ -2624,8 +2568,6 @@ import { initI18n, getI18n } from './i18n.js';
       initSmoothScroll();        // Smooth anchor scrolling
       initFormHandling();        // Form validation
       initCommissionWizard();    // Multi-step commission form
-      initHeaderScroll();        // Header show/hide on scroll
-      initHeroParallax();        // Hero section parallax effect
       initLazyLoading();         // Image lazy loading enhancements
       initSkipLink();            // Accessibility skip link
       initNewsletter();          // Newsletter subscription form

@@ -9,25 +9,25 @@
     <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap&subset=latin,cyrillic" rel="stylesheet">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="manifest" href="site.webmanifest">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/tokens.css">
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/typography.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=17">
-    <link rel="stylesheet" href="css/mobile-gallery-improvements.css">
-    <link rel="stylesheet" href="css/artist-feedback.css?v=1">
-    <link rel="stylesheet" href="css/about-fold.css">
-    <link rel="stylesheet" href="css/highlights.css">
-    <link rel="stylesheet" href="css/testimonials.css">
-    <link rel="stylesheet" href="css/language-switcher.css?v=1">
+    <link rel="stylesheet" href="css/tokens.css?v=20">
+    <link rel="stylesheet" href="css/base.css?v=20">
+    <link rel="stylesheet" href="css/typography.css?v=20">
+    <link rel="stylesheet" href="css/components.css?v=20">
+    <link rel="stylesheet" href="css/layout.css?v=20">
+    <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=20">
+    <link rel="stylesheet" href="css/mobile-gallery-improvements.css?v=20">
+    <link rel="stylesheet" href="css/artist-feedback.css?v=20">
+    <link rel="stylesheet" href="css/about-fold.css?v=20">
+    <link rel="stylesheet" href="css/highlights.css?v=20">
+    <link rel="stylesheet" href="css/testimonials.css?v=20">
+    <link rel="stylesheet" href="css/language-switcher.css?v=20">
 
     <!-- Scripts -->
     <script type="module" src="js/main.js"></script>
@@ -36,12 +36,7 @@
     <script type="module" src="js/highlights.js"></script>
     <script type="module" src="js/testimonials.js"></script>
   <script type="module" src="js/qa-enhancements.js"></script>
-  <link rel="stylesheet" href="css/qa-fixes.css?v=1">
-  
-  <!-- PNG Favicon Fallbacks (LOW-001) -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="css/qa-fixes.css?v=20">
 </head>
 <body data-theme="light">
 
@@ -146,11 +141,11 @@
     <!-- Header -->
     <header class="favorites-panel__header">
       <div class="favorites-panel__title-group">
-        <h2 id="favorites-title" class="favorites-panel__title">
+        <h2 id="favorites-title" class="favorites-panel__title" data-i18n="favorites.title">
           Your Favorites
         </h2>
         <p id="favorites-description" class="favorites-panel__count">
-          <span data-count>0</span> pieces saved
+          <span data-count>0</span> <span data-i18n="favorites.piecesSaved">pieces saved</span>
         </p>
       </div>
       <button
@@ -177,12 +172,12 @@
         <svg class="favorites-empty__icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
-        <h3 class="favorites-empty__title">No Favorites Yet</h3>
-        <p class="favorites-empty__description">
+        <h3 class="favorites-empty__title" data-i18n="favorites.emptyTitle">No Favorites Yet</h3>
+        <p class="favorites-empty__description" data-i18n="favorites.emptyDescription">
           Click the heart icon on artworks to save them here
         </p>
-        <a href="gallery.html" class="btn btn--primary">
-          Explore Gallery
+        <a href="gallery.html" class="btn btn--primary" data-i18n="favorites.browseCollection">
+          Browse the Collection
         </a>
       </div>
 
@@ -193,19 +188,19 @@
       <button
         class="btn btn--secondary btn--block favorites-panel__clear"
         type="button">
-        Clear All
+        <span data-i18n="favorites.clearAll">Clear All</span>
       </button>
       <button
         class="btn btn--primary btn--block favorites-panel__inquire"
         type="button">
-        Inquire About <span data-selected-count>0</span> Piece<span data-plural>s</span>
+        <span data-i18n="favorites.inquireAbout">Inquire About</span> <span data-selected-count>0</span> <span data-i18n="favorites.pieces">Piece<span data-plural>s</span></span>
       </button>
     </footer>
 
   </aside>
 
     <!-- Main Content -->
-    <main id="main-content" role="main">
+    <main id="main-content">
 
         <!-- Artist Story Section -->
         <section class="section section--artist-story" aria-labelledby="story-heading">
@@ -262,7 +257,7 @@ I believe art can grow alongside nature with care and respect. Every material I 
                                     data-fold-toggle
                                     aria-expanded="false"
                                     aria-controls="artist-bio__content">
-                                    Read more
+                                    <span data-i18n="about.readMore">Read more</span>
                                 </button>
                             </div>
                         </div>
@@ -428,35 +423,35 @@ I believe art can grow alongside nature with care and respect. Every material I 
             </div>
         </section>
 
-    </main>
+        <!-- Newsletter Signup -->
+        <section class="newsletter" aria-labelledby="newsletter-heading">
+          <div class="newsletter__container">
+            <h2 id="newsletter-heading" class="newsletter__title" data-i18n="about.stayInspired.title">Stay Inspired</h2>
+            <p class="newsletter__text" data-i18n="about.stayInspired.text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
+            <form class="newsletter__form" id="newsletter-form" novalidate>
+              <input
+                type="email"
+                class="newsletter__input"
+                placeholder="Enter your email"
+                data-i18n-placeholder="about.stayInspired.emailPlaceholder"
+                aria-label="Email address"
+                required
+              >
+              <button type="submit" class="newsletter__button" data-i18n="about.stayInspired.button">Subscribe</button>
+            </form>
+            <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
+            <p class="newsletter__privacy" data-i18n="about.stayInspired.privacyNote">We respect your privacy. <a href="privacy.html" data-i18n="about.stayInspired.privacyLink">Privacy Policy</a></p>
+          </div>
+        </section>
 
-    <!-- Newsletter Signup -->
-    <section class="newsletter" aria-labelledby="newsletter-heading">
-      <div class="newsletter__container">
-        <h2 id="newsletter-heading" class="newsletter__title" data-i18n="about.stayInspired.title">Stay Inspired</h2>
-        <p class="newsletter__text" data-i18n="about.stayInspired.text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
-        <form class="newsletter__form" id="newsletter-form" novalidate>
-          <input
-            type="email"
-            class="newsletter__input"
-            placeholder="Enter your email"
-            data-i18n-placeholder="about.stayInspired.emailPlaceholder"
-            aria-label="Email address"
-            required
-          >
-          <button type="submit" class="newsletter__button" data-i18n="about.stayInspired.button">Subscribe</button>
-        </form>
-        <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
-        <p class="newsletter__privacy" data-i18n="about.stayInspired.privacyNote">We respect your privacy. <a href="privacy.html" data-i18n="about.stayInspired.privacyLink">Privacy Policy</a></p>
-      </div>
-    </section>
+    </main>
 
     <!-- Back to Top Button -->
     <button
       class="back-to-top"
       data-back-to-top
       aria-label="Back to top"
-      aria-hidden="true"
+      hidden
       type="button">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <polyline points="18 15 12 9 6 15"></polyline>
@@ -507,11 +502,28 @@ I believe art can grow alongside nature with care and respect. Every material I 
           <p class="footer__email">
             <a href="mailto:thebranchstone@gmail.com" class="footer__email-link">thebranchstone@gmail.com</a>
           </p>
+
+          <!-- Trust Badges -->
+          <div class="footer__trust-badges">
+            <div class="trust-badge-small">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span data-i18n="home.footer.secureCheckout">Secure checkout</span>
+            </div>
+            <div class="trust-badge-small">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+              <span data-i18n="home.footer.established">Est. 2013</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="footer__bottom">
-        <p class="footer__copyright" data-i18n="home.footer.copyright">&copy; <span id="copyright-year">2025</span> Branchstone. All rights reserved.</p>
+        <p class="footer__copyright" data-i18n="home.footer.copyright">&copy; <span id="copyright-year">2026</span> Branchstone. All rights reserved.</p>
       </div>
     </footer>
 

@@ -78,7 +78,7 @@
 
 .grid {
   display: grid;
-  gap: var(--spacing-md, 1.5rem);
+  gap: var(--space-6, 1.5rem);
 }
 
 .grid-cols-2 {
@@ -125,15 +125,15 @@
 
 /* Grid Gap Utilities */
 .grid-gap-sm {
-  gap: var(--spacing-sm, 1rem);
+  gap: var(--space-4, 1rem);
 }
 
 .grid-gap-md {
-  gap: var(--spacing-md, 1.5rem);
+  gap: var(--space-6, 1.5rem);
 }
 
 .grid-gap-lg {
-  gap: var(--spacing-lg, 2rem);
+  gap: var(--space-8, 2rem);
 }
 
 /* ==========================================================================
@@ -193,19 +193,19 @@
 
 /* Flex Gaps */
 .gap-sm {
-  gap: var(--spacing-sm, 1rem);
+  gap: var(--space-4, 1rem);
 }
 
 .gap-md {
-  gap: var(--spacing-md, 1.5rem);
+  gap: var(--space-6, 1.5rem);
 }
 
 .gap-lg {
-  gap: var(--spacing-lg, 2rem);
+  gap: var(--space-8, 2rem);
 }
 
 .gap-xl {
-  gap: var(--spacing-xl, 3rem);
+  gap: var(--space-12, 3rem);
 }
 
 /* Flex Wrap */
@@ -254,7 +254,7 @@
 }
 
 .gallery-error {
-  color: var(--error-color, #c74040);
+  color: var(--error, #c74040);
 }
 
 @media (min-width: 640px) {
@@ -2093,7 +2093,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .section-testimonials__heading {
     font-size: var(--text-3xl);
     margin-bottom: var(--space-8);
@@ -2394,7 +2394,7 @@
 }
 
 /* Header responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .header__nav {
     display: none;
   }
@@ -2667,7 +2667,7 @@
   opacity: 0.3;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .location {
     grid-template-columns: 1fr;
   }
@@ -2770,7 +2770,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .hero__container {
     grid-template-columns: 1fr;
     text-align: center;
@@ -3178,7 +3178,7 @@
   line-height: 1.4;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-8);
@@ -3380,7 +3380,7 @@
   margin: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .section-sold {
     padding: var(--space-16) 0;
   }

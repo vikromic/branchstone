@@ -267,7 +267,7 @@
    MOBILE OPTIMIZATIONS
    ========================================================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* Simpler divider on mobile */
   .gallery-section-divider {
     margin: var(--space-8) 0 var(--space-6);

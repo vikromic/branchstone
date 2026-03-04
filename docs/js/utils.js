@@ -501,3 +501,12 @@ export const pluralize = (count, singular, plural = null) => {
   if (count === 1) return singular;
   return plural || `${singular}s`;
 };
+
+/**
+ * Convert string to URL-friendly slug
+ * @param {string} str - String to slugify
+ * @returns {string} Slugified string
+ */
+export function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
