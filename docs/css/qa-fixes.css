@@ -232,7 +232,7 @@ select.is-valid {
 /* MED-005: Skip Links - Visually Hidden Until Focused */
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: 0;
   left: 0;
   background: var(--accent-primary);
   color: var(--text-inverse);
@@ -241,11 +241,12 @@ select.is-valid {
   font-weight: 600;
   border-radius: 0 0 var(--radius-md) 0;
   z-index: 9999;
-  transition: top 0.2s ease;
+  transform: translateY(calc(-100% - 0.5rem));
+  transition: transform 0.2s ease;
 }
 
 .skip-link:focus {
-  top: 0;
+  transform: translateY(0);
   outline: 3px solid var(--accent-primary);
   outline-offset: 3px;
 }
