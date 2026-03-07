@@ -1,0 +1,244 @@
+# ============================================================
+# Universal .cursorignore — Cursor AI context exclusions
+# Covers: Python, Java/Spring, Node/TS, Angular, React, Vue,
+#         Go, Rust, .NET, DevOps, mobile, and general tooling
+# ============================================================
+
+# =========================
+# OS / Desktop junk
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+._*
+
+# =========================
+# VCS
+# =========================
+.git/
+
+# =========================
+# IDE / Editor
+# =========================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.bak
+
+# =========================
+# AI / LLM tool artifacts
+# =========================
+.ai/
+.claude/
+.claude-flow/
+.swarm/
+.cursor/
+.copilot/
+.continue/
+.aider*
+.mcp.json
+reviews/
+
+# =========================
+# Dependencies & lock files
+# =========================
+node_modules/
+bower_components/
+.yarn/
+.pnp.*
+.npm/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+poetry.lock
+Pipfile.lock
+Cargo.lock
+
+# =========================
+# Python caches / venvs
+# =========================
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+.env/
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.hypothesis/
+.ipynb_checkpoints/
+
+# =========================
+# Java / Gradle / Maven
+# =========================
+target/
+.gradle/
+.mvn/
+mvnw
+mvnw.cmd
+gradlew
+gradlew.bat
+gradle/wrapper/
+*.class
+*.jar
+*.war
+*.ear
+
+# =========================
+# Build outputs
+# =========================
+build/
+dist/
+out/
+bin/
+obj/
+tmp/
+temp/
+artifacts/
+coverage/
+.coverage
+htmlcov/
+.nyc_output/
+*.tsbuildinfo
+
+# =========================
+# Frontend framework caches
+# =========================
+.next/
+.nuxt/
+.svelte-kit/
+.vite/
+.turbo/
+.angular/
+.output/
+.cache/
+.parcel-cache/
+storybook-static/
+.eslintcache
+.stylelintcache
+
+# =========================
+# DevOps / Infrastructure
+# =========================
+.terraform/
+*.tfstate
+*.tfstate.*
+.vagrant/
+.kube/
+.pulumi/
+jenkins/
+kubernetes/
+
+# =========================
+# CI/CD
+# =========================
+.github/
+.gitlab-ci-local/
+.circleci/
+
+# =========================
+# Secrets / environment (NEVER index)
+# =========================
+.env
+.env.*
+*.key
+*.pem
+*.crt
+*.pfx
+*.p12
+*.jks
+*.keystore
+*.truststore
+credentials*
+secrets/
+
+# =========================
+# Test artifacts
+# =========================
+test-output/
+test-results/
+reports/
+*/__snapshots__/
+.codeana-dry-run/
+.codeana-payloads/
+
+# =========================
+# Database files
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================
+# Binary / large media assets
+# =========================
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.ico
+*.webp
+*.svg
+*.psd
+*.mp4
+*.mov
+*.mp3
+*.wav
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+*.pdf
+*.woff
+*.woff2
+*.eot
+*.ttf
+*.otf
+
+# =========================
+# Go / Rust
+# =========================
+vendor/
+pkg/
+*.exe
+*.dll
+*.dylib
+
+# =========================
+# .NET
+# =========================
+[Bb]in/
+[Oo]bj/
+packages/
+*.nupkg
+
+# =========================
+# Mobile (iOS / Android)
+# =========================
+Pods/
+DerivedData/
+*.apk
+*.aab
+*.ipa
+
+# =========================
+# Misc caches
+# =========================
+logs/
+*.log
+.debug/
+.direnv/
+.vercel/
+.netlify/
+.serverless/
+.sass-cache/

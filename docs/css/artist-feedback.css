@@ -30,12 +30,6 @@
   height: var(--hero-info-size-reduced);
   /* Reduce opacity for less prominence */
   opacity: 0.85;
-  /* Override display: none from components.css */
-  display: flex;
-  /* Fixed positioning relative to viewport */
-  position: fixed;
-  right: 24px;
-  bottom: 88px;
 }
 
 .section-hero .hero-show-info .hero-show-info__icon {

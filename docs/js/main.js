@@ -2577,7 +2577,6 @@ import { initI18n, getI18n } from './i18n.js';
       initBackToTop();           // Back to top button
 
       // Mobile UX enhancements
-      initMobileBottomNav();        // Bottom navigation bar
       enhanceFavoritesWithHaptics(); // Haptic feedback for favorites
 
       // Hero card functionality
