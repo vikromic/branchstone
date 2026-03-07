@@ -368,10 +368,7 @@
   border-radius: var(--radius-lg);
   background: var(--bg-elevated);
   /* Enhanced multi-layer shadow for gallery-worthy depth */
-  box-shadow:
-    0 1px 2px rgba(26, 24, 22, 0.04),
-    0 4px 8px rgba(26, 24, 22, 0.08),
-    0 12px 24px rgba(26, 24, 22, 0.10);
+  box-shadow: 0 2px 6px rgba(26, 24, 22, 0.10), 0 4px 12px rgba(26, 24, 22, 0.08);
   transition:
     transform var(--duration-normal) var(--ease-spring),
     box-shadow var(--duration-normal) var(--ease-smooth);
@@ -768,7 +765,7 @@
 .form__input::placeholder,
 .form__textarea::placeholder {
   color: var(--text-tertiary);
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .form__input:focus,
@@ -1738,29 +1735,17 @@
   background: rgba(0, 0, 0, 0.85);
 }
 
-/* Mobile - always show inquiry button with adequate touch target */
+/* Mobile - card tap opens the detail modal, so inquiry stays in the modal */
 @media (max-width: 767px) {
   .artwork-card__inquire {
-    opacity: 1;
-    transform: scale(1);
-    width: 48px;
-    height: 48px;
-    top: 0.5rem;
-    right: 3.5rem; /* Adjusted for mobile spacing */
-  }
-
-  /* Ensure SVG icon is visible on mobile with explicit white color */
-  .artwork-card__inquire-icon {
-    color: #ffffff;
-    stroke: #ffffff;
+    display: none;
   }
 }
 
 /* Disable inquiry button for sold items */
 .artwork-card--sold .artwork-card__inquire,
 .artwork-card:has(.artwork-card__badge--sold) .artwork-card__inquire {
-  cursor: default;
-  pointer-events: none;
+  display: none;
 }
 
 
@@ -2621,8 +2606,7 @@
 /* Disable favorite button on sold artwork cards */
 .artwork-card--sold .artwork-card__favorite,
 .artwork-card:has(.artwork-card__badge--sold) .artwork-card__favorite {
-  pointer-events: none;
-  cursor: not-allowed;
+  display: none;
 }
 
 /* ==========================================================================
@@ -3856,29 +3840,29 @@ details[open] summary {
 .collectors-choice-indicator {
   position: absolute;
   top: var(--space-3);
-  right: var(--space-3);
+  left: var(--space-3);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   background: linear-gradient(
     135deg,
-    rgba(212, 175, 55, 0.95) 0%,
-    rgba(184, 134, 11, 0.92) 100%
+    rgba(212, 175, 55, 0.86) 0%,
+    rgba(184, 134, 11, 0.82) 100%
   );
   border-radius: var(--radius-full);
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   box-shadow:
-    0 4px 12px rgba(212, 175, 55, 0.4),
-    0 2px 4px rgba(212, 175, 55, 0.2);
-  animation: collectorsChoicePulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    0 4px 10px rgba(212, 175, 55, 0.18),
+    0 1px 2px rgba(212, 175, 55, 0.12);
+  animation: none;
 }
 
 .collectors-choice-indicator::before {
   content: '★';
   color: white;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -4434,7 +4418,7 @@ details[open] summary {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface-secondary);
+  background: var(--bg-elevated);
   border: 1px solid var(--border-default);
   border-radius: 50%;
   cursor: pointer;

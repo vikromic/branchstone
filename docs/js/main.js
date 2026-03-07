@@ -33,6 +33,7 @@ const SCROLL_THRESHOLD_STICKY = SCROLL_THRESHOLDS.STICKY;
 const SCROLL_THRESHOLD_BOTTOM_NAV = SCROLL_THRESHOLDS.BOTTOM_NAV;
 const SCROLL_THRESHOLD_BOTTOM_NAV_HIDE = SCROLL_THRESHOLDS.BOTTOM_NAV_HIDE;
 const SWIPE_THRESHOLD_CLOSE = SWIPE.CLOSE_THRESHOLD;
+const GALLERY_CONTAINER_SELECTOR = '[data-gallery-groups]';
 
 // Import feature modules
 import { FavoritesManager } from './favorites-manager.js';
@@ -144,9 +145,9 @@ import { initI18n, getI18n } from './i18n.js';
 
   const initGalleryData = async () => {
     // Only run on gallery page
-    const container = document.querySelector('.bento-grid');
+    const container = document.querySelector(GALLERY_CONTAINER_SELECTOR);
     if (!container) {
-      console.log('[Gallery] Bento grid not found, skipping gallery initialization');
+      console.log('[Gallery] Gallery container not found, skipping gallery initialization');
       return null;
     }
 
@@ -191,7 +192,7 @@ import { initI18n, getI18n } from './i18n.js';
    * Provides graceful fallback when gallery fails to load
    */
   const showGalleryError = (message, i18nKey) => {
-    const container = document.querySelector('.bento-grid');
+    const container = document.querySelector(GALLERY_CONTAINER_SELECTOR);
     if (!container) return;
 
     const errorDiv = document.createElement('div');
@@ -275,144 +276,157 @@ import { initI18n, getI18n } from './i18n.js';
   };
 
   /**
-   * Update gallery header based on selected collection
+   * Get translated gallery copy with safe fallback
    */
-  const updateGalleryHeader = (collectionName) => {
+  const getGalleryText = (key, fallback) => {
+    const i18n = getI18n();
+    if (!i18n) return fallback;
+    return i18n.t(key, fallback) || fallback;
+  };
+
+  /**
+   * Resolve collection-specific copy for the current language
+   */
+  const getCollectionContextCopy = (collectionName) => {
+    if (!galleryManagerInstance || !collectionName || collectionName === 'all') {
+      return null;
+    }
+
+    const metadata = galleryManagerInstance.getCollectionMetadata(collectionName);
+    const slug = galleryManagerInstance.collectionToSlug(collectionName);
+
+    return {
+      name: getGalleryText(`gallery.collections.${slug}.name`, metadata.name || collectionName),
+      description: getGalleryText(`gallery.collections.${slug}.description`, metadata.description || '')
+    };
+  };
+
+  /**
+   * Format availability summary for the active collection
+   */
+  const formatCollectionSummary = (stats) => {
+    const currentLanguage = getI18n()?.currentLanguage || 'en';
+
+    if (currentLanguage === 'uk') {
+      return `Показано ${stats.available} доступних / ${stats.sold} зібраних`;
+    }
+
+    return `Showing ${stats.available} available / ${stats.sold} collected`;
+  };
+
+  /**
+   * Message shown when a collection only contains sold works
+   */
+  const getSoldOnlyMessage = () => {
+    const currentLanguage = getI18n()?.currentLanguage || 'en';
+    return currentLanguage === 'uk'
+      ? 'Зараз у цій колекції немає доступних робіт.'
+      : 'No available pieces in this collection right now.';
+  };
+
+  /**
+   * Update gallery hero copy
+   * Keep the hero generic so collection context lives near the filters.
+   */
+  const updateGalleryHeader = () => {
     const titleElement = document.getElementById('gallery-title');
     const subtitleElement = document.querySelector('.gallery-hero .subheading');
 
     if (!titleElement || !subtitleElement) return;
 
-    if (!collectionName || collectionName === 'all') {
-      // Reset to default - use i18n translations to preserve language
-      const i18n = getI18n();
-      titleElement.textContent = i18n.t('gallery.title', 'The Works');
-      subtitleElement.textContent = i18n.t('gallery.subtitle', 'Nature inspired soul art. Each piece is meticulously crafted by hand, creating timeless works that blend traditional craft with modern design.');
-    } else {
-      // Get collection metadata from gallery manager
-      if (galleryManagerInstance) {
-        const metadata = galleryManagerInstance.getCollectionMetadata(collectionName);
-        titleElement.textContent = metadata.name;
-        subtitleElement.textContent = metadata.description || '';
-      } else {
-        // Fallback if metadata not available
-        titleElement.textContent = collectionName;
-        subtitleElement.textContent = '';
-      }
-    }
+    titleElement.textContent = getGalleryText('gallery.title', 'The Works');
+    subtitleElement.textContent = getGalleryText('gallery.subtitle', 'Nature inspired soul art. Each piece is meticulously crafted by hand, creating timeless works that blend traditional craft with modern design.');
   };
 
   /**
-   * Update collection description (mobile-only feature)
-   * Shows/hides collection description with expand/collapse functionality
-   *
-   * @param {string|null} collectionName - Collection name to display description for, or null/'all' to hide
-   *
-   * @description
-   * Mobile-only UX enhancement that shows detailed collection descriptions below the filter dropdown.
-   * Features:
-   * - Auto-detects if text is long (>240 chars) and adds "Read more/Show less" toggle
-   * - Creates toggle button dynamically only when needed
-   * - Removes toggle button when switching to short descriptions or 'all' view
-   * - Only runs on mobile viewports (<=768px width)
-   *
-   * The 240-character threshold assumes ~80 chars per line on mobile, truncating at ~3 lines.
-   *
-   * @example
-   * // Show description for Nature Spirits collection
-   * updateCollectionDescription('Nature Spirits');
-   *
-   * @example
-   * // Hide description when showing all works
-   * updateCollectionDescription('all');
+   * Update the local collection context shown below the filters
    */
-  const updateCollectionDescription = (collectionName) => {
-    // Only run on mobile
-    if (window.innerWidth >= BREAKPOINTS.MOBILE) return;
-
+  const updateCollectionContext = (collectionName) => {
+    const contextSection = document.getElementById('collection-context');
+    const desktopTitle = document.getElementById('collection-context-title');
+    const desktopSummary = document.getElementById('collection-context-summary');
+    const desktopDescription = document.getElementById('collection-context-description');
     const descriptionContainer = document.getElementById('collection-description');
     const descriptionText = document.getElementById('collection-description-text');
+    const existingToggle = descriptionContainer?.querySelector('.collection-description__toggle');
 
-    if (!descriptionContainer || !descriptionText) return;
+    if (!contextSection || !desktopTitle || !desktopSummary || !desktopDescription || !descriptionContainer || !descriptionText) {
+      return;
+    }
+
+    if (existingToggle) {
+      existingToggle.remove();
+    }
 
     if (!collectionName || collectionName === 'all') {
-      // Hide description when showing all works
+      contextSection.hidden = true;
       descriptionContainer.classList.remove('is-visible');
       descriptionText.textContent = '';
       descriptionText.classList.add('is-collapsed');
       descriptionText.classList.remove('is-expanded');
-      // Remove toggle button if present
-      const existingToggle = descriptionContainer.querySelector('.collection-description__toggle');
-      if (existingToggle) existingToggle.remove();
-    } else {
-      // Show description for specific collection
-      if (galleryManagerInstance) {
-        const metadata = galleryManagerInstance.getCollectionMetadata(collectionName);
-        const description = metadata.description || '';
-
-        if (description) {
-          // Set text content
-          descriptionText.textContent = description;
-
-          // Show container
-          descriptionContainer.classList.add('is-visible');
-
-          // Check if text is long enough to need truncation (~3 lines check)
-          // Rough estimate: ~80 chars per line on mobile
-          const needsTruncation = description.length > TEXT.MOBILE_DESCRIPTION_TRUNCATE;
-
-          if (needsTruncation) {
-            // Add collapsed class and toggle button
-            descriptionText.classList.add('is-collapsed');
-            descriptionText.classList.remove('is-expanded');
-
-            // Remove existing toggle if present
-            const existingToggle = descriptionContainer.querySelector('.collection-description__toggle');
-            if (existingToggle) existingToggle.remove();
-
-            // Create toggle button
-            const toggleButton = document.createElement('button');
-            toggleButton.className = 'collection-description__toggle';
-            toggleButton.textContent = ' Read more';
-            toggleButton.setAttribute('type', 'button');
-            toggleButton.setAttribute('aria-expanded', 'false');
-            toggleButton.setAttribute('aria-label', 'Read more about this collection');
-
-            // Toggle handler
-            toggleButton.addEventListener('click', (e) => {
-              e.preventDefault();
-              const isExpanded = descriptionText.classList.contains('is-expanded');
-
-              if (isExpanded) {
-                // Collapse
-                descriptionText.classList.remove('is-expanded');
-                descriptionText.classList.add('is-collapsed');
-                toggleButton.textContent = ' Read more';
-                toggleButton.setAttribute('aria-expanded', 'false');
-                toggleButton.setAttribute('aria-label', 'Read more about this collection');
-              } else {
-                // Expand
-                descriptionText.classList.remove('is-collapsed');
-                descriptionText.classList.add('is-expanded');
-                toggleButton.textContent = ' Show less';
-                toggleButton.setAttribute('aria-expanded', 'true');
-                toggleButton.setAttribute('aria-label', 'Show less about this collection');
-              }
-            });
-
-            // Append toggle button inline after the text
-            descriptionContainer.appendChild(toggleButton);
-          } else {
-            // Short text, no toggle needed
-            descriptionText.classList.remove('is-collapsed');
-            descriptionText.classList.add('is-expanded');
-          }
-        } else {
-          // No description available
-          descriptionContainer.classList.remove('is-visible');
-        }
-      }
+      desktopTitle.textContent = '';
+      desktopSummary.textContent = '';
+      desktopDescription.textContent = '';
+      return;
     }
+
+    const copy = getCollectionContextCopy(collectionName);
+    const stats = galleryManagerInstance?.getCollectionStats(collectionName) || { available: 0, sold: 0 };
+
+    if (!copy || !copy.description) {
+      contextSection.hidden = true;
+      descriptionContainer.classList.remove('is-visible');
+      return;
+    }
+
+    contextSection.hidden = false;
+    desktopTitle.textContent = copy.name;
+    desktopSummary.textContent = formatCollectionSummary(stats);
+    desktopDescription.textContent = copy.description;
+
+    descriptionText.textContent = copy.description;
+    descriptionContainer.classList.add('is-visible');
+
+    const needsTruncation = copy.description.length > TEXT.MOBILE_DESCRIPTION_TRUNCATE;
+
+    if (!needsTruncation) {
+      descriptionText.classList.remove('is-collapsed');
+      descriptionText.classList.add('is-expanded');
+      return;
+    }
+
+    descriptionText.classList.add('is-collapsed');
+    descriptionText.classList.remove('is-expanded');
+
+    const currentLanguage = getI18n()?.currentLanguage || 'en';
+    const collapsedText = currentLanguage === 'uk' ? ' Читати далі' : ' Read more';
+    const expandedText = currentLanguage === 'uk' ? ' Показати менше' : ' Show less';
+    const collapsedLabel = currentLanguage === 'uk'
+      ? 'Читати більше про цю колекцію'
+      : 'Read more about this collection';
+    const expandedLabel = currentLanguage === 'uk'
+      ? 'Показати менше про цю колекцію'
+      : 'Show less about this collection';
+
+    const toggleButton = document.createElement('button');
+    toggleButton.className = 'collection-description__toggle';
+    toggleButton.textContent = collapsedText;
+    toggleButton.setAttribute('type', 'button');
+    toggleButton.setAttribute('aria-expanded', 'false');
+    toggleButton.setAttribute('aria-label', collapsedLabel);
+
+    toggleButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isExpanded = descriptionText.classList.contains('is-expanded');
+
+      descriptionText.classList.toggle('is-expanded', !isExpanded);
+      descriptionText.classList.toggle('is-collapsed', isExpanded);
+      toggleButton.textContent = isExpanded ? collapsedText : expandedText;
+      toggleButton.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
+      toggleButton.setAttribute('aria-label', isExpanded ? collapsedLabel : expandedLabel);
+    });
+
+    descriptionContainer.appendChild(toggleButton);
   };
 
   /**
@@ -427,6 +441,75 @@ import { initI18n, getI18n } from './i18n.js';
     }
 
     return false;
+  };
+
+  /**
+   * Keep the active filter chip visible inside horizontal filter rows
+   */
+  const scrollActiveFilterIntoView = () => {
+    const activeButton = document.querySelector('.filter-controls [data-filter].is-active');
+    const filterControls = document.querySelector('.filter-controls');
+
+    if (!activeButton || !filterControls) return;
+    if (filterControls.scrollWidth <= filterControls.clientWidth) return;
+
+    requestAnimationFrame(() => {
+      activeButton.scrollIntoView({
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    });
+  };
+
+  /**
+   * Apply collapsed / expanded state to the collected works archive
+   */
+  const setArchiveExpanded = (expanded) => {
+    const archiveSection = document.querySelector('[data-gallery-archive]');
+    const archiveToggle = archiveSection?.querySelector('[data-gallery-archive-toggle]');
+    const archiveItems = archiveSection?.querySelector('[data-gallery-archive-items]');
+    const archiveIcon = archiveSection?.querySelector('.gallery-archive__toggle-icon');
+
+    if (!archiveSection || !archiveToggle || !archiveItems) return;
+
+    archiveToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    archiveItems.hidden = !expanded;
+    archiveSection.classList.toggle('is-expanded', expanded);
+
+    if (archiveIcon) {
+      archiveIcon.textContent = expanded ? '−' : '+';
+    }
+  };
+
+  /**
+   * Update available/archive visibility based on the active collection
+   */
+  const updateGallerySectionPresentation = (collectionName) => {
+    if (!galleryManagerInstance) return;
+
+    const stats = galleryManagerInstance.getCollectionStats(collectionName);
+    const availableSection = document.querySelector('[data-gallery-group="available"]');
+    const archiveSection = document.querySelector('[data-gallery-archive]');
+    const archiveToggleLabel = archiveSection?.querySelector('[data-gallery-archive-label]');
+    const archiveNote = archiveSection?.querySelector('[data-gallery-archive-note]');
+
+    if (availableSection) {
+      availableSection.hidden = stats.available === 0;
+    }
+
+    if (!archiveSection || !archiveToggleLabel || !archiveNote) return;
+
+    archiveSection.hidden = stats.sold === 0;
+    if (stats.sold === 0) return;
+
+    archiveToggleLabel.textContent = `${getGalleryText('gallery.collectedWorks', 'Collected Works')} (${stats.sold})`;
+
+    const soldOnlyState = stats.available === 0 && stats.sold > 0;
+    archiveNote.hidden = !soldOnlyState;
+    archiveNote.textContent = soldOnlyState ? getSoldOnlyMessage() : '';
+
+    setArchiveExpanded(soldOnlyState);
   };
 
   /**
@@ -480,7 +563,9 @@ import { initI18n, getI18n } from './i18n.js';
     // Note: Removed isGalleryFiltering debounce - it was blocking clicks for 1750ms
     // which made the UI feel unresponsive. Clicks now work immediately.
 
-    const artworkCards = document.querySelectorAll('[data-collection]');
+    const artworkCards = document.querySelectorAll('.artwork-card[data-collection]');
+    const collectionName = filter === 'all' ? 'all' :
+      (galleryManagerInstance?.slugToCollection(filter) || filter);
 
     // Get animation duration from CSS custom properties with fallbacks from constants
     const rootStyles = getComputedStyle(document.documentElement);
@@ -526,22 +611,21 @@ import { initI18n, getI18n } from './i18n.js';
       }
     });
 
-    // Update persistence and header if requested
-    if (updatePersistence) {
-      // Convert filter slug back to collection name
-      const collectionName = filter === 'all' ? 'all' :
-        (galleryManagerInstance?.slugToCollection(filter) || filter);
+    updateGalleryHeader();
+    updateCollectionContext(collectionName);
+    updateGallerySectionPresentation(collectionName);
 
+    // Update persistence if requested
+    if (updatePersistence) {
       saveCollectionToStorage(collectionName);
       updateURLWithCollection(collectionName);
-      updateGalleryHeader(collectionName);
-      updateCollectionDescription(collectionName);
     }
 
   };
 
   // Flag to ensure desktop filter handler is attached only once
   let desktopFilterHandlerAttached = false;
+  let galleryArchiveToggleAttached = false;
 
   // Update active button state (shared helper)
   const updateActiveFilterButton = (activeFilter) => {
@@ -561,10 +645,10 @@ import { initI18n, getI18n } from './i18n.js';
     document.querySelectorAll('[data-mobile-filter]').forEach(button => {
       const buttonFilter = button.getAttribute('data-filter');
       if (buttonFilter === activeFilter) {
-        button.classList.add('mobile-filter-chip--active');
+        button.classList.add('is-active');
         button.setAttribute('aria-pressed', 'true');
       } else {
-        button.classList.remove('mobile-filter-chip--active');
+        button.classList.remove('is-active');
         button.setAttribute('aria-pressed', 'false');
       }
     });
@@ -590,11 +674,13 @@ import { initI18n, getI18n } from './i18n.js';
         }
       }
     }
+
+    scrollActiveFilterIntoView();
   };
 
   const initGalleryFiltering = () => {
     const filterButtons = document.querySelectorAll('.filter-controls [data-filter]');
-    const artworkCards = document.querySelectorAll('[data-collection]');
+    const artworkCards = document.querySelectorAll('.artwork-card[data-collection]');
 
     if (filterButtons.length === 0 || artworkCards.length === 0) return;
 
@@ -620,11 +706,19 @@ import { initI18n, getI18n } from './i18n.js';
 
     console.log('[Gallery] Applying initial filter:', initialFilter, '(from collection:', initialCollection + ')');
 
-    // Apply initial filter and update header
-    updateGalleryHeader(initialCollection);
-    updateCollectionDescription(initialCollection);
     filterGallery(initialFilter, false); // false = don't update persistence (already loaded from it)
     updateActiveFilterButton(initialFilter);
+
+    if (!galleryArchiveToggleAttached) {
+      document.addEventListener('click', (e) => {
+        const toggle = e.target.closest('[data-gallery-archive-toggle]');
+        if (!toggle) return;
+
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        setArchiveExpanded(!expanded);
+      });
+      galleryArchiveToggleAttached = true;
+    }
   };
 
   // ========================================
@@ -1419,7 +1513,7 @@ import { initI18n, getI18n } from './i18n.js';
       let activeFilterName = 'All';
       const currentMobileFilterButtons = document.querySelectorAll('[data-mobile-filter]');
       currentMobileFilterButtons.forEach(button => {
-        if (button.classList.contains('mobile-filter-chip--active')) {
+        if (button.classList.contains('is-active')) {
           const filter = button.getAttribute('data-filter');
           if (filter !== 'all') {
             activeFilterName = button.textContent.trim();
@@ -1446,10 +1540,10 @@ import { initI18n, getI18n } from './i18n.js';
       const currentMobileFilterButtons = document.querySelectorAll('[data-mobile-filter]');
       currentMobileFilterButtons.forEach(button => {
         if (button.getAttribute('data-filter') === activeFilter) {
-          button.classList.add('mobile-filter-chip--active');
+          button.classList.add('is-active');
           button.setAttribute('aria-pressed', 'true');
         } else {
-          button.classList.remove('mobile-filter-chip--active');
+          button.classList.remove('is-active');
           button.setAttribute('aria-pressed', 'false');
         }
       });
@@ -1959,7 +2053,7 @@ import { initI18n, getI18n } from './i18n.js';
 
   const initArtworkModal = () => {
     // Only run on gallery page
-    const container = document.querySelector('.bento-grid');
+    const container = document.querySelector(GALLERY_CONTAINER_SELECTOR);
     if (!container) {
       console.log('[ArtworkModal] Gallery not found, skipping initialization');
       return;

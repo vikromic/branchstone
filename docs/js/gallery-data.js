@@ -19,7 +19,7 @@
  */
 
 import { sanitizeText } from './security.js';
-import { GALLERY, ARTWORK_CARD } from './constants.js';
+import { GALLERY, ARTWORK_CARD, BREAKPOINTS } from './constants.js';
 import { getI18n } from './i18n.js';
 import { slugify, createSVG } from './utils.js';
 
@@ -36,6 +36,17 @@ export class GalleryDataManager {
   getCurrentLanguage() {
     const i18n = getI18n();
     return i18n ? i18n.currentLanguage : 'en';
+  }
+
+  /**
+   * Translate gallery copy with a safe fallback
+   */
+  t(key, fallback) {
+    const i18n = getI18n();
+    if (!i18n) return fallback;
+
+    const translated = i18n.t(key, fallback);
+    return translated || fallback;
   }
 
   /**
@@ -112,6 +123,30 @@ export class GalleryDataManager {
     return this.collectionsMetadata.get(collectionName) || {
       name: collectionName,
       description: ''
+    };
+  }
+
+  /**
+   * Get artworks for a specific collection or all artworks
+   */
+  getArtworksForCollection(collectionName = 'all') {
+    if (!collectionName || collectionName === 'all') {
+      return [...this.artworks];
+    }
+
+    return this.artworks.filter(artwork => artwork.collection === collectionName);
+  }
+
+  /**
+   * Get available / sold counts for the active collection
+   */
+  getCollectionStats(collectionName = 'all') {
+    const artworks = this.getArtworksForCollection(collectionName);
+
+    return {
+      total: artworks.length,
+      available: artworks.filter(artwork => !artwork.sold).length,
+      sold: artworks.filter(artwork => artwork.sold).length
     };
   }
 
@@ -369,7 +404,7 @@ export class GalleryDataManager {
     if (artwork.sold) {
       const soldBadge = document.createElement('span');
       soldBadge.className = 'artwork-card__badge artwork-card__badge--sold';
-      soldBadge.textContent = 'Sold';
+      soldBadge.textContent = this.t('gallery.soldLabel', 'Sold');
       article.appendChild(soldBadge);
     }
 
@@ -389,16 +424,20 @@ export class GalleryDataManager {
    * @param {Object} artwork - The artwork data
    * @returns {HTMLImageElement} The image element
    */
-  createArtworkImage(artwork) {
+  createArtworkImage(artwork, priorityIndex, article) {
     const img = document.createElement('img');
     const imagePath = artwork.main_image.startsWith('img/')
       ? artwork.main_image
       : `img/${artwork.main_image}`;
 
+    const eagerLoadCount = window.innerWidth < BREAKPOINTS.MOBILE ? 3 : 6;
+    const shouldEagerLoad = priorityIndex > -1 && priorityIndex < eagerLoadCount;
+
     img.src = imagePath;
     img.alt = sanitizeText(artwork.name);
     img.className = 'artwork-card__image';
-    img.loading = ARTWORK_CARD.IMAGE_LOADING;
+    img.loading = shouldEagerLoad ? 'eager' : ARTWORK_CARD.IMAGE_LOADING;
+    img.fetchPriority = priorityIndex > -1 && priorityIndex < 2 ? 'high' : 'auto';
 
     // Set loading state
     img.setAttribute('data-loading', '');
@@ -407,11 +446,13 @@ export class GalleryDataManager {
     img.addEventListener('load', () => {
       img.removeAttribute('data-loading');
       img.classList.add('loaded');
+      article?.classList.remove('is-loading');
     });
 
     // Error handler
     img.addEventListener('error', () => {
       img.removeAttribute('data-loading');
+      article?.classList.remove('is-loading');
       console.error(`Failed to load image: ${imagePath}`);
     });
 
@@ -498,7 +539,7 @@ export class GalleryDataManager {
    * @param {number} index - The index in the artworks array
    * @returns {HTMLElement} The created article element
    */
-  createArtworkCard(artwork, index) {
+  createArtworkCard(artwork, index, priorityIndex = -1) {
     const article = document.createElement('article');
     const sizeClass = this.getSizeClass(artwork);
     const collectionSlug = this.collectionToSlug(artwork.collection);
@@ -509,7 +550,9 @@ export class GalleryDataManager {
     if (artwork.sold) {
       article.classList.add('artwork-card--sold');
     }
+    article.classList.add('is-loading');
 
+    article.setAttribute('data-artwork-id', artworkId);
     article.setAttribute('data-size', sizeClass);
     article.setAttribute('data-collection', collectionSlug);
     if (artwork.prints) {
@@ -540,13 +583,15 @@ export class GalleryDataManager {
     this.createBadges(article, artwork);
 
     // Create and append main image (extracted method)
-    const img = this.createArtworkImage(artwork);
+    const img = this.createArtworkImage(artwork, priorityIndex, article);
     article.appendChild(img);
 
-    // Create and append action buttons (extracted method)
-    const { inquireBtn, favoriteBtn } = this.createActionButtons(artworkId, artwork.name);
-    article.appendChild(inquireBtn);
-    article.appendChild(favoriteBtn);
+    // Create and append action buttons for available works only
+    if (!artwork.sold) {
+      const { inquireBtn, favoriteBtn } = this.createActionButtons(artworkId, artwork.name);
+      article.appendChild(inquireBtn);
+      article.appendChild(favoriteBtn);
+    }
 
     // Create and append content section (extracted method)
     const content = this.createCardContent(artwork);
@@ -558,7 +603,7 @@ export class GalleryDataManager {
   /**
    * Render all artworks to the gallery grid
    */
-  renderGallery(containerSelector = '.bento-grid') {
+  renderGallery(containerSelector = '[data-gallery-groups]') {
     console.log('[GalleryData] Rendering gallery...');
     const container = document.querySelector(containerSelector);
     if (!container) {
@@ -575,35 +620,79 @@ export class GalleryDataManager {
     const availableWorks = this.artworks.filter(art => !art.sold);
     const soldWorks = this.artworks.filter(art => art.sold);
 
-    // Render available works section
+    const initialCollection = new URLSearchParams(window.location.search).get('collection') || 'all';
+    const initialVisibleWorks = this.getArtworksForCollection(initialCollection);
+    const prioritySource = initialVisibleWorks.length > 0 ? initialVisibleWorks : this.artworks;
+    const priorityMap = new Map(
+      prioritySource.map((artwork, index) => [`artwork-${this.collectionToSlug(artwork.name)}`, index])
+    );
+
     if (availableWorks.length > 0) {
-      const availableLabel = this.createSectionLabel('Available Works');
-      container.appendChild(availableLabel);
+      const availableSection = document.createElement('section');
+      availableSection.className = 'gallery-group gallery-group--available';
+      availableSection.setAttribute('data-gallery-group', 'available');
+
+      const availableLabel = this.createSectionLabel(this.t('gallery.availableWorks', 'Available Works'));
+      availableSection.appendChild(availableLabel);
+
+      const availableGrid = document.createElement('div');
+      availableGrid.className = 'bento-grid gallery-group__grid';
 
       availableWorks.forEach((artwork, index) => {
-        const card = this.createArtworkCard(artwork, index);
-        container.appendChild(card);
+        const artworkId = `artwork-${this.collectionToSlug(artwork.name)}`;
+        const card = this.createArtworkCard(artwork, index, priorityMap.get(artworkId) ?? -1);
+        availableGrid.appendChild(card);
       });
+
+      availableSection.appendChild(availableGrid);
+      container.appendChild(availableSection);
     }
 
-    // Add divider if both sections exist
-    if (availableWorks.length > 0 && soldWorks.length > 0) {
-      const divider = this.createSectionDivider('Collected Works');
-      container.appendChild(divider);
-    }
-
-    // Render sold works section
     if (soldWorks.length > 0) {
-      // Only add label if no divider was added (i.e., no available works)
-      if (availableWorks.length === 0) {
-        const soldLabel = this.createSectionLabel('Collected Works');
-        container.appendChild(soldLabel);
-      }
+      const archiveSection = document.createElement('section');
+      archiveSection.className = 'gallery-archive';
+      archiveSection.setAttribute('data-gallery-archive', '');
+
+      const archiveNote = document.createElement('p');
+      archiveNote.className = 'gallery-archive__note';
+      archiveNote.setAttribute('data-gallery-archive-note', '');
+      archiveNote.hidden = true;
+      archiveSection.appendChild(archiveNote);
+
+      const archiveToggle = document.createElement('button');
+      archiveToggle.className = 'gallery-archive__toggle';
+      archiveToggle.setAttribute('type', 'button');
+      archiveToggle.setAttribute('data-gallery-archive-toggle', '');
+      archiveToggle.setAttribute('aria-expanded', 'false');
+      archiveToggle.setAttribute('aria-controls', 'gallery-archive-items');
+
+      const archiveToggleLabel = document.createElement('span');
+      archiveToggleLabel.className = 'gallery-archive__toggle-label';
+      archiveToggleLabel.setAttribute('data-gallery-archive-label', '');
+      archiveToggleLabel.textContent = `${this.t('gallery.collectedWorks', 'Collected Works')} (${soldWorks.length})`;
+
+      const archiveToggleIcon = document.createElement('span');
+      archiveToggleIcon.className = 'gallery-archive__toggle-icon';
+      archiveToggleIcon.setAttribute('aria-hidden', 'true');
+      archiveToggleIcon.textContent = '+';
+
+      archiveToggle.appendChild(archiveToggleLabel);
+      archiveToggle.appendChild(archiveToggleIcon);
+      archiveSection.appendChild(archiveToggle);
+
+      const soldGrid = document.createElement('div');
+      soldGrid.className = 'bento-grid gallery-archive__grid';
+      soldGrid.id = 'gallery-archive-items';
+      soldGrid.setAttribute('data-gallery-archive-items', '');
 
       soldWorks.forEach((artwork, index) => {
-        const card = this.createArtworkCard(artwork, availableWorks.length + index);
-        container.appendChild(card);
+        const artworkId = `artwork-${this.collectionToSlug(artwork.name)}`;
+        const card = this.createArtworkCard(artwork, index, priorityMap.get(artworkId) ?? -1);
+        soldGrid.appendChild(card);
       });
+
+      archiveSection.appendChild(soldGrid);
+      container.appendChild(archiveSection);
     }
 
     console.log('[GalleryData] Gallery rendered successfully');
@@ -691,7 +780,7 @@ export class GalleryDataManager {
     const button = document.createElement('button');
     const slug = this.collectionToSlug(collection);
 
-    button.className = isActive ? 'mobile-filter-chip mobile-filter-chip--active' : 'mobile-filter-chip';
+    button.className = isActive ? 'mobile-filter-chip is-active' : 'mobile-filter-chip';
     button.setAttribute('data-filter', slug);
     button.setAttribute('data-mobile-filter', '');
     button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
@@ -764,7 +853,7 @@ export class GalleryDataManager {
       console.log('[GalleryData] Language changed, reloading artworks...');
 
       // Show loading state
-      const container = document.querySelector('.bento-grid');
+      const container = document.querySelector('[data-gallery-groups]');
       if (container) {
         const loadingMsg = document.createElement('p');
         loadingMsg.className = 'gallery-loading';
@@ -787,7 +876,7 @@ export class GalleryDataManager {
       console.error('[GalleryData] Error reloading gallery for language change:', error);
 
       // Show error state
-      const container = document.querySelector('.bento-grid');
+      const container = document.querySelector('[data-gallery-groups]');
       if (container) {
         const errorMsg = document.createElement('p');
         errorMsg.className = 'gallery-error';
@@ -816,7 +905,7 @@ export class GalleryDataManager {
   async init() {
     try {
       // Show loading state
-      const container = document.querySelector('.bento-grid');
+      const container = document.querySelector('[data-gallery-groups]');
       if (container) {
         const loadingMsg = document.createElement('p');
         loadingMsg.className = 'gallery-loading';
@@ -842,7 +931,7 @@ export class GalleryDataManager {
       console.error('Failed to initialize gallery:', error);
 
       // Show error state
-      const container = document.querySelector('.bento-grid');
+      const container = document.querySelector('[data-gallery-groups]');
       if (container) {
         const errorMsg = document.createElement('p');
         errorMsg.className = 'gallery-error';

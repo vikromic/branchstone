@@ -237,13 +237,6 @@
             </div>
         </section>
 
-        <!-- Collection Description (Mobile Only) -->
-        <div class="collection-description" id="collection-description" aria-live="polite">
-            <p class="collection-description__text collapsed" id="collection-description-text">
-                <!-- Description text will be injected by JavaScript -->
-            </p>
-        </div>
-
         <!-- Filter Bar -->
         <section class="filter-bar" aria-label="Filter gallery by collection">
             <div class="container">
@@ -289,11 +282,32 @@
             </div>
         </section>
 
+        <section class="collection-context" id="collection-context" hidden aria-live="polite">
+            <div class="container">
+                <div class="collection-context__desktop">
+                    <p class="collection-context__eyebrow" data-i18n="gallery.collectionFocus">Collection Focus</p>
+                    <div class="collection-context__header">
+                        <div>
+                            <h2 class="collection-context__title" id="collection-context-title"></h2>
+                            <p class="collection-context__summary" id="collection-context-summary"></p>
+                        </div>
+                    </div>
+                    <p class="collection-context__description" id="collection-context-description"></p>
+                </div>
+
+                <div class="collection-description" id="collection-description">
+                    <p class="collection-description__text is-collapsed" id="collection-description-text">
+                        <!-- Description text will be injected by JavaScript -->
+                    </p>
+                </div>
+            </div>
+        </section>
+
         <!-- Gallery Grid -->
         <section class="gallery-section" aria-label="Artwork gallery">
             <div class="container">
-                <div class="bento-grid">
-                    <!-- Artwork cards will be populated dynamically from artworks.json -->
+                <div class="gallery-groups" data-gallery-groups>
+                    <!-- Gallery sections will be populated dynamically from artworks.json -->
                 </div>
             </div>
         </section>

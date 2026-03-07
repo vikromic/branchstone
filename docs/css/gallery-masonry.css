@@ -143,7 +143,34 @@
    ========================================================================== */
 
 .artwork-card__image[data-loading] {
-  background: var(--bg-elevated);
+  opacity: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 236, 228, 0.8) 0%,
+    rgba(255, 255, 255, 0.96) 45%,
+    rgba(232, 213, 196, 0.9) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.6s ease-in-out infinite;
+  filter: none;
+}
+
+[data-theme="dark"] .artwork-card__image[data-loading] {
+  background: linear-gradient(
+    135deg,
+    rgba(26, 24, 22, 0.88) 0%,
+    rgba(56, 43, 34, 0.96) 45%,
+    rgba(45, 31, 23, 0.9) 100%
+  );
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* Fade in after load */

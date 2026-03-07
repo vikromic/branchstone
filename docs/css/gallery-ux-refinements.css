@@ -82,7 +82,7 @@
 .filter-bar {
   padding: var(--space-3) 0;
   background: var(--bg-primary);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-default);
 }
 
 [data-theme="dark"] .filter-bar {
@@ -99,7 +99,7 @@
   font-weight: 500;
   padding: var(--space-2) var(--space-3);
   min-height: 36px;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-default);
   background: var(--bg-primary);
   color: var(--text-secondary);
   letter-spacing: 0.02em;
@@ -112,11 +112,98 @@
   color: var(--text-primary);
 }
 
+.filter-controls .tag.is-active,
 .filter-controls .tag-active {
   background: var(--accent-primary);
   border-color: var(--accent-primary);
   color: white;
   font-weight: 600;
+}
+
+/* ==========================================================================
+   GALLERY SECTION STACK
+   ========================================================================== */
+
+.gallery-groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.gallery-group,
+.gallery-archive {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.gallery-archive {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.gallery-archive__note {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.gallery-archive__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    135deg,
+    rgba(245, 236, 228, 0.72) 0%,
+    rgba(255, 255, 255, 0.92) 100%
+  );
+  color: var(--text-primary);
+  box-shadow: 0 8px 24px rgba(26, 24, 22, 0.06);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery-archive__toggle:hover {
+  border-color: var(--copper-300);
+  box-shadow: 0 12px 28px rgba(26, 24, 22, 0.08);
+}
+
+.gallery-archive__toggle:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+.gallery-archive__toggle-label {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 500;
+}
+
+.gallery-archive__toggle-icon {
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.gallery-archive__grid[hidden] {
+  display: none !important;
+}
+
+[data-theme="dark"] .gallery-archive__toggle {
+  background: linear-gradient(
+    135deg,
+    rgba(26, 24, 22, 0.92) 0%,
+    rgba(45, 31, 23, 0.88) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .gallery-archive__toggle:hover {
+  border-color: rgba(217, 173, 143, 0.35);
 }
 
 /* ==========================================================================
@@ -288,6 +375,18 @@
     gap: var(--space-3);
     row-gap: var(--space-4);
   }
+
+  .gallery-groups {
+    gap: var(--space-8);
+  }
+
+  .gallery-archive__toggle {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .gallery-archive__toggle-label {
+    font-size: var(--text-base);
+  }
 }
 
 /* ==========================================================================
@@ -337,7 +436,7 @@
 
 /* Ensure sold badge is prominent but not aggressive */
 .artwork-card__badge--sold {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(26, 24, 22, 0.75);
   color: white;
   font-size: var(--text-xs);
   font-weight: 500;
@@ -361,4 +460,3 @@
 .artwork-card__price {
   display: none !important;
 }
-
