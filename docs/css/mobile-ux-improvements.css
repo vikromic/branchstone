@@ -28,8 +28,8 @@
   --carousel-dot-spacing-vertical: 12px;
 
   /* Carousel dot colors */
-  --carousel-dot-inactive-bg: rgba(255, 255, 255, 0.35);
-  --carousel-dot-inactive-opacity: 0.45;
+  --carousel-dot-inactive-bg: rgba(26, 24, 22, 0.20);
+  --carousel-dot-inactive-opacity: 0.7;
   --carousel-dot-active-bg: var(--accent-primary);
   --carousel-dot-active-opacity: 1;
   --carousel-dot-hover-opacity: 0.8;
@@ -38,6 +38,12 @@
   /* Mobile breakpoint - standardized across all files */
   /* Strategy: Use 767px for max-width (mobile), 768px for min-width (tablet+) */
   /* This ensures no overlap: 0-767px = mobile, 768px+ = desktop */
+}
+
+/* Dark mode carousel dot colors - restore white-based values for dark backgrounds */
+[data-theme="dark"] {
+  --carousel-dot-inactive-bg: rgba(255, 255, 255, 0.35);
+  --carousel-dot-inactive-opacity: 0.45;
 }
 
 /* ==========================================================================

@@ -8,7 +8,7 @@ import { SwipeHandler } from './touch-handler.js';
 import { prefersReducedMotion } from './utils.js';
 import { BREAKPOINTS } from './constants.js';
 import { getI18n } from './i18n.js';
-import { getCarouselPageStarts, resolveCurrentPage, getNextPageStart } from './highlights-pagination.mjs';
+import { getCarouselPageStarts, resolveCurrentPage, getNextPageStart } from './highlights-pagination.js';
 
 class HighlightsManager {
   constructor() {

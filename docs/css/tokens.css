@@ -17,8 +17,8 @@
      ======================================== */
 
   /* Background Colors */
-  --bg-primary: #F5F3F0;      /* Main canvas - warm off-white */
-  --bg-secondary: #EFEBE5;    /* Subtle contrast backgrounds */
+  --bg-primary: #F8F6F3;      /* Main canvas - warm off-white */
+  --bg-secondary: #F0EBE3;    /* Subtle contrast backgrounds */
   --bg-tertiary: #FFFFFF;     /* Pure white for cards */
   --bg-elevated: #FFFFFF;     /* Elevated surfaces */
 
@@ -29,10 +29,10 @@
   --text-inverse: #FFFFFF;    /* Text on dark backgrounds */
 
   /* Accent Colors */
-  --accent-primary: #8C6347;    /* Primary accent - deeper copper for AA contrast */
-  --accent-secondary: #5B7A8F;  /* Secondary accent - slate blue */
-  --accent-tertiary: #BE9476;   /* Tertiary accent - muted copper */
-  --accent-hover: #7B5238;      /* Hover state - darker copper */
+  --accent-primary: #835A3E;    /* Primary accent - deeper copper for AA contrast */
+  --accent-secondary: #4E6A7C;  /* Secondary accent - slate blue */
+  --accent-tertiary: #BE9476;   /* Tertiary accent - muted copper. Decorative only — fails WCAG text contrast */
+  --accent-hover: #6E4830;      /* Hover state - darker copper */
 
   /* Copper Color Spectrum (9-tone professional palette) */
   --copper-50: #F5ECE4;    /* Light sand - backgrounds, subtle highlights */
@@ -60,16 +60,16 @@
 
   /* Semantic Colors */
   --success: #5A7562;   /* Success messages */
-  --warning: #C29563;   /* Warning messages */
-  --error: #A65B4F;     /* Error messages */
+  --warning: #8A6428;   /* Warning messages — meets WCAG AA text contrast */
+  --error: #9A5044;     /* Error messages */
   --success-bg: #E8F2EC;
   --success-text: #2F5B49;
   --success-border: #A7C5B4;
 
   /* Border Colors */
-  --border-subtle: #E1DBD4;   /* Very subtle borders */
-  --border-default: #C6BCAF;  /* Default border color */
-  --border-strong: #A99C8E;   /* Strong/emphasized borders */
+  --border-subtle: #C8BFB4;   /* Very subtle borders */
+  --border-default: #9A8D7E;  /* Default border color — meets WCAG 1.4.11 (3:1) */
+  --border-strong: #887A6C;   /* Strong/emphasized borders */
 
   /* Overlay & compatibility aliases for legacy component vars */
   --overlay-scrim: rgba(20, 18, 16, 0.72);
@@ -88,10 +88,10 @@
      Updated: Increased opacity for better card visibility
      ======================================== */
 
-  --shadow-sm: 0 1px 3px rgba(26, 24, 22, 0.08), 0 1px 2px rgba(26, 24, 22, 0.06);
-  --shadow-md: 0 4px 8px rgba(26, 24, 22, 0.10), 0 2px 4px rgba(26, 24, 22, 0.08);
-  --shadow-lg: 0 10px 24px rgba(26, 24, 22, 0.12), 0 4px 8px rgba(26, 24, 22, 0.08);
-  --shadow-xl: 0 20px 40px rgba(26, 24, 22, 0.15), 0 8px 16px rgba(26, 24, 22, 0.10);
+  --shadow-sm: 0 1px 3px rgba(26, 24, 22, 0.10), 0 1px 2px rgba(26, 24, 22, 0.08);
+  --shadow-md: 0 4px 8px rgba(26, 24, 22, 0.14), 0 2px 4px rgba(26, 24, 22, 0.10);
+  --shadow-lg: 0 10px 24px rgba(26, 24, 22, 0.16), 0 4px 8px rgba(26, 24, 22, 0.10);
+  --shadow-xl: 0 20px 40px rgba(26, 24, 22, 0.20), 0 8px 16px rgba(26, 24, 22, 0.14);
 
   /* ========================================
      GRADIENTS - Enhanced with multi-stop depth

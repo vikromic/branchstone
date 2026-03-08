@@ -179,7 +179,7 @@
   align-items: center;
   justify-content: center;
   background: var(--bg-elevated);
-  border: 2px solid var(--border-default);
+  border: 2px solid var(--border-strong);
   border-radius: var(--radius-full);
   cursor: pointer;
   transition: all var(--duration-normal) var(--ease-smooth);
@@ -247,7 +247,7 @@
 }
 
 .featured-carousel__dot:hover {
-  background: var(--accent-primary);
+  background-color: var(--border-strong);
   transform: scale(1.2);
 }
 
