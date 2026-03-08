@@ -65,6 +65,7 @@
 @media (max-width: 767px) {
   .collection-context {
     padding: var(--space-2) 0 var(--space-4);
+    scroll-margin-top: calc(var(--mobile-header-offset, 60px) + var(--space-4));
   }
 
   .collection-context__desktop {
@@ -93,6 +94,23 @@
     margin: 0;
     max-width: 100%;
     white-space: pre-line;
+  }
+
+  .collection-description__eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-2);
+  }
+
+  .collection-description__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2);
   }
 
   .collection-description__text.is-collapsed {
@@ -151,6 +169,14 @@
 
   [data-theme="dark"] .collection-description__text {
     color: var(--text-secondary);
+  }
+
+  [data-theme="dark"] .collection-description__eyebrow {
+    color: var(--text-tertiary);
+  }
+
+  [data-theme="dark"] .collection-description__title {
+    color: var(--text-primary);
   }
 
   [data-theme="dark"] .collection-description__toggle {

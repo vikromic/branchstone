@@ -325,6 +325,17 @@ import { initI18n, getI18n } from './i18n.js';
   };
 
   /**
+   * Keep a single source of truth for mobile sticky offsets
+   */
+  const syncMobileHeaderOffset = () => {
+    const header = document.querySelector('.header');
+    if (!header) return;
+
+    const offset = `${Math.ceil(header.getBoundingClientRect().height)}px`;
+    document.documentElement.style.setProperty('--mobile-header-offset', offset);
+  };
+
+  /**
    * Update gallery hero copy
    * Keep the hero generic so collection context lives near the filters.
    */
@@ -347,10 +358,11 @@ import { initI18n, getI18n } from './i18n.js';
     const desktopSummary = document.getElementById('collection-context-summary');
     const desktopDescription = document.getElementById('collection-context-description');
     const descriptionContainer = document.getElementById('collection-description');
+    const descriptionTitle = document.getElementById('collection-description-title');
     const descriptionText = document.getElementById('collection-description-text');
     const existingToggle = descriptionContainer?.querySelector('.collection-description__toggle');
 
-    if (!contextSection || !desktopTitle || !desktopSummary || !desktopDescription || !descriptionContainer || !descriptionText) {
+    if (!contextSection || !desktopTitle || !desktopSummary || !desktopDescription || !descriptionContainer || !descriptionTitle || !descriptionText) {
       return;
     }
 
@@ -361,6 +373,7 @@ import { initI18n, getI18n } from './i18n.js';
     if (!collectionName || collectionName === 'all') {
       contextSection.hidden = true;
       descriptionContainer.classList.remove('is-visible');
+      descriptionTitle.textContent = '';
       descriptionText.textContent = '';
       descriptionText.classList.add('is-collapsed');
       descriptionText.classList.remove('is-expanded');
@@ -384,6 +397,7 @@ import { initI18n, getI18n } from './i18n.js';
     desktopSummary.textContent = formatCollectionSummary(stats);
     desktopDescription.textContent = copy.description;
 
+    descriptionTitle.textContent = copy.name;
     descriptionText.textContent = copy.description;
     descriptionContainer.classList.add('is-visible');
 
@@ -752,6 +766,11 @@ import { initI18n, getI18n } from './i18n.js';
         }
       });
     });
+  };
+
+  const initMobileStickyGeometry = () => {
+    syncMobileHeaderOffset();
+    window.addEventListener('resize', debounce(syncMobileHeaderOffset, 100), { passive: true });
   };
 
   // ========================================
@@ -2644,6 +2663,7 @@ import { initI18n, getI18n } from './i18n.js';
       initThemeToggle();         // Theme must load first to prevent flash
       initMobileMenu();          // Mobile navigation
       initScrollAnimations();    // Scroll-based UI behaviors
+      initMobileStickyGeometry(); // Shared mobile sticky offsets
 
       // ===== PHASE 2: DATA LOADING (async, graceful degradation) =====
       // Gallery data loads artwork cards; failure shows error message but doesn't break page

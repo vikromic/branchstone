@@ -430,14 +430,14 @@ export class GalleryDataManager {
       ? artwork.main_image
       : `img/${artwork.main_image}`;
 
-    const eagerLoadCount = window.innerWidth < BREAKPOINTS.MOBILE ? 3 : 6;
+    const eagerLoadCount = window.innerWidth < BREAKPOINTS.MOBILE ? 6 : 6;
     const shouldEagerLoad = priorityIndex > -1 && priorityIndex < eagerLoadCount;
 
     img.src = imagePath;
     img.alt = sanitizeText(artwork.name);
     img.className = 'artwork-card__image';
     img.loading = shouldEagerLoad ? 'eager' : ARTWORK_CARD.IMAGE_LOADING;
-    img.fetchPriority = priorityIndex > -1 && priorityIndex < 2 ? 'high' : 'auto';
+    img.fetchPriority = priorityIndex > -1 && priorityIndex < 3 ? 'high' : 'auto';
 
     // Set loading state
     img.setAttribute('data-loading', '');

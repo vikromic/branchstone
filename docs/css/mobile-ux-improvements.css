@@ -11,6 +11,7 @@
   /* Mobile-specific spacing */
   --mobile-nav-height: 56px;
   --mobile-nav-offset: 72px; /* nav height + safe area padding */
+  --mobile-header-offset: 60px;
 
   /* WCAG AA touch target minimums */
   --touch-target-min: 44px;
@@ -653,6 +654,12 @@
 /* Skeleton for artwork cards */
 .artwork-card.is-loading {
   pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(245, 236, 228, 0.82) 100%
+  );
+  border: 1px solid rgba(154, 141, 126, 0.18);
 }
 
 .artwork-card.is-loading .artwork-card__image {
@@ -664,6 +671,17 @@
   );
   background-size: 200% 200%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.artwork-card.is-loading .artwork-card__content {
+  opacity: 1;
+  transform: translateY(0);
+  background: linear-gradient(
+    to top,
+    rgba(26, 24, 22, 0.72) 0%,
+    rgba(26, 24, 22, 0.42) 55%,
+    transparent 100%
+  );
 }
 
 .artwork-card.is-loading .artwork-card__title,
@@ -679,6 +697,19 @@
   animation: skeleton-loading 1.2s ease-in-out infinite;
   color: transparent;
   user-select: none;
+}
+
+.artwork-card.is-loading .artwork-card__title {
+  min-height: 1.2em;
+  width: 70%;
+  border-radius: 999px;
+}
+
+.artwork-card.is-loading .artwork-card__collection {
+  min-height: 0.9em;
+  width: 44%;
+  border-radius: 999px;
+  margin-top: var(--space-2);
 }
 
 /* Dark theme skeleton */
@@ -698,6 +729,15 @@
     rgba(184, 134, 107, 0.2) 50%,
     rgba(255, 255, 255, 0.05) 100%
   );
+}
+
+[data-theme="dark"] .artwork-card.is-loading {
+  background: linear-gradient(
+    180deg,
+    rgba(26, 24, 22, 0.92) 0%,
+    rgba(45, 31, 23, 0.84) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Respect reduced motion */
