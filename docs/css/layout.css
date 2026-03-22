@@ -327,12 +327,14 @@
   overflow: hidden;
   border-radius: var(--radius-md);
   background: var(--bg-secondary);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform var(--duration-normal) var(--ease-spring),
+              box-shadow var(--duration-normal) var(--ease-smooth);
 }
 
 .bento-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15),
+              0 6px 12px rgba(0, 0, 0, 0.06);
 }
 
 .bento-item img {
@@ -1992,7 +1994,8 @@
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
   position: relative;
-  transition: all var(--transition-normal);
+  transition: transform var(--duration-normal) var(--ease-spring),
+              box-shadow var(--duration-normal) var(--ease-smooth);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2001,7 +2004,7 @@
 
 .testimonial-card:hover {
   box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+  transform: translateY(-6px) scale(1.01);
 }
 
 .testimonial-card::before {
@@ -3024,13 +3027,7 @@
   font-style: italic;
 }
 
-/* Testimonial Card */
-.testimonial-card {
-  background: var(--bg-primary);
-  padding: var(--space-8);
-  border-radius: var(--radius-xl);
-  position: relative;
-}
+/* Testimonial Card (structural styles defined earlier in this file) */
 
 .testimonial-card::before {
   content: '"';

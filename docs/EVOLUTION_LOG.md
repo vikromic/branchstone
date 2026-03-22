@@ -133,3 +133,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +21 lines net across 3 files. Sold cards gained full specular ::after. Highlight cards upgraded to squircle + spring hover. About portrait framed with depth shadow. Removed duplicate @keyframes spin, renamed conflicting badgePulse.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: SPRING_PHYSICS_AND_SKELETON_v1]
+### 🎯 Objective
+- **Surface:** Skeleton loading cards, bento-item hovers, testimonial card hovers
+- **Items:** `components.css` (skeleton-card), `layout.css` (bento-item, testimonial-card)
+- **Goal:** Ensure all card hovers use spring physics. Fix skeleton cards to match artwork frame spec.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Skeleton Squircle** | Match artwork-card spec | [x] Upgraded to --radius-squircle + Liquid Glass shadow |
+| **Bento Spring** | Spring easing on hover | [x] 0.3s ease → --ease-spring |
+| **Testimonial Spring** | Spring easing on hover | [x] transition: all → spring on transform/box-shadow |
+| **Duplicate Removal** | Clean cascade | [x] Removed duplicate .testimonial-card block |
+
+### 💡 Verdict
+- **Changes:** -4 lines net across 2 files. All card-level hovers now use --ease-spring with scale(1.01).
+- **Status:** COMMITTED
