@@ -1,116 +1,48 @@
-# Claude Code Configuration — Branchstone
+# 🎨 Branchstone: Gallery Sentinel (CLAUDE.md)
 
-## Project Overview
+## 🛠️ Technical Stack & Context
+- **Frontend:** Vanilla HTML5, CSS3, Vanilla JS (ES6+).
+- **Environment:** Static site served from the `/docs` directory (GitHub Pages).
+- **Grid:** Strict 8px base unit.
+- **Target:** Desktop-First (1440p+). The UI is "The Invisible Frame" for the art.
 
-**Branchstone** — Static HTML/CSS/JS art portfolio site for mixed-media artist Viktoria.
-- **Stack**: Vanilla HTML5, CSS3, JavaScript (ES modules)
-- **Hosting**: GitHub Pages (served from `/docs`)
-- **No build tool** — files are served directly, no bundler or transpiler
-- **i18n**: English + Ukrainian (client-side switching)
+## 🌟 Core Philosophy: "Apple Liquid Glass"
+The UI must feel like physical hardware. Luxury is defined by the depth of the glass and the precision of the corners.
 
-## Site Structure
+- **Perfect Corners (Squircles):** Use continuous curvature for all frames and buttons.
+    - *Outer Radius:* `rounded-[2rem]` (32px).
+    - *Concentric Rule:* Inner Radius = Outer Radius - Padding.
+- **Liquid Glass Spec:**
+    - **Surface:** `backdrop-filter: blur(40px)` with `bg-white/[0.02]`.
+    - **Specular Highlight:** `border-t-[1.5px] border-t-white/12` (Top edge glow) + `border-x-[1px] border-x-white/5`.
+    - **Depth:** `shadow-[0_20px_50px_rgba(0,0,0,0.3)]`.
+- **Image Treatment:** Every artwork frame must have a subtle `1px` inner-stroke to separate the art from the glass container.
 
-| Page | File | Purpose |
-|------|------|---------|
-| Home | `docs/index.html` | Hero, featured carousel, highlights |
-| Gallery | `docs/gallery.html` | Masonry gallery with filtering |
-| About | `docs/about.html` | Artist bio and fold section |
-| Commissions | `docs/commissions.html` | Commission request info |
-| Contact | `docs/contact.html` | Contact form |
-| Privacy | `docs/privacy.html` | Privacy policy |
-| Terms | `docs/terms.html` | Terms of service |
+## 🏎️ ProMotion Fluidity (120Hz Logic)
+Motion must feel like a physical weight on a spring.
+- **Spring Physics:** Use `{ stiffness: 120, damping: 20, mass: 0.8 }`.
+- **Zero-Reflow:** Never animate `width`, `height`, or `top/left`. Only use `transform: scale()` and `translate3d()`.
+- **Interruptible Lightbox:** Image expansions must be interruptible (users can close before the "open" animation finishes).
 
-## Source Layout
+## 📏 Spacing & Rhythm (Gallery Layout)
+- **The Golden Gap:** Minimum `gap-12` (48px) between art pieces. Art needs massive breathing room.
+- **Internal Breathing:** Modals and captions must maintain `p-10` (40px) padding.
+- **Information Lasagna:** 1. Background (#050505) -> 2. Art Content -> 3. Glass Overlays -> 4. Minimal HUD.
 
-```
-docs/                    ← Served by GitHub Pages
-├── css/                 ← Stylesheets (no preprocessor)
-│   ├── tokens.css       ← Design tokens (colors, spacing, fonts)
-│   ├── base.css         ← Reset and base styles
-│   ├── typography.css   ← Type scale
-│   ├── layout.css       ← Grid and layout
-│   ├── components.css   ← Shared component styles
-│   └── *.css            ← Feature-specific styles
-├── js/                  ← JavaScript (vanilla ES modules)
-│   ├── main.js          ← Entry point, imports modules
-│   ├── constants.js     ← Shared constants
-│   ├── utils.js         ← Utility functions
-│   ├── i18n.js          ← Internationalization (EN/UK)
-│   ├── gallery-data.js  ← Gallery artwork data
-│   └── *.js             ← Feature modules
-├── img/                 ← Images (WebP preferred)
-└── *.html               ← Pages
-```
+## 🧪 Code Simplification (The Zen Pass)
+- **Rule:** Run `/simplify` on all CSS and JS every 3 iterations.
+- **Goal:** Remove "div-soup." Prefer modern CSS (Grid/Flex) over legacy floats or positioning.
+- **Vanilla Integrity:** Keep JS lightweight. Use `IntersectionObserver` for reveals instead of heavy scroll libraries.
 
-## Behavioral Rules (Always Enforced)
+## ⚠️ Photosensitive & Art Safety
+- **The 2Hz Rule:** No flickering. Pulse/Fade animations must be $\ge 400ms$ sine-waves.
+- **Neutrality:** UI elements must not cast color-tinted shadows onto the artwork.
 
-- Do what has been asked; nothing more, nothing less
-- NEVER create files unless absolutely necessary for the goal
-- ALWAYS prefer editing existing files over creating new ones
-- NEVER proactively create documentation files unless explicitly requested
-- NEVER save working files to the root folder
-- ALWAYS read a file before editing it
-- All source files belong in `docs/` (css/, js/, img/, or root HTML)
-- Test files and debug scripts stay in project root (not docs/)
+## 🤖 Mandatory Tool Usage (Eyes-On)
+- **FORCE_CHROME:** No commits without a 1440p `/chrome` audit.
+- **Proof of Sight:** Describe a specific visual artifact (e.g., "The caption text is 2px off-center") before editing.
 
-## Code Conventions
-
-- Vanilla JavaScript only — no frameworks, no build tools
-- CSS custom properties for theming (defined in `tokens.css`)
-- ES modules (`type="module"`) for JS imports
-- Mobile-first responsive design
-- WebP images with fallbacks
-- Semantic HTML5 elements
-- BEM-like CSS class naming
-- Keep accessibility in mind (ARIA labels, keyboard nav)
-
-## Testing
-
-```bash
-# Open locally — just use a local server
-npx serve docs
-
-# Run test files (Node.js based)
-node test-responsive.js
-node test-mobile-gallery-spacing.js
-```
-
-- No CI pipeline — manual testing in browser
-- Test files in project root are debug/QA helpers
-
-## Security Rules
-
-- NEVER hardcode API keys, secrets, or credentials
-- NEVER commit .env files
-- Sanitize any user input (contact form)
-- Use CSP headers where possible
-
-## Claude Flow Configuration
-
-### Project Config
-- **Topology**: hierarchical-mesh
-- **Max Agents**: 15
-- **Memory**: hybrid
-- **HNSW**: Enabled
-- **Neural**: Enabled
-- **Intelligence**: MAXIMUM
-
-### 3-Tier Model Routing
-
-| Tier | Handler | Use Cases |
-|------|---------|-----------|
-| **1** | Agent Booster (WASM) | Simple CSS fixes, typos, class renames |
-| **2** | Haiku | Single-file edits, style tweaks, content updates |
-| **3** | Sonnet/Opus | Multi-page refactoring, responsive redesign, i18n |
-
-### Concurrency Rules
-
-- All operations MUST be concurrent/parallel in a single message
-- ALWAYS batch ALL file reads/writes/edits in ONE message
-- ALWAYS batch ALL Bash commands in ONE message
-
-### Available Agents
-
-**Core**: `coder`, `reviewer`, `tester`, `planner`, `researcher`
-**Frontend**: `frontend-dev`, `designer`
-**Code Quality**: `code-review-swarm`, `code-analyzer`
+## 🧬 Evolutionary Loop & Logging
+- **The 1% Rule:** Fix one micro-interaction or alignment error per iteration.
+- **Log:** All changes must be recorded in `docs/EVOLUTION_LOG.md`.
+- **Revert Trigger:** If a change makes the site feel "cheap" or "Standard Web," `git reset --hard`.
