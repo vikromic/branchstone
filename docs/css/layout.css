@@ -1710,36 +1710,11 @@
    ARTWORK CARD
    ========================================================================== */
 
+/* Layout-only properties (visual appearance in components.css, animations in artwork-animations.css) */
 .artwork-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-squircle);
-  background: var(--bg-tertiary);
   cursor: pointer;
-  /* Liquid Glass depth shadow */
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18),
-              0 8px 16px rgba(0, 0, 0, 0.08);
-  transition: transform var(--transition-base),
-              box-shadow var(--transition-base);
   display: flex;
   flex-direction: column;
-}
-
-.artwork-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(26, 24, 22, 0.12),
-              0 4px 8px rgba(26, 24, 22, 0.08);
-}
-
-/* Dark mode shadow adjustments */
-[data-theme="dark"] .artwork-card {
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3),
-              0 8px 16px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="dark"] .artwork-card:hover {
-  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.45),
-              0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
 .artwork-card:focus-visible {

@@ -173,7 +173,7 @@
   /* Increase image height for emotional connection on mobile */
   .artwork-card {
     min-height: 280px;
-    border-radius: var(--radius-md); /* Reduced from --radius-lg for modern look */
+    border-radius: var(--radius-xl); /* Scaled squircle for mobile (20px) */
   }
 
   /* Single column on small phones for maximum image size */

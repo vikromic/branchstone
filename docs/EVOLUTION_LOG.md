@@ -59,6 +59,31 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 
 ---
 
+## [Iteration: CSS_CONSOLIDATION_v1]
+### 🎯 Objective
+- **Surface:** CSS architecture — `.artwork-card` rule ownership
+- **Items:** `components.css`, `layout.css`, `mobile-gallery-improvements.css`
+- **Goal:** Eliminate cascade conflicts from duplicate `.artwork-card` definitions.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Cascade Clarity** | Single source of truth per property | [x] components.css owns visuals, layout.css owns layout, animations.css owns motion |
+| **Squircle Mobile** | Corners preserved on mobile | [x] Updated mobile override from --radius-md (8px) to --radius-xl (20px) |
+| **Dark Mode** | Shadow overrides consolidated | [x] Moved to components.css alongside base shadow |
+| **Net Lines** | Simpler = better | [x] -23 lines removed |
+| **Visual Parity** | No visual regression | [x] Verified at 1440p via Playwright |
+
+### 📸 Visual Evidence
+- **Before:** `.artwork-card` defined in 3 CSS files with conflicting `box-shadow`, `border-radius`, `transition`. layout.css overrode spring easing with `transition-base`. Mobile cards had 8px corners.
+- **After:** Each file owns distinct concerns. Computed values match spec. Mobile cards have 20px corners.
+
+### 💡 Verdict
+- **Changes:** -23 lines net across 3 files. Removed 25-line duplicate `.artwork-card` block from layout.css, removed 2 redundant `position: relative` re-declarations from components.css, upgraded mobile border-radius to `--radius-xl`.
+- **Status:** COMMITTED
+
+---
+
 ## [Iteration: ID_TEMPLATE]
 ### 🎯 Objective
 - **Surface:** - **Items:** - **Goal:** ### ⚖️ Sentinel Audit
