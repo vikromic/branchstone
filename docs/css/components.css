@@ -4392,7 +4392,7 @@ details[open] summary {
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 300ms ease;
+  transition: opacity 400ms var(--ease-smooth);
 }
 
 .artwork-modal.is-active {
@@ -4408,8 +4408,8 @@ details[open] summary {
   right: 0;
   bottom: 0;
   background: var(--overlay-scrim);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
 }
 
 /* Content container */
@@ -4421,10 +4421,10 @@ details[open] summary {
   max-height: 90vh;
   background: var(--surface-primary);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-squircle);
   overflow-y: auto;
   transform: scale(0.95) translateY(20px);
-  transition: transform 300ms ease;
+  transition: transform 400ms var(--ease-spring);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 

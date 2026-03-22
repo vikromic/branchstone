@@ -84,6 +84,33 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 
 ---
 
+## [Iteration: HOMEPAGE_CAROUSEL_AND_MODAL_v1]
+### 🎯 Objective
+- **Surface:** Featured carousel cards + artwork modal overlay
+- **Items:** `featured-carousel.css`, `components.css` (modal section)
+- **Goal:** Extend Liquid Glass treatment to homepage carousel and upgrade modal to spec.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Carousel Squircle** | 2rem corners on carousel cards | [x] `--radius-squircle` applied |
+| **Carousel Specular** | 1.5px top highlight | [x] `::after` overlay added |
+| **Carousel Shadow** | Liquid Glass depth | [x] `0 20px 50px` applied |
+| **Modal Blur** | `backdrop-filter: blur(40px)` | [x] Upgraded from 4px to 40px |
+| **Modal Corners** | Squircle on content | [x] `--radius-squircle` applied |
+| **Modal Spring** | Spring easing on open/close | [x] `--ease-spring` at 400ms |
+| **Modal Safety** | Transform-only, interruptible | [x] Uses opacity + scale only, CSS class toggle |
+
+### 📸 Visual Evidence
+- **Before:** Carousel cards had 16px radius, basic `--shadow-md`, no specular. Modal overlay was blur(4px), content had 16px radius, generic ease timing.
+- **After:** Carousel cards match gallery art frame spec. Modal overlay is deep Liquid Glass blur at 40px. Modal opens with spring physics. Verified at 1440p via Playwright.
+
+### 💡 Verdict
+- **Changes:** +25 lines net across 2 files. Carousel cards gained full Liquid Glass treatment (squircle, specular ::after, depth shadow). Modal upgraded to spec (blur 40px, squircle corners, spring easing).
+- **Status:** COMMITTED
+
+---
+
 ## [Iteration: ID_TEMPLATE]
 ### 🎯 Objective
 - **Surface:** - **Items:** - **Goal:** ### ⚖️ Sentinel Audit
