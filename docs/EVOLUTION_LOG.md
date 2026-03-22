@@ -31,6 +31,34 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 
 ---
 
+## [Iteration: LIQUID_GLASS_FRAME_v1]
+### 🎯 Objective
+- **Surface:** Artwork card frames across gallery grid
+- **Items:** `.artwork-card`, `.bento-grid`, `::after` specular overlay
+- **Goal:** Establish Apple Liquid Glass frame treatment on all art containers.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **8px Grid** | Strict 8px base units | [x] Tokens unchanged |
+| **Concentricity** | Squircle corners (32px outer) | [x] `--radius-squircle: 2rem` applied |
+| **Specular Glow** | Top-border 1.5px @ 12% white | [x] `::after` overlay with 1.5px/1px borders |
+| **Inner Stroke** | 1px art separator | [x] `inset 0 0 0 1px rgba(255,255,255,0.08)` |
+| **Golden Gap** | column-gap 48px between art | [x] `column-gap: var(--space-12)` at 1024px+ |
+| **Depth Shadow** | `0 20px 50px rgba(0,0,0,0.3)` | [x] Applied to card + dark mode variant |
+| **Epilepsy Safe** | Pulse/Fade >= 400ms | [x] haptic-pulse fixed 300ms -> 400ms |
+| **120Hz Motion** | Spring easing (cubic-bezier) | [x] `--ease-spring` already correct |
+
+### 📸 Visual Evidence
+- **Before:** Cards had 16px radius, 4px shadow depth, ~20px column gap, no specular glow or inner stroke
+- **After:** Cards have 28.8px squircle radius, 50px shadow depth, 43px column gap, 1.5px top specular highlight, 1px inner stroke. Verified at 1440p in both light and dark mode via Playwright.
+
+### 💡 Verdict
+- **Changes:** +22 lines net across 13 files. Added `--radius-squircle` token, `::after` specular overlay, Liquid Glass shadows, Golden Gap column spacing, fixed haptic-pulse safety. Bumped CSS cache to v=21.
+- **Status:** COMMITTED
+
+---
+
 ## [Iteration: ID_TEMPLATE]
 ### 🎯 Objective
 - **Surface:** - **Items:** - **Goal:** ### ⚖️ Sentinel Audit

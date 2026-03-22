@@ -221,14 +221,14 @@
 /* Ensure stable layout with consistent gaps */
 @media (min-width: 640px) {
   .bento-grid {
-    gap: var(--space-4);
+    column-gap: var(--space-8);  /* 32px breathing room on tablet */
     row-gap: var(--space-5);
   }
 }
 
 @media (min-width: 1024px) {
   .bento-grid {
-    gap: var(--space-5);
+    column-gap: var(--space-12);  /* 48px — Golden Gap between art columns */
     row-gap: var(--space-6);
   }
 }

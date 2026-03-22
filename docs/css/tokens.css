@@ -243,6 +243,7 @@
   --radius-lg: 16px;   /* Increased for organic, handcrafted feel */
   --radius-xl: 20px;   /* Adjusted proportionally */
   --radius-2xl: 24px;  /* Adjusted proportionally */
+  --radius-squircle: 2rem; /* 32px — Apple Liquid Glass continuous curvature */
   --radius-full: 9999px;
 
   /* ========================================
