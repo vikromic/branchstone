@@ -228,7 +228,7 @@
 
 @media (min-width: 1024px) {
   .bento-grid {
-    column-gap: var(--space-12);  /* 48px — Golden Gap between art columns */
+    column-gap: 48px;  /* Golden Gap — fixed px to guarantee minimum */
     row-gap: var(--space-6);
   }
 }
