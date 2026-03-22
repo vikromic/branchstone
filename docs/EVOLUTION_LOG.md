@@ -111,18 +111,25 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 
 ---
 
-## [Iteration: ID_TEMPLATE]
+## [Iteration: SOLD_CARDS_HIGHLIGHTS_SIMPLIFY_v1]
 ### 🎯 Objective
-- **Surface:** - **Items:** - **Goal:** ### ⚖️ Sentinel Audit
-  | Metric | Requirement | Status |
-  | :--- | :--- | :--- |
-  | **8px Grid** | Strict 8px multiples only | [ ] |
-  | **Concentricity** | Concentric "Squircle" geometry | [ ] |
-  | **Specular Glow** | Hardware-grade top-border highlight | [ ] |
-  | **Liquid Glass** | High-fidelity blur & translucency | [ ] |
-  | **120Hz Motion** | Apple-spec Spring physics | [ ] |
-  | **Performance** | Zero layout reflow (Transform-only) | [ ] |
+- **Surface:** Sold artwork cards, highlight cards, about-preview image, animation keyframe cleanup
+- **Items:** `layout.css` (sold-card, about-preview), `highlights.css`, `components.css` (keyframe dedup)
+- **Goal:** Complete Liquid Glass treatment across all remaining art containers. Simplify duplicate keyframes.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Sold Cards** | Squircle + specular + depth | [x] Full Liquid Glass treatment |
+| **Highlight Cards** | Squircle + depth shadow | [x] Upgraded with spring easing |
+| **About Preview** | Squircle + depth | [x] Artist portrait frame upgraded |
+| **Keyframe Dedup** | No naming collisions | [x] Renamed badgePulse→favCountPulse, removed duplicate spin |
+| **Safety** | Pulse >= 400ms | [x] favCountPulse fixed 300ms→400ms |
 
 ### 📸 Visual Evidence
-- **Before:** - **After:** ### 💡 Verdict
-- **Changes:** - **Status:** (COMMITTED / REVERTED)
+- **Before:** Sold cards had 16px radius, basic shadow-md, no specular. Highlight cards had 8px radius. About image had 16px. Duplicate @keyframes spin in components.css. badgePulse naming collision (box-shadow vs scale variants).
+- **After:** All art containers unified at squircle radius with Liquid Glass depth. Keyframe collision resolved. Verified at 1440p.
+
+### 💡 Verdict
+- **Changes:** +21 lines net across 3 files. Sold cards gained full specular ::after. Highlight cards upgraded to squircle + spring hover. About portrait framed with depth shadow. Removed duplicate @keyframes spin, renamed conflicting badgePulse.
+- **Status:** COMMITTED
