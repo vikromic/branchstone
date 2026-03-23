@@ -1452,3 +1452,26 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Replaced `<link rel="canonical" href="...404.html">` with `<meta name="robots" content="noindex">`. Prevents search engines from indexing the error page and wasting crawl budget.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: OPEN_GRAPH_TAGS_v1]
+### 🎯 Objective
+- **Surface:** Social sharing previews for gallery and homepage
+- **Items:** `<meta property="og:...">` + `twitter:card` in gallery.html and index.html
+- **Goal:** Add Open Graph tags so social media shares display a proper preview card with title, description, and artwork image instead of a generic text link.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **og:title** | Page title | [x] Gallery + Homepage |
+| **og:description** | Short description | [x] Matches meta description |
+| **og:image** | Representative artwork | [x] cover.jpeg (exists in both JPEG and WebP) |
+| **og:url** | Canonical URL | [x] branchstone.art domain |
+| **og:type** | website | [x] |
+| **twitter:card** | summary_large_image | [x] Large preview card |
+| **Gallery render** | No regression | [x] All 19 cards present |
+
+### 💡 Verdict
+- **Changes:** Added 6 OG/Twitter meta tags to gallery.html and index.html. Social shares will now display a branded preview card with artwork image, title, and description. High-impact for an art gallery where visual previews drive click-through.
+- **Status:** COMMITTED
