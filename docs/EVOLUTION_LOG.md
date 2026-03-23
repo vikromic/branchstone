@@ -1312,3 +1312,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added `autocomplete="email"` and `inputmode="email"` to newsletter email inputs in gallery.html, index.html, about.html, commissions.html, contact.html, privacy.html, terms.html. Mobile users now get an email-optimized keyboard and browser autofill support.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: CSS_TESTIMONIAL_CONSOLIDATION_v1]
+### 🎯 Objective
+- **Surface:** CSS architecture — testimonial card rule ownership
+- **Items:** `.testimonial-card__quote`, `__footer`, `__author`, `__location` in `layout.css`
+- **Goal:** Consolidate 3 pairs of near-duplicate testimonial card rules into single authoritative blocks.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Unique props preserved** | `flex: 1`, `gap`, `margin-top: auto`, `font-style: normal` | [x] Moved into surviving blocks |
+| **`.testimonial-card__location`** | Kept as selector (used by home page) | [x] Restored alongside `__role` |
+| **Visual parity** | No testimonial regression | [x] Verified at 390×844 — identical rendering |
+| **Net lines** | Reduced duplication | [x] -27 lines of near-duplicate CSS removed |
+
+### 💡 Verdict
+- **Changes:** Removed 3 first-occurrence blocks (`__quote`, `__footer`, `__author`, `__location`) from ~line 1758 and merged their 4 unique properties (`flex: 1`, `gap: --space-1`, `margin-top: auto`, `font-style: normal`) into the surviving blocks at ~line 2799. Net: -27 lines. Session total dead CSS: 38 lines removed across 2 iterations.
+- **Status:** COMMITTED
