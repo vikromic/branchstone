@@ -449,3 +449,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +5 lines in layout.css (reset border, position, width, height, transform on `.faq__question::after`). Bumped cache to v=24 for layout.css.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: MOBILE_MENU_LIQUID_GLASS_v1]
+### 🎯 Objective
+- **Surface:** Mobile navigation slide-out menu panel
+- **Items:** `.mobile-menu__nav` in `layout.css`
+- **Goal:** Apply Liquid Glass treatment to the mobile menu — the last major UI surface without it.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Glass Background** | Semi-transparent gradient | [x] rgba(248,246,243, 0.82→0.94) |
+| **Backdrop Blur** | blur(40px) per spec | [x] blur(40px) saturate(180%) |
+| **Specular Edge** | Inset glow on leading edge | [x] inset 1px rgba(255,255,255,0.5) |
+| **Dark Mode** | Adapted glass values | [x] rgba(26,24,22, 0.85→0.95) |
+| **Readability** | Nav links remain legible | [x] Sufficient opacity gradient |
+| **Interaction** | Menu open/close works | [x] Verified slide + backdrop tap close |
+
+### 📸 Visual Evidence
+- **Before:** Mobile menu panel had opaque `var(--bg-primary)` background. Functional but inconsistent with the Liquid Glass aesthetic applied to filter bar, cards, and modals.
+- **After:** Menu panel is frosted glass with 40px blur. Content subtly bleeds through the semi-transparent surface. Dark mode uses deep glass with warm copper accents. Specular edge highlight on leading edge. Verified at 390×844 in both light and dark themes via Playwright.
+
+### 💡 Verdict
+- **Changes:** +8 lines in layout.css (glass background, backdrop-filter, specular shadow, dark mode variant). Layout.css already at v=24.
+- **Status:** COMMITTED
