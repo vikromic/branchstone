@@ -584,3 +584,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Replaced `transition: all` with 6 explicit properties on `.btn` base rule. Prevents unintended property transitions (e.g., `display`, `z-index`) while preserving all intended hover effects.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: GOLDEN_MONSTERA_IMAGE_FIX_v1]
+### 🎯 Objective
+- **Surface:** Gallery page — "Golden Monstera" artwork card
+- **Items:** `artworks.json` and `artworks_uk.json`
+- **Goal:** Fix broken image reference causing console error on every gallery page load.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Image loads** | No 404 errors | [x] `1.jpeg` exists and loads |
+| **Console clean** | No image errors | [x] Verified — 0 errors |
+| **Both locales** | EN + UK JSON fixed | [x] Both artworks.json files updated |
+| **Collected Works** | Card renders correctly | [x] "Golden Monstera" visible in sold section |
+
+### 💡 Verdict
+- **Changes:** Fixed `main_image` path from nonexistent `art6.webp` to existing `1.jpeg` in both `artworks.json` and `artworks_uk.json`. Eliminates a 404 error on every gallery page load.
+- **Status:** COMMITTED
