@@ -1227,3 +1227,28 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Changed line 433 in `gallery-data.js` from `? 6 : 6` to `? 2 : 6`. Saves ~4 image downloads on mobile first paint (~500KB–1MB depending on image sizes). Desktop retains 6 eager loads for the multi-column grid.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: TESTIMONIAL_DOUBLE_QUOTE_FIX_v1]
+### 🎯 Objective
+- **Surface:** Testimonial card screen reader experience on homepage and about page
+- **Items:** `docs/js/main.js` — `createTestimonialCard()` home and about page paths
+- **Goal:** Eliminate double-quoting where CSS `::before { content: '"' }` decorative quote overlaps with literal `"..."` quotes in the blockquote text content.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Screen reader** | No duplicate quotes announced | [x] Removed inline `"..."` wrapping from text content |
+| **Visual context** | Quote still identifiable | [x] CSS decorative `"` at top-left + italic `<blockquote>` styling |
+| **Semantic meaning** | Quotation communicated | [x] `<blockquote>` element provides semantic context |
+| **About page** | Same fix applied | [x] Line 2508 also updated |
+| **Homepage** | Same fix applied | [x] Line 2546 updated |
+
+### 📸 Visual Evidence
+- **Before:** Screen readers announced: `"quote" → "SM" → "quote Viktoria's work...quote"` — the CSS `::before` decorative quote plus the literal `"..."` in the text created double-quoting. Sighted users saw both a large faint `"` and smaller inline `"..."`.
+- **After:** Text content is plain (no inline `"..."` wrapping). The CSS decorative `"` provides visual cueing, `<blockquote>` provides semantic meaning, and italic styling distinguishes the quote from regular text.
+
+### 💡 Verdict
+- **Changes:** Removed `` `"${feedback.review}"` `` wrapping from both home page (line 2546) and about page (line 2508) testimonial rendering. Text now uses `feedback.review` directly. Zero CSS changes needed.
+- **Status:** COMMITTED

@@ -2505,7 +2505,7 @@ import { initI18n, getI18n } from './i18n.js';
 
       const quote = document.createElement('p');
       quote.className = 'testimonial-card__quote';
-      quote.textContent = `" ${feedback.review}"`;
+      quote.textContent = feedback.review;
 
       const footer = document.createElement('footer');
       footer.className = 'testimonial-card__footer';
@@ -2543,7 +2543,7 @@ import { initI18n, getI18n } from './i18n.js';
 
       const blockquote = document.createElement('blockquote');
       blockquote.className = 'testimonial-card__quote';
-      blockquote.textContent = `"${feedback.review}"`;
+      blockquote.textContent = feedback.review;
 
       const footer = document.createElement('footer');
       footer.className = 'testimonial-card__footer';
