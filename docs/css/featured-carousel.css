@@ -151,7 +151,9 @@
   border: none;
   border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all var(--duration-normal) var(--ease-smooth);
+  transition: background-color var(--duration-normal) var(--ease-smooth),
+              transform var(--duration-normal) var(--ease-smooth),
+              box-shadow var(--duration-normal) var(--ease-smooth);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 10;
 }
@@ -170,7 +172,8 @@
   width: 1.25rem;
   height: 1.25rem;
   color: var(--text-secondary);
-  transition: all var(--duration-normal) var(--ease-smooth);
+  transition: color var(--duration-normal) var(--ease-smooth),
+              fill var(--duration-normal) var(--ease-smooth);
 }
 
 .featured-carousel__favorite.is-favorited .featured-carousel__favorite-icon {
@@ -207,7 +210,10 @@
   border: 2px solid var(--border-strong);
   border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all var(--duration-normal) var(--ease-smooth);
+  transition: background-color var(--duration-normal) var(--ease-smooth),
+              border-color var(--duration-normal) var(--ease-smooth),
+              transform var(--duration-normal) var(--ease-smooth),
+              box-shadow var(--duration-normal) var(--ease-smooth);
   z-index: 10;
   box-shadow: var(--shadow-md);
 }
@@ -268,7 +274,9 @@
   border: none;
   border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all var(--duration-normal) var(--ease-smooth);
+  transition: background-color var(--duration-normal) var(--ease-smooth),
+              width var(--duration-normal) var(--ease-smooth),
+              transform var(--duration-normal) var(--ease-smooth);
 }
 
 .featured-carousel__dot:hover {

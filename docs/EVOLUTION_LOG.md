@@ -794,3 +794,25 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** -105 lines in layout.css. Session total dead CSS: **342 lines removed** across 3 cleanup iterations. CSS codebase is significantly leaner.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: CAROUSEL_TRANSITION_ALL_FIX_v1]
+### 🎯 Objective
+- **Surface:** Featured carousel component transitions
+- **Items:** `.featured-carousel__favorite`, `__favorite-icon`, `__nav`, `__dot` in featured-carousel.css
+- **Goal:** Replace 4 `transition: all` rules with explicit property lists on the homepage featured carousel.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **favorite button** | Explicit props | [x] background-color, transform, box-shadow |
+| **favorite icon** | Explicit props | [x] color, fill |
+| **nav arrows** | Explicit props | [x] background-color, border-color, transform, box-shadow |
+| **pagination dots** | Explicit props | [x] background-color, width, transform |
+| **Carousel render** | No regression | [x] Verified at 390×844 |
+| **Cache bust** | featured-carousel.css v=24 | [x] |
+
+### 💡 Verdict
+- **Changes:** 4 rules fixed in featured-carousel.css (+8 lines). Session total: **19 `transition: all` rules fixed**. ~28 remain (19 in components.css, rest scattered).
+- **Status:** COMMITTED
