@@ -1394,3 +1394,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added `<link rel="canonical" href="...">` to all 8 HTML files using the production domain from `CNAME`. Prevents duplicate content indexing from query-parameterized gallery URLs.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: SITEMAP_XML_v1]
+### 🎯 Objective
+- **Surface:** SEO infrastructure — sitemap
+- **Items:** `docs/sitemap.xml` (new file)
+- **Goal:** Create the sitemap.xml referenced by robots.txt — crawlers were getting a 404.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **robots.txt reference** | `Sitemap: https://branchstone.art/sitemap.xml` | [x] Already exists |
+| **File serves** | Valid XML | [x] Verified at localhost:8888/sitemap.xml |
+| **All pages** | 7 URLs (excluding 404) | [x] index, gallery, about, commissions, contact, privacy, terms |
+| **Gallery-first priority** | Gallery gets high priority score | [x] Homepage 1.0, gallery 0.9, commissions 0.8 |
+
+### 💡 Verdict
+- **Changes:** Created `docs/sitemap.xml` with 7 URLs and priority scores reflecting the gallery-first site hierarchy. Fixes the 404 crawlers were hitting from the robots.txt Sitemap directive.
+- **Status:** COMMITTED
