@@ -353,3 +353,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +20 lines in layout.css. Last flat card surface now has Liquid Glass.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: PALETTE_CLEANUP_v1]
+### 🎯 Objective
+- **Surface:** CSS palette consistency sweep
+- **Items:** `.badge-sold/.badge-available/.badge-reserved` (dead), `.sold-card__badge` in layout.css
+- **Goal:** Remove dead CSS with hardcoded colors. Replace red sold badge with earthy copper tones for Art Safety.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Dead CSS** | Remove unused rules | [x] 3 badge rules removed (-14 lines) |
+| **Art Safety** | No color-tinted shadows | [x] Red badge → copper-800/900 gradient |
+| **Shadow Neutrality** | No colored shadow cast | [x] Red shadow → neutral dark earth |
+| **WCAG Contrast** | White on dark bg | [x] copper-800/900 passes easily |
+
+### 💡 Verdict
+- **Changes:** -14 lines in qa-fixes.css (dead rules), 2 property changes in layout.css (sold badge gradient + shadow). All hardcoded vivid hex colors eliminated from non-token CSS files (except Instagram brand gradient which is intentional).
+- **Status:** COMMITTED
