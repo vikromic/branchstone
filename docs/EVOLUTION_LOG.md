@@ -1432,3 +1432,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Updated `background_color` in `site.webmanifest` from `#F5F3F0` to `#F8F6F3` to match the actual CSS background. Eliminates the subtle color flash during PWA splash-to-page transition.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: 404_NOINDEX_v1]
+### 🎯 Objective
+- **Surface:** SEO — prevent 404 page from being indexed
+- **Items:** `docs/404.html`
+- **Goal:** Add `noindex` robots meta and remove the erroneous canonical URL that was encouraging search engines to index the 404 error page.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **noindex** | Present on 404 | [x] `<meta name="robots" content="noindex">` added |
+| **Canonical removed** | No canonical on error page | [x] `<link rel="canonical">` removed |
+| **Sitemap** | 404 not listed | [x] Was already excluded in iteration 13 |
+| **Page renders** | No regression | [x] 404 page still shows links to home + gallery |
+
+### 💡 Verdict
+- **Changes:** Replaced `<link rel="canonical" href="...404.html">` with `<meta name="robots" content="noindex">`. Prevents search engines from indexing the error page and wasting crawl budget.
+- **Status:** COMMITTED
