@@ -1014,3 +1014,22 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Tightened `CLAUDE.md` and `RALPH_LOOP_PROMPT.md` so each verified improvement is committed immediately, while open-ended hardening runs are executed as large safety-capped batches rather than bounded completion tasks. The prompt now distinguishes open-ended 500-iteration review batches from narrow `COMPLETE`-driven runs.
 - **Status:** READY TO COMMIT
+
+---
+
+## [Iteration: RALPH_COMMAND_NAMESPACE_FIX_v1]
+### 🎯 Objective
+- **Surface:** Run-ready operator docs
+- **Items:** `RALPH_LOOP_PROMPT.md`
+- **Goal:** Update runnable examples to the namespaced Claude plugin command so the documented Ralph invocations are copy-paste ready.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Live mobile scout** | Proof of Sight before edits | [x] Verified on `gallery.html` at 390×844 |
+| **Command accuracy** | Namespaced slash command in runnable examples | [x] Replaced `/ralph-loop` with `/ralph-loop:ralph-loop` |
+| **Workflow integrity** | No change to loop semantics or guardrails | [x] Preserved open-ended and bounded run behavior |
+
+### 💡 Verdict
+- **Changes:** Corrected the two runnable Claude command examples in `RALPH_LOOP_PROMPT.md` to use `/ralph-loop:ralph-loop`, matching the plugin command form you want to run directly.
+- **Status:** READY TO COMMIT

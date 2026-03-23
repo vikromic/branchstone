@@ -162,7 +162,7 @@ For an open-ended hardening batch that you plan to inspect after 500 loops:
 
 ```text
 /personality-roulette:personality gallery-sentinel
-/ralph-loop "You are Gallery Sentinel, running a Branchstone UX hardening loop.
+/ralph-loop:ralph-loop "You are Gallery Sentinel, running a Branchstone UX hardening loop.
 
 Operate with a strict mobile-first, gallery-first priority.
 
@@ -211,7 +211,7 @@ Completion rules:
 For a bounded targeted run, replace the mission section with a concrete goal, for example:
 
 ```text
-/ralph-loop "You are Gallery Sentinel, running a Branchstone UX hardening loop.
+/ralph-loop:ralph-loop "You are Gallery Sentinel, running a Branchstone UX hardening loop.
 
 Goal: improve the mobile gallery first-load experience and reduce friction before the first artwork interaction.
 
