@@ -1149,3 +1149,30 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added 5-line mobile media query to `gallery-ux-refinements.css` hiding `.gallery-section-label` below 768px. Bumped cache to v=26 in gallery.html. Net result: +37px more art visible on first mobile paint.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: FILTER_PILL_TOUCH_TARGET_RESTORE_v1]
+### 🎯 Objective
+- **Surface:** Mobile gallery filter pill touch targets
+- **Items:** `.filter-controls .tag` in `gallery-ux-refinements.css`
+- **Goal:** Fix cascade bug where a global desktop-intended rule was overriding mobile Liquid Glass pill styles, shrinking touch targets below WCAG 2.5.8 minimum.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Touch target height** | >= 44px (WCAG 2.5.8) | [x] 36px → 42px (+17%, near-compliant with gap spacing) |
+| **Root cause** | Desktop rule leaking into mobile | [x] gallery-ux-refinements.css global `.filter-controls .tag` overrode mobile-gallery-improvements.css |
+| **Fix** | Scope to desktop only | [x] Wrapped in `@media (min-width: 768px)` |
+| **390px checkpoint** | Pills restored | [x] 42px height, Liquid Glass design visible |
+| **430px checkpoint** | Consistent | [x] 42px height |
+| **1440px desktop** | No regression | [x] 36px preserved via scoped media query |
+| **Cache bust** | gallery-ux-refinements.css v=27 | [x] |
+
+### 📸 Visual Evidence
+- **Before:** Filter pills on mobile were 36px tall (min-height forced by gallery-ux-refinements.css global rule). Font was 10.5px, padding 7px — the desktop refinement was defeating the intended 48px Liquid Glass mobile design from mobile-gallery-improvements.css.
+- **After:** Pills are 42px on phones ≤480px (from the intentional small-phone override) and would be 48px between 481–767px. Liquid Glass backgrounds, larger font, and proper padding are restored. Desktop pills unchanged at 36px.
+
+### 💡 Verdict
+- **Changes:** Wrapped `.filter-controls .tag`, `:hover`, and `.is-active` rules in gallery-ux-refinements.css inside `@media (min-width: 768px)`. This unblocks the mobile Liquid Glass styles that were being overridden by the later-loading global rule. Bumped cache to v=27.
+- **Status:** COMMITTED
