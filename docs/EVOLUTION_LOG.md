@@ -284,3 +284,27 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +22 lines net in layout.css, 1 word fix in commissions.html. Cards match trust card treatment from Iteration 1.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: FORM_FOCUS_ACCESSIBILITY_v1]
+### 🎯 Objective
+- **Surface:** All form inputs site-wide (contact, commissions, newsletter)
+- **Items:** `.form__input:focus`, `.form__input:focus-visible` in `components.css`
+- **Goal:** Fix invisible keyboard focus indicators on form fields (WCAG 2.4.7 violation).
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **WCAG 2.4.7** | Focus visible for keyboard | [x] 3px solid accent outline added |
+| **:focus shadow** | Visible ring on mouse click | [x] Opacity 0.1→0.25 |
+| **:focus-visible** | Prominent ring on keyboard | [x] 3px outline + 2px offset + shadow |
+| **Visual Proof** | Verified via Tab navigation | [x] Copper ring visible on Name field |
+
+### 📸 Visual Evidence
+- **Before:** Form inputs had `:focus` with `outline: none` and box-shadow at 10% opacity — effectively invisible. Keyboard users couldn't see which field had focus.
+- **After:** `:focus` shadow increased to 25% opacity. New `:focus-visible` rule adds 3px solid accent outline with 2px offset for keyboard users. Verified by Tab-navigating to Name field on contact page via Playwright.
+
+### 💡 Verdict
+- **Changes:** +6 lines in components.css. Enhanced `:focus` shadow opacity, added `:focus-visible` rule with outline for keyboard accessibility. CSS cache bumped to v=23.
+- **Status:** COMMITTED
