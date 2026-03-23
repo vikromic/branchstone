@@ -1373,3 +1373,24 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Updated gallery.html meta description from "pyrography artwork...burned wood art" to "mixed-media artworks crafted with foraged natural materials." Aligns with the actual product and other page descriptions. 152 chars, under SERP limit.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: CANONICAL_URLS_v1]
+### 🎯 Objective
+- **Surface:** SEO — canonical URL tags across all pages
+- **Items:** `<link rel="canonical">` in all 8 HTML files
+- **Goal:** Add canonical URLs to prevent search engines from indexing query-parameterized versions (e.g. `?collection=X`, `?art=Y`) as separate pages.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Gallery canonical** | `https://branchstone.art/gallery.html` | [x] Verified via DOM |
+| **Homepage canonical** | `https://branchstone.art/` | [x] Added |
+| **All 8 pages** | Canonical present | [x] All files updated |
+| **Domain source** | `CNAME` file | [x] `branchstone.art` confirmed |
+| **Gallery render** | No regression | [x] All 19 cards present |
+
+### 💡 Verdict
+- **Changes:** Added `<link rel="canonical" href="...">` to all 8 HTML files using the production domain from `CNAME`. Prevents duplicate content indexing from query-parameterized gallery URLs.
+- **Status:** COMMITTED
