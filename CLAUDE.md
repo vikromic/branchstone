@@ -75,3 +75,11 @@ On every loop, search for the most meaningful issue or opportunity in these cate
 - **Success means:** proof-of-sight before change, verified improvement after change, no observed regression in adjacent gallery states, and evolution log updated.
 - **High-iteration Ralph runs may create many commits.** That is acceptable. Prioritize auditability and rollback safety over a tidy commit count.
 - **Never claim the site is finished.** After logging and verification, continue scouting for the next highest-leverage improvement until the human stops the loop.
+
+## 🎯 Targeted Issue Resolution Mode
+When running a targeted Ralph-Loop batch to resolve a specific list of issues:
+- Address the issues one by one, verifying each fix using `/chrome` before moving to the next.
+- Do not get distracted by open-ended improvements until the specific issues are completely resolved and verified.
+- Continue to obey all Apple Liquid Glass aesthetic standards, art prominence rules, and zero-regression policies while fixing the issues.
+- After all issues are fixed, output the completion token to end the targeted loop.
+

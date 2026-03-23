@@ -225,3 +225,43 @@ All other rules remain the same. Output COMPLETE only when the goal is fully sat
 - Use **bounded targeted mode** when you want Claude to stop itself after a concrete goal is fully satisfied.
 - In open-ended batch mode, do not use `COMPLETE` as the completion promise. Use a token the agent is explicitly forbidden to print, such as `__MANUAL_REVIEW__`.
 - In bounded targeted mode, keep the goal narrow and keep `COMPLETE` literal.
+
+## **Targeted Run: Urgent UI/UX Fixes Batch**
+
+Use this prompt to execute a bounded run aimed directly at the specific list of high-priority desktop, mobile, and general issues identified for the current sprint.
+
+```text
+/ralph-loop:ralph-loop "You are Gallery Sentinel, running a targeted Branchstone UX hardening loop.
+
+Goal: You have a specific list of UI/UX and functionality issues to resolve. You must address them one by one, verifying each fix before moving to the next. Do not stop until ALL issues below are fully resolved and verified.
+
+The issues to resolve:
+
+**Desktop:**
+1. Initial popup should be shown only once when user opens the website for the first time. It shouldn’t be open every time user navigates to the index page.
+2. Gallery grid: think how to make the view better, with smaller gaps. The artwork cards should not overlap each other.
+
+**Mobile:**
+1. Add language button to the header. User should have access to it from any screen.
+2. Artwork details page should show artwork pics carousel and the description with no shifts. Currently the work “Magnet” shows shifted to the right.
+3. On the gallery grid all artwork cards should be clickable, not only the name of the artwork.
+4. Improve 'x' buttons on artwork details page. It should be visible but remain neutral not grabbing users attention.
+5. Heart symbol on the 'featured works' carousel should be the same visual style as 'x' buttons once they’re improved. No frame for these buttons needed.
+6. Pricing guide: fix 'most popular' label on the medium card. Now it slightly shifted to the top. Also reduce space between text lines on these cards. It seems a bit too much especially between size line and price line (e.g between 8\" × 10” and Starting at $100).
+7. FAQ make answers foldable and fold by default.
+
+**General:**
+1. Loop all the carousels on all the pages.
+2. There’s extra grey line between website title section and the next section “Where Forest Meets Art” section, take a look what’s going on there and fix.
+
+Required operating rules:
+- Read and obey CLAUDE.md before acting.
+- Pick one specific issue from the list above per iteration. 
+- Start every iteration by scouting the relevant page/component in Playwright /chrome (use mobile view for mobile issues, desktop view for desktop issues).
+- Provide Proof of Sight before changing code: describe what you actually see in the live UI.
+- Implement the fix, verify it in /chrome, update docs/EVOLUTION_LOG.md, and commit.
+- Repeat until all issues in the list are fully resolved.
+- If the result feels cheaper, noisier, slower, or less art-forward, revert it.
+- Output COMPLETE only when all the goals are fully satisfied and verified." --completion-promise "COMPLETE" --max-iterations 30
+```
+
