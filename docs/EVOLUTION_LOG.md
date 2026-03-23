@@ -399,3 +399,28 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +3 lines net in gallery-ux-refinements.css (wrapped existing rules in `@media (min-width: 768px)`). Bumped cache to v=24 in gallery.html.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: INSTAGRAM_HANDLE_VISIBILITY_FIX_v1]
+### 🎯 Objective
+- **Surface:** Instagram `@branchstone.art` follow pill on homepage
+- **Items:** Animated underline rule in `typography.css`, `.section-instagram__follow`
+- **Goal:** Fix invisible Instagram handle caused by CSS cascade conflict (WCAG ~1.07:1 contrast).
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **WCAG Contrast** | ≥4.5:1 for text | [x] White on Instagram gradient — exceeds AA |
+| **Brand Gradient** | Instagram 5-stop gradient | [x] Restored: #f09433→#bc1888 |
+| **Underline Links** | Still animate on hover | [x] Privacy Policy verified 0% 1px → 100% |
+| **Instagram Cards** | No underline interference | [x] Also excluded from animated underline |
+| **Cache Bust** | typography.css version bumped | [x] v=24 across all 8 HTML files |
+
+### 📸 Visual Evidence
+- **Before:** `@branchstone.art` handle was white text (`rgb(255,255,255)`) on cream background (`rgb(240,235,227)`) — ~1.07:1 contrast, effectively invisible. The typography.css animated underline rule (`background-size: 0% 1px`) replaced the Instagram gradient background because `.section-instagram__follow` wasn't in the exclusion list.
+- **After:** Handle pill shows full Instagram brand gradient with white text. Contrast exceeds WCAG AA. Regular text links still have animated underline. Verified at 390×844 via Playwright.
+
+### 💡 Verdict
+- **Changes:** Added `:not(.section-instagram__follow):not(.instagram-card)` to the animated underline exclusion list in typography.css. Bumped cache to v=24 across all 8 HTML files.
+- **Status:** COMMITTED

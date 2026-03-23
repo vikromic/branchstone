@@ -120,8 +120,9 @@ a:hover:not(.btn) {
   color: var(--accent-hover);
 }
 
-/* Animated underline for text links */
-a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mobile-menu__link) {
+/* Animated underline for text links.
+   Exclude links that define their own background (gradient pills, card overlays). */
+a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mobile-menu__link):not(.section-instagram__follow):not(.instagram-card) {
   background-image: linear-gradient(
     to right,
     var(--accent-primary) 0%,
@@ -133,8 +134,8 @@ a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mo
   transition: background-size var(--transition-smooth), color var(--transition-fast);
 }
 
-a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mobile-menu__link):hover,
-a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mobile-menu__link):focus {
+a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mobile-menu__link):not(.section-instagram__follow):not(.instagram-card):hover,
+a:not(.btn):not(.nav-link):not(.header__nav-link):not(.footer__nav-link):not(.mobile-menu__link):not(.section-instagram__follow):not(.instagram-card):focus {
   background-size: 100% 1px;
 }
 
