@@ -822,7 +822,6 @@
   top: 0;
   z-index: 100;
   background: var(--bg-primary);
-  border-bottom: 1px solid var(--border-default);
   transition: box-shadow var(--transition-normal), background var(--transition-normal), transform var(--transition-smooth);
 }
 

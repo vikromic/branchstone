@@ -1611,3 +1611,19 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Replaced `sessionStorage` with `localStorage` in `initHeroCardClose()` within `main.js`. All 5 set/get/remove calls updated.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: HEADER_GREY_LINE_FIX]
+### 🎯 Objective
+- **Surface:** Header-to-hero section boundary on index.html
+- **Issue:** Visible grey/brown border line between the navigation header and the hero section caused by `border-bottom: 1px solid var(--border-default)` on `.header` in layout.css.
+- **Goal:** Remove the distracting line for a seamless header-to-hero transition.
+
+### 📸 Visual Evidence
+- **Before:** 1px solid brown/grey line visible below the navigation bar, breaking the visual flow into the hero.
+- **After:** Clean, seamless transition from header to hero. The scrolled state still has box-shadow for separation.
+
+### 💡 Verdict
+- **Changes:** Removed `border-bottom` from `.header` in `layout.css`. Bumped layout.css cache version from v=26 to v=27 across all 8 HTML pages.
+- **Status:** COMMITTED
