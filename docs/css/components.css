@@ -2494,7 +2494,11 @@
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px) scale(0.8);
-  transition: all var(--transition-normal);
+  transition: opacity var(--transition-normal),
+              visibility var(--transition-normal),
+              transform var(--transition-normal),
+              background-color var(--transition-normal),
+              box-shadow var(--transition-normal);
   z-index: 998;
   -webkit-tap-highlight-color: transparent;
 }

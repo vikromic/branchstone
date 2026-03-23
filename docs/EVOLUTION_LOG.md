@@ -604,3 +604,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Fixed `main_image` path from nonexistent `art6.webp` to existing `1.jpeg` in both `artworks.json` and `artworks_uk.json`. Eliminates a 404 error on every gallery page load.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: BACK_TO_TOP_TRANSITION_ALL_FIX_v1]
+### 🎯 Objective
+- **Surface:** Back-to-top button transition performance
+- **Items:** `.back-to-top` in `components.css` and `qa-fixes.css`
+- **Goal:** Replace `transition: all` with explicit property list on the fixed-position back-to-top button, continuing the pattern established in BTN_TRANSITION_ALL_FIX_v1.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Explicit props (components.css)** | Only intended properties transition | [x] opacity, visibility, transform, background-color, box-shadow |
+| **Explicit props (qa-fixes.css)** | Override matches intended list | [x] Same 5 properties with Material easing |
+| **Show/hide animation** | Scale + translate still animates | [x] transform transitions preserved |
+| **Hover animation** | Background + shadow still animates | [x] background-color, box-shadow preserved |
+| **Visual regression** | Button renders identically | [x] Verified at 390×844 via Playwright |
+| **Cache bust** | CSS versions bumped | [x] components.css v=25, qa-fixes.css v=27 |
+
+### 📸 Visual Evidence
+- **Before:** `.back-to-top` had `transition: all var(--transition-normal)` in components.css and `transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1)` in qa-fixes.css — forcing the browser to diff every CSS property on every state change for a fixed-position compositor element.
+- **After:** Both rules use explicit 5-property transition lists (opacity, visibility, transform, background-color, box-shadow). Computed `transitionProperty` confirmed as `"opacity, visibility, transform, background-color, box-shadow"`. Button show/hide and hover animations work identically. Verified at 390×844.
+
+### 💡 Verdict
+- **Changes:** Replaced `transition: all` with explicit property lists in components.css (+4 lines) and qa-fixes.css (+3 lines). Cache bumped to v=25/v=27 across all 8 HTML files. Follows the pattern from BTN_TRANSITION_ALL_FIX_v1. ~43 `transition: all` instances remain across the codebase for future iterations.
+- **Status:** COMMITTED
