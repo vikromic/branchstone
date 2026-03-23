@@ -753,3 +753,24 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** -134 lines of dead CSS in layout.css. +4 lines for explicit transitions across layout.css and qa-fixes.css. Net: -130 lines. Running total: 15 `transition: all` rules fixed. ~32 remain.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: DEAD_CSS_CLEANUP_BATCH_2_v1]
+### 🎯 Objective
+- **Surface:** Dead CSS removal — old non-BEM header and old card patterns
+- **Items:** `.site-header`→`.nav-menu` in layout.css, `.card-footer`→`.card-artwork-meta` in components.css
+- **Goal:** Remove 103 lines of dead CSS superseded by BEM equivalents.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **HTML references** | Zero for all removed selectors | [x] Verified via grep |
+| **JS references** | Zero for all removed selectors | [x] Verified via grep |
+| **Old header block** | `.site-header` through `.nav-menu` | [x] Removed (46 lines) — replaced by `.header__*` |
+| **Old card block** | `.card-footer` through `.card-artwork-meta` | [x] Removed (57 lines) — replaced by `.artwork-card` |
+| **Homepage render** | No regression | [x] Verified at 390×844 |
+
+### 💡 Verdict
+- **Changes:** -103 lines across layout.css and components.css. Session total dead CSS removed: 237 lines. All verified as zero-reference in both HTML and JS.
+- **Status:** COMMITTED

@@ -302,65 +302,6 @@
   flex: 1;
 }
 
-.card-footer {
-  padding: 1.5rem;
-  border-top: 1px solid var(--border-default);
-}
-
-/* Artwork card for gallery items */
-.card-artwork {
-  position: relative;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  border-radius: var(--radius-md);
-  background-color: var(--bg-secondary);
-}
-
-.card-artwork img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform var(--transition-slow);
-}
-
-.card-artwork:hover img {
-  transform: scale(1.05);
-}
-
-.card-artwork-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.4) 50%,
-    transparent 100%
-  );
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 1.5rem;
-  color: var(--text-inverse);
-}
-
-.card-artwork:hover .card-artwork-overlay {
-  opacity: 1;
-}
-
-.card-artwork-title {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 0.25rem;
-}
-
-.card-artwork-meta {
-  font-size: 0.875rem;
-  opacity: 0.9;
-}
-
 /* ==========================================================================
    ARTWORK CARD HOVER OVERLAY
    Static/structural styles - animations in artwork-animations.css
