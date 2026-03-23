@@ -265,20 +265,6 @@ select.is-valid {
   color: var(--text-inverse);
 }
 
-.badge-sold {
-  background: #95a5a6;
-  color: var(--text-inverse);
-}
-
-.badge-available {
-  background: #3498db;
-  color: var(--text-inverse);
-}
-
-.badge-reserved {
-  background: #f39c12;
-  color: var(--text-inverse);
-}
 
 [data-theme="dark"] .artwork-card__badge {
   border-color: rgba(255, 255, 255, 0.2);
