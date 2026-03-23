@@ -2605,6 +2605,12 @@
   font-weight: var(--font-light);
   color: var(--accent-primary);
   transition: transform var(--transition-normal);
+  /* Reset triangle borders inherited from generic details summary::after */
+  border: none;
+  position: static;
+  width: auto;
+  height: auto;
+  transform: none;
 }
 
 .faq__item[open] .faq__question::after {

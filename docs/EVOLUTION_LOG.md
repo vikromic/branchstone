@@ -424,3 +424,28 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added `:not(.section-instagram__follow):not(.instagram-card)` to the animated underline exclusion list in typography.css. Bumped cache to v=24 across all 8 HTML files.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: FAQ_DUPLICATE_INDICATOR_FIX_v1]
+### 🎯 Objective
+- **Surface:** FAQ accordion on Contact page
+- **Items:** `.faq__question::after` in `layout.css`
+- **Goal:** Remove duplicate expand indicators (CSS triangle + "+" text) on FAQ accordions.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Single Indicator** | Only one expand icon | [x] "+" only, triangle borders reset |
+| **Open State** | Indicator changes on open | [x] "+" → "−" on details[open] |
+| **Color** | Accent color on indicator | [x] var(--accent-primary) |
+| **Touch Target** | Entire summary clickable | [x] Flexbox full-width |
+| **Cache Bust** | layout.css version bumped | [x] v=24 across all HTML files |
+
+### 📸 Visual Evidence
+- **Before:** Each FAQ item showed both a CSS border-triangle (from generic `details summary::after` in components.css) and a "+" text (from `.faq__question::after` in layout.css) — two competing indicators on the same pseudo-element.
+- **After:** Only the styled "+" indicator appears. On open, changes to "−". Clean, single-purpose expand indicator. Verified at 390×844 with open/closed states via Playwright.
+
+### 💡 Verdict
+- **Changes:** +5 lines in layout.css (reset border, position, width, height, transform on `.faq__question::after`). Bumped cache to v=24 for layout.css.
+- **Status:** COMMITTED
