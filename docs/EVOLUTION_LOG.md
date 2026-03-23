@@ -1332,3 +1332,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Removed 3 first-occurrence blocks (`__quote`, `__footer`, `__author`, `__location`) from ~line 1758 and merged their 4 unique properties (`flex: 1`, `gap: --space-1`, `margin-top: auto`, `font-style: normal`) into the surviving blocks at ~line 2799. Net: -27 lines. Session total dead CSS: 38 lines removed across 2 iterations.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: THEME_COLOR_META_v1]
+### 🎯 Objective
+- **Surface:** Mobile browser chrome branding
+- **Items:** `<meta name="theme-color">` across all 8 HTML files
+- **Goal:** Add `theme-color` meta tags so mobile browsers tint the address bar/status bar to match the site's warm beige (light) and charcoal (dark) backgrounds, creating a more immersive, premium feel.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Light mode** | `#F8F6F3` (warm off-white) | [x] Added with `(prefers-color-scheme: light)` |
+| **Dark mode** | `#141210` (deep charcoal) | [x] Added with `(prefers-color-scheme: dark)` |
+| **All pages** | 8 HTML files | [x] index, gallery, about, commissions, contact, privacy, terms, 404 |
+| **Gallery render** | No regression | [x] All 19 cards render; DOM confirms both meta tags |
+
+### 💡 Verdict
+- **Changes:** Added 2 `<meta name="theme-color">` tags to all 8 HTML files — light (#F8F6F3) and dark (#141210) with media queries. Mobile browsers will now tint their chrome to match the site's color scheme.
+- **Status:** COMMITTED
