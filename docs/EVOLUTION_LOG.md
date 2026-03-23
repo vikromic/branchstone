@@ -1414,3 +1414,21 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Created `docs/sitemap.xml` with 7 URLs and priority scores reflecting the gallery-first site hierarchy. Fixes the 404 crawlers were hitting from the robots.txt Sitemap directive.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: WEBMANIFEST_BG_COLOR_FIX_v1]
+### 🎯 Objective
+- **Surface:** PWA splash screen color consistency
+- **Items:** `docs/site.webmanifest`
+- **Goal:** Fix `background_color` mismatch — manifest had `#F5F3F0` but the actual CSS `--bg-primary` is `#F8F6F3`, causing a color flash on PWA splash screens.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Color match** | CSS `--bg-primary` = manifest `background_color` | [x] Both now `#F8F6F3` |
+| **Gallery render** | No regression | [x] All 19 cards present |
+
+### 💡 Verdict
+- **Changes:** Updated `background_color` in `site.webmanifest` from `#F5F3F0` to `#F8F6F3` to match the actual CSS background. Eliminates the subtle color flash during PWA splash-to-page transition.
+- **Status:** COMMITTED
