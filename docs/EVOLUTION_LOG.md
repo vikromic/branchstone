@@ -373,3 +373,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** -14 lines in qa-fixes.css (dead rules), 2 property changes in layout.css (sold badge gradient + shadow). All hardcoded vivid hex colors eliminated from non-token CSS files (except Instagram brand gradient which is intentional).
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: FILTER_BAR_LIQUID_GLASS_FIX_v1]
+### 🎯 Objective
+- **Surface:** Gallery collection filter bar on mobile (sticky toolbar)
+- **Items:** `.filter-bar` in `gallery-ux-refinements.css`
+- **Goal:** Fix cascade conflict that defeated the Liquid Glass filter bar on mobile.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Liquid Glass** | Semi-transparent bg + blur(24px) | [x] Now visible on mobile |
+| **Desktop Preserved** | Opaque bg-primary at ≥768px | [x] Scoped via @media |
+| **Dark Mode** | Dark glass variant active | [x] rgba(26,24,22,0.9→0.75) |
+| **Cascade Fix** | No unscoped overrides | [x] gallery-ux-refinements.css wrapped in @media (min-width: 768px) |
+| **Art Safety** | No color bleed onto artwork | [x] Neutral white/dark glass only |
+| **Cache Bust** | CSS version bumped | [x] gallery-ux-refinements.css?v=24 |
+
+### 📸 Visual Evidence
+- **Before:** Filter bar had `backdrop-filter: blur(24px)` applied in mobile-gallery-improvements.css, but gallery-ux-refinements.css (loaded later, same specificity, no media query) overwrote the semi-transparent gradient with opaque `var(--bg-primary)`. The glass blur was invisible — a wasted GPU instruction.
+- **After:** Filter bar is a true Liquid Glass surface on mobile. Artwork content bleeds through the frosted 24px blur. Dark mode shows dark glass with copper-tinted border. Desktop retains opaque background (no blur needed at full width). Verified at 390×844 (light + dark) and 1440×900 via Playwright.
+
+### 💡 Verdict
+- **Changes:** +3 lines net in gallery-ux-refinements.css (wrapped existing rules in `@media (min-width: 768px)`). Bumped cache to v=24 in gallery.html.
+- **Status:** COMMITTED

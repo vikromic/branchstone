@@ -78,16 +78,21 @@
    COLLECTION FILTER REFINEMENTS
    ========================================================================== */
 
-/* Reduce visual weight of filter UI */
-.filter-bar {
-  padding: var(--space-3) 0;
-  background: var(--bg-primary);
-  border-bottom: 1px solid var(--border-default);
-}
+/* Reduce visual weight of filter UI — desktop only.
+   Mobile uses Liquid Glass (semi-transparent bg + backdrop-filter)
+   defined in mobile-gallery-improvements.css. Applying an opaque
+   background here at all widths defeats the glass blur on mobile. */
+@media (min-width: 768px) {
+  .filter-bar {
+    padding: var(--space-3) 0;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-default);
+  }
 
-[data-theme="dark"] .filter-bar {
-  background: var(--bg-primary);
-  border-bottom-color: var(--border-default);
+  [data-theme="dark"] .filter-bar {
+    background: var(--bg-primary);
+    border-bottom-color: var(--border-default);
+  }
 }
 
 .filter-controls {
