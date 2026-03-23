@@ -703,3 +703,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 4 rules fixed in components.css (+7 lines). Cache bumped to v=26 across all 8 HTML files. Running total: 12 `transition: all` rules fixed across 4 iterations. ~35 remain (19 in components.css).
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: NEWSLETTER_PRIVACY_TOUCH_TARGET_v1]
+### 🎯 Objective
+- **Surface:** Newsletter "Privacy Policy" link touch target on mobile
+- **Items:** `.newsletter__privacy a` in `layout.css` touch target media query
+- **Goal:** Fix WCAG 2.5.8 violation — link was only 13px tall (44px minimum required for mobile touch).
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Touch target height** | >= 44px | [x] 44px (was 13px) |
+| **Display** | inline-block for padding | [x] Applied on mobile only |
+| **Padding** | Adequate vertical spacing | [x] 14px top + 14px bottom |
+| **Visual layout** | No disruption | [x] Text stays at same font size, padding is invisible |
+| **All pages** | Newsletter appears site-wide | [x] CSS rule applies globally |
+| **Cache bust** | layout.css bumped | [x] v=25 |
+
+### 📸 Visual Evidence
+- **Before:** "Privacy Policy" link in newsletter section had `font-size: 10.5px`, `display: inline`, `padding: 0` — rendering at only 13px height. Effectively untappable on mobile touchscreens.
+- **After:** Link has `display: inline-block` with `1rem` (14px) vertical padding on mobile — computed height 44px. Visual appearance unchanged. Verified at 390×844 via Playwright.
+
+### 💡 Verdict
+- **Changes:** +4 lines in layout.css mobile touch target section. Link height: 13px → 44px (238% increase). Fixes a WCAG 2.5.8 violation present on all pages with the newsletter component.
+- **Status:** COMMITTED

@@ -3744,6 +3744,12 @@
     margin: var(--space-1) 0;
   }
 
+  /* Newsletter Privacy Policy link */
+  .newsletter__privacy a {
+    display: inline-block;
+    padding: 1rem 0;
+  }
+
   /* Social links spacing */
   .footer__social-list {
     gap: var(--space-3);
