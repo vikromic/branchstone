@@ -1123,3 +1123,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Updated modal description truncation to trim end whitespace and remove the final partial token with a whitespace-aware regex before adding `...`.
 - **Status:** READY TO COMMIT
+
+---
+
+## [Iteration: MOBILE_SECTION_LABEL_HIDE_v1]
+### 🎯 Objective
+- **Surface:** Mobile gallery first-paint art prominence
+- **Items:** `.gallery-section-label` in `gallery-ux-refinements.css`
+- **Goal:** Hide the "Available Works" section label on mobile to reclaim vertical space and show more artwork above the fold on first paint.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **First card position** | Closer to top of viewport | [x] 298px → 261px (37px improvement) |
+| **Art above fold** | More artwork visible | [x] 546px → 583px (+6.8%) |
+| **Desktop label** | Preserved on desktop | [x] Confirmed visible at 1440×900 |
+| **360px checkpoint** | Consistent at narrow width | [x] Verified at 360×780 |
+| **Scroll state** | No gap where label was | [x] Clean flow from filter to cards |
+| **Cache bust** | gallery-ux-refinements.css bumped | [x] v=26 |
+
+### 📸 Visual Evidence
+- **Before:** "AVAILABLE WORKS" label sat between filter bar and first card, consuming 58px (16px text + 42px margins). On a 390×844 viewport, first card started at 298px with 546px of art visible above fold.
+- **After:** Label hidden via `display: none` at `max-width: 767px`. First card now starts at 261px with 583px of art visible. Desktop retains the label. No visual gap or spacing anomaly at any tested width.
+
+### 💡 Verdict
+- **Changes:** Added 5-line mobile media query to `gallery-ux-refinements.css` hiding `.gallery-section-label` below 768px. Bumped cache to v=26 in gallery.html. Net result: +37px more art visible on first mobile paint.
+- **Status:** COMMITTED
