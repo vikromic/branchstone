@@ -430,7 +430,7 @@ export class GalleryDataManager {
       ? artwork.main_image
       : `img/${artwork.main_image}`;
 
-    const eagerLoadCount = window.innerWidth < BREAKPOINTS.MOBILE ? 6 : 6;
+    const eagerLoadCount = window.innerWidth < BREAKPOINTS.MOBILE ? 2 : 6;
     const shouldEagerLoad = priorityIndex > -1 && priorityIndex < eagerLoadCount;
 
     img.src = imagePath;

@@ -1201,3 +1201,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added `aria-hidden` lifecycle to artwork modal: `true` on creation (line 381), `false` on open (line 661), `true` on close after animation (line 695). Zero visual impact.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: MOBILE_LAZY_LOAD_IMAGES_v1]
+### 🎯 Objective
+- **Surface:** Mobile gallery initial load performance
+- **Items:** `docs/js/gallery-data.js` — `createArtworkImage()` eager load count
+- **Goal:** Reduce the number of eagerly-loaded images on mobile from 6 to 2, deferring 4 below-fold images to `loading="lazy"`.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Above-fold coverage** | First 1–2 cards visible on 390px | [x] 2 eager images covers above-fold + peek of next card |
+| **Dead ternary** | Both branches were 6 | [x] Fixed: mobile=2, desktop=6 |
+| **Desktop unchanged** | 6 eager loads preserved | [x] Ternary branch for >= 768px still returns 6 |
+| **fetchPriority** | First 3 get "high" | [x] Unchanged — first 2 on mobile get "high", rest are "auto" |
+| **Lazy attribute** | Images 3+ on mobile use lazy | [x] `ARTWORK_CARD.IMAGE_LOADING` is `'lazy'` |
+| **Gallery render** | No visual regression | [x] All 19 cards render; verified via Playwright |
+
+### 📸 Visual Evidence
+- **Before:** `eagerLoadCount` was `window.innerWidth < 768 ? 6 : 6` — a no-op ternary loading 6 images eagerly on all viewport sizes. On a 390×844 phone, only ~1.5 cards are above fold, so 4 images loaded eagerly before the user could see them.
+- **After:** Mobile eager count reduced to 2. Images 3–19 now use `loading="lazy"`, deferring download until the browser's scroll heuristic triggers them.
+
+### 💡 Verdict
+- **Changes:** Changed line 433 in `gallery-data.js` from `? 6 : 6` to `? 2 : 6`. Saves ~4 image downloads on mobile first paint (~500KB–1MB depending on image sizes). Desktop retains 6 eager loads for the multi-column grid.
+- **Status:** COMMITTED
