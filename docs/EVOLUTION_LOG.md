@@ -1514,3 +1514,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Moved `qa-fixes.css` and fixed `qa-enhancements.js` indent in both about.html and contact.html. All 3 affected pages (gallery, about, contact) now have properly organized `<head>` elements.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: OG_TAGS_SUPPORTING_PAGES_v1]
+### 🎯 Objective
+- **Surface:** Social sharing previews for supporting pages
+- **Items:** OG + Twitter Card tags on about.html, commissions.html, contact.html
+- **Goal:** Extend Open Graph coverage to all key pages so social shares display branded preview cards site-wide.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **about.html** | 6 OG/Twitter tags | [x] Verified via DOM |
+| **commissions.html** | 6 OG/Twitter tags | [x] Added |
+| **contact.html** | 6 OG/Twitter tags | [x] Added |
+| **Page renders** | No regression | [x] About renders with highlights, testimonials; Contact renders with form, FAQs |
+
+### 💡 Verdict
+- **Changes:** Added OG/Twitter Card meta tags to about, commissions, and contact pages. All 5 key pages (gallery, index, about, commissions, contact) now have social sharing support. Only legal pages (privacy, terms) omitted as low-value for social sharing.
+- **Status:** COMMITTED
