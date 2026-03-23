@@ -729,3 +729,27 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +4 lines in layout.css mobile touch target section. Link height: 13px → 44px (238% increase). Fixes a WCAG 2.5.8 violation present on all pages with the newsletter component.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: DEAD_CSS_CLEANUP_AND_TRANSITION_FIX_v1]
+### 🎯 Objective
+- **Surface:** Dead CSS removal + transition:all fixes in layout.css and qa-fixes.css
+- **Items:** `.mobile-menu-toggle`, `.site-footer`→`.footer-copyright` (dead), `.btn-primary`/`.btn-secondary`/`.sold-artwork-cta` (transition:all)
+- **Goal:** Remove 134 lines of dead CSS (old non-BEM footer + old menu toggle), fix 3 remaining `transition: all` rules.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Dead CSS verification** | Zero HTML/JS references | [x] grep confirmed 0 matches for all removed selectors |
+| **mobile-menu-toggle** | Dead — replaced by .header__menu-toggle | [x] Removed (24 lines) |
+| **Old footer block** | Dead — replaced by .footer__* BEM | [x] Removed (110 lines) |
+| **btn-primary** | Explicit transition | [x] background-color, color |
+| **btn-secondary** | Explicit transition | [x] border-color, color |
+| **sold-artwork-cta** | Explicit transition | [x] background-color, color, transform |
+| **Commissions page** | No visual regression | [x] Verified at 390×844 |
+| **Cache bust** | layout.css bumped | [x] v=25 |
+
+### 💡 Verdict
+- **Changes:** -134 lines of dead CSS in layout.css. +4 lines for explicit transitions across layout.css and qa-fixes.css. Net: -130 lines. Running total: 15 `transition: all` rules fixed. ~32 remain.
+- **Status:** COMMITTED
