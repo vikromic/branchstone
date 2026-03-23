@@ -605,9 +605,12 @@ a[target="_blank"]::after {
   }
 }
 
-/* Contain layout shifts */
+/* Contain layout shifts — skip rendering off-screen images.
+   contain-intrinsic-size prevents CLS by providing a placeholder
+   height; 'auto' remembers last-known size after first render. */
 .artwork-card__image {
   content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
 }
 
 /* ==========================================================================

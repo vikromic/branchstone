@@ -500,3 +500,27 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** -4 lines in qa-fixes.css (replaced permanent rule with hover-only), -1 line in components.css (removed permanent `will-change` from `.artwork-card`). Cache bumped to v=24 for both files.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: CLS_CONTAIN_INTRINSIC_SIZE_v1]
+### 🎯 Objective
+- **Surface:** Gallery page scroll performance (CLS prevention)
+- **Items:** `.artwork-card__image` in `qa-fixes.css`
+- **Goal:** Add `contain-intrinsic-size` to prevent Cumulative Layout Shift from `content-visibility: auto`.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **contain-intrinsic-size** | Placeholder height for off-screen images | [x] `auto 300px` |
+| **content-visibility** | Still active | [x] `auto` preserved |
+| **Gallery render** | All 32 images display correctly | [x] Verified |
+| **Cache Bust** | qa-fixes.css bumped | [x] v=25 across all HTML |
+
+### 📸 Visual Evidence
+- **Before:** `content-visibility: auto` without `contain-intrinsic-size` — browser may collapse off-screen images to 0 height, causing layout jumps when scrolling into view (CLS penalty).
+- **After:** `contain-intrinsic-size: auto 300px` provides 300px placeholder height for off-screen images. The `auto` keyword tells the browser to remember the last-known rendered size after first paint. Gallery renders identically with no visual regression.
+
+### 💡 Verdict
+- **Changes:** +1 line in qa-fixes.css (`contain-intrinsic-size`). Cache bumped to v=25.
+- **Status:** COMMITTED
