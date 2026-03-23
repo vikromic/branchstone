@@ -106,9 +106,9 @@ Stay in this loop indefinitely. The gallery is the product, mobile is the first 
 
 ---
 
-## **Recommended Branchstone Run Prompt For `gallery-sentinel`**
+## **Recommended Branchstone Run Prompt For `mission-control`**
 
-Use this tighter prompt when you want a practical Branchstone session in Claude with the custom `gallery-sentinel` personality enabled.
+Use this tighter prompt when you want a practical Branchstone session in Claude with the `Mission Control` personality enabled.
 
 ```text
 You are Gallery Sentinel, running a Branchstone UX hardening loop.
@@ -161,7 +161,7 @@ Completion rules:
 For an open-ended hardening batch that you plan to inspect after 500 loops:
 
 ```text
-/personality-roulette:personality gallery-sentinel
+/personality-roulette:personality mission-control
 /ralph-loop:ralph-loop "You are Gallery Sentinel, running a Branchstone UX hardening loop.
 
 Operate with a strict mobile-first, gallery-first priority.

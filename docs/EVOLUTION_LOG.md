@@ -1036,6 +1036,26 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 
 ---
 
+## [Iteration: MISSION_CONTROL_PERSONALITY_ALIGNMENT_v1]
+### 🎯 Objective
+- **Surface:** Personality guidance for Branchstone loop ops
+- **Items:** `CLAUDE.md`, `RALPH_LOOP_PROMPT.md`
+- **Goal:** Align the recommended Claude personality with `Mission Control` while keeping the art-first and gallery-first operating model unchanged.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Live mobile scout** | Proof of Sight before edits | [x] Verified on `gallery.html` at 390×844 |
+| **Repo guidance** | Personality overlay compatible with gallery-first rules | [x] Added `Mission Control` preference to `CLAUDE.md` |
+| **Run command readiness** | Recommended command uses desired personality | [x] Replaced `gallery-sentinel` example with `mission-control` |
+| **Workflow integrity** | Art-first loop rules preserved | [x] No change to scouting, verification, or commit guardrails |
+
+### 💡 Verdict
+- **Changes:** Updated the Branchstone instruction layer so `Mission Control` is the preferred personality overlay for Claude sessions, and changed the recommended runnable Ralph command to activate `mission-control` instead of `gallery-sentinel`.
+- **Status:** READY TO COMMIT
+
+---
+
 ## [Iteration: GALLERY_BOTTOM_SPACING_v1]
 ### 🎯 Objective
 - **Surface:** Mobile gallery section bottom pacing
