@@ -1099,3 +1099,27 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Replaced `padding-bottom: calc(var(--space-16, 4rem) + var(--mobile-nav-offset))` with `padding-bottom: var(--space-10)` in the `@media (max-width: 767px)` block at line 515 of `mobile-gallery-improvements.css`. Bumped CSS cache version to v=25 in `gallery.html`.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: MODAL_DESCRIPTION_TRUNCATION_WORD_BOUNDARY_v1]
+### 🎯 Objective
+- **Surface:** Artwork modal long-description preview
+- **Items:** `populateDescription()` in `docs/js/artwork-modal.js`
+- **Goal:** Prevent modal excerpts from cutting off mid-word when the truncation threshold lands after a newline or other non-space whitespace.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Live mobile scout** | Proof of Sight before commit | [x] Verified on `gallery.html` at 390×844 |
+| **Observed defect** | No broken trailing word in excerpt | [x] Confirmed current UI was producing `Lef...` in modal preview |
+| **Truncation rule** | Trim to last whitespace boundary | [x] Replaced plain-space cutoff with whitespace-aware fallback |
+| **Scope** | Narrow source-only change | [x] Limited to `docs/js/artwork-modal.js` |
+
+### 📸 Visual Evidence
+- **Before:** In the `Born Of Burn` modal, the collapsed description ended with `Lef...`, which exposed a broken word at the end of the excerpt.
+- **After:** The truncation logic now strips the trailing partial token from any whitespace boundary before appending the ellipsis.
+
+### 💡 Verdict
+- **Changes:** Updated modal description truncation to trim end whitespace and remove the final partial token with a whitespace-aware regex before adding `...`.
+- **Status:** READY TO COMMIT

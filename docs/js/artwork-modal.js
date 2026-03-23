@@ -800,7 +800,9 @@ export class ArtworkModalManager {
     const isLong = sanitizedDesc.length > TEXT.DESCRIPTION_LONG_THRESHOLD;
 
     if (isLong) {
-      const shortText = sanitizedDesc.substring(0, TEXT.DESCRIPTION_LONG_THRESHOLD) + '...';
+      const truncated = sanitizedDesc.substring(0, TEXT.DESCRIPTION_LONG_THRESHOLD).trimEnd();
+      const withoutPartialWord = truncated.replace(/\s+\S*$/, '');
+      const shortText = (withoutPartialWord.length > 0 ? withoutPartialWord : truncated) + '...';
       descEl.textContent = shortText;
       descEl.setAttribute('data-full-text', sanitizedDesc);
       descEl.setAttribute('data-short-text', shortText);
