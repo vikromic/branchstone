@@ -2383,7 +2383,7 @@
   color: var(--text-primary);
   text-decoration: none;
   border-bottom: 1px solid var(--border-subtle);
-  transition: color 0.2s ease, padding-left 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
   /* Ensure minimum touch target of 44px */
   min-height: 48px;
 }
@@ -2391,7 +2391,7 @@
 .mobile-menu__link:focus,
 .mobile-menu__link--active {
   color: var(--accent-primary);
-  padding-left: 0.5rem;
+  transform: translateX(0.5rem);
 }
 
 .mobile-menu__link:focus-visible {

@@ -545,3 +545,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** -13 lines across 7 CSS files. Removed `::-moz-selection` block (5 lines, obsolete since 2018) and 8 `-webkit-overflow-scrolling: touch` declarations (obsolete since iOS 13, 2019). Modern browsers provide momentum scrolling and unprefixed `::selection` natively.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: ZERO_REFLOW_MENU_LINK_v1]
+### 🎯 Objective
+- **Surface:** Mobile menu link hover/active animation
+- **Items:** `.mobile-menu__link` transition in `layout.css`
+- **Goal:** Replace layout-triggering `padding-left` animation with GPU-composited `transform: translateX()` per CLAUDE.md spec.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Zero-Reflow** | Only animate transform/opacity | [x] `padding-left` → `translateX(0.5rem)` |
+| **Active State** | Home link shifted right | [x] `matrix(1,0,0,1,7,0)` confirmed |
+| **Transition** | Smooth 200ms ease | [x] `transform 0.2s ease` |
+| **Visual Parity** | Same shift amount | [x] 0.5rem = 7px at 14px base |
+
+### 💡 Verdict
+- **Changes:** 2 property swaps in layout.css (`padding-left` → `transform` in transition and hover/active rules). Eliminates layout reflow on menu link interaction.
+- **Status:** COMMITTED
