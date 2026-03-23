@@ -327,3 +327,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +6 lines in components.css. Same pattern as Iteration 5 applied to newsletter input. Systematic audit confirmed no remaining `outline:none` without `:focus-visible` override.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: VALUE_CARDS_LIQUID_GLASS_v1]
+### 🎯 Objective
+- **Surface:** "Art Philosophy" value cards on About page
+- **Items:** `.value-card` in `layout.css`
+- **Goal:** Apply Liquid Glass to the last flat card surface. Preserve distinctive left-border accent.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Squircle Radius** | `--radius-squircle` | [x] Upgraded from --radius-lg |
+| **Glass Background** | Semi-transparent white | [x] rgba(255,255,255,0.45) |
+| **Left Accent** | Preserved | [x] 4px solid accent-primary kept |
+| **Depth Shadow** | Multi-layer | [x] Applied |
+| **Spring Hover** | scale(1.01) + shadow | [x] Subtle uplift |
+| **Dark Mode** | Adapted values | [x] Added |
+
+### 📸 Visual Evidence
+- **Before:** Solid beige background (--bg-secondary), --radius-lg, no hover, no depth.
+- **After:** Glass bg, squircle corners, depth shadows, specular highlight, spring hover. Left accent preserved. Verified via Playwright.
+
+### 💡 Verdict
+- **Changes:** +20 lines in layout.css. Last flat card surface now has Liquid Glass.
+- **Status:** COMMITTED
