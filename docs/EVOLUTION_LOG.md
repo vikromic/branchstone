@@ -681,3 +681,25 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 2 files, 4 rules fixed (+8 lines net). ~36 `transition: all` instances remain.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: TRANSITION_ALL_SWEEP_BATCH_3_v1]
+### 🎯 Objective
+- **Surface:** CSS transition performance — 4 targets in components.css
+- **Items:** `.mobile-menu-backdrop`, `.artwork-modal__close`, `.artwork-modal__carousel-prev/next`, `.artwork-modal__carousel-dot`
+- **Goal:** Fix `transition: all` on modal/overlay components that run during user-visible animations.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **menu-backdrop** | Explicit props only | [x] opacity, visibility |
+| **modal-close** | Explicit props only | [x] background-color, transform |
+| **carousel-prev/next** | Explicit props only | [x] background-color, transform |
+| **carousel-dot** | Explicit props only | [x] background-color, width, border-radius, opacity |
+| **Homepage render** | No visual regression | [x] Verified at 390×844 |
+| **Cache bust** | components.css bumped | [x] v=26 |
+
+### 💡 Verdict
+- **Changes:** 4 rules fixed in components.css (+7 lines). Cache bumped to v=26 across all 8 HTML files. Running total: 12 `transition: all` rules fixed across 4 iterations. ~35 remain (19 in components.css).
+- **Status:** COMMITTED
