@@ -225,7 +225,9 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease,
+              transform 0.2s ease,
+              box-shadow 0.2s ease;
   margin-top: 1.5rem;
   width: 100%;
 }
@@ -315,7 +317,8 @@
   background: var(--copper-300);
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease,
+              transform 0.2s ease;
   padding: 0;
 }
 

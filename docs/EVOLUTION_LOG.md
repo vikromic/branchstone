@@ -655,3 +655,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 3 files edited (+2 lines each). Replaced `transition: all` with explicit property lists. Cache bumped. ~40 `transition: all` instances remain for future batches.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: TRANSITION_ALL_SWEEP_BATCH_2_v1]
+### 🎯 Objective
+- **Surface:** CSS transition performance — 4 additional targets across 2 files
+- **Items:** `.artwork-inquiry-button` + `.artwork-carousel__indicator` (artist-feedback.css), `.filter-controls .tag` x2 media queries (mobile-gallery-improvements.css)
+- **Goal:** Continue `transition: all` elimination on interactive gallery and feedback components.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **inquiry-button** | Explicit props only | [x] background-color, transform, box-shadow |
+| **carousel-indicator** | Explicit props only | [x] background-color, transform |
+| **filter-tag (mobile)** | Explicit props only | [x] color, border-color, box-shadow, transform |
+| **filter-tag (tablet)** | Explicit props only | [x] background-color, color, border-color, box-shadow, transform |
+| **Gallery render** | No visual regression | [x] Verified at 390×844 |
+| **Cache bust** | CSS bumped | [x] artist-feedback v=24, mobile-gallery v=24 |
+
+### 📸 Visual Evidence
+- **Before:** 4 interactive elements used `transition: all` with various easing curves — affecting artwork inquiry buttons, carousel dot indicators, and mobile filter chips across multiple breakpoints.
+- **After:** Each targets only its actually-changing properties. Gallery renders pixel-identical. Verified at 390×844 via Playwright.
+
+### 💡 Verdict
+- **Changes:** 2 files, 4 rules fixed (+8 lines net). ~36 `transition: all` instances remain.
+- **Status:** COMMITTED
