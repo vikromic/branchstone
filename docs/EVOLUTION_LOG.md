@@ -232,3 +232,27 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 0 lines net in qa-fixes.css (6 gradient values replaced in-place). Eliminated all neon/vivid hex colors from the codebase in favor of design token references.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: 404_PAGE_FIX_v1]
+### 🎯 Objective
+- **Surface:** 404 error page
+- **Items:** `404.html`
+- **Goal:** Fix visible skip-link bug, add missing Google Fonts, add CSS cache busters.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Skip-Link** | Hidden until focused | [x] qa-fixes.css now loaded |
+| **Google Fonts** | Cormorant Garamond + Inter | [x] Preconnect + stylesheet added |
+| **Cache Busters** | v=22 on all CSS links | [x] All 6 CSS files versioned |
+| **data-skip-link** | Matches other pages | [x] Attribute added |
+
+### 📸 Visual Evidence
+- **Before:** Skip-link text "Skip to main content" visible at top-left corner. Fonts loading as fallback system fonts.
+- **After:** Skip-link hidden offscreen via transform. Cormorant Garamond rendering correctly. Page properly branded. Verified via Playwright.
+
+### 💡 Verdict
+- **Changes:** Added qa-fixes.css, Google Fonts preconnect/stylesheet, CSS cache busters (v=22), data-skip-link attribute.
+- **Status:** COMMITTED
