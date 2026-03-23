@@ -32,7 +32,8 @@
   text-decoration: underline;
   text-decoration-color: var(--sage-300);
   text-underline-offset: 3px;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease,
+              text-decoration-color 0.2s ease;
 }
 
 .artist-bio__fold-toggle:hover {

@@ -630,3 +630,28 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Replaced `transition: all` with explicit property lists in components.css (+4 lines) and qa-fixes.css (+3 lines). Cache bumped to v=25/v=27 across all 8 HTML files. Follows the pattern from BTN_TRANSITION_ALL_FIX_v1. ~43 `transition: all` instances remain across the codebase for future iterations.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: TRANSITION_ALL_SWEEP_BATCH_1_v1]
+### 🎯 Objective
+- **Surface:** CSS transition performance — 3 additional components
+- **Items:** `.language-switcher` (language-switcher.css), `.artist-bio__fold-toggle` (about-fold.css), `.filter-controls .tag` (gallery-ux-refinements.css)
+- **Goal:** Continue systematic `transition: all` elimination across small, self-contained components.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **language-switcher** | Explicit props only | [x] background-color, border-color, transform |
+| **fold-toggle** | Explicit props only | [x] color, text-decoration-color |
+| **filter tag** | Explicit props only | [x] background-color, border-color, color |
+| **Gallery render** | No visual regression | [x] Verified at 390×844 |
+| **Cache bust** | All affected CSS bumped | [x] language-switcher v=24, about-fold v=24, gallery-ux v=25 |
+
+### 📸 Visual Evidence
+- **Before:** Three components used `transition: all 0.2s ease` — forcing browsers to diff every CSS property on hover/focus/active for the language switcher (present on all pages), the about page fold toggle, and every gallery filter chip.
+- **After:** Each component transitions only its actually-changing properties. Computed `transitionProperty` for filter tag confirmed as `"background-color, border-color, color"`. Gallery renders pixel-identical. Verified at 390×844 via Playwright.
+
+### 💡 Verdict
+- **Changes:** 3 files edited (+2 lines each). Replaced `transition: all` with explicit property lists. Cache bumped. ~40 `transition: all` instances remain for future batches.
+- **Status:** COMMITTED
