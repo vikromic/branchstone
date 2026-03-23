@@ -65,6 +65,9 @@ CLAUDE.md.*
 
 .mcp.json
 
+# Playwright MCP artifacts
+.playwright-mcp/
+
 # Claude Flow runtime (npm artifacts for agentic-flow)
 node_modules/
 package.json
