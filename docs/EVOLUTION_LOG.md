@@ -1494,3 +1494,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Moved `qa-fixes.css` from line 48 (after scripts) to line 43 (with other stylesheets). Fixed 2-space → 4-space indent on `qa-enhancements.js`. CSS and scripts are now properly grouped in the `<head>`.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: ABOUT_CONTACT_HEAD_ORGANIZATION_v1]
+### 🎯 Objective
+- **Surface:** `<head>` element organization on about.html and contact.html
+- **Items:** `qa-fixes.css` position + `qa-enhancements.js` indent
+- **Goal:** Same fix as gallery iteration 17 — move misplaced CSS before scripts and fix indentation.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **about.html** | CSS grouped before scripts | [x] qa-fixes.css moved, qa-enhancements.js indented |
+| **contact.html** | CSS grouped before scripts | [x] qa-fixes.css moved, qa-enhancements.js indented |
+| **About render** | No regression | [x] Full page renders with highlights, testimonials, newsletter |
+| **Contact render** | No regression | [x] Form, FAQs, newsletter all present |
+
+### 💡 Verdict
+- **Changes:** Moved `qa-fixes.css` and fixed `qa-enhancements.js` indent in both about.html and contact.html. All 3 affected pages (gallery, about, contact) now have properly organized `<head>` elements.
+- **Status:** COMMITTED
