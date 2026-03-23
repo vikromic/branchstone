@@ -837,3 +837,25 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 3 rules fixed across 2 CSS files (+6 lines). Session total: **22 `transition: all` rules fixed**. ~25 remain (19 in components.css, 4 in mobile-ux-improvements.css, 2 in layout.css).
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: MOBILE_UX_TRANSITION_ALL_FIX_v1]
+### 🎯 Objective
+- **Surface:** Mobile UX improvements CSS transitions
+- **Items:** `.mobile-bottom-nav__link`, carousel dot container/::before, `.footer__social-link` in mobile-ux-improvements.css
+- **Goal:** Clear all 4 remaining `transition: all` from mobile-ux-improvements.css.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **bottom-nav link** | Explicit props | [x] color, transform |
+| **carousel dot container** | Explicit props | [x] opacity |
+| **carousel dot ::before** | Explicit props | [x] width, height, background-color, opacity |
+| **footer social link** | Explicit props | [x] transform, background-color, color, border-color |
+| **Homepage render** | No regression | [x] Verified at 390×844 |
+| **Cache bust** | mobile-ux v=24 across 7 files | [x] |
+
+### 💡 Verdict
+- **Changes:** 4 rules fixed in mobile-ux-improvements.css (+9 lines). File now **transition:all free**. Session total: **26 rules fixed**. Only **19 remain in components.css**.
+- **Status:** COMMITTED

@@ -112,7 +112,8 @@
   text-decoration: none;
   font-size: 0.75rem;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease,
+              transform 0.2s ease;
   border-radius: var(--radius-sm);
   position: relative;
 }
@@ -355,7 +356,7 @@
     filter: none;
 
     /* Smooth transitions */
-    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
 
     /* Force hardware rendering for crisp edges */
@@ -400,7 +401,10 @@
     filter: none;
 
     /* Smooth transitions */
-    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                height 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Force hardware rendering */
     transform: translateZ(0);
@@ -959,7 +963,10 @@
     width: var(--touch-target-large);
     height: var(--touch-target-large);
     border: 2px solid var(--border-default);
-    transition: all var(--transition-normal);
+    transition: transform var(--transition-normal),
+                background-color var(--transition-normal),
+                color var(--transition-normal),
+                border-color var(--transition-normal);
   }
 
   .footer__social-link:hover,
