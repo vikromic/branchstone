@@ -276,7 +276,10 @@
     border: 2px solid var(--border-strong);
     border-radius: var(--radius-full);
     cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-smooth);
+    transition: background-color var(--duration-normal) var(--ease-smooth),
+                border-color var(--duration-normal) var(--ease-smooth),
+                transform var(--duration-normal) var(--ease-smooth),
+                box-shadow var(--duration-normal) var(--ease-smooth);
     z-index: 10;
     box-shadow: var(--shadow-md);
   }
@@ -357,7 +360,9 @@
     border: none;
     border-radius: var(--radius-full);
     cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-smooth);
+    transition: background-color var(--duration-normal) var(--ease-smooth),
+                width var(--duration-normal) var(--ease-smooth),
+                transform var(--duration-normal) var(--ease-smooth);
   }
 
   .highlights__dot:hover {

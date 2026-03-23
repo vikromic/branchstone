@@ -816,3 +816,24 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 4 rules fixed in featured-carousel.css (+8 lines). Session total: **19 `transition: all` rules fixed**. ~28 remain (19 in components.css, rest scattered).
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: HIGHLIGHTS_COLLECTION_TRANSITION_FIX_v1]
+### 🎯 Objective
+- **Surface:** Highlights carousel + collection description transitions
+- **Items:** `.highlights__nav`, `.highlights__dot` (highlights.css), `.collection-description__text` (collection-descriptions.css)
+- **Goal:** Fix 3 remaining `transition: all` in peripheral CSS files.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **highlights nav** | Explicit props | [x] background-color, border-color, transform, box-shadow |
+| **highlights dot** | Explicit props | [x] background-color, width, transform |
+| **collection text** | Explicit props | [x] opacity, max-height |
+| **About page** | No regression | [x] Verified at 390×844 |
+| **Cache bust** | highlights v=24, collection-descriptions v=24 | [x] |
+
+### 💡 Verdict
+- **Changes:** 3 rules fixed across 2 CSS files (+6 lines). Session total: **22 `transition: all` rules fixed**. ~25 remain (19 in components.css, 4 in mobile-ux-improvements.css, 2 in layout.css).
+- **Status:** COMMITTED
