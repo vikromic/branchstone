@@ -1553,3 +1553,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added `<noscript>` fallback inside the gallery container with a polite message directing users to email. Invisible when JS is enabled; provides a usable alternative when JS is blocked.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: COLOR_SCHEME_PROPERTY_v1]
+### 🎯 Objective
+- **Surface:** Dark mode native UI consistency
+- **Items:** `color-scheme: light dark` in `tokens.css` `:root`
+- **Goal:** Tell browsers the page supports both color schemes so native UI elements (scrollbars, form controls, selection highlights) automatically adapt to dark/light mode.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Property added** | `color-scheme: light dark` on `:root` | [x] First line in `:root` block |
+| **Cache bust** | tokens.css v=24 | [x] Bumped across all 8 HTML files |
+| **Gallery render** | No regression | [x] All 19 cards, filters, newsletter present |
+| **Dark mode benefit** | Scrollbars + form controls match theme | [x] Browser-native dark adaptation enabled |
+
+### 💡 Verdict
+- **Changes:** Added `color-scheme: light dark` to `:root` in tokens.css. Bumped cache to v=24 across all pages. Native browser elements (scrollbars, checkboxes, selects) will now automatically match the active theme without custom CSS.
+- **Status:** COMMITTED
