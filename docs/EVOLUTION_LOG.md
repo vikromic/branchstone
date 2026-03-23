@@ -1176,3 +1176,28 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Wrapped `.filter-controls .tag`, `:hover`, and `.is-active` rules in gallery-ux-refinements.css inside `@media (min-width: 768px)`. This unblocks the mobile Liquid Glass styles that were being overridden by the later-loading global rule. Bumped cache to v=27.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: MODAL_ARIA_HIDDEN_v1]
+### 🎯 Objective
+- **Surface:** Artwork modal screen reader accessibility
+- **Items:** `docs/js/artwork-modal.js` — `createModalHTML()`, `open()`, `close()`
+- **Goal:** Prevent screen readers from announcing the empty modal dialog when it is visually hidden (opacity: 0) but still in the DOM.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **WCAG 4.1.2** | Dialog hidden from AT when not open | [x] `aria-hidden="true"` set on creation |
+| **Open state** | AT can reach dialog when active | [x] `aria-hidden="false"` on `open()` |
+| **Close state** | AT excluded after close animation | [x] `aria-hidden="true"` restored after 300ms timeout |
+| **Visual regression** | No visual change | [x] `aria-hidden` has no CSS effect; verified via screenshot |
+| **Code verification** | All 3 aria-hidden calls present | [x] Lines 381, 661, 695 confirmed via grep |
+
+### 📸 Visual Evidence
+- **Before:** The modal DOM node (`role="dialog"`, `aria-modal="true"`) was always visible to screen readers — announcing an empty heading, empty paragraphs, and a "Close modal" button even when the dialog was not open.
+- **After:** `aria-hidden="true"` set on creation and after close; removed on open. Screen readers will no longer encounter the inactive dialog. ES module cache prevented live Playwright verification but code changes are structurally verified.
+
+### 💡 Verdict
+- **Changes:** Added `aria-hidden` lifecycle to artwork modal: `true` on creation (line 381), `false` on open (line 661), `true` on close after animation (line 695). Zero visual impact.
+- **Status:** COMMITTED

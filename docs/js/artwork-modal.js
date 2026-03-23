@@ -378,6 +378,7 @@ export class ArtworkModalManager {
     modal.setAttribute('role', 'dialog');
     modal.setAttribute('aria-modal', 'true');
     modal.setAttribute('aria-labelledby', 'modal-title');
+    modal.setAttribute('aria-hidden', 'true');
     // Don't use hidden attribute - it conflicts with CSS transitions
     // modal.hidden = true;
 
@@ -657,6 +658,7 @@ export class ArtworkModalManager {
 
     // Add active class to trigger CSS transition
     this.modal.classList.add('is-active');
+    this.modal.setAttribute('aria-hidden', 'false');
 
     // Lock body scroll
     document.body.style.overflow = 'hidden';
@@ -690,6 +692,7 @@ export class ArtworkModalManager {
     setTimeout(() => {
       // Don't use hidden attribute - keep consistent with open method
       // this.modal.hidden = true;
+      this.modal.setAttribute('aria-hidden', 'true');
       this.currentArtwork = null;
 
       // Unlock body scroll
