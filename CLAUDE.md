@@ -12,6 +12,8 @@
 - **Avoid overfitting to one past issue.** A solved problem is not a permanent priority; fresh observation always wins.
 - **If no obvious bug exists, improve quality anyway.** Reduce friction in hierarchy, spacing, touch ergonomics, motion, readability, resilience, perceived performance, or architectural clarity.
 - **Ship coherent units.** Each iteration should revolve around one clear improvement theme or one tightly related bundle, not random scattered tweaks.
+- **For open-ended Ralph operation, think in long batches.** It is acceptable to run very large iteration batches such as `500`, then inspect the accumulated result and launch the next batch.
+- **Safety cap, not finish line.** In open-ended hardening mode, the iteration cap exists to bound unattended runtime, not to declare the site complete.
 
 ## 📱 Page Priority & Audit Order
 1. **Gallery mobile browse state**: first paint, header chrome, collection filters, artwork density, card legibility, card actions.
@@ -58,6 +60,8 @@ On every loop, search for the most meaningful issue or opportunity in these cate
 - **Compare against your earlier Proof of Sight.** State what is better now and confirm what did not regress.
 - **No commit without zero-regression confidence** in layout, art prominence, touch comfort, and perceived performance.
 - **If the change feels cheaper, revert it.** Quality bar matters more than keeping work.
+- **A successful iteration is commit-worthy.** If an iteration produced a verified net improvement and updated the evolution log, commit it immediately.
+- **Do not commit failed or unverified passes.** If the change regressed the UI, could not be verified, or did not produce a clear improvement, keep working without committing that pass.
 
 ## 📝 Logging & Commit Hygiene
 - **Update `docs/EVOLUTION_LOG.md` every iteration.** Record:
@@ -65,5 +69,7 @@ On every loop, search for the most meaningful issue or opportunity in these cate
   - what you changed
   - what you verified
   - why the result is a net improvement
-- **Commit after each coherent iteration** using Conventional Commit format.
+- **Commit after each successful iteration** using Conventional Commit format.
+- **Success means:** proof-of-sight before change, verified improvement after change, no observed regression in adjacent gallery states, and evolution log updated.
+- **High-iteration Ralph runs may create many commits.** That is acceptable. Prioritize auditability and rollback safety over a tidy commit count.
 - **Never claim the site is finished.** After logging and verification, continue scouting for the next highest-leverage improvement until the human stops the loop.

@@ -48,7 +48,7 @@ Your job is not to chase one known bug. Your job is to keep finding and fixing t
 
 8. **Log, Commit, Continue**
    - Update `docs/EVOLUTION_LOG.md` every iteration.
-   - Commit each coherent iteration with a Conventional Commit message.
+   - Commit each successful iteration with a Conventional Commit message.
    - Do not declare victory or stop looping unless a human stops you.
 
 ### **Required Loop Workflow**
@@ -96,7 +96,7 @@ Your job is not to chase one known bug. Your job is to keep finding and fixing t
   - reason the result is better
 
 **Step 8 [Commit]**
-- Commit the iteration cleanly.
+- Commit the iteration only if it was successful: verified improvement, no observed regression, and evolution log updated.
 
 **Step 9 [Loop]**
 - Immediately begin the next scout from fresh observation.
@@ -131,6 +131,8 @@ Required operating rules:
 - If no obvious bug exists, improve clarity, speed, spacing, interaction quality, or code simplicity without making the interface louder.
 - Never let decorative UI compete with the artwork.
 - Never stylize or alter the exact completion token.
+- Commit every successful iteration. A successful iteration means the change was verified in /chrome, produced a clear net improvement, updated docs/EVOLUTION_LOG.md, and showed no observed adjacent-state regression.
+- Do not commit failed, unverifiable, or neutral passes.
 
 Required workflow each iteration:
 1. Scout the live mobile gallery.
@@ -156,7 +158,7 @@ Completion rules:
 
 ## **Suggested Claude Commands**
 
-For an open-ended hardening run:
+For an open-ended hardening batch that you plan to inspect after 500 loops:
 
 ```text
 /personality-roulette:personality gallery-sentinel
@@ -179,7 +181,9 @@ Required operating rules:
 - Prefer fixes to gallery load, filter discoverability, card readability, modal behavior, favorites, inquiry flow, touch comfort, performance, accessibility, and visual hierarchy before touching secondary pages.
 - If no obvious bug exists, improve clarity, speed, spacing, interaction quality, or code simplicity without making the interface louder.
 - Never let decorative UI compete with the artwork.
-- Never stylize or alter the exact completion token.
+- Never emit the completion token `__MANUAL_REVIEW__`.
+- Commit every successful iteration. A successful iteration means the change was verified in /chrome, produced a clear net improvement, updated docs/EVOLUTION_LOG.md, and showed no observed adjacent-state regression.
+- Do not commit failed, unverifiable, or neutral passes.
 
 Required workflow each iteration:
 1. Scout the live mobile gallery.
@@ -198,12 +202,13 @@ Verification requirements:
 - Keep output concise, operational, and evidence-based.
 
 Completion rules:
-- Continue until max iterations is reached or a human stops the run.
-- Only output COMPLETE when the requested run goal is fully satisfied.
-- Output COMPLETE on its own line with no punctuation or decoration." --completion-promise "COMPLETE" --max-iterations 12
+- This is an open-ended hardening batch, not a bounded completion task.
+- Never output `__MANUAL_REVIEW__`.
+- Continue iterating until the 500-iteration safety cap stops the batch or a human stops the run.
+- Treat `--max-iterations 500` as a review checkpoint, not as project completion." --completion-promise "__MANUAL_REVIEW__" --max-iterations 500
 ```
 
-For a targeted run, replace the mission section with a concrete goal, for example:
+For a bounded targeted run, replace the mission section with a concrete goal, for example:
 
 ```text
 /ralph-loop "You are Gallery Sentinel, running a Branchstone UX hardening loop.
@@ -212,3 +217,10 @@ Goal: improve the mobile gallery first-load experience and reduce friction befor
 
 All other rules remain the same. Output COMPLETE only when the goal is fully satisfied and verified." --completion-promise "COMPLETE" --max-iterations 8
 ```
+
+## **Operator Guidance**
+
+- Use **open-ended batch mode** when you want the site to keep compounding improvements for a long unattended run and you will inspect the result after a large checkpoint such as `500` iterations.
+- Use **bounded targeted mode** when you want Claude to stop itself after a concrete goal is fully satisfied.
+- In open-ended batch mode, do not use `COMPLETE` as the completion promise. Use a token the agent is explicitly forbidden to print, such as `__MANUAL_REVIEW__`.
+- In bounded targeted mode, keep the goal narrow and keep `COMPLETE` literal.

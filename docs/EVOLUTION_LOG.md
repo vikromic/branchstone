@@ -993,3 +993,24 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Extended `RALPH_LOOP_PROMPT.md` with a tighter Branchstone-specific prompt, plus suggested Claude command examples for open-ended and targeted runs. The new variant is optimized for `gallery-sentinel` and keeps the loop deterministic enough for repeated Claude use while preserving the universal gallery-first rules.
 - **Status:** READY TO COMMIT
+
+---
+
+## [Iteration: SUCCESSFUL_ITERATION_COMMIT_POLICY_v1]
+### 🎯 Objective
+- **Surface:** Continuous-loop operating rules
+- **Items:** `CLAUDE.md`, `RALPH_LOOP_PROMPT.md`
+- **Goal:** Align the instruction set with long unattended Ralph batches by requiring a commit after every successful iteration while keeping open-ended runs alive until a large review checkpoint such as 500 iterations.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Live mobile scout** | Proof of Sight before edits | [x] Verified on `gallery.html` at 390×844 |
+| **Commit semantics** | Successful iteration must commit | [x] Added explicit success definition and commit rule |
+| **Failure handling** | Failed or unverifiable passes must not commit | [x] Added explicit non-commit rule |
+| **Open-ended batch mode** | Long run can continue without terminal completion | [x] Added 500-iteration review-checkpoint guidance |
+| **Ralph safety** | Completion token protected in open-ended mode | [x] Added forbidden-token pattern with `__MANUAL_REVIEW__` |
+
+### 💡 Verdict
+- **Changes:** Tightened `CLAUDE.md` and `RALPH_LOOP_PROMPT.md` so each verified improvement is committed immediately, while open-ended hardening runs are executed as large safety-capped batches rather than bounded completion tasks. The prompt now distinguishes open-ended 500-iteration review batches from narrow `COMPLETE`-driven runs.
+- **Status:** READY TO COMMIT
