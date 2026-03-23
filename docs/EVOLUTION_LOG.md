@@ -972,3 +972,24 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Rewrote `CLAUDE.md` into a gallery-first operating manual and rewrote `RALPH_LOOP_PROMPT.md` into a universal continuous-hardening prompt. Both now prioritize mobile gallery states, fresh observation, proof-of-sight, zero-regression verification, and iterative logging without tying the loop to any specific known problem.
 - **Status:** READY TO COMMIT
+
+---
+
+## [Iteration: GALLERY_SENTINEL_RALPH_PROMPT_TIGHTENING_v1]
+### 🎯 Objective
+- **Surface:** Ralph loop operator prompt
+- **Items:** `RALPH_LOOP_PROMPT.md`
+- **Goal:** Add a run-ready Branchstone prompt variant optimized for the custom `gallery-sentinel` personality so long Claude loops stay strict, low-noise, and art-first.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Live mobile scout** | Proof of Sight before edits | [x] Verified on `gallery.html` at 390×844 |
+| **Prompt specificity** | Ready-to-run text, not just general philosophy | [x] Added concrete Branchstone run prompt |
+| **Personality fit** | Works with `gallery-sentinel` without theater drift | [x] Emphasized concise, operational, evidence-based output |
+| **Automation safety** | Completion token preserved literally | [x] Added explicit completion-token guardrails |
+| **Loop discipline** | Iteration flow and regression checks remain mandatory | [x] Embedded explicit scout → act → verify → log → commit loop |
+
+### 💡 Verdict
+- **Changes:** Extended `RALPH_LOOP_PROMPT.md` with a tighter Branchstone-specific prompt, plus suggested Claude command examples for open-ended and targeted runs. The new variant is optimized for `gallery-sentinel` and keeps the loop deterministic enough for repeated Claude use while preserving the universal gallery-first rules.
+- **Status:** READY TO COMMIT
