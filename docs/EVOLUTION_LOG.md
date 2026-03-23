@@ -1573,3 +1573,25 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added `color-scheme: light dark` to `:root` in tokens.css. Bumped cache to v=24 across all pages. Native browser elements (scrollbars, checkboxes, selects) will now automatically match the active theme without custom CSS.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: CSS_CACHE_VERSION_ALIGNMENT_v1]
+### 🎯 Objective
+- **Surface:** CSS cache consistency across pages
+- **Items:** `mobile-gallery-improvements.css` version in 4 HTML files
+- **Goal:** Align stale v=24 references to v=25 on about, commissions, contact, and index pages.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **gallery.html** | v=25 | [x] Already current |
+| **index.html** | v=25 | [x] Updated from v=24 |
+| **about.html** | v=25 | [x] Updated from v=24 |
+| **commissions.html** | v=25 | [x] Updated from v=24 |
+| **contact.html** | v=25 | [x] Updated from v=24 |
+| **All CSS files** | Consistent versions | [x] Audit confirmed zero remaining mismatches |
+
+### 💡 Verdict
+- **Changes:** Bumped `mobile-gallery-improvements.css` from v=24 to v=25 on 4 pages that were stale. All CSS cache versions are now consistent across the site.
+- **Status:** COMMITTED
