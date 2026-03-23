@@ -1424,7 +1424,6 @@
     border-radius: 0;
     border: none;
     box-shadow: none;
-    outline: none;
     width: var(--touch-target-preferred);
     height: var(--touch-target-preferred);
     min-width: var(--touch-target-preferred);
@@ -1440,7 +1439,8 @@
   }
 
   .artwork-modal__close:focus-visible {
-    outline: none;
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
   }
 
   .artwork-modal__close svg {

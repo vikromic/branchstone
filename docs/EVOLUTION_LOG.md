@@ -930,3 +930,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 8 rules fixed in components.css (+16 lines). **SWEEP COMPLETE: 45/45 `transition: all` rules eliminated from the entire CSS codebase.** Zero remain.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: MODAL_CLOSE_FOCUS_VISIBLE_FIX_v1]
+### 🎯 Objective
+- **Surface:** Artwork modal close button keyboard focus on mobile
+- **Items:** `.artwork-modal__close:focus-visible` in `mobile-ux-improvements.css`
+- **Goal:** Fix WCAG 2.4.7 violation — mobile override was removing focus indicator with `outline: none`.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **WCAG 2.4.7** | Focus visible for keyboard | [x] Restored 2px solid accent outline |
+| **Base outline:none** | Redundant (base.css handles) | [x] Removed from mobile override |
+| **:focus-visible** | Proper outline on keyboard nav | [x] 2px solid + 2px offset |
+| **Gallery render** | No regression | [x] Verified at 390×844 |
+
+### 💡 Verdict
+- **Changes:** Fixed `:focus-visible { outline: none }` → `:focus-visible { outline: 2px solid var(--accent-primary) }` on modal close button. Removed redundant `outline: none` from base state. Second a11y fix this session.
+- **Status:** COMMITTED
