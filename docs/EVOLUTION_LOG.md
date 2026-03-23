@@ -859,3 +859,25 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 4 rules fixed in mobile-ux-improvements.css (+9 lines). File now **transition:all free**. Session total: **26 rules fixed**. Only **19 remain in components.css**.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: COMPONENTS_TRANSITION_BATCH_1_v1]
+### 🎯 Objective
+- **Surface:** components.css — cards and form elements
+- **Items:** `.card`, `.card-feature`, `.form-checkbox-box`, `.form-radio-box`, `.form__input/.form__textarea/.form__select`
+- **Goal:** Fix 5 `transition: all` rules on cards and form inputs — the most commonly rendered elements.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **.card** | Explicit props | [x] box-shadow, transform |
+| **.card-feature** | Explicit props | [x] box-shadow, transform |
+| **.form-checkbox-box** | Explicit props | [x] background-color, border-color |
+| **.form-radio-box** | Explicit props | [x] background-color, border-color |
+| **.form__input/textarea/select** | Explicit props | [x] border-color, box-shadow |
+| **Contact form** | No regression | [x] Verified at 390×844 |
+
+### 💡 Verdict
+- **Changes:** 5 rules fixed in components.css (+5 lines). Session total: **31 `transition: all` rules fixed**. **14 remain in components.css**.
+- **Status:** COMMITTED
