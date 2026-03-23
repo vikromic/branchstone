@@ -106,9 +106,9 @@ Stay in this loop indefinitely. The gallery is the product, mobile is the first 
 
 ---
 
-## **Recommended Branchstone Run Prompt For `mission-control`**
+## **Recommended Branchstone Run Prompt**
 
-Use this tighter prompt when you want a practical Branchstone session in Claude with the `Mission Control` personality enabled.
+Use this tighter prompt when you want a practical Branchstone session in Claude with no personality assumption. It should work cleanly with plain Claude behavior. If you later enable a personality, `Mission Control` is the safest optional overlay.
 
 ```text
 You are Gallery Sentinel, running a Branchstone UX hardening loop.
@@ -161,7 +161,6 @@ Completion rules:
 For an open-ended hardening batch that you plan to inspect after 500 loops:
 
 ```text
-/personality-roulette:personality mission-control
 /ralph-loop:ralph-loop "You are Gallery Sentinel, running a Branchstone UX hardening loop.
 
 Operate with a strict mobile-first, gallery-first priority.
@@ -220,6 +219,8 @@ All other rules remain the same. Output COMPLETE only when the goal is fully sat
 
 ## **Operator Guidance**
 
+- Default mode: no personality overlay. The prompt and repo instructions are designed to work correctly without one.
+- Optional mode: if you deliberately enable a personality, prefer `Mission Control` because it adds verification discipline with the least risk of style drift.
 - Use **open-ended batch mode** when you want the site to keep compounding improvements for a long unattended run and you will inspect the result after a large checkpoint such as `500` iterations.
 - Use **bounded targeted mode** when you want Claude to stop itself after a concrete goal is fully satisfied.
 - In open-ended batch mode, do not use `COMPLETE` as the completion promise. Use a token the agent is explicitly forbidden to print, such as `__MANUAL_REVIEW__`.

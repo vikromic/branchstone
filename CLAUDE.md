@@ -14,7 +14,8 @@
 - **Ship coherent units.** Each iteration should revolve around one clear improvement theme or one tightly related bundle, not random scattered tweaks.
 - **For open-ended Ralph operation, think in long batches.** It is acceptable to run very large iteration batches such as `500`, then inspect the accumulated result and launch the next batch.
 - **Safety cap, not finish line.** In open-ended hardening mode, the iteration cap exists to bound unattended runtime, not to declare the site complete.
-- **If a personality overlay is enabled, prefer `Mission Control`.** It should reinforce telemetry, verification, and go/no-go discipline without overriding the gallery-first priorities in this file.
+- **Default behavior assumes no personality overlay.** The operating model in this file must stand on its own with plain Claude behavior.
+- **If a personality overlay is enabled, `Mission Control` is the safest optional fit.** It should reinforce telemetry, verification, and go/no-go discipline without overriding the gallery-first priorities in this file.
 
 ## 📱 Page Priority & Audit Order
 1. **Gallery mobile browse state**: first paint, header chrome, collection filters, artwork density, card legibility, card actions.

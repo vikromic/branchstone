@@ -1056,6 +1056,26 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 
 ---
 
+## [Iteration: NO_PERSONALITY_DEFAULT_v1]
+### 🎯 Objective
+- **Surface:** Default Claude operating assumptions
+- **Items:** `CLAUDE.md`, `RALPH_LOOP_PROMPT.md`
+- **Goal:** Make the Branchstone loop instructions assume plain Claude behavior by default, with personality treated as optional rather than built into the recommended run command.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Live mobile scout** | Proof of Sight before edits | [x] Verified on `gallery.html` at 390×844 |
+| **Default behavior** | Docs work without any personality plugin | [x] Added no-personality default language |
+| **Prompt readiness** | Runnable command has no personality prerequisite | [x] Removed personality activation from default example |
+| **Optional overlay guidance** | Safe optional personality still documented | [x] Kept `Mission Control` as optional best-fit overlay |
+
+### 💡 Verdict
+- **Changes:** Reframed the Branchstone instruction layer so plain Claude behavior is the default operating model, and made `Mission Control` an optional overlay instead of part of the default runnable command path.
+- **Status:** READY TO COMMIT
+
+---
+
 ## [Iteration: GALLERY_BOTTOM_SPACING_v1]
 ### 🎯 Objective
 - **Surface:** Mobile gallery section bottom pacing
