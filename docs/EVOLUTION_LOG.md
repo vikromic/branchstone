@@ -904,3 +904,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 6 rules fixed in components.css (+6 lines). Session total: **37 `transition: all` rules fixed**. **8 remain in components.css**.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: COMPONENTS_TRANSITION_FINAL_v1]
+### 🎯 Objective
+- **Surface:** components.css — final 8 `transition: all` rules
+- **Items:** `.wizard-progress__step-number`, `.commission-type-card`, `.commission-type-card__content`, `.commission-type-card__icon`, `.hero-card-close`, `.hero-show-info`, `.hero-show-info__text`, `.simple-toast`
+- **Goal:** Eliminate ALL remaining `transition: all` from the entire CSS codebase.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **wizard step number** | Explicit | [x] background-color, color, border-color, box-shadow |
+| **commission card** | Explicit | [x] transform, box-shadow |
+| **commission content** | Explicit | [x] border-color, box-shadow, transform, background-color |
+| **commission icon** | Explicit | [x] color |
+| **hero-card-close** | Explicit | [x] background-color, border-color, transform, box-shadow |
+| **hero-show-info** | Explicit | [x] border-color, transform, box-shadow |
+| **hero-show-info__text** | Explicit | [x] opacity, max-width, margin-left |
+| **simple-toast** | Explicit | [x] opacity, transform |
+| **Commissions page** | No regression | [x] Verified at 390×844 |
+| **Codebase count** | Zero `transition: all` | [x] **0 matches across all CSS files** |
+
+### 💡 Verdict
+- **Changes:** 8 rules fixed in components.css (+16 lines). **SWEEP COMPLETE: 45/45 `transition: all` rules eliminated from the entire CSS codebase.** Zero remain.
+- **Status:** COMMITTED

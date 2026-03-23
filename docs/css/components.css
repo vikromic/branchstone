@@ -3324,7 +3324,10 @@ details[open] summary {
   font-family: var(--font-display);
   font-size: 0.875rem;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
 }
 
 .wizard-progress__step--active .wizard-progress__step-number {
@@ -3434,7 +3437,8 @@ details[open] summary {
   cursor: pointer;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease,
+              box-shadow 0.3s ease;
 }
 
 .commission-type-card input[type="radio"] {
@@ -3452,7 +3456,10 @@ details[open] summary {
   border: 2px solid var(--border-light);
   border-radius: var(--radius-lg);
   text-align: center;
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease,
+              box-shadow 0.3s ease,
+              transform 0.3s ease,
+              background-color 0.3s ease;
 }
 
 .commission-type-card:hover .commission-type-card__content {
@@ -3478,7 +3485,7 @@ details[open] summary {
   background: linear-gradient(135deg, var(--accent-light), rgba(139, 113, 92, 0.1));
   border-radius: var(--radius-full);
   color: var(--accent-primary);
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .commission-type-card input[type="radio"]:checked ~ .commission-type-card__content .commission-type-card__icon {
@@ -4084,7 +4091,10 @@ details[open] summary {
   box-shadow:
     0 2px 6px rgba(26, 24, 22, 0.2),
     0 1px 2px rgba(26, 24, 22, 0.1);
-  transition: all 0.25s ease;
+  transition: background-color 0.25s ease,
+              border-color 0.25s ease,
+              transform 0.25s ease,
+              box-shadow 0.25s ease;
   z-index: 100;
 }
 
@@ -4147,7 +4157,9 @@ details[open] summary {
   box-shadow:
     0 4px 16px rgba(184, 134, 107, 0.3),
     0 2px 6px rgba(26, 24, 22, 0.2);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 20;
   white-space: nowrap;
   font-family: var(--font-body);
@@ -4171,7 +4183,9 @@ details[open] summary {
   opacity: 0;
   max-width: 0;
   overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              margin-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hero-show-info:hover {
@@ -4306,7 +4320,8 @@ details[open] summary {
     0 4px 8px rgba(26, 24, 22, 0.2);
   z-index: 9999;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
