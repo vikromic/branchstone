@@ -1292,3 +1292,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added `img.decoding = shouldEagerLoad ? 'auto' : 'async'` to `createArtworkImage()`. Above-fold images use browser default (`auto`), below-fold images use `async` to prevent decode from blocking the main thread during scroll.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: NEWSLETTER_INPUT_AUTOFILL_v1]
+### 🎯 Objective
+- **Surface:** Newsletter email input UX on all pages
+- **Items:** `<input class="newsletter__input">` across 7 HTML files
+- **Goal:** Add `autocomplete="email"` and `inputmode="email"` to improve mobile keyboard and browser autofill for newsletter subscription.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **autocomplete** | `email` for autofill | [x] Added to all 7 newsletter inputs |
+| **inputmode** | `email` for mobile keyboard | [x] Added to all 7 newsletter inputs |
+| **Gallery render** | No regression | [x] All 19 cards render; verified via Playwright |
+| **Attribute verification** | DOM confirms new attributes | [x] `autocomplete: "email"`, `inputMode: "email"` |
+
+### 💡 Verdict
+- **Changes:** Added `autocomplete="email"` and `inputmode="email"` to newsletter email inputs in gallery.html, index.html, about.html, commissions.html, contact.html, privacy.html, terms.html. Mobile users now get an email-optimized keyboard and browser autofill support.
+- **Status:** COMMITTED
