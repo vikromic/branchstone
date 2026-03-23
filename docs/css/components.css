@@ -1875,7 +1875,13 @@
 .newsletter__input:focus {
   outline: none;
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(139, 113, 90, 0.1);
+  box-shadow: 0 0 0 3px rgba(131, 90, 62, 0.25);
+}
+
+.newsletter__input:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(131, 90, 62, 0.2);
 }
 
 .newsletter__input::placeholder {

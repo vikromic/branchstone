@@ -308,3 +308,22 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +6 lines in components.css. Enhanced `:focus` shadow opacity, added `:focus-visible` rule with outline for keyboard accessibility. CSS cache bumped to v=23.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: NEWSLETTER_FOCUS_ACCESSIBILITY_v1]
+### 🎯 Objective
+- **Surface:** Newsletter email input on all pages
+- **Items:** `.newsletter__input:focus`, `.newsletter__input:focus-visible` in `components.css`
+- **Goal:** Complete the focus accessibility sweep — newsletter input had same invisible focus issue.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **WCAG 2.4.7** | Focus visible for keyboard | [x] :focus-visible with 3px outline |
+| **:focus shadow** | Visible on mouse click | [x] Opacity 0.1→0.25 |
+| **Systematic Audit** | All outline:none have :focus-visible | [x] Verified — 0 remaining gaps |
+
+### 💡 Verdict
+- **Changes:** +6 lines in components.css. Same pattern as Iteration 5 applied to newsletter input. Systematic audit confirmed no remaining `outline:none` without `:focus-visible` override.
+- **Status:** COMMITTED
