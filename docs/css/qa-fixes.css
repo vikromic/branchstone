@@ -594,16 +594,13 @@ a[target="_blank"]::after {
    PERFORMANCE OPTIMIZATIONS
    ========================================================================== */
 
-/* Reduce paint/layout thrashing */
-.artwork-card,
-.btn,
-.mobile-bottom-nav__link {
-  will-change: transform;
-}
-
-/* Optimize animations */
+/* GPU layer hints — only on interaction, not permanently.
+   Permanent will-change wastes GPU memory by pre-allocating
+   compositor layers for every card/button on the page. Modern
+   browsers GPU-accelerate transform/opacity by default. */
 @media (prefers-reduced-motion: no-preference) {
-  .artwork-card:hover {
+  .artwork-card:hover,
+  .btn:hover {
     will-change: transform, box-shadow;
   }
 }

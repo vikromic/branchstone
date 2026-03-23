@@ -475,3 +475,28 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +8 lines in layout.css (glass background, backdrop-filter, specular shadow, dark mode variant). Layout.css already at v=24.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: WILL_CHANGE_CLEANUP_v1]
+### 🎯 Objective
+- **Surface:** GPU compositor layer allocation (performance)
+- **Items:** Permanent `will-change` in `qa-fixes.css` and `components.css`
+- **Goal:** Remove permanent `will-change: transform` from `.artwork-card`, `.btn`, `.mobile-bottom-nav__link` to reduce GPU memory waste.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Btn will-change** | `auto` (not permanent) | [x] Removed — now `auto` |
+| **Card will-change** | Only during animation | [x] Scroll animation in artwork-animations.css retained |
+| **Hover hint** | Applied on hover only | [x] `:hover { will-change: transform, box-shadow }` |
+| **Visual regression** | Gallery renders correctly | [x] Verified at 390×844 |
+| **Cache Bust** | qa-fixes.css + components.css | [x] v=24 across all HTML |
+
+### 📸 Visual Evidence
+- **Before:** `will-change: transform` permanently applied to every `.artwork-card`, `.btn`, and `.mobile-bottom-nav__link` — creating unnecessary GPU compositor layers for 30+ elements on the gallery page alone. The CSS spec warns: "Setting will-change on too many elements can cause excessive GPU memory usage."
+- **After:** Permanent declarations removed. Hover-triggered `will-change` retained for smooth interaction. Scroll animation `will-change` (artwork-animations.css) retained as justified. Verified gallery renders with no visual regression.
+
+### 💡 Verdict
+- **Changes:** -4 lines in qa-fixes.css (replaced permanent rule with hover-only), -1 line in components.css (removed permanent `will-change` from `.artwork-card`). Cache bumped to v=24 for both files.
+- **Status:** COMMITTED

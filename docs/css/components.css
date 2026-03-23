@@ -373,7 +373,6 @@
   transition:
     transform var(--duration-normal) var(--ease-spring),
     box-shadow var(--duration-normal) var(--ease-smooth);
-  will-change: transform;
 }
 
 /* Liquid Glass: Specular highlight + art inner-stroke */
