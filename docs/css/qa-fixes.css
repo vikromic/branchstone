@@ -289,28 +289,29 @@ select.is-valid {
   /* Different background colors for diversity */
 }
 
+/* Avatar gradients — earthy tones from copper/sage palettes for Art Safety */
 .testimonial-card:nth-child(1) .testimonial-card__avatar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--copper-400) 0%, var(--copper-600) 100%);
 }
 
 .testimonial-card:nth-child(2) .testimonial-card__avatar {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, var(--copper-300) 0%, var(--copper-500) 100%);
 }
 
 .testimonial-card:nth-child(3) .testimonial-card__avatar {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(135deg, var(--sage-500) 0%, var(--sage-700) 100%);
 }
 
 .testimonial-card:nth-child(4) .testimonial-card__avatar {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  background: linear-gradient(135deg, var(--copper-500) 0%, var(--copper-700) 100%);
 }
 
 .testimonial-card:nth-child(5) .testimonial-card__avatar {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background: linear-gradient(135deg, var(--sage-400) 0%, var(--sage-600) 100%);
 }
 
 .testimonial-card:nth-child(6) .testimonial-card__avatar {
-  background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+  background: linear-gradient(135deg, var(--copper-200) 0%, var(--copper-400) 100%);
 }
 
 /* MED-008: Mobile Filter Count Badge - Show When Active */

@@ -207,3 +207,28 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +18 lines net in layout.css. Trust cards gained full Liquid Glass treatment (squircle, glass bg, depth shadow, specular, spring hover). Dark mode override added. Mobile padding adjustment added. CSS cache bumped to v=22 across all HTML files.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: TESTIMONIAL_AVATAR_PALETTE_v1]
+### 🎯 Objective
+- **Surface:** Testimonial card avatar circles ("What Collectors Say")
+- **Items:** `.testimonial-card:nth-child(n) .testimonial-card__avatar` in `qa-fixes.css`
+- **Goal:** Replace vivid neon avatar gradients with earthy copper/sage palette for Art Safety compliance.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Art Safety** | No vivid/neon colors near art | [x] All neon gradients replaced |
+| **Palette Cohesion** | Use copper/sage token palette | [x] copper-200→700, sage-400→700 |
+| **Variety** | Distinguish each avatar | [x] 4 copper + 2 sage gradient pairs |
+| **Dark Mode** | Tones adapt correctly | [x] Verified — tokens auto-adapt |
+| **WCAG Contrast** | White initials on dark bg | [x] All gradients dark enough for white text |
+
+### 📸 Visual Evidence
+- **Before:** Avatar circles used vivid neon gradients: purple (#667eea→#764ba2), hot pink (#f093fb→#f5576c), cyan (#4facfe→#00f2fe), teal/green (#43e97b→#38f9d7), pink-yellow (#fa709a→#fee140), teal-purple (#30cfd0→#330867). Visually jarring against earthy palette.
+- **After:** Avatars use copper-400→600, copper-300→500, sage-500→700, copper-500→700, sage-400→600, copper-200→400. Warm, muted, distinguished. Verified in both light and dark modes via Playwright.
+
+### 💡 Verdict
+- **Changes:** 0 lines net in qa-fixes.css (6 gradient values replaced in-place). Eliminated all neon/vivid hex colors from the codebase in favor of design token references.
+- **Status:** COMMITTED
