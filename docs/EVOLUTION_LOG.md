@@ -565,3 +565,22 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 2 property swaps in layout.css (`padding-left` → `transform` in transition and hover/active rules). Eliminates layout reflow on menu link interaction.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: BTN_TRANSITION_ALL_FIX_v1]
+### 🎯 Objective
+- **Surface:** Base `.btn` transition property (performance)
+- **Items:** `.btn` in `components.css`
+- **Goal:** Replace `transition: all` with explicit property list to prevent unintended transitions.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Explicit props** | Only intended properties transition | [x] transform, box-shadow, color, background-color, border-color, opacity |
+| **Variant override** | .btn--primary/secondary still override | [x] Specific transitions take precedence |
+| **Visual regression** | Page renders correctly | [x] Verified via Playwright |
+
+### 💡 Verdict
+- **Changes:** Replaced `transition: all` with 6 explicit properties on `.btn` base rule. Prevents unintended property transitions (e.g., `display`, `z-index`) while preserving all intended hover effects.
+- **Status:** COMMITTED
