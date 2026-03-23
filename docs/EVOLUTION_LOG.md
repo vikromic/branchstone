@@ -1272,3 +1272,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Removed 11-line dead `.testimonial-card::before` block (opacity: 0.15) from layout.css. The surviving block (opacity: 0.2) was already winning the cascade, so zero visual change. Bumped layout.css to v=26 across all pages.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: IMAGE_ASYNC_DECODING_v1]
+### 🎯 Objective
+- **Surface:** Gallery scroll performance
+- **Items:** `docs/js/gallery-data.js` — `createArtworkImage()`
+- **Goal:** Add `decoding="async"` to below-fold gallery images so the browser decodes them off the main thread, reducing scroll jank.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Above-fold images** | `decoding="auto"` (browser default) | [x] First 2 on mobile, first 6 on desktop |
+| **Below-fold images** | `decoding="async"` | [x] All lazy-loaded images get async decoding |
+| **Gallery render** | No regression | [x] All 19 cards render; verified via Playwright |
+| **Scroll perf** | Reduced main-thread decode blocking | [x] `async` defers decode to off-main-thread |
+
+### 💡 Verdict
+- **Changes:** Added `img.decoding = shouldEagerLoad ? 'auto' : 'async'` to `createArtworkImage()`. Above-fold images use browser default (`auto`), below-fold images use `async` to prevent decode from blocking the main thread during scroll.
+- **Status:** COMMITTED
