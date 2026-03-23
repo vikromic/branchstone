@@ -1595,3 +1595,19 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Bumped `mobile-gallery-improvements.css` from v=24 to v=25 on 4 pages that were stale. All CSS cache versions are now consistent across the site.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: WELCOME_POPUP_PERSISTENCE]
+### 🎯 Objective
+- **Surface:** Homepage hero welcome card
+- **Issue:** Welcome popup reappears every time user navigates to index.html because it used `sessionStorage` (clears on tab close).
+- **Goal:** Show the welcome card only once per visitor. After dismissal, persist across sessions.
+
+### 📸 Visual Evidence
+- **Before:** Welcome card visible on every page load. Dismissal only lasts within the current browser tab session.
+- **After:** Welcome card hidden on return to index.html after dismissal. "Show Info" button remains for manual restore.
+
+### 💡 Verdict
+- **Changes:** Replaced `sessionStorage` with `localStorage` in `initHeroCardClose()` within `main.js`. All 5 set/get/remove calls updated.
+- **Status:** COMMITTED

@@ -2586,8 +2586,8 @@ import { initI18n, getI18n } from './i18n.js';
     closeButton.addEventListener('click', (e) => {
       e.stopPropagation();
       heroContent.classList.add('is-hidden');
-      // Save state to sessionStorage with namespaced key
-      sessionStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
+      // Save state to localStorage so it persists across sessions
+      localStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
       // Show toast notification
       showSimpleToast('Tap ⓘ to restore', 4000, 'hero.tap_to_restore');
     });
@@ -2597,7 +2597,7 @@ import { initI18n, getI18n } from './i18n.js';
       showButton.addEventListener('click', (e) => {
         e.stopPropagation();
         heroContent.classList.remove('is-hidden');
-        sessionStorage.removeItem(STORAGE_PREFIX + 'heroCardDismissed');
+        localStorage.removeItem(STORAGE_PREFIX + 'heroCardDismissed');
       });
     }
 
@@ -2607,7 +2607,7 @@ import { initI18n, getI18n } from './i18n.js';
         // Only close if clicking on the section itself, not the content card
         if (e.target === heroSection || e.target.classList.contains('section-hero__background') || e.target.classList.contains('section-hero__background-image')) {
           heroContent.classList.add('is-hidden');
-          sessionStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
+          localStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
         }
       });
     }
@@ -2616,12 +2616,12 @@ import { initI18n, getI18n } from './i18n.js';
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !heroContent.classList.contains('is-hidden')) {
         heroContent.classList.add('is-hidden');
-        sessionStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
+        localStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
       }
     });
 
-    // Restore dismissed state from sessionStorage using namespaced key
-    if (sessionStorage.getItem(STORAGE_PREFIX + 'heroCardDismissed') === 'true') {
+    // Restore dismissed state from localStorage so popup stays hidden across visits
+    if (localStorage.getItem(STORAGE_PREFIX + 'heroCardDismissed') === 'true') {
       heroContent.classList.add('is-hidden');
     }
   };
