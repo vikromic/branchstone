@@ -2825,7 +2825,7 @@
     justify-content: flex-start;
     overflow-x: auto;
     overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
+
     scrollbar-width: none;
     flex-wrap: nowrap;
     gap: var(--space-2);

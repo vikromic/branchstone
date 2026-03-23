@@ -156,12 +156,6 @@ table {
   text-shadow: none;
 }
 
-::-moz-selection {
-  background-color: var(--accent-primary);
-  color: var(--text-inverse);
-  text-shadow: none;
-}
-
 /* ========================================
    FOCUS STYLES
    ======================================== */

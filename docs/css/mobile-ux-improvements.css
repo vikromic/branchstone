@@ -783,7 +783,6 @@
   .favorites-panel__content,
   .mobile-menu__list,
   .gallery-grid {
-    -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
 

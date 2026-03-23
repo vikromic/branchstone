@@ -80,7 +80,7 @@
     gap: var(--space-4);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+
     padding-bottom: var(--space-2);
     margin-left: calc(-1 * clamp(1rem, 5vw, 2rem));
     margin-right: calc(-1 * clamp(1rem, 5vw, 2rem));

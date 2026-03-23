@@ -2096,7 +2096,6 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: var(--space-4) 0;
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Custom scrollbar for modern browsers */
@@ -2393,11 +2392,7 @@
     perspective: 1000px;
   }
 
-  /* Optimize scroll performance */
-  .favorites-panel__content,
-  .lightbox {
-    -webkit-overflow-scrolling: touch;
-  }
+  /* Scroll containment for modal panels */
 
   /* Reduce animation complexity on mobile */
   .artwork-card:hover {

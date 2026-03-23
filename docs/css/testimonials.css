@@ -42,7 +42,7 @@
     gap: var(--space-4);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
+
     padding-bottom: var(--space-2);
     /* Add left/right padding equal to gap for visual balance */
     padding-left: var(--space-4);

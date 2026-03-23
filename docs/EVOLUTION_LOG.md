@@ -524,3 +524,24 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** +1 line in qa-fixes.css (`contain-intrinsic-size`). Cache bumped to v=25.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: DEAD_VENDOR_PREFIX_CLEANUP_v1]
+### 🎯 Objective
+- **Surface:** CSS codebase hygiene (Code Zen)
+- **Items:** `::-moz-selection` in base.css, `-webkit-overflow-scrolling: touch` across 6 files
+- **Goal:** Remove dead vendor prefixes that serve no purpose in any supported browser.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **::-moz-selection** | Dropped Firefox 62 (2018) | [x] Removed — ::selection covers all |
+| **-webkit-overflow-scrolling** | Deprecated iOS 13 (2019) | [x] All 8 instances removed |
+| **Files cleaned** | 7 CSS files | [x] base, testimonials, highlights, layout, components, mobile-gallery, mobile-ux |
+| **Lines removed** | Net reduction | [x] -13 lines |
+| **Visual regression** | Homepage renders correctly | [x] Verified via Playwright |
+
+### 💡 Verdict
+- **Changes:** -13 lines across 7 CSS files. Removed `::-moz-selection` block (5 lines, obsolete since 2018) and 8 `-webkit-overflow-scrolling: touch` declarations (obsolete since iOS 13, 2019). Modern browsers provide momentum scrolling and unprefixed `::selection` natively.
+- **Status:** COMMITTED
