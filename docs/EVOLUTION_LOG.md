@@ -950,3 +950,25 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Fixed `:focus-visible { outline: none }` → `:focus-visible { outline: 2px solid var(--accent-primary) }` on modal close button. Removed redundant `outline: none` from base state. Second a11y fix this session.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: GALLERY_FIRST_LOOP_HARDENING_v1]
+### 🎯 Objective
+- **Surface:** Instruction layer for continuous UX improvement
+- **Items:** `CLAUDE.md`, `RALPH_LOOP_PROMPT.md`
+- **Goal:** Make the operating instructions universal, mobile-first, gallery-first, and suitable for an endless loop that keeps discovering fresh UX improvements instead of chasing one specific issue.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Local mobile scout** | Proof of Sight before edits | [x] Verified via Playwright at mobile viewport |
+| **Primary surface clarity** | Gallery defined as top priority | [x] `gallery.html` established as first audit target |
+| **Homepage role** | Funnel into gallery, not primary destination | [x] Captured in both instruction files |
+| **Loop universality** | No dependency on static bug backlog | [x] Explicit fresh-scout / fresh-priority rules added |
+| **Verification discipline** | `/chrome` before edit and before commit | [x] Preserved and strengthened |
+| **Endless improvement mode** | Continue until human stops | [x] Added to `CLAUDE.md` and Ralph prompt |
+
+### 💡 Verdict
+- **Changes:** Rewrote `CLAUDE.md` into a gallery-first operating manual and rewrote `RALPH_LOOP_PROMPT.md` into a universal continuous-hardening prompt. Both now prioritize mobile gallery states, fresh observation, proof-of-sight, zero-regression verification, and iterative logging without tying the loop to any specific known problem.
+- **Status:** READY TO COMMIT
