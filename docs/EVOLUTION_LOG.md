@@ -881,3 +881,26 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** 5 rules fixed in components.css (+5 lines). Session total: **31 `transition: all` rules fixed**. **14 remain in components.css**.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: COMPONENTS_TRANSITION_BATCH_2_v1]
+### 🎯 Objective
+- **Surface:** components.css — tags, nav links, newsletter, favorites panel
+- **Items:** `.tag`, `.mobile-menu .nav-link`, `.newsletter__input`, `.newsletter__button`, `.favorites-panel__close`, `.favorite-item__remove`
+- **Goal:** Fix 6 more `transition: all` rules on interactive UI elements.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **.tag** | Explicit props | [x] border-color, color, background-color |
+| **.mobile-menu .nav-link** | Explicit props | [x] background-color, border-color |
+| **.newsletter__input** | Explicit props | [x] border-color, box-shadow |
+| **.newsletter__button** | Explicit props | [x] background-color, border-color |
+| **.favorites-panel__close** | Explicit props | [x] background-color, color |
+| **.favorite-item__remove** | Explicit props | [x] background-color, color |
+| **Homepage** | No regression | [x] Verified at 390×844 |
+
+### 💡 Verdict
+- **Changes:** 6 rules fixed in components.css (+6 lines). Session total: **37 `transition: all` rules fixed**. **8 remain in components.css**.
+- **Status:** COMMITTED
