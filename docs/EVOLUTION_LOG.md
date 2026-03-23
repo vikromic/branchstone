@@ -1252,3 +1252,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Removed `` `"${feedback.review}"` `` wrapping from both home page (line 2546) and about page (line 2508) testimonial rendering. Text now uses `feedback.review` directly. Zero CSS changes needed.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: DEAD_CSS_TESTIMONIAL_BEFORE_v1]
+### 🎯 Objective
+- **Surface:** CSS architecture — dead rule cleanup
+- **Items:** `.testimonial-card::before` duplicate in `layout.css`
+- **Goal:** Remove the first (dead) `.testimonial-card::before` block that was fully overridden by an identical later block with different opacity.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Dead CSS verified** | All properties overridden | [x] Second block at line 2799 overrides all 9 properties |
+| **Testimonials render** | No visual regression | [x] Verified at 390×844 — decorative quote unchanged |
+| **Gallery render** | No regression | [x] All 19 cards + Collected Works toggle present |
+| **Cache bust** | layout.css v=26 | [x] Bumped across all 8 HTML files |
+
+### 💡 Verdict
+- **Changes:** Removed 11-line dead `.testimonial-card::before` block (opacity: 0.15) from layout.css. The surviving block (opacity: 0.2) was already winning the cascade, so zero visual change. Bumped layout.css to v=26 across all pages.
+- **Status:** COMMITTED
