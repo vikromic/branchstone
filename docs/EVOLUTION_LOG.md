@@ -1475,3 +1475,22 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added 6 OG/Twitter meta tags to gallery.html and index.html. Social shares will now display a branded preview card with artwork image, title, and description. High-impact for an art gallery where visual previews drive click-through.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: GALLERY_HEAD_ORGANIZATION_v1]
+### 🎯 Objective
+- **Surface:** Gallery page `<head>` element organization
+- **Items:** `gallery.html` — CSS and script ordering
+- **Goal:** Move `qa-fixes.css` from after scripts to the stylesheet block, and fix inconsistent indentation on `qa-enhancements.js`.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **CSS grouped** | All stylesheets together before scripts | [x] `qa-fixes.css` moved to stylesheet block |
+| **Scripts grouped** | All scripts together after stylesheets | [x] Consistent 4-space indent on all 3 scripts |
+| **Gallery render** | No regression | [x] All 19 cards + newsletter + footer present |
+
+### 💡 Verdict
+- **Changes:** Moved `qa-fixes.css` from line 48 (after scripts) to line 43 (with other stylesheets). Fixed 2-space → 4-space indent on `qa-enhancements.js`. CSS and scripts are now properly grouped in the `<head>`.
+- **Status:** COMMITTED
