@@ -179,3 +179,31 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Fixed column-gap from `var(--space-12)` (43.2px) to fixed `48px` for exact Golden Gap compliance.
 - **Status:** COMMITTED — ALL SPEC REQUIREMENTS MET
+
+---
+
+## [Iteration: TRUST_CARDS_LIQUID_GLASS_v1]
+### 🎯 Objective
+- **Surface:** "Why Choose Branchstone" trust/value proposition cards
+- **Items:** `.trust-item` in `layout.css`
+- **Goal:** Apply Liquid Glass treatment to the last flat card surface on the homepage.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Computed Value | Status |
+| :--- | :--- | :--- | :--- |
+| **Squircle Radius** | `--radius-squircle` | 28px | [x] |
+| **Glass Background** | Semi-transparent white | rgba(255,255,255,0.45) | [x] |
+| **Depth Shadow** | Multi-layer box-shadow | 4px+1px blur | [x] |
+| **Specular Highlight** | Top border glow | 1.5px solid rgba(255,255,255,0.8) | [x] |
+| **Spring Hover** | `--ease-spring` on scale+shadow | 0.5s spring | [x] |
+| **Internal Padding** | Breathing room | 28px/21px | [x] |
+| **Dark Mode** | Adapted glass values | Verified | [x] |
+| **Mobile** | Reduced padding | var(--space-6)/var(--space-5) | [x] |
+
+### 📸 Visual Evidence
+- **Before:** Trust cards were completely flat — no background, no shadow, no radius, no hover effect. The only section on the homepage without Liquid Glass treatment.
+- **After:** Cards have squircle corners, semi-transparent glass background, multi-layer depth shadow, specular top highlight, spring physics hover (scale 1.02 + shadow uplift). Dark mode variant with deeper shadows and subtle white borders. Verified at 1440p in both light and dark themes via Playwright.
+
+### 💡 Verdict
+- **Changes:** +18 lines net in layout.css. Trust cards gained full Liquid Glass treatment (squircle, glass bg, depth shadow, specular, spring hover). Dark mode override added. Mobile padding adjustment added. CSS cache bumped to v=22 across all HTML files.
+- **Status:** COMMITTED

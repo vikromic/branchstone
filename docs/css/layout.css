@@ -3198,6 +3198,19 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-3);
+  padding: var(--space-8) var(--space-6);
+  border-radius: var(--radius-squircle);
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 20px rgba(26, 24, 22, 0.07), 0 1px 3px rgba(26, 24, 22, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.8);
+  position: relative;
+  transition: transform 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-spring);
+}
+
+.trust-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(26, 24, 22, 0.12), 0 2px 6px rgba(26, 24, 22, 0.06);
 }
 
 .trust-item__icon {
@@ -3230,10 +3243,25 @@
   max-width: 280px;
 }
 
+[data-theme="dark"] .trust-item {
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.06);
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .trust-item:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
 @media (max-width: 640px) {
   .trust-grid {
     grid-template-columns: 1fr;
     gap: var(--space-6);
+  }
+
+  .trust-item {
+    padding: var(--space-6) var(--space-5);
   }
 }
 
