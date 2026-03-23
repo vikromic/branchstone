@@ -1033,3 +1033,29 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Corrected the two runnable Claude command examples in `RALPH_LOOP_PROMPT.md` to use `/ralph-loop:ralph-loop`, matching the plugin command form you want to run directly.
 - **Status:** READY TO COMMIT
+
+---
+
+## [Iteration: GALLERY_BOTTOM_SPACING_v1]
+### 🎯 Objective
+- **Surface:** Mobile gallery section bottom pacing
+- **Items:** `.gallery-section` padding-bottom in `mobile-gallery-improvements.css`
+- **Goal:** Remove vestigial 72px `--mobile-nav-offset` from gallery section bottom padding that created ~128px of dead whitespace between the Collected Works toggle and the Stay Inspired newsletter on mobile.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Live mobile scout** | Proof of Sight before edits | [x] Scouted gallery.html at 390×844 and 360×780 |
+| **Spacing reduction** | Remove vestigial nav offset | [x] `calc(--space-16 + --mobile-nav-offset)` → `--space-10` |
+| **Computed value** | 128px → 35px | [x] Verified via getComputedStyle |
+| **Gallery top** | No regression in hero, filters, first card | [x] Verified via screenshot comparison |
+| **Mid-gallery cards** | No regression in card rhythm or overlays | [x] Verified at scroll position ~2800px |
+| **360px checkpoint** | Consistent at narrower width | [x] Verified at 360×780 |
+
+### 📸 Visual Evidence
+- **Before:** ~128px padding-bottom on `.gallery-section` at mobile widths, creating a large empty gap between the Collected Works toggle and the Stay Inspired newsletter section. The `--mobile-nav-offset: 72px` was added for a bottom navigation bar that does not exist on the gallery page.
+- **After:** 35px padding-bottom (var(--space-10)). Gap between Collected Works and newsletter is now proportional and comfortable. No adjacent state regression at 390px or 360px.
+
+### 💡 Verdict
+- **Changes:** Replaced `padding-bottom: calc(var(--space-16, 4rem) + var(--mobile-nav-offset))` with `padding-bottom: var(--space-10)` in the `@media (max-width: 767px)` block at line 515 of `mobile-gallery-improvements.css`. Bumped CSS cache version to v=25 in `gallery.html`.
+- **Status:** COMMITTED

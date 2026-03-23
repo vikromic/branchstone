@@ -511,9 +511,9 @@
    ========================================================================== */
 
 @media (max-width: 767px) {
-  /* Add bottom padding to gallery section for mobile nav */
+  /* Gallery section bottom spacing — no bottom nav exists, keep it tight */
   .gallery-section {
-    padding-bottom: calc(var(--space-16, 4rem) + var(--mobile-nav-offset));
+    padding-bottom: var(--space-10);
   }
 
   /* Footer extra padding */
