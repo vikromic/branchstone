@@ -256,3 +256,31 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added qa-fixes.css, Google Fonts preconnect/stylesheet, CSS cache busters (v=22), data-skip-link attribute.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: COMMISSIONS_INCLUDED_GLASS_v1]
+### 🎯 Objective
+- **Surface:** "What's Included" feature cards on Commissions page + content typo
+- **Items:** `.included-item`, `.included-icon` in `layout.css`, typo in `commissions.html`
+- **Goal:** Apply Liquid Glass treatment to included feature cards. Fix "intrested" typo.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Squircle Radius** | `--radius-squircle` (28px) | [x] Applied |
+| **Glass Background** | Semi-transparent white | [x] rgba(255,255,255,0.45) |
+| **Depth Shadow** | Multi-layer box-shadow | [x] 4px+1px blur |
+| **Specular Highlight** | Top border glow | [x] 1.5px rgba(255,255,255,0.8) |
+| **Spring Hover** | scale(1.02) + shadow | [x] 0.5s spring |
+| **Dark Mode** | Adapted values | [x] Verified via evaluate |
+| **Icon Upgrade** | Larger radius + shadow | [x] --radius-lg + --shadow-md |
+| **Typo Fix** | "intrested" → "interested" | [x] Fixed |
+
+### 📸 Visual Evidence
+- **Before:** Included feature items were flat with basic 1.5rem padding, no glass, no depth. Icon used --radius-md. "intrested" typo in Photo Documentation.
+- **After:** Cards have squircle corners, glass bg, depth shadows, specular highlight, spring hover. Dark mode variant added. Icon radius/shadow upgraded. Typo fixed. Verified via Playwright.
+
+### 💡 Verdict
+- **Changes:** +22 lines net in layout.css, 1 word fix in commissions.html. Cards match trust card treatment from Iteration 1.
+- **Status:** COMMITTED
