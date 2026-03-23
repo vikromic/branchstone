@@ -1534,3 +1534,22 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Added OG/Twitter Card meta tags to about, commissions, and contact pages. All 5 key pages (gallery, index, about, commissions, contact) now have social sharing support. Only legal pages (privacy, terms) omitted as low-value for social sharing.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: NOSCRIPT_FALLBACK_v1]
+### 🎯 Objective
+- **Surface:** Gallery resilience for users without JavaScript
+- **Items:** `gallery.html` — `<noscript>` inside gallery container
+- **Goal:** Provide a graceful fallback message with email contact link when JavaScript is disabled, instead of an empty gallery section.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **noscript content** | Helpful message + contact link | [x] Email link to thebranchstone@gmail.com |
+| **Normal render** | Invisible when JS enabled | [x] noscript ignored; all 19 cards render |
+| **Gallery render** | No regression | [x] Full gallery, filters, Collected Works all present |
+
+### 💡 Verdict
+- **Changes:** Added `<noscript>` fallback inside the gallery container with a polite message directing users to email. Invisible when JS is enabled; provides a usable alternative when JS is blocked.
+- **Status:** COMMITTED
