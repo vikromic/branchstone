@@ -774,3 +774,23 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** -103 lines across layout.css and components.css. Session total dead CSS removed: 237 lines. All verified as zero-reference in both HTML and JS.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: DEAD_CSS_CLEANUP_BATCH_3_v1]
+### 🎯 Objective
+- **Surface:** Dead CSS removal — unused utility classes and container variants
+- **Items:** `.container-wide`, `.container-fluid`, `.grid-gap-*`, `.flex`, `.flex-col`, `.items-*`, `.justify-*`, `.gap-*`, `.flex-wrap`, `.flex-nowrap` in layout.css
+- **Goal:** Remove ~105 lines of unused Tailwind-style utility classes that were never referenced.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **HTML references** | Zero for all removed selectors | [x] Verified via grep |
+| **JS references** | Zero for all removed selectors | [x] Verified via grep |
+| **container-narrow** | KEPT (5 references) | [x] Still in CSS |
+| **Homepage render** | No regression | [x] Verified at 390×844 |
+
+### 💡 Verdict
+- **Changes:** -105 lines in layout.css. Session total dead CSS: **342 lines removed** across 3 cleanup iterations. CSS codebase is significantly leaner.
+- **Status:** COMMITTED

@@ -25,20 +25,6 @@
   padding-right: clamp(1rem, 5vw, 2rem);
 }
 
-.container-wide {
-  width: 100%;
-  max-width: 1440px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: clamp(1rem, 5vw, 2rem);
-  padding-right: clamp(1rem, 5vw, 2rem);
-}
-
-.container-fluid {
-  width: 100%;
-  padding-left: clamp(1rem, 5vw, 2rem);
-  padding-right: clamp(1rem, 5vw, 2rem);
-}
 
 /* ==========================================================================
    2. SECTIONS
@@ -122,100 +108,6 @@
   .grid-cols-4 {
     grid-template-columns: repeat(4, 1fr);
   }
-}
-
-/* Grid Gap Utilities */
-.grid-gap-sm {
-  gap: var(--space-4, 1rem);
-}
-
-.grid-gap-md {
-  gap: var(--space-6, 1.5rem);
-}
-
-.grid-gap-lg {
-  gap: var(--space-8, 2rem);
-}
-
-/* ==========================================================================
-   4. FLEXBOX UTILITIES
-   ========================================================================== */
-
-.flex {
-  display: flex;
-}
-
-.flex-col {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Align Items */
-.items-center {
-  align-items: center;
-}
-
-.items-start {
-  align-items: flex-start;
-}
-
-.items-end {
-  align-items: flex-end;
-}
-
-.items-stretch {
-  align-items: stretch;
-}
-
-/* Justify Content */
-.justify-center {
-  justify-content: center;
-}
-
-.justify-start {
-  justify-content: flex-start;
-}
-
-.justify-end {
-  justify-content: flex-end;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.justify-around {
-  justify-content: space-around;
-}
-
-.justify-evenly {
-  justify-content: space-evenly;
-}
-
-/* Flex Gaps */
-.gap-sm {
-  gap: var(--space-4, 1rem);
-}
-
-.gap-md {
-  gap: var(--space-6, 1.5rem);
-}
-
-.gap-lg {
-  gap: var(--space-8, 2rem);
-}
-
-.gap-xl {
-  gap: var(--space-12, 3rem);
-}
-
-/* Flex Wrap */
-.flex-wrap {
-  flex-wrap: wrap;
-}
-
-.flex-nowrap {
-  flex-wrap: nowrap;
 }
 
 /* ==========================================================================
