@@ -15,7 +15,7 @@ export class FeaturedCarousel {
     this.currentIndex = 0;
     this.slidesPerView = this.getSlidesPerView();
     this.autoplayInterval = null;
-    this.autoplayEnabled = false;
+    this.autoplayEnabled = true;
     this.autoplayDelay = ANIMATION.TOAST_DURATION * 2.5; // 5 seconds
     this.isTransitioning = false;
 

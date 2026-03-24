@@ -1744,3 +1744,12 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes**: Updated `initHeroCardClose()` in `main.js` to assign event listeners to `.btn--hero` elements to save `heroCardDismissed` to localStorage.
 - **Status**: COMMITTED
+
+### Iteration: Fix 1px Grey Line (Desktop)
+- **Issue:** A 1px grey line was visible between the header and the hero section on desktop index.html.
+- **Proof of Sight:** Verified via browser_subagent that the line originates from the header/hero transition boundary.
+- **Fix:** Added a global CSS override in  ( and ) to ensure the transition is seamless.
+
+### Iteration: Restoring Mobile Header Language Button
+- **Issue:** Mobile user could only see a tiny globe icon without text; the user requested to "add it to the header".
+- **Fix:** Restored pill button styling in  by removing  from label and removing layout overrides on mobile.

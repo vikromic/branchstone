@@ -2632,9 +2632,16 @@ import { initI18n, getI18n } from './i18n.js';
       }
     });
 
-    // Restore dismissed state from localStorage so popup stays hidden across visits
-    if (localStorage.getItem(STORAGE_PREFIX + 'heroCardDismissed') === 'true') {
+    // Check if user has visited before or explicitly dismissed the card
+    const hasVisited = localStorage.getItem(STORAGE_PREFIX + 'hasVisitedBefore') === 'true';
+    const isDismissed = localStorage.getItem(STORAGE_PREFIX + 'heroCardDismissed') === 'true';
+
+    if (isDismissed || hasVisited) {
+      // Hide on subsequent visits or if explicitly closed
       heroContent.classList.add('is-hidden');
+    } else {
+      // First visit ever! Mark as visited for future page loads
+      localStorage.setItem(STORAGE_PREFIX + 'hasVisitedBefore', 'true');
     }
   };
 

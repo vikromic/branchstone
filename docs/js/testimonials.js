@@ -13,6 +13,11 @@ class TestimonialsManager {
     this.gridElement = null;
     this.paginationElement = null;
     this.currentIndex = 0;
+    
+    // Autoplay settings mapping to highlights.js convention
+    this.autoplayInterval = null;
+    this.autoplayEnabled = true;
+    this.autoplayDelay = 5000;
 
     // AbortController for cleanup
     this.abortController = new AbortController();
@@ -55,6 +60,22 @@ class TestimonialsManager {
       if (window.innerWidth < BREAKPOINTS.MOBILE) {
         this.setupMobilePagination();
         this.setupScrollSync();
+      }
+
+      // Handle autoplay functionality on mobile
+      if (this.autoplayEnabled) {
+        this.startAutoplay();
+      }
+      
+      if (this.container) {
+        this.container.addEventListener('mouseenter', () => this.stopAutoplay());
+        this.container.addEventListener('mouseleave', () => {
+          if (this.autoplayEnabled) this.startAutoplay();
+        });
+        this.container.addEventListener('touchstart', () => this.stopAutoplay(), { passive: true });
+        this.container.addEventListener('touchend', () => {
+          if (this.autoplayEnabled) this.startAutoplay();
+        }, { passive: true });
       }
 
       // Handle window resize with cleanup signal
@@ -319,6 +340,34 @@ class TestimonialsManager {
     emptyDiv.textContent = 'No testimonials available at this time.';
 
     this.gridElement.appendChild(emptyDiv);
+  }
+  
+  /**
+   * Start autoplay (mobile only since desktop is a grid)
+   */
+  startAutoplay() {
+    this.stopAutoplay();
+
+    if (!this.autoplayEnabled) return;
+
+    this.autoplayInterval = setInterval(() => {
+      // Testimonials is only a scroll-snap carousel on mobile
+      if (window.innerWidth < BREAKPOINTS.MOBILE) {
+        if (this.testimonials.length <= 1) return;
+        const nextIndex = (this.currentIndex + 1) % this.testimonials.length;
+        this.scrollToTestimonial(nextIndex);
+      }
+    }, this.autoplayDelay);
+  }
+
+  /**
+   * Stop autoplay
+   */
+  stopAutoplay() {
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+      this.autoplayInterval = null;
+    }
   }
 
   /**

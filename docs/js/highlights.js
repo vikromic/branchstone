@@ -76,7 +76,7 @@ class HighlightsManager {
       this.updateNavigation();
 
       // Start autoplay if enabled
-      if (this.autoplayEnabled && window.innerWidth >= BREAKPOINTS.MOBILE) {
+      if (this.autoplayEnabled) {
         this.startAutoplay();
       }
 
@@ -116,7 +116,7 @@ class HighlightsManager {
       this.cacheElements();
       this.updateNavigation();
 
-      if (this.autoplayEnabled && window.innerWidth >= BREAKPOINTS.MOBILE) {
+      if (this.autoplayEnabled) {
         this.startAutoplay();
       }
 
@@ -505,13 +505,20 @@ class HighlightsManager {
         });
       }
 
-      // Pause autoplay on hover
       if (this.container) {
         this.container.addEventListener('mouseenter', () => this.stopAutoplay());
         this.container.addEventListener('mouseleave', () => {
           if (this.autoplayEnabled) this.startAutoplay();
         });
       }
+    }
+    
+    // Always add touch listeners to container so mobile swipe pauses autoplay
+    if (this.container) {
+      this.container.addEventListener('touchstart', () => this.stopAutoplay(), { passive: true });
+      this.container.addEventListener('touchend', () => {
+        if (this.autoplayEnabled) this.startAutoplay();
+      }, { passive: true });
     }
 
     // Handle window resize with cleanup signal
@@ -831,10 +838,16 @@ class HighlightsManager {
   startAutoplay() {
     this.stopAutoplay(); // Clear any existing interval
 
-    if (!this.autoplayEnabled || window.innerWidth < BREAKPOINTS.MOBILE) return;
+    if (!this.autoplayEnabled) return;
 
     this.autoplayInterval = setInterval(() => {
-      this.navigate(1);
+      if (window.innerWidth < BREAKPOINTS.MOBILE) {
+        if (this.highlights.length <= 1) return;
+        const nextIndex = (this.currentIndex + 1) % this.highlights.length;
+        this.scrollToHighlight(nextIndex);
+      } else {
+        this.navigate(1);
+      }
     }, this.autoplayDelay);
   }
 
