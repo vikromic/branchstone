@@ -1675,3 +1675,19 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Updated `.artwork-modal__close svg` and `.artwork-card__favorite svg` / `.featured-carousel__favorite svg` in `mobile-ux-improvements.css`. Reduced size from 32px to 24px, stroke-width from 2.5/2 to 1.5, color from text-primary to text-tertiary with active state darkening.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: MAGNET_DETAIL_AND_PRICE_FIX]
+### 🎯 Objective
+- **Surface:** Artwork detail modal for Magnet (mobile)
+- **Issues:** Reported right-shift on Magnet detail (not reproducible at 360/390px). Found "$Price on request" bug — non-numeric prices getting `$` prefix.
+- **Goal:** Fix price display logic for artworks without numeric prices.
+
+### 📸 Visual Evidence
+- **Before:** "$Price on request" shown in modal for artworks with empty price field.
+- **After:** "Price on request" shown correctly without errant `$` prefix. Layout alignment verified at 360px and 390px — no shift found.
+
+### 💡 Verdict
+- **Changes:** Updated `artwork-modal.js` price display to check if price starts with a digit before prepending `$`. Non-numeric values like "Price on request" are shown as-is.
+- **Status:** COMMITTED

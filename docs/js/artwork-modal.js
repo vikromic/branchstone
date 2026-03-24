@@ -766,8 +766,9 @@ export class ArtworkModalManager {
       priceEl.hidden = true; // Hide price section when sold (badge already shows "Sold")
     } else {
       priceEl.hidden = false;
-      const priceText = artwork.price.replace('$', '');
-      priceEl.textContent = priceText ? `$${priceText}` : 'Price on request';
+      const priceText = artwork.price.replace('$', '').trim();
+      const isNumeric = priceText && /^\d/.test(priceText);
+      priceEl.textContent = isNumeric ? `$${priceText}` : (priceText || 'Price on request');
       priceEl.classList.remove('artwork-modal__price--sold');
     }
 
