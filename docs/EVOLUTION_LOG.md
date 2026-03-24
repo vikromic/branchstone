@@ -1659,3 +1659,19 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Changed `.pricing-badge` to `top:0; transform:translate(-50%,-50%)` for reliable centering. Reduced `.pricing-header` margins from 1.5rem to 1rem, `.pricing-price` margin from 1.5rem to 1rem, `.pricing-features li` padding from 0.75rem to 0.5rem.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: NEUTRAL_ICON_BUTTONS]
+### 🎯 Objective
+- **Surface:** Artwork detail close (x) button and featured works heart/favorite buttons on mobile
+- **Issues:** Close button SVG too heavy (32px, stroke-width 2.5, dark color). Heart button similarly bold.
+- **Goal:** Make both icon buttons visible but neutral — thinner stroke, lighter color, no frame.
+
+### 📸 Visual Evidence
+- **Before:** Close icon 32px with stroke-width 2.5 in text-primary (dark brown). Heart icons same weight.
+- **After:** Both icons 24px with stroke-width 1.5 in text-tertiary (muted). Darkens on active/tap.
+
+### 💡 Verdict
+- **Changes:** Updated `.artwork-modal__close svg` and `.artwork-card__favorite svg` / `.featured-carousel__favorite svg` in `mobile-ux-improvements.css`. Reduced size from 32px to 24px, stroke-width from 2.5/2 to 1.5, color from text-primary to text-tertiary with active state darkening.
+- **Status:** COMMITTED

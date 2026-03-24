@@ -1444,9 +1444,14 @@
   }
 
   .artwork-modal__close svg {
-    width: 32px;
-    height: 32px;
-    stroke-width: 2.5;
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.5;
+    stroke: var(--text-tertiary);
+    transition: stroke 200ms ease;
+  }
+
+  .artwork-modal__close:active svg {
     stroke: var(--text-primary);
   }
 
@@ -1477,9 +1482,15 @@
 
   .artwork-card__favorite svg,
   .featured-carousel__favorite svg {
-    width: 32px;   /* Slightly bigger (was ~24px) */
-    height: 32px;
-    stroke-width: 2;
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.5;
+    stroke: var(--text-tertiary);
+    transition: stroke 200ms ease;
+  }
+
+  .artwork-card__favorite:active svg,
+  .featured-carousel__favorite:active svg {
     stroke: var(--text-primary);
   }
 
