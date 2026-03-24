@@ -2582,14 +2582,26 @@ import { initI18n, getI18n } from './i18n.js';
 
     if (!heroContent || !closeButton) return;
 
+    // Save dismiss state
+    const saveDismissState = () => {
+      localStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
+    };
+
     // Close button click
     closeButton.addEventListener('click', (e) => {
       e.stopPropagation();
       heroContent.classList.add('is-hidden');
-      // Save state to localStorage so it persists across sessions
-      localStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
+      saveDismissState();
       // Show toast notification
       showSimpleToast('Tap ⓘ to restore', 4000, 'hero.tap_to_restore');
+    });
+
+    // CTA buttons click (Dismiss the card permanently if user engages)
+    const ctaButtons = heroContent.querySelectorAll('.btn--hero');
+    ctaButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        saveDismissState();
+      });
     });
 
     // Show button click
@@ -2607,7 +2619,7 @@ import { initI18n, getI18n } from './i18n.js';
         // Only close if clicking on the section itself, not the content card
         if (e.target === heroSection || e.target.classList.contains('section-hero__background') || e.target.classList.contains('section-hero__background-image')) {
           heroContent.classList.add('is-hidden');
-          localStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
+          saveDismissState();
         }
       });
     }
@@ -2616,7 +2628,7 @@ import { initI18n, getI18n } from './i18n.js';
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !heroContent.classList.contains('is-hidden')) {
         heroContent.classList.add('is-hidden');
-        localStorage.setItem(STORAGE_PREFIX + 'heroCardDismissed', 'true');
+        saveDismissState();
       }
     });
 

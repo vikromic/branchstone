@@ -1723,3 +1723,24 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Reduced desktop column-gap from 48px to 24px and tablet from 32px to 20px in `gallery-ux-refinements.css`. Row gaps also reduced. Cache bumped to v=28.
 - **Status:** COMMITTED
+
+
+## [Iteration: DESKTOP_INITIAL_POPUP_FIX]
+### 🎯 Objective
+- **Surface**: Desktop Initial Popup
+- **Items**: index.html, main.js
+- **Goal**: Make initial popup show only once when user opens website, even if clicking CTA buttons.
+
+### ⚖️ Sentinel Audit
+| Metric | Requirement | Status |
+| :--- | :--- | :--- |
+| **Persistence Check** | Set in localStorage on CTA and close | [x] Verified via /chrome |
+| **Navigation Resilience**| Does not reappear on returning to homepage | [x] Verified via /chrome |
+
+### 📸 Visual Evidence
+- **Before**: Popup reappears when coming back from Gallery, CTA not saving dismissal state.
+- **After**: Popup dismiss state saved in localStorage on any engagement (CTAs or close or click outside), so it stays hidden properly.
+
+### 💡 Verdict
+- **Changes**: Updated `initHeroCardClose()` in `main.js` to assign event listeners to `.btn--hero` elements to save `heroCardDismissed` to localStorage.
+- **Status**: COMMITTED
