@@ -519,14 +519,14 @@
 
 .pricing-badge {
   position: absolute;
-  top: -0.75rem;
+  top: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 }
 
 .pricing-header {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -547,7 +547,7 @@
 .pricing-price {
   font-size: var(--text-2xl);
   color: var(--text-primary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .pricing-price strong {
@@ -565,7 +565,7 @@
 }
 
 .pricing-features li {
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
   padding-left: 2rem;
   position: relative;
   color: var(--text-secondary);

@@ -1643,3 +1643,19 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Converted `commissions.html` FAQ from `div/h3/p` to native `details/summary` elements using `.faq__item`/`.faq__question`/`.faq__answer` BEM classes matching contact page.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: PRICING_CARD_LAYOUT_FIX]
+### 🎯 Objective
+- **Surface:** Commissions page pricing cards (mobile)
+- **Issues:** "Most Popular" badge shifted upward, overlapping card border unevenly. Excessive spacing between size/price lines and feature list items.
+- **Goal:** Center badge on card border, reduce vertical spacing for compact mobile layout.
+
+### 📸 Visual Evidence
+- **Before:** Badge partially cut off at top, too much space between 8"×10" and "Starting at $100", and between list items.
+- **After:** Badge perfectly centered on card border (half above, half below). Tighter spacing throughout.
+
+### 💡 Verdict
+- **Changes:** Changed `.pricing-badge` to `top:0; transform:translate(-50%,-50%)` for reliable centering. Reduced `.pricing-header` margins from 1.5rem to 1rem, `.pricing-price` margin from 1.5rem to 1rem, `.pricing-features li` padding from 0.75rem to 0.5rem.
+- **Status:** COMMITTED
