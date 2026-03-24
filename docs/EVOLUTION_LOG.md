@@ -1627,3 +1627,19 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Removed `border-bottom` from `.header` in `layout.css`. Bumped layout.css cache version from v=26 to v=27 across all 8 HTML pages.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: FAQ_COLLAPSIBLE]
+### 🎯 Objective
+- **Surface:** Commissions page FAQ section
+- **Issue:** FAQ answers are always visible, making the section long and noisy.
+- **Goal:** Make FAQ answers foldable (collapsed by default), matching the existing contact page pattern.
+
+### 📸 Visual Evidence
+- **Before:** All 6 FAQ answers fully visible, long vertical scroll.
+- **After:** All questions collapsed by default with `+` toggle. Clicking expands to `−` and reveals the answer. Clean, compact layout.
+
+### 💡 Verdict
+- **Changes:** Converted `commissions.html` FAQ from `div/h3/p` to native `details/summary` elements using `.faq__item`/`.faq__question`/`.faq__answer` BEM classes matching contact page.
+- **Status:** COMMITTED
