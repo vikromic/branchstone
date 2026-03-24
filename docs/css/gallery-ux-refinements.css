@@ -242,15 +242,15 @@
 /* Ensure stable layout with consistent gaps */
 @media (min-width: 640px) {
   .bento-grid {
-    column-gap: var(--space-5);  /* 20px tighter gap on tablet */
+    column-gap: 16px;  /* 16px tight gap on tablet */
     row-gap: var(--space-4);
   }
 }
 
 @media (min-width: 1024px) {
   .bento-grid {
-    column-gap: 24px;  /* Tighter gap for denser gallery feel */
-    row-gap: var(--space-5);
+    column-gap: 16px;  /* Tighter gap for denser gallery feel */
+    row-gap: var(--space-4);
   }
 }
 

@@ -49,27 +49,27 @@
   /* Default fallback for cards without scale data */
   .artwork-card {
     grid-column: span 1;
-    grid-row: span 26; /* Medium default */
+    grid-row: span 36; /* Medium default */
   }
 
   /* Small artworks - compact vertical space */
   .artwork-card[data-size="small"] {
     grid-column: span 1;
-    grid-row: span 20;
+    grid-row: span 26;
     /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
   }
 
   /* Medium artworks - standard size */
   .artwork-card[data-size="medium"] {
     grid-column: span 1;
-    grid-row: span 28;
+    grid-row: span 38;
     /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
   }
 
   /* Large artworks - prominent display */
   .artwork-card[data-size="large"] {
     grid-column: span 1;
-    grid-row: span 36;
+    grid-row: span 48;
     /* aspect-ratio set dynamically via inline style based on actual artwork dimensions */
   }
 }
@@ -82,19 +82,19 @@
   /* Small artworks */
   .artwork-card[data-size="small"] {
     grid-column: span 1;
-    grid-row: span 18;
+    grid-row: span 24;
   }
 
   /* Medium artworks */
   .artwork-card[data-size="medium"] {
     grid-column: span 1;
-    grid-row: span 26;
+    grid-row: span 36;
   }
 
   /* Large artworks - span 2 columns when possible */
   .artwork-card[data-size="large"] {
     grid-column: span 2;
-    grid-row: span 20;
+    grid-row: span 42;
   }
 }
 
@@ -106,19 +106,19 @@
   /* Small artworks */
   .artwork-card[data-size="small"] {
     grid-column: span 1;
-    grid-row: span 20;
+    grid-row: span 28;
   }
 
   /* Medium artworks */
   .artwork-card[data-size="medium"] {
     grid-column: span 1;
-    grid-row: span 30;
+    grid-row: span 40;
   }
 
   /* Large artworks - span 2 columns */
   .artwork-card[data-size="large"] {
     grid-column: span 2;
-    grid-row: span 24;
+    grid-row: span 60;
   }
 }
 

@@ -291,10 +291,9 @@
     justify-content: center;
   }
 
-  /* Disable card-level click for lightbox on mobile to prevent mis-taps */
+  /* Removed pointer-events: none to allow entire card clickability (Mobile Issue 3) */
   .artwork-card__image-wrapper {
-    cursor: default;
-    pointer-events: none;
+    cursor: pointer;
   }
 
   /* Re-enable pointer events for buttons */
@@ -483,6 +482,8 @@
   [class*="carousel"][class*="pagination"],
   [class*="carousel"][class*="dots"] {
     display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
     gap: var(--carousel-dot-gap);
     justify-content: center;
     align-items: center;

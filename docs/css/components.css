@@ -1489,8 +1489,8 @@
   min-height: 44px;
   width: 44px;
   height: 44px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
+  border-radius: 0;
+  background: transparent;
   border: none;
   cursor: pointer;
   display: flex;
@@ -1516,9 +1516,9 @@
 }
 
 .artwork-card__favorite:hover {
-  background: rgba(255, 255, 255, 1);
+  background: transparent;
   transform: scale(1.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
 }
 
 .artwork-card__favorite:active {
@@ -4426,9 +4426,9 @@ details[open] summary {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-default);
-  border-radius: 50%;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
   transition: background-color 200ms ease,
               transform 200ms ease;
@@ -4441,12 +4441,12 @@ details[open] summary {
 }
 
 .artwork-modal__close:hover {
-  background: var(--accent-primary);
-  transform: rotate(90deg);
+  background: transparent;
+  transform: scale(1.1);
 }
 
 .artwork-modal__close:hover svg {
-  stroke: var(--text-inverse);
+  stroke: var(--accent-primary);
 }
 
 /* Grid layout */

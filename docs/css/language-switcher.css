@@ -165,22 +165,12 @@
     margin-left: 0;
   }
 
-  /* Show compact language switcher in mobile header */
+  /* Keep language switcher as a recognizable button in mobile header */
   .header__container .language-switcher {
-    min-width: 44px;
-    min-height: 44px;
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    justify-content: center;
+    margin-right: var(--space-1);
     flex-shrink: 0;
   }
 
-  .header__container .language-switcher__label {
-    display: none;
-  }
 }
 
 /* ========================================

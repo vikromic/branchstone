@@ -637,3 +637,7 @@ a[target="_blank"]::after {
     break-inside: avoid;
   }
 }
+
+/* Fix unwanted grey line between Header and Hero */
+.header:not(.is-scrolled) { border-bottom: none !important; box-shadow: none !important; }
+.section-hero { border-top: none !important; }
