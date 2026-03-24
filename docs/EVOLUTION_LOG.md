@@ -1691,3 +1691,19 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Updated `artwork-modal.js` price display to check if price starts with a digit before prepending `$`. Non-numeric values like "Price on request" are shown as-is.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: MOBILE_LANGUAGE_BUTTON]
+### 🎯 Objective
+- **Surface:** Mobile header across all pages
+- **Issue:** Language switcher hidden on mobile (`display: none`), only accessible via hamburger menu.
+- **Goal:** Show compact globe icon in mobile header for instant language access from any screen.
+
+### 📸 Visual Evidence
+- **Before:** Mobile header: logo, heart, sun, hamburger. No language access without opening menu.
+- **After:** Mobile header: logo, heart, globe, sun, hamburger. Globe icon is frameless, 44px touch target. Label hidden to save space.
+
+### 💡 Verdict
+- **Changes:** Replaced `display:none` in `language-switcher.css` mobile media query with compact frameless button styling. Hides label, removes border/background. Bumped cache to v=26.
+- **Status:** COMMITTED

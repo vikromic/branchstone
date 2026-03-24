@@ -165,8 +165,20 @@
     margin-left: 0;
   }
 
-  /* Hide desktop switcher on mobile */
+  /* Show compact language switcher in mobile header */
   .header__container .language-switcher {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .header__container .language-switcher__label {
     display: none;
   }
 }
