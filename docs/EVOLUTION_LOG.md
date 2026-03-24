@@ -1707,3 +1707,19 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### 💡 Verdict
 - **Changes:** Replaced `display:none` in `language-switcher.css` mobile media query with compact frameless button styling. Hides label, removes border/background. Bumped cache to v=26.
 - **Status:** COMMITTED
+
+---
+
+## [Iteration: DESKTOP_GALLERY_GRID_TIGHTER]
+### 🎯 Objective
+- **Surface:** Desktop gallery grid layout
+- **Issue:** Column gap too wide (48px "Golden Gap"), making the grid feel sparse. No overlaps, but excessive spacing.
+- **Goal:** Reduce gaps for a denser, more curated gallery feel while maintaining no-overlap guarantee.
+
+### 📸 Visual Evidence
+- **Before:** 48px column gap and 21px row gap. Cards widely spaced.
+- **After:** 24px column gap and ~18px row gap. Tighter grid with 4 columns of 288px. Zero overlaps verified programmatically.
+
+### 💡 Verdict
+- **Changes:** Reduced desktop column-gap from 48px to 24px and tablet from 32px to 20px in `gallery-ux-refinements.css`. Row gaps also reduced. Cache bumped to v=28.
+- **Status:** COMMITTED

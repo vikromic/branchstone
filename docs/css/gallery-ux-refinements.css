@@ -242,15 +242,15 @@
 /* Ensure stable layout with consistent gaps */
 @media (min-width: 640px) {
   .bento-grid {
-    column-gap: var(--space-8);  /* 32px breathing room on tablet */
-    row-gap: var(--space-5);
+    column-gap: var(--space-5);  /* 20px tighter gap on tablet */
+    row-gap: var(--space-4);
   }
 }
 
 @media (min-width: 1024px) {
   .bento-grid {
-    column-gap: 48px;  /* Golden Gap — fixed px to guarantee minimum */
-    row-gap: var(--space-6);
+    column-gap: 24px;  /* Tighter gap for denser gallery feel */
+    row-gap: var(--space-5);
   }
 }
 
