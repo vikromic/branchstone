@@ -1753,3 +1753,50 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### Iteration: Restoring Mobile Header Language Button
 - **Issue:** Mobile user could only see a tiny globe icon without text; the user requested to "add it to the header".
 - **Fix:** Restored pill button styling in  by removing  from label and removing layout overrides on mobile.
+
+---
+
+## [Iteration: CARRIED_GROUND_REACT_ARCHIVE]
+
+### Objective
+
+- **Surface:** The complete Branchstone portfolio, not only the landing page.
+- **Observed:** The previous implementation exposed the artist’s archive through a conventional site shell, multiple independent CSS/JavaScript layers, and inconsistent progressive fallbacks.
+- **Direction:** “Carried Ground” — a mobile-first living material archive in which soil, seams, field notes, and ledger marks frame the work without turning it into a commercial template.
+
+### What changed
+
+- Rebuilt all eight page types as one React 19 + Vite multi-page application: home, works, practice, commission, correspondence, privacy, terms, and 404.
+- Applied one shared visual language across every page: Cormorant/Inter typography, soil and paper themes, mineral-blue accents, material separators, archival numbering, restrained controls, and common navigation/footer behavior.
+- Added sixteen prerendered entry documents: eight English root routes plus eight first-class Ukrainian `/uk/*` routes, each with localized metadata, canonical URLs, and hreflang links.
+- Preserved `?lang=en|uk` compatibility while migrating explicit Ukrainian URLs to `/uk/*`; explicit query language now also updates the stored preference before hydration.
+- Rebuilt the 32-work archive around stable locale-independent IDs and preserved the 19 available / 13 collected contract.
+- Added collection and availability filters, deep-linked artwork modals, Back/Forward history, keyboard and focus restoration, saved works, inquiry handoff, and a complete no-gesture works index on the home material field.
+- Replaced simulated form submission with honest handoffs: contact and commission flows validate locally, prepare mailto content, offer clipboard fallback, preserve short-lived drafts where storage is available, and never claim that the website sent a message.
+- Added progressive safety: native mobile navigation before hydration, disabled contact and commission controls before hydration, and localized no-JavaScript email/contact fallbacks.
+- Consolidated modal accessibility, locale paths, page manifests, timestamped storage envelopes, favorite migration, clipboard fallback, theme application, and responsive design tokens at their owning layers.
+
+### Migration and compatibility
+
+- **Published interface:** Existing English `.html` routes remain valid. Legacy language query URLs are consumed and normalized to the canonical EN or `/uk/*` route without dropping artwork, collection, or message parameters.
+- **Browser state:** Existing `branchstone-theme`, `branchstone.language`, `branchstone_favorites`, pending inquiry, and commission draft data remain backward compatible. Legacy favorite prefixes and the `mermaids-dream` artwork alias are normalized; unreadable data is surfaced instead of silently treated as success.
+- **Stored/server data:** No server-side data migration is required because the portfolio remains static and does not accept or persist submitted personal data.
+- **Deployment:** Generated root HTML, `/uk`, and cache-safe assets are swapped through the guarded publisher. Hand-maintained media, JSON, CNAME, and documentation are preserved. The obsolete `docs/js` and `docs/css` runtime trees were removed from the published artifact.
+
+### Visual evidence
+
+- Accepted gallery direction: `/Users/denysmalyshev/.codex/generated_images/019f7852-fe5d-78d3-8425-03580280f1b0/exec-4023ebc7-c11b-4bc5-9a35-340e1b5d1981.png`
+- Artwork, practice, commission, and correspondence previews: `exec-d8ff2e56-5984-4256-99a0-1f9935a6e7f2.png`, `exec-2a9a835a-f7fd-430f-b412-a6c880fc56af.png`, `exec-e62d55b3-9f0f-4c1e-b0e8-625027588325.png`, and `exec-5862b09b-8987-40dd-8e62-062bcc37af80.png` in the same generated-image run.
+- Final in-app Browser capture at the native 390 × 844 viewport: `/Users/denysmalyshev/.codex/visualizations/2026/07/19/019f7852-fe5d-78d3-8425-03580280f1b0/branchstone-gallery-final-390.png`.
+
+### Verification
+
+- `npm test`: 6 files / 21 tests passed, including catalog, localization, favorites migration, clipboard fallback, source contracts, and SSR progressive safety.
+- `npm run build` and `npm run verify:artifact`: 16 localized prerendered entries and the 32/19/13 catalog contract verified.
+- `npm run publish` and `npm run verify:published`: all 16 published HTML files match stage, 109 local dependency paths resolve, and no temporary publish residue or obsolete runtime directories remain.
+- Route matrix: every EN/UA page passed with JavaScript and without JavaScript, with no broken images, duplicate IDs, console/page/request failures, local 4xx/5xx, or horizontal overflow. Runtime checks covered a narrower 320 px boundary, the native 390 px mobile viewport, and 1440 px desktop; the requested 360/390/430 widths share the same mobile layout interval with no intervening CSS breakpoint.
+- In-app Browser core journeys passed: locale migration, theme persistence, mobile menu focus, gallery filters and modal history, saved-work inquiry, contact validation/copy/removal, the full four-step commission draft/review/copy/restore flow, practice disclosure, and the interactive home material field.
+
+### Status
+
+- **VERIFIED / COMMITTED**

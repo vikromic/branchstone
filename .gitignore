@@ -70,8 +70,9 @@ CLAUDE.md.*
 
 # Claude Flow runtime (npm artifacts for agentic-flow)
 node_modules/
-package.json
-package-lock.json
+.stage/
+.stage-ssr/
+coverage/
 
 src/codeana/.codeana-dry-run
 src/codeana/.codeana-payloads
