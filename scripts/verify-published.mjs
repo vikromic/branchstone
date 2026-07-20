@@ -1,10 +1,16 @@
 import { access, readFile, readdir } from "node:fs/promises";
 import { extname, resolve } from "node:path";
+import {
+  assetGenerationManifest,
+  parseAssetGenerationManifest,
+} from "./asset-generations.mjs";
 import { htmlFiles as rootHtmlFiles } from "../site-pages.js";
 
 const root = process.cwd();
 const stage = resolve(root, ".stage");
 const docs = resolve(root, "docs");
+const stageAssets = resolve(stage, "assets");
+const publishedAssets = resolve(docs, "assets");
 const htmlFiles = [...rootHtmlFiles, ...rootHtmlFiles.map((filename) => `uk/${filename}`)];
 const localReference = /(?:src|href)=["']([^"']+)["']/g;
 const cssReference = /url\(\s*["']?([^"')]+)["']?\s*\)/g;
@@ -62,6 +68,28 @@ while (queue.length) {
 
 const leftovers = (await readdir(docs)).filter((entry) => entry.startsWith(".branchstone-"));
 if (leftovers.length) throw new Error(`Publish temporary paths remain: ${leftovers.join(", ")}`);
+
+const [expectedAssets, actualAssets, generationSource] = await Promise.all([
+  readdir(stageAssets),
+  readdir(publishedAssets),
+  readFile(resolve(publishedAssets, assetGenerationManifest), "utf8"),
+]);
+expectedAssets.sort();
+actualAssets.sort();
+const generation = parseAssetGenerationManifest(generationSource);
+const currentAssets = generation.current;
+const previousAssets = generation.previous;
+if (expectedAssets.join("\n") !== currentAssets.join("\n")) {
+  throw new Error("Published current asset generation differs from stage");
+}
+const allowedAssets = [...new Set([...currentAssets, ...previousAssets, assetGenerationManifest])].sort();
+if (allowedAssets.join("\n") !== actualAssets.join("\n")) {
+  const expected = new Set(allowedAssets);
+  const actual = new Set(actualAssets);
+  const missing = allowedAssets.filter((entry) => !actual.has(entry));
+  const stale = actualAssets.filter((entry) => !expected.has(entry));
+  throw new Error(`Published assets differ from bounded generations; missing: ${missing.join(", ") || "none"}; stale: ${stale.join(", ") || "none"}`);
+}
 for (const obsolete of ["js", "css"]) {
   try {
     await access(resolve(docs, obsolete));
@@ -71,4 +99,4 @@ for (const obsolete of ["js", "css"]) {
   }
 }
 
-console.log(`Published artifact verified: ${htmlFiles.length} localized HTML files match stage, ${inspected.size} local dependency paths resolve, and no publish residue remains.`);
+console.log(`Published artifact verified: ${htmlFiles.length} localized HTML files match stage, ${currentAssets.length} current and ${previousAssets.length} previous asset names form one bounded set, ${inspected.size} local dependency paths resolve, and no publish residue remains.`);

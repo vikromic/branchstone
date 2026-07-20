@@ -1,5 +1,11 @@
-import { access, cp, mkdir, readdir, rename, rm } from "node:fs/promises";
+import { cp, mkdir, readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import {
+  assetGenerationManifest,
+  parseAssetGenerationManifest,
+  selectPreviousAssetGeneration,
+  validateAssetNames,
+} from "./asset-generations.mjs";
 import { htmlFiles } from "../site-pages.js";
 
 const root = process.cwd();
@@ -15,25 +21,50 @@ const nextHtml = resolve(docs, ".branchstone-html-next");
 const previousHtml = resolve(docs, ".branchstone-html-previous");
 const temporaryPaths = [nextAssets, previousAssets, nextUk, previousUk, nextHtml, previousHtml];
 
+async function currentPublishedGeneration() {
+  try {
+    return parseAssetGenerationManifest(
+      await readFile(resolve(generatedAssets, assetGenerationManifest), "utf8"),
+    );
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+    try {
+      return {
+        version: 1,
+        current: validateAssetNames(
+          (await readdir(generatedAssets)).filter((entry) => entry !== assetGenerationManifest),
+          "bootstrap",
+        ),
+        previous: [],
+      };
+    } catch (directoryError) {
+      if (directoryError.code === "ENOENT") return { version: 1, current: [], previous: [] };
+      throw directoryError;
+    }
+  }
+}
+
 for (const temporary of temporaryPaths) {
   await rm(temporary, { recursive: true, force: true });
 }
 try {
-  await mkdir(nextAssets, { recursive: true });
   await mkdir(nextHtml, { recursive: true });
   await mkdir(previousHtml, { recursive: true });
-
-  try {
-    await access(generatedAssets);
-    await cp(generatedAssets, nextAssets, { recursive: true });
-  } catch (error) {
-    if (error.code !== "ENOENT") throw error;
-    // First publish has no previous generated asset set to preserve.
+  await cp(resolve(stage, "assets"), nextAssets, { recursive: true });
+  const currentAssets = validateAssetNames(await readdir(resolve(stage, "assets")), "staged");
+  const publishedGeneration = await currentPublishedGeneration();
+  const previousAssetsToRetain = selectPreviousAssetGeneration(currentAssets, publishedGeneration);
+  const currentAssetSet = new Set(currentAssets);
+  for (const entry of previousAssetsToRetain) {
+    if (!currentAssetSet.has(entry)) {
+      await cp(resolve(generatedAssets, entry), resolve(nextAssets, entry), { recursive: true });
+    }
   }
-
-  for (const entry of await readdir(resolve(stage, "assets"))) {
-    await cp(resolve(stage, "assets", entry), resolve(nextAssets, entry), { recursive: true });
-  }
+  await writeFile(resolve(nextAssets, assetGenerationManifest), `${JSON.stringify({
+    version: 1,
+    current: currentAssets,
+    previous: previousAssetsToRetain,
+  }, null, 2)}\n`);
   await cp(resolve(stage, "uk"), nextUk, { recursive: true });
 
   for (const filename of htmlFiles) {
@@ -72,8 +103,6 @@ try {
   for (const filename of htmlFiles) {
     await rename(resolve(nextHtml, filename), resolve(docs, filename));
   }
-  await rm(previousAssets, { recursive: true, force: true });
-  await rm(previousUk, { recursive: true, force: true });
 } catch (error) {
   for (const filename of htmlFiles) {
     const restorePath = resolve(docs, `.${filename}.restore`);
@@ -87,10 +116,13 @@ try {
   await rm(previousAssets, { recursive: true, force: true });
   await rm(previousUk, { recursive: true, force: true });
   throw error;
-} finally {
-  for (const temporary of temporaryPaths) {
-    await rm(temporary, { recursive: true, force: true });
-  }
 }
 
-console.log(`Published ${htmlFiles.length * 2} localized HTML entries and cache-safe generated assets; media, JSON, CNAME, and hand-maintained docs were preserved.`);
+// The published assets, localized pages, and HTML files are committed now.
+// Cleanup must stay outside the rollback path: a cleanup failure must never
+// remove the successfully installed publication or restore a partial backup.
+for (const temporary of temporaryPaths) {
+  await rm(temporary, { recursive: true, force: true });
+}
+
+console.log(`Published ${htmlFiles.length * 2} localized HTML entries with one bounded previous asset generation; media, JSON, CNAME, and hand-maintained docs were preserved.`);

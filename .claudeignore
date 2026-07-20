@@ -1,218 +1,40 @@
-# =========================
-# Core junk / OS / tooling
-# =========================
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# =========================
-# VCS / metadata
-# =========================
+# Repository and dependency state
 .git/
-.gitignore
-.gitattributes
-.gitmodules
-
-# =========================
-# IDE / Editor
-# =========================
-.idea/
-.vscode/
-*.iml
-*.ipr
-*.iws
-*.swp
-*.swo
-*.tmp
-
-# =========================
-# General build / temp / logs
-# =========================
-build/
-dist/
-out/
-tmp/
-temp/
-logs/
-*.log
-coverage/
-.coverage
-.nyc_output/
-.cache/
-target/
-
-# =========================
-# Node / Frontend
-# =========================
 node_modules/
-bower_components/
-jspm_packages/
-.yarn/
-.pnp.*
-.npm/
-*.tsbuildinfo
+package-lock.json
 
-# Frontend build outputs
-.next/
-.nuxt/
-.svelte-kit/
-.vite/
-storybook-static/
-build-storybook/
-public/build/
-dist/
+# Reproducible build and test output
+.stage/
+.stage-ssr/
 coverage/
-*.map
+.playwright-mcp/
+playwright-report/
+test-results/
+artifacts/
+screenshots/
+tmp/
+*.log
 
-# Frontend runtime / tools
-.eslintcache
-.stylelintcache
-.husky/
-lint-staged.config.*
+# Generated deployment copies; inspect source instead
+docs/assets/
+docs/img/
+docs/*.html
+docs/uk/
 
-
-# =========================
-# Java / Spring / Maven / Gradle
-# =========================
-# Maven / Gradle outputs
-target/
-out/
-build/
-.gradle/
-mvnw.cmd
-mvnw
-.mvn/
-
-# IntelliJ / Eclipse / other IDE cruft
-.project
-.classpath
-.settings/
-bin/
-.gradle/
-
-# Compiled classes / archives
-*.class
-*.jar
-*.war
-*.ear
-
-# Lombok / annotation processing caches
-.lombok/
-
-# =========================
-# Python
-# =========================
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.so
-
-# Virtualenvs
-venv/
-.venv/
-env/
-.env/
-ENV/
-.Python
-
-# Python build outputs
-build/
-dist/
-*.egg-info/
-.eggs/
-.pytest_cache/
-.mypy_cache/
-.dmypy.json
-.pyre/
-.pytype/
-
-# Jupyter / notebooks
-.ipynb_checkpoints/
-*.ipynb
-
-# =========================
-# Go
-# =========================
-# Go build artifacts
-bin/
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
-# Go modules cache (usually outside repo, but just in case)
-pkg/
-vendor/
-
-# =========================
-# Docker / K8s generated
-# =========================
-# Generated manifests / temp
-.chart/
-helmfile.d/.helmfile/**/*
-tmp-charts/
-.kube/
-*.local.yaml
-
-# =========================
-# Environment / secrets (never feed these to LLM)
-# =========================
-.env
-.env.*
-*.key
-*.pem
-*.crt
-*.pfx
-*.p12
-*.jks
-*.keystore
-*.truststore
-
-# =========================
-# Test artifacts
-# =========================
-test-output/
-junit-report.xml
-reports/
-*.lcov
-*/__snapshots__/
-
-# =========================
-# Binary / large assets
-# =========================
+# Binary media and font payloads
 *.png
 *.jpg
 *.jpeg
-*.gif
-*.bmp
-*.ico
 *.webp
-*.svg
-*.psd
-*.ai
+*.gif
 *.mp4
 *.mov
-*.avi
-*.mkv
-*.mp3
-*.wav
-*.flac
-*.zip
-*.tar
-*.tar.gz
-*.tgz
-*.7z
-*.pdf
+*.woff
+*.woff2
 
-# =========================
-# Misc tools
-# =========================
-*.sass-cache
-.sass-cache/
-.cache/
-.parcel-cache/
-.vagrant/
-.envrc
-.direnv/
+# Local-only state
+.env
+.env.*
+.DS_Store
+.idea/
+.vscode/

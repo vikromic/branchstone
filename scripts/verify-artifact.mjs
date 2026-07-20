@@ -56,7 +56,7 @@ for (const filename of htmlFiles) {
   }
 }
 
-for (const required of ["CNAME", ".nojekyll", "favicon.svg", "site.webmanifest", "robots.txt", "sitemap.xml", "EVOLUTION_LOG.md"]) {
+for (const required of ["CNAME", ".nojekyll", "favicon.svg", "site.webmanifest", "robots.txt", "sitemap.xml"]) {
   await access(resolve(docs, required));
 }
 
