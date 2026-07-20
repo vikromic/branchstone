@@ -69,6 +69,19 @@ describe("Vite document routing", () => {
   });
 
   it.each([
+    ["/uk/", "uk", "Branchstone від Вікторії — мистецтво змішаних медіа"],
+    ["/uk/gallery.html", "uk", "Роботи — Branchstone від Вікторії"],
+    ["/uk/contact.html", "uk", "Листування — Branchstone від Вікторії"],
+  ])("serves localized initial document metadata for %s", async (path, lang, title) => {
+    const response = await documentRequest(path);
+    const html = await response.text();
+
+    expect(response.status).toBe(200);
+    expect(html).toContain(`<html lang="${lang}"`);
+    expect(html).toContain(`<title>${title}</title>`);
+  });
+
+  it.each([
     ["/@vite/client", "text/javascript"],
     ["/src/styles/index.css", "text/javascript"],
     ["/favicon.svg", "image/svg+xml"],

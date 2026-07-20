@@ -8,9 +8,12 @@ import { isUkrainianPath, localePathname } from "./src/domain/content.js";
 import { getPageMetadata } from "./src/domain/metadata.js";
 
 const root = process.cwd();
-const documentPaths = new Set(sitePages.flatMap(({ filename }) => (
-  filename === "index.html" ? ["/", "/index.html"] : [`/${filename}`]
+const documentPageByPath = new Map(sitePages.flatMap(({ id, filename }) => (
+  filename === "index.html"
+    ? [["/", id], ["/index.html", id]]
+    : [[`/${filename}`, id]]
 )));
+const documentPaths = new Set(documentPageByPath.keys());
 
 function isDocumentRequest(request) {
   if (request.method !== "GET" && request.method !== "HEAD") return false;
@@ -28,9 +31,9 @@ function isViteResourcePath(pathname) {
     || (extension !== "" && extension !== ".html");
 }
 
-function localizeNotFoundHead(html, locale) {
+function localizeDocumentHead(html, pageId, locale) {
   if (locale !== "uk") return html;
-  const { title, description } = getPageMetadata("notFound", "uk");
+  const { title, description } = getPageMetadata(pageId, "uk");
   return html
     .replace('<html lang="en"', '<html lang="uk"')
     .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
@@ -47,6 +50,16 @@ function devDocumentAliases() {
   ]);
   return {
     name: "branchstone-dev-document-aliases",
+    transformIndexHtml: {
+      order: "post",
+      handler(html, context) {
+        const originalUrl = context.originalUrl ?? context.path ?? "/";
+        const pathname = new URL(originalUrl, "http://branchstone.local").pathname;
+        const locale = isUkrainianPath(pathname) ? "uk" : "en";
+        const pageId = documentPageByPath.get(localePathname(pathname, "en"));
+        return pageId ? localizeDocumentHead(html, pageId, locale) : html;
+      },
+    },
     configureServer(server) {
       server.middlewares.use(async (request, response, next) => {
         const url = new URL(request.url ?? "/", "http://branchstone.local");
@@ -78,7 +91,7 @@ function devDocumentAliases() {
 
         try {
           const source = await readFile(resolve(root, "404.html"), "utf8");
-          const localizedSource = localizeNotFoundHead(source, locale);
+          const localizedSource = localizeDocumentHead(source, "notFound", locale);
           const html = await server.transformIndexHtml(pathname, localizedSource, request.originalUrl);
           response.statusCode = 404;
           response.setHeader("Content-Type", "text/html; charset=utf-8");
