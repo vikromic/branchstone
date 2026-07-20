@@ -14,7 +14,7 @@
 .contact-hero {
   position: relative;
   z-index: 1;
-  min-height: min(58rem, max(40rem, calc(100svh - 4.65rem)));
+  min-height: min(58rem, max(40rem, calc(100svh - var(--site-header-height))));
   padding: clamp(6rem, 19vw, 10rem) var(--safe-gutter-right) clamp(3.5rem, 10vw, 6rem) var(--safe-gutter-left);
   display: grid;
   align-content: end;
@@ -177,14 +177,17 @@
 
 .inquiry-register {
   margin: 0 0 3rem;
-  padding: 1.25rem;
-  background: var(--mineral);
-  color: #f5f0e8;
+  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  border-left: 0.25rem solid var(--mineral);
+  background: var(--surface);
+  color: var(--ink);
 }
 
 .inquiry-register__title {
   margin: 0 0 0.9rem;
+  color: var(--ink-muted);
   font-size: 0.57rem;
+  font-weight: 620;
   line-height: 1.5;
   letter-spacing: 0.16em;
 }
@@ -196,15 +199,16 @@
   grid-template-columns: 1.5rem 3.5rem minmax(0, 1fr) 2.75rem;
   gap: 0.7rem;
   align-items: center;
-  border-top: 1px solid rgba(245, 240, 232, 0.34);
+  border-top: 1px solid var(--rule-strong);
 }
 
 .inquiry-ticket__number {
   align-self: start;
   padding-top: 0.1rem;
+  color: var(--ink-muted);
   font-size: 0.55rem;
+  font-weight: 600;
   letter-spacing: 0.1em;
-  opacity: 0.72;
 }
 
 .inquiry-ticket img,
@@ -229,10 +233,11 @@
 .inquiry-ticket p {
   margin: 0.25rem 0 0;
   font-size: 0.57rem;
+  font-weight: 540;
   line-height: 1.4;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.72;
+  color: var(--ink-muted);
 }
 
 .inquiry-ticket button {
@@ -241,10 +246,16 @@
   display: grid;
   place-items: center;
   justify-self: end;
-  border: 0;
+  border: 1px solid var(--rule-strong);
   background: transparent;
   color: inherit;
   cursor: pointer;
+}
+
+.inquiry-ticket button:focus-visible {
+  outline-color: var(--ink);
+  outline-offset: 3px;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
 }
 
 .inquiry-ticket button svg {
@@ -597,8 +608,14 @@
 }
 
 @media (min-width: 64rem) {
+  .contact-hero {
+    min-height: clamp(43rem, 74svh, 49rem);
+    padding-top: clamp(5rem, 8svh, 7rem);
+    padding-bottom: clamp(3.75rem, 7svh, 5.5rem);
+  }
+
   .contact-hero__material {
-    bottom: -9rem;
+    bottom: -7rem;
     object-position: center 48%;
   }
 
@@ -611,8 +628,16 @@
   .contact-desk,
   .contact-faq {
     display: grid;
-    grid-template-columns: minmax(15rem, 0.6fr) minmax(0, 1.4fr);
-    column-gap: clamp(3rem, 7vw, 7rem);
+    grid-template-columns: minmax(17rem, 0.72fr) minmax(0, 1.28fr);
+    column-gap: clamp(2rem, 6vw, 6rem);
+  }
+
+  .contact-sheet__intro h2,
+  .contact-desk h2,
+  .contact-faq h2 {
+    max-width: 100%;
+    font-size: clamp(2rem, 3.2vw, 3.4rem);
+    overflow-wrap: anywhere;
   }
 
   .contact-sheet__header {
@@ -650,6 +675,33 @@
 @media (orientation: landscape) and (max-height: 34rem) {
   .contact-hero {
     min-height: 35rem;
+  }
+}
+
+@media (min-width: 64rem) and (max-height: 44rem) {
+  .contact-hero {
+    min-height: 28rem;
+    padding-top: 3.25rem;
+    padding-bottom: 2.75rem;
+    gap: 1.5rem;
+  }
+
+  .contact-hero__material {
+    bottom: -5rem;
+    height: 21rem;
+  }
+
+  .contact-hero__copy .kicker {
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-hero__copy > p:last-child {
+    margin-top: 1rem;
+    line-height: 1.6;
+  }
+
+  .contact-hero__marker {
+    padding-top: 0.75rem;
   }
 }
 

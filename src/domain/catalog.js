@@ -171,9 +171,13 @@ export function collectionLabel(id, locale = "en") {
   return collections.find((collection) => collection.id === id)?.[locale] ?? id;
 }
 
-export const catalogStats = Object.freeze({
-  total: artworkRecords.length,
-  available: artworkRecords.filter((artwork) => !artwork.sold).length,
-  collected: artworkRecords.filter((artwork) => artwork.sold).length,
-  highlightedAvailable: artworkRecords.filter((artwork) => artwork.highlighted && !artwork.sold).length,
-});
+export function catalogStatsFor(artworks) {
+  return artworks.reduce((stats, artwork) => {
+    stats.total += 1;
+    stats[artwork.sold ? "collected" : "available"] += 1;
+    if (artwork.highlighted && !artwork.sold) stats.highlightedAvailable += 1;
+    return stats;
+  }, { total: 0, available: 0, collected: 0, highlightedAvailable: 0 });
+}
+
+export const catalogStats = Object.freeze(catalogStatsFor(artworkRecords));

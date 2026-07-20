@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   artworkRecords,
   catalogStats,
+  catalogStatsFor,
   collections,
   getCatalog,
   normalizeArtworkId,
@@ -14,6 +15,12 @@ import {
 describe("catalog contract", () => {
   it("keeps the published inventory and availability split", () => {
     expect(catalogStats).toEqual({ total: 32, available: 19, collected: 13, highlightedAvailable: 7 });
+    expect(catalogStatsFor(artworkRecords.slice(0, 3))).toEqual({
+      total: 3,
+      available: artworkRecords.slice(0, 3).filter(({ sold }) => !sold).length,
+      collected: artworkRecords.slice(0, 3).filter(({ sold }) => sold).length,
+      highlightedAvailable: artworkRecords.slice(0, 3).filter(({ sold, highlighted }) => highlighted && !sold).length,
+    });
   });
 
   it("uses unique locale-independent artwork ids", () => {

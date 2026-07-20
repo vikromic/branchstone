@@ -91,3 +91,11 @@ export function localeHref(path, locale) {
   url.searchParams.delete("lang");
   return `${url.pathname}${url.search}${url.hash}`;
 }
+
+export function contactInquiryHref(locale, message, artworkIds = []) {
+  const search = new URLSearchParams();
+  const ids = Array.isArray(artworkIds) ? artworkIds : [artworkIds];
+  ids.filter(Boolean).forEach((id) => search.append("art", id));
+  search.set("message", message);
+  return localeHref(`/contact.html?${search.toString()}`, locale);
+}

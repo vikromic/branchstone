@@ -3,9 +3,11 @@ import { ArrowDown, ArrowLeft, ArrowRight, Check, Copy, EnvelopeSimple } from "@
 import { SiteShell } from "../app/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
 import { copyText } from "../domain/clipboard.js";
+import { assetUrl } from "../domain/catalog.js";
 import { CONTACT_EMAIL, localeHref } from "../domain/content.js";
 import { readEnvelope, storageKeys, writeEnvelope } from "../domain/storage.js";
-import commissionMaterial from "../assets/material-stage/top-strata.webp";
+import commissionMaterial from "../assets/material-stage/commission-soil-hero.webp";
+import commissionMaterialMobile from "../assets/material-stage/commission-soil-hero-mobile.webp";
 import "../styles/commissions.css";
 
 const LAST_STEP = 3;
@@ -754,6 +756,16 @@ function ArtisticProcess({ content }) {
         <p className="kicker">{content.kicker}</p>
         <h2 id="commission-process-title">{content.title}</h2>
       </div>
+      <div className="commission-process__material" aria-hidden="true">
+        <picture>
+          <source
+            type="image/webp"
+            srcSet={`${assetUrl("img/art1-400w.webp")} 400w, ${assetUrl("img/art1-800w.webp")} 800w, ${assetUrl("img/art1.webp")} 1222w`}
+            sizes="(min-width: 72rem) 25rem, (min-width: 52rem) 38vw, 100vw"
+          />
+          <img src={assetUrl("img/art1.jpeg")} alt="" loading="lazy" decoding="async" />
+        </picture>
+      </div>
       <ol className="commission-process__ledger">
         {content.steps.map(([title, description], index) => (
           <li key={title}>
@@ -801,7 +813,10 @@ export function CommissionsPage() {
             <a className="commission-hero__jump" href="#commission-request">{content.hero.cta}<ArrowDown aria-hidden="true" /></a>
           </div>
           <div className="commission-hero__material" aria-hidden="true">
-            <img src={commissionMaterial} alt="" />
+            <picture>
+              <source media="(max-width: 759px)" srcSet={commissionMaterialMobile} />
+              <img src={commissionMaterial} alt="" fetchPriority="high" />
+            </picture>
             <p>{content.hero.mark}</p>
           </div>
           <p className="commission-hero__note">{content.hero.note}</p>

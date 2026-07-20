@@ -11,7 +11,6 @@ const copy = {
     description: "The address does not lead to a page in the current archive. The work may have moved, or the path may have been carried here incorrectly.",
     home: "Return to the ground",
     gallery: "Enter the works",
-    imageAlt: "Close view of weathered bark beside a pale mineral surface",
     errorLabel: "Error 404",
   },
   uk: {
@@ -20,7 +19,6 @@ const copy = {
     description: "Ця адреса не веде до сторінки в поточному архіві. Можливо, матеріал перемістився або шлях було перенесено сюди помилково.",
     home: "Повернутися до ґрунту",
     gallery: "Увійти до робіт",
-    imageAlt: "Крупний план вивітреної кори поруч зі світлою мінеральною поверхнею",
     errorLabel: "Помилка 404",
   },
 };
@@ -32,7 +30,7 @@ export function NotFoundPage() {
   return (
     <SiteShell page="notFound" footer={false}>
       <section className="not-found-page" aria-labelledby="not-found-title">
-        <img className="not-found-page__material" src={julyPinesStage} alt={content.imageAlt} />
+        <img className="not-found-page__material" src={julyPinesStage} alt="" aria-hidden="true" />
         <div className="not-found-page__record">
           <p className="kicker">{content.eyebrow}</p>
           <p className="not-found-page__code" aria-label={content.errorLabel}>404</p>

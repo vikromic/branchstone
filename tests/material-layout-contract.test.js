@@ -40,11 +40,49 @@ describe("material art direction", () => {
     expect(home).toMatch(/@media \(max-width: 699px\) and \(max-height: 620px\) and \(orientation: landscape\)[\s\S]*?\.home-material-layer--top\s*\{[\s\S]*?width: 108%;/);
   });
 
-  it("subtracts the matching header height from the 404 field at every desktop breakpoint", async () => {
-    const editorial = await readFile(resolve(root, "src/styles/editorial.css"), "utf8");
+  it("uses one header-height contract for every full-viewport editorial field", async () => {
+    const [editorial, index, commissions, contact] = await Promise.all([
+      readFile(resolve(root, "src/styles/editorial.css"), "utf8"),
+      readFile(resolve(root, "src/styles/index.css"), "utf8"),
+      readFile(resolve(root, "src/styles/commissions.css"), "utf8"),
+      readFile(resolve(root, "src/styles/contact.css"), "utf8"),
+    ]);
 
-    expect(editorial).toContain("min-height: max(39rem, calc(100svh - 5rem))");
-    expect(editorial).toMatch(/@media \(min-width: 760px\)[\s\S]*?\.not-found-page\s*\{\s*min-height: max\(39rem, calc\(100svh - 6rem\)\)/);
-    expect(editorial).toMatch(/@media \(min-width: 1100px\)[\s\S]*?\.not-found-page\s*\{\s*min-height: max\(39rem, calc\(100svh - 6\.4rem\)\)/);
+    expect(index).toContain("--site-header-height: 5rem");
+    expect(index).toMatch(/@media \(min-width: 760px\)[\s\S]*?:root\s*\{\s*--site-header-height:\s*6rem;/);
+    expect(index).toMatch(/@media \(min-width: 1100px\)[\s\S]*?:root\s*\{\s*--site-header-height:\s*6\.4rem;/);
+    expect(ruleFor(index, ".site-header")).toContain("min-height: var(--site-header-height)");
+    expect(ruleFor(editorial, ".about-hero")).toContain("calc(100svh - var(--site-header-height))");
+    expect(ruleFor(editorial, ".not-found-page")).toContain("calc(100svh - var(--site-header-height))");
+    expect(ruleFor(commissions, ".commission-hero")).toContain("calc(100svh - var(--site-header-height))");
+    expect(ruleFor(contact, ".contact-hero")).toContain("calc(100svh - var(--site-header-height))");
+  });
+
+  it("keeps the desktop index content-sized and grounded by a real material asset", async () => {
+    const [shell, index] = await Promise.all([
+      readFile(resolve(root, "src/app/SiteShell.jsx"), "utf8"),
+      readFile(resolve(root, "src/styles/index.css"), "utf8"),
+    ]);
+
+    expect(shell).toContain('bottom-strata-alpha.webp');
+    expect(shell).toContain('className="site-index__material"');
+    expect(index).toMatch(/@media \(min-width: 760px\)[\s\S]*?grid-template-rows: auto auto;/);
+    expect(index).not.toContain("grid-template-rows: auto 1fr");
+    expect(ruleFor(index, ".site-index__routes")).toContain("align-content: start");
+    expect(ruleFor(index, ".site-index")).toContain("overflow-x: clip");
+    expect(index).toContain("mask-image: linear-gradient(90deg");
+  });
+
+  it("gives Paper a visible index focus color and a light 404 surface", async () => {
+    const [index, editorial, notFound] = await Promise.all([
+      readFile(resolve(root, "src/styles/index.css"), "utf8"),
+      readFile(resolve(root, "src/styles/editorial.css"), "utf8"),
+      readFile(resolve(root, "src/pages/NotFoundPage.jsx"), "utf8"),
+    ]);
+
+    expect(index).toMatch(/:root\[data-theme="paper"\][\s\S]*?--mineral: #3c606c;/);
+    expect(editorial).toContain(':root[data-theme="paper"] .legal-page');
+    expect(editorial).toContain(':root[data-theme="paper"] .not-found-page');
+    expect(notFound).toContain('alt="" aria-hidden="true"');
   });
 });

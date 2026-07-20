@@ -48,9 +48,9 @@ function LocaleSwitch() {
   );
 }
 
-function renderPage(page) {
+function renderPage(page, initialLocale = "en") {
   return render(
-    <SiteProvider initialLocale="en">
+    <SiteProvider initialLocale={initialLocale}>
       <LocaleSwitch />
       {page}
     </SiteProvider>,
@@ -153,11 +153,13 @@ describe("commission form behavior", () => {
     fireEvent.change(email, { target: { value: "river@example.com" } });
     fireEvent.submit(form);
 
-    expect(await screen.findByRole("heading", { name: "How should the work meet the space?" })).toBeInTheDocument();
+    const scaleHeading = await screen.findByRole("heading", { name: "How should the work meet the space?" });
+    await waitFor(() => expect(scaleHeading).toHaveFocus());
     const continueButton = screen.getByRole("button", { name: /Continue/ });
     expect(continueButton).toHaveAttribute("type", "submit");
     fireEvent.click(continueButton);
-    expect(await screen.findByRole("heading", { name: "What should the material carry?" })).toBeInTheDocument();
+    const directionHeading = await screen.findByRole("heading", { name: "What should the material carry?" });
+    await waitFor(() => expect(directionHeading).toHaveFocus());
   });
 
   it("enforces live field limits and sanitizes an older restored draft to those same limits", async () => {
@@ -244,6 +246,7 @@ describe("contact form localized status", () => {
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
     }));
+    vi.stubGlobal("requestAnimationFrame", (callback) => window.setTimeout(() => callback(0), 0));
   });
 
   afterEach(() => {
@@ -262,5 +265,60 @@ describe("contact form localized status", () => {
     fireEvent.click(screen.getByTestId("locale-switch"));
     expect(await screen.findByText("Заповніть перше виділене поле, перш ніж продовжити.")).toBeInTheDocument();
     expect(screen.queryByText("Complete the first highlighted field before continuing.")).not.toBeInTheDocument();
+  });
+
+  it("removes only the generated artwork sentence while preserving the visitor's note", async () => {
+    const generatedMessage = "Hello, I’m interested in the original work “Born Of Burn.” Please share its current availability and acquisition details.";
+    window.history.replaceState({}, "", `/contact.html?art=born-of-burn&message=${encodeURIComponent(generatedMessage)}`);
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+
+    renderPage(<ContactPage />);
+    const message = await screen.findByLabelText(/Message/);
+    const visitorNote = "I would also like to ask about shipping to California.";
+    await waitFor(() => expect(message).toHaveValue(generatedMessage));
+    fireEvent.change(message, { target: { value: `${generatedMessage}\n\n${visitorNote}` } });
+
+    fireEvent.click(screen.getByRole("button", { name: "Remove from this inquiry: Born Of Burn" }));
+
+    await waitFor(() => expect(message).toHaveValue(visitorNote));
+    expect(screen.queryByRole("button", { name: /Remove from this inquiry/ })).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.getByLabelText(/Your name/)).toHaveFocus());
+
+    fireEvent.change(screen.getByLabelText(/Your name/), { target: { value: "River Stone" } });
+    fireEvent.change(screen.getByLabelText(/Your email/), { target: { value: "river@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Copy message" }));
+
+    await waitFor(() => expect(writeText).toHaveBeenCalledTimes(1));
+    const preparedLetter = writeText.mock.calls[0][0];
+    expect(preparedLetter).toContain(visitorNote);
+    expect(preparedLetter).not.toContain(generatedMessage);
+    expect(preparedLetter).not.toContain("Works included:");
+  });
+
+  it.each([
+    ["en", "I’m interested in these saved works and would like to know more about them.", "Please include shipping options.", /Message/, /Remove from this inquiry/],
+    ["uk", "Мене цікавлять ці збережені роботи, і я хотів би дізнатися про них більше.", "Будь ласка, додайте варіанти доставки.", /Повідомлення/, /Прибрати із запиту/],
+  ])("removes the generated %s group sentence only after the final saved work", async (locale, generatedMessage, visitorNote, messageLabel, removeLabel) => {
+    window.history.replaceState({}, "", locale === "uk" ? "/uk/contact.html" : "/contact.html");
+    writeEnvelope(storageKeys.pendingInquiry, {
+      artworks: [{ id: "july-pines" }, { id: "magnet" }],
+    });
+
+    renderPage(<ContactPage />, locale);
+    const message = await screen.findByLabelText(messageLabel);
+    await waitFor(() => expect(message).toHaveValue(generatedMessage));
+    fireEvent.change(message, { target: { value: `${generatedMessage}\n\n${visitorNote}` } });
+
+    const firstRemove = (await screen.findAllByRole("button", { name: removeLabel }))[0];
+    fireEvent.click(firstRemove);
+    await waitFor(() => expect(message).toHaveValue(`${generatedMessage}\n\n${visitorNote}`));
+
+    fireEvent.click(screen.getAllByRole("button", { name: removeLabel })[0]);
+    await waitFor(() => expect(message).toHaveValue(visitorNote));
+    expect(screen.queryByRole("button", { name: removeLabel })).not.toBeInTheDocument();
   });
 });

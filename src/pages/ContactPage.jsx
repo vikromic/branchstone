@@ -209,6 +209,22 @@ function buildLetter(values, tickets, text) {
   };
 }
 
+function removeGeneratedSentence(value, sentence) {
+  if (!sentence) return value;
+  const sentenceStart = value.indexOf(sentence);
+  if (sentenceStart < 0) return value;
+
+  const before = value.slice(0, sentenceStart);
+  const after = value.slice(sentenceStart + sentence.length);
+  if (!before.trim()) return after.replace(/^\s+/, "");
+  if (!after.trim()) return before.replace(/\s+$/, "");
+
+  const separatedByLineBreak = /\r?\n\s*$/.test(before) || /^\s*\r?\n/.test(after);
+  return separatedByLineBreak
+    ? `${before.replace(/\s+$/, "")}\n\n${after.replace(/^\s+/, "")}`
+    : `${before.replace(/[\t ]+$/, "")} ${after.replace(/^[\t ]+/, "")}`;
+}
+
 function findFirstInvalid(form) {
   return [...form.elements].find((control) => control.willValidate && !control.checkValidity());
 }
@@ -217,6 +233,7 @@ export function ContactPage() {
   const { locale, catalog } = useSite();
   const text = contactCopy[locale];
   const formRef = useRef(null);
+  const generatedInquiryRef = useRef(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const [values, setValues] = useState({ name: "", email: "", subject: "", message: "", website: "" });
   const [ticketRefs, setTicketRefs] = useState([]);
@@ -231,12 +248,20 @@ export function ContactPage() {
 
     if (urlMessagePresent) {
       const message = url.searchParams.get("message") ?? "";
-      const artworkId = normalizeArtworkId(url.searchParams.get("art"));
-      const artwork = catalog.find((item) => item.id === artworkId);
-      if (artwork) setTicketRefs([{ id: artwork.id, fallbackTitle: artwork.name }]);
+      const artworks = url.searchParams.getAll("art")
+        .map((id) => catalog.find((item) => item.id === normalizeArtworkId(id)))
+        .filter(Boolean);
+      if (artworks.length) {
+        const references = artworks.map((artwork) => ({ id: artwork.id, fallbackTitle: artwork.name }));
+        setTicketRefs(references);
+        generatedInquiryRef.current = {
+          message,
+          ids: new Set(references.map(({ id }) => id)),
+        };
+      }
       setValues((current) => ({
         ...current,
-        subject: artwork ? prefillText.artworkSubject : current.subject,
+        subject: artworks.length ? prefillText.artworkSubject : current.subject,
         message,
       }));
       url.searchParams.delete("message");
@@ -251,6 +276,10 @@ export function ContactPage() {
     safeRemove(storageKeys.pendingInquiry);
     if (!resolved.length) return;
     setTicketRefs(resolved);
+    generatedInquiryRef.current = {
+      message: prefillText.pendingMessage,
+      ids: new Set(resolved.map(({ id }) => id)),
+    };
     setValues((current) => ({
       ...current,
       subject: prefillText.artworkSubject,
@@ -321,6 +350,17 @@ export function ContactPage() {
   };
 
   const removeTicket = (id, index) => {
+    const generatedInquiry = generatedInquiryRef.current;
+    if (generatedInquiry?.ids.has(id)) {
+      generatedInquiry.ids.delete(id);
+    }
+    if (generatedInquiry && generatedInquiry.ids.size === 0) {
+      setValues((current) => ({
+        ...current,
+        message: removeGeneratedSentence(current.message, generatedInquiry.message),
+      }));
+      generatedInquiryRef.current = null;
+    }
     setTicketRefs((current) => current.filter((item) => item.id !== id));
     requestAnimationFrame(() => {
       const removeButtons = [...document.querySelectorAll("[data-ticket-remove]")];

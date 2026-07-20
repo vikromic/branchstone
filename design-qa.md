@@ -1,6 +1,6 @@
 # Branchstone final design and interaction QA
 
-Date: 2026-07-19
+Date: 2026-07-20
 
 Scope: mobile-first Carried Ground visual system, the Home and Gallery “Stay” interaction, every localized page, modal and drawer behavior, forms, storage, routing, accessibility, and a separate desktop-layout audit. This report deliberately separates simulator, emulation, desktop, and physical-device evidence.
 
@@ -60,10 +60,10 @@ Evidence:
 
 ## Automated verification
 
-- Final full suite: 14 files, 106/106 tests passed.
-- Focused post-cleanup forms, Stay, modal, and routing assertions: 32/32 passed.
+- Final full suite: 18 files, 125/125 tests passed.
+- Focused post-review Gallery, Contact, shell, layout, and URL-contract assertions: 48/48 passed.
 - Routing teardown had one reproduced 10-second dependency-scan flake after all assertions passed. Dependency discovery and HMR are now disabled for that middleware-only test; the suite subsequently passed 10/10 three consecutive times in 0.68–0.76 seconds.
-- Production client/SSR build passed. Artifact verification passed all 16 localized prerendered entries and the 32/19/13 catalog invariants. `git diff --check` passed.
+- Production client/SSR build and prerender passed. Artifact verification passed all 16 localized entries and the 32/19/13 catalog invariants. `git diff --check` passed.
 
 ## Visual fidelity and source limits
 
@@ -123,11 +123,52 @@ Independent review was deliberately adversarial and cross-family:
 
 The remaining P3 difference is intentional generative texture variation: the transparent desktop material is not a pixel-identical crop of the concept render, but its fused structure, palette, edge hierarchy, asymmetric vault, and visual weight match the approved direction. Physical-iPhone proof and the previously documented low-resolution Gallery masters remain outside this desktop pass’s evidence boundary.
 
-The obsolete Home-only `top-strata-alpha.png` and `top-strata-alpha.webp` sources were removed after reference search confirmed that the unified assets replaced their only importer. The non-alpha `top-strata.webp` remains because Commissions still uses it; Gallery and Contact seam assets also remain live.
+The obsolete Home-only `top-strata-alpha.png` and `top-strata-alpha.webp` sources were removed after reference search confirmed that the unified assets replaced their only importer. Commission’s former `top-strata.webp` was also removed after its only caller moved to the new responsive `commission-soil-hero-mobile.webp` / `commission-soil-hero.webp` pair; Gallery and Contact seam assets remain live.
+
+## Supporting pages design-to-implementation QA — 2026-07-20
+
+This pass extends the approved system rather than inventing a second direction. The shared visual truth remains the selected Concept 3 “Eroded Vault,” with the supplied natural mobile Home reference used to protect the project’s irregular, non-sticker material language:
+
+- Concept 3 source: `/Users/denysmalyshev/.codex/generated_images/019f7852-fe5d-78d3-8425-03580280f1b0/exec-af89d72d-900c-4f7c-b522-9107327b5f79.png`
+- Natural mobile reference: `/var/folders/82/vgmjrwd15s1_slvzhsmpdz780000gn/T/codex-clipboard-13b9f5b9-6a5f-4227-89b1-c012582a8820.png`
+- Final evidence directory: `/tmp/branchstone-desktop-improvements-2026-07-20/`
+
+Five visible inspection points were judged together with the source direction:
+
+1. **Header and geological threshold:** compressed Gallery chrome clears both the archive title and the natural seam; Paper Gallery uses dark gallery ink rather than the former 1.67:1 light chrome.
+2. **Artwork geometry:** stream and modal masters use intrinsic dimensions with `contain`, no crop, and no forced upscale. Born Of Burn remains 360×450 in the large desktop modal because that is the available master.
+3. **Index and editorial rhythm:** the desktop index is content-sized and grounded by a real faded material edge; Practice and Commission use open, asymmetric image/ledger compositions with no card-grid repetition or short-viewport collision.
+4. **Forms and state:** Contact’s writing register and Commission’s four-step form preserve focus, validation, visitor prose, temporary storage boundaries, and truthful email/clipboard handoff language.
+5. **Theme, locale, and legal continuity:** EN/UK and Soil/Paper states keep one shell vocabulary; legal pages and the custom 404 use readable light surfaces, current-page semantics, and exact viewport-height accounting.
+
+Above-fold copy was not rewritten. The only intentional shell wording changes are the split direct `all works` / `index` controls, truthful `Studio notes / Instagram`, and truthful saved-work removal labels. URL, storage-envelope, and published-route contracts remain compatible.
+
+Final representative captures:
+
+- `/tmp/branchstone-desktop-improvements-2026-07-20/gallery-desktop-soil-golden.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/gallery-mobile-paper-golden.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/gallery-mobile-modal-after-swipe.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/practice-desktop-1366x600.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/practice-process-desktop.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/commission-desktop-soil.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/commission-mobile-uk.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/contact-register-desktop.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/index-desktop-soil.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/privacy-desktop-paper.png`
+- `/tmp/branchstone-desktop-improvements-2026-07-20/404-desktop-paper.png`
+
+Independent review closure:
+
+- Native Codex reuse, simplification, efficiency, and altitude reviews found and drove the shared-count/header/inquiry/legal abstractions, dead seam removal, mobile resource gating, responsive Commission hero, Paper Gallery contrast, and saved-group provenance fixes.
+- OpenCode GLM 5.2 returned a clean working-tree UX review. Its confirmed collection-count contradiction and redundant resolved reveal control were fixed and retested; its seam-overlap concern was not reproduced in the 390×844 or 1366×600 visual evidence.
+- Antigravity/Gemini returned a clean risk review. Its compressed editorial and Contact-prose risks were explicitly exercised; physical mobile-keyboard and native edge-navigation gestures remain device-only follow-ups rather than claimed proof.
+- Claude Fable 5 timed out with a degraded adapter result, and Cursor Fable 5 was unavailable because the configured account reached its monthly usage limit. Neither is counted as validation.
+
+The remaining deviations are explicit: generated environmental soil texture is directionally matched rather than pixel-identical to the concept, and several artist masters remain too small for true Retina desktop detail. They are therefore kept at intrinsic size instead of being cosmetically enlarged. No P0, P1, or P2 defect remained after the final live pass.
 
 ## Local access and release boundary
 
-- Current LAN URL: `http://192.168.50.229:8082/`
+- Current LAN URL: `http://192.168.1.226:8082/`
 - The server is bound to `0.0.0.0:8082` and returned HTTP 200 from both loopback and the LAN address during this audit.
 - No external email was sent. Mail actions were verified up to local handoff/clipboard behavior.
 - No storage schema migration is needed. Expired legacy envelopes are purged on the next site load.

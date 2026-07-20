@@ -27,7 +27,7 @@
 /* About: one continuous field, with the portrait and material doing the framing. */
 .about-hero {
   position: relative;
-  min-height: min(58rem, max(39rem, calc(100svh - 4.65rem)));
+  min-height: min(58rem, max(39rem, calc(100svh - var(--site-header-height))));
   display: grid;
   align-items: end;
   isolation: isolate;
@@ -262,6 +262,37 @@
   background: var(--ground);
 }
 
+.about-process__material {
+  width: min(100%, 30rem);
+  margin: 0 0 clamp(3rem, 10vw, 5rem);
+}
+
+.about-process__material picture,
+.about-process__material img {
+  width: 100%;
+  display: block;
+}
+
+.about-process__material img {
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: left center;
+  filter: saturate(0.72) contrast(1.06) brightness(0.78);
+}
+
+.about-process .process-ledger {
+  border-top: 0;
+}
+
+.about-process .process-ledger li {
+  padding-block: 0 2.6rem;
+  border-bottom: 0;
+}
+
+.about-process .process-ledger li + li {
+  margin-top: 0.85rem;
+}
+
 .process-ledger p {
   grid-column: 2;
 }
@@ -270,21 +301,19 @@
   background: var(--surface);
 }
 
-.highlight-ledger,
-.collector-notes {
-  border-top: 1px solid var(--rule);
+.highlight-entry + .highlight-entry {
+  margin-top: clamp(4rem, 14vw, 7rem);
 }
 
-.highlight-entry {
+.highlight-entry__link {
   display: grid;
-  gap: 1.2rem;
-  padding: 1.6rem 0 2rem;
-  border-bottom: 1px solid var(--rule);
+  gap: 1.4rem;
+  color: inherit;
+  text-decoration: none;
 }
 
-.highlight-entry > a:first-child {
-  display: block;
-  overflow: hidden;
+.highlight-entry__link:focus-visible {
+  outline-offset: 0.75rem;
 }
 
 .highlight-entry img {
@@ -317,7 +346,8 @@
   line-height: 1.62;
 }
 
-.highlight-entry__copy > a {
+.highlight-entry__action {
+  width: fit-content;
   min-height: 2.75rem;
   display: inline-flex;
   align-items: center;
@@ -337,8 +367,10 @@
   display: grid;
   gap: 1.75rem;
   margin: 0;
-  padding: 2.2rem 0;
-  border-bottom: 1px solid var(--rule);
+}
+
+.collector-notes figure + figure {
+  margin-top: clamp(3.5rem, 11vw, 6rem);
 }
 
 .collector-notes blockquote {
@@ -532,10 +564,14 @@
   text-underline-offset: 0.3rem;
 }
 
+:root[data-theme="paper"] .legal-page {
+  --ink-muted: #5a4b42;
+}
+
 /* 404: a single weathered field, not an image beside a panel. */
 .not-found-page {
   position: relative;
-  min-height: max(39rem, calc(100svh - 5rem));
+  min-height: max(39rem, calc(100svh - var(--site-header-height)));
   display: grid;
   align-items: end;
   isolation: isolate;
@@ -595,7 +631,35 @@
   line-height: 1.72;
 }
 
+:root[data-theme="paper"] .not-found-page {
+  background: var(--ground-deep);
+  color: var(--ink);
+}
+
+:root[data-theme="paper"] .not-found-page::after {
+  background: rgba(222, 211, 197, 0.76);
+}
+
+:root[data-theme="paper"] .not-found-page__material {
+  opacity: 0.42;
+  filter: saturate(0.42) contrast(0.96) brightness(1.08);
+  mix-blend-mode: multiply;
+}
+
+:root[data-theme="paper"] .not-found-page .kicker,
+:root[data-theme="paper"] .not-found-page__description {
+  color: #5a4b42;
+}
+
+:root[data-theme="paper"] .not-found-page__code {
+  color: var(--mineral);
+}
+
 @media (min-width: 48rem) {
+  .about-hero {
+    min-height: min(58rem, max(34rem, calc(100svh - var(--site-header-height))));
+  }
+
   .about-hero__image img {
     object-position: 18% center;
   }
@@ -625,27 +689,60 @@
     margin-top: 0;
   }
 
-  .process-ledger li {
-    grid-template-columns: 3rem minmax(10rem, 0.55fr) minmax(18rem, 1.45fr);
+  .about-process__material {
+    width: min(42vw, 28rem);
+    margin-left: auto;
+  }
+
+  .about-process .process-ledger li {
+    grid-template-columns: 3rem minmax(10rem, 0.52fr) minmax(18rem, 1.48fr);
     gap: 1rem 1.5rem;
     align-items: start;
-    padding-block: 1.6rem;
+    padding-block: 0 2.8rem;
   }
 
   .process-ledger p {
     grid-column: 3;
   }
 
-  .highlight-entry {
+  .highlight-entry__link {
     grid-template-columns: minmax(13rem, 0.72fr) minmax(0, 1.28fr);
     gap: clamp(2rem, 6vw, 5rem);
     align-items: center;
-    padding-block: 2.5rem;
+  }
+
+  .highlight-entry:nth-child(even) .highlight-entry__link {
+    grid-template-columns: minmax(0, 1.18fr) minmax(13rem, 0.82fr);
+  }
+
+  .highlight-entry:nth-child(even) img {
+    order: 2;
+  }
+
+  .highlight-entry:nth-child(even) .highlight-entry__copy {
+    padding-left: clamp(1rem, 5vw, 4rem);
   }
 
   .collector-notes figure {
     grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.35fr);
     align-items: end;
+    max-width: 68rem;
+  }
+
+  .collector-notes figure:nth-child(even) {
+    margin-left: auto;
+    grid-template-columns: minmax(12rem, 0.35fr) minmax(0, 1fr);
+  }
+
+  .collector-notes figure:nth-child(even) blockquote {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .collector-notes figure:nth-child(even) figcaption {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: left;
   }
 
   .collector-notes figcaption {
@@ -670,7 +767,31 @@
   .about-process {
     display: grid;
     grid-template-columns: minmax(16rem, 0.62fr) minmax(32rem, 1.38fr);
-    gap: clamp(4rem, 9vw, 9rem);
+    grid-template-rows: auto 1fr;
+    gap: clamp(3rem, 7vw, 7rem) clamp(4rem, 9vw, 9rem);
+  }
+
+  .about-process .editorial-chapter__heading {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+  }
+
+  .about-process__material {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+    width: min(100%, 25rem);
+    margin: 0;
+  }
+
+  .about-process .process-ledger {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .about-process .process-ledger li:nth-child(even) {
+    padding-left: clamp(1rem, 2.5vw, 2.5rem);
   }
 
   .about-invitation {
@@ -680,13 +801,7 @@
 
 @media (min-width: 760px) {
   .not-found-page {
-    min-height: max(39rem, calc(100svh - 6rem));
-  }
-}
-
-@media (min-width: 1100px) {
-  .not-found-page {
-    min-height: max(39rem, calc(100svh - 6.4rem));
+    min-height: max(39rem, calc(100svh - var(--site-header-height)));
   }
 }
 
@@ -694,6 +809,36 @@
   .about-hero,
   .not-found-page {
     min-height: 34rem;
+  }
+}
+
+@media (min-width: 48rem) and (orientation: landscape) and (max-height: 38.75rem) {
+  .about-hero {
+    min-height: calc(100svh - var(--site-header-height));
+  }
+
+  .about-hero__copy {
+    padding-top: 2.5rem;
+    padding-bottom: 6.5rem;
+  }
+
+  .about-hero__copy .kicker {
+    margin-bottom: 1rem;
+  }
+
+  .about-hero h1 {
+    margin-bottom: 0.9rem;
+    font-size: clamp(2.6rem, 5vw, 3.7rem);
+  }
+
+  .about-hero__introduction {
+    max-width: 32rem;
+    font-size: 0.94rem;
+    line-height: 1.55;
+  }
+
+  .material-separator {
+    height: clamp(6.5rem, 19svh, 7.5rem);
   }
 }
 

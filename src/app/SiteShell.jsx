@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "@phosphor-icons/react";
-import { CONTACT_EMAIL, INSTAGRAM_URL, localeHref } from "../domain/content.js";
+import indexMaterial from "../assets/material-stage/bottom-strata-alpha.webp";
+import {
+  CONTACT_EMAIL,
+  INSTAGRAM_URL,
+  contactInquiryHref,
+  localeHref,
+} from "../domain/content.js";
 import { storageKeys, writeEnvelope } from "../domain/storage.js";
 import { useSite } from "./SiteContext.jsx";
 import { useModalLayer } from "./useModalLayer.js";
@@ -13,7 +19,6 @@ const quietChromeCopy = {
   en: {
     allWorks: "all works",
     index: "index",
-    openAllWorks: "Open all works and the site index",
     openIndex: "Open the site index",
     language: "Language",
     languageValue: "Українська",
@@ -21,13 +26,13 @@ const quietChromeCopy = {
     soil: "Soil",
     paper: "Paper",
     correspondence: "Email the studio",
-    studioNotes: "Studio notes",
+    studioNotes: "Studio notes / Instagram",
+    removeSaved: "Remove from saved works",
     utilities: "Studio and legal links",
   },
   uk: {
     allWorks: "усі роботи",
     index: "індекс",
-    openAllWorks: "Відкрити всі роботи та індекс сайту",
     openIndex: "Відкрити індекс сайту",
     language: "Мова",
     languageValue: "English",
@@ -35,7 +40,8 @@ const quietChromeCopy = {
     soil: "Ґрунт",
     paper: "Папір",
     correspondence: "Написати до студії",
-    studioNotes: "Нотатки студії",
+    studioNotes: "Нотатки студії / Instagram",
+    removeSaved: "Видалити зі збережених робіт",
     utilities: "Студійні та юридичні посилання",
   },
 };
@@ -57,9 +63,30 @@ function IndexRoutes({ className, locale, page, t }) {
   );
 }
 
+function IndexMaterial() {
+  return (
+    <div className="site-index__material" aria-hidden="true">
+      <picture>
+        <source media="(min-width: 760px)" srcSet={indexMaterial} />
+        <img alt="" decoding="async" />
+      </picture>
+    </div>
+  );
+}
+
+function LegalLinks({ page, locale, t }) {
+  return (
+    <>
+      <a aria-current={page === "privacy" ? "page" : undefined} href={localeHref("/privacy.html", locale)}>{t.shell.privacy}</a>
+      <a aria-current={page === "terms" ? "page" : undefined} href={localeHref("/terms.html", locale)}>{t.shell.terms}</a>
+    </>
+  );
+}
+
 function FavoritesDrawer({ onClose }) {
   const panelRef = useRef(null);
   const { locale, t, catalog, favorites, removeFavorite, clearFavorites } = useSite();
+  const chrome = quietChromeCopy[locale];
   const saved = favorites.map((id) => catalog.find((artwork) => artwork.id === id)).filter(Boolean);
 
   const inquire = () => {
@@ -70,12 +97,10 @@ function FavoritesDrawer({ onClose }) {
       window.location.href = localeHref("/contact.html", locale);
       return;
     }
-    const url = new URL(localeHref("/contact.html", locale), window.location.origin);
-    url.searchParams.set("message", locale === "uk"
+    const message = locale === "uk"
       ? `Вітаю, мене цікавлять ці роботи: ${saved.map(({ name }) => name).join(", ")}.`
-      : `Hello, I’m interested in these works: ${saved.map(({ name }) => name).join(", ")}.`);
-    if (saved[0]) url.searchParams.set("art", saved[0].id);
-    window.location.href = `${url.pathname}${url.search}`;
+      : `Hello, I’m interested in these works: ${saved.map(({ name }) => name).join(", ")}.`;
+    window.location.href = contactInquiryHref(locale, message, saved.map(({ id }) => id));
   };
 
   return (
@@ -97,7 +122,7 @@ function FavoritesDrawer({ onClose }) {
                   <span className="ledger-number">{String(index + 1).padStart(2, "0")}</span>
                   <img src={artwork.mainImage} alt="" loading="lazy" decoding="async" />
                   <div><h3>{artwork.name}</h3><p>{artwork.collection}</p></div>
-                  <button type="button" onClick={() => removeFavorite(artwork.id)} aria-label={`${t.common.close}: ${artwork.name}`}><X aria-hidden="true" /></button>
+                  <button type="button" onClick={() => removeFavorite(artwork.id)} aria-label={`${chrome.removeSaved}: ${artwork.name}`}><X aria-hidden="true" /></button>
                 </article>
               ))}
             </div>
@@ -125,8 +150,8 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
   const { locale, setLocale, theme, setTheme, t, favorites, favoritesReady, favoriteMigrationNotice, dismissFavoriteMigrationNotice, storageUnavailable, dismissStorageNotice } = useSite();
   const currentPagePath = pagePathById[page] ?? pagePathById.notFound;
   const chrome = quietChromeCopy[locale];
-  const indexLabel = page === "home" ? chrome.allWorks : chrome.index;
-  const indexAriaLabel = page === "home" ? chrome.openAllWorks : chrome.openIndex;
+  const indexLabel = chrome.index;
+  const indexAriaLabel = chrome.openIndex;
   const alternateLocale = locale === "en" ? "uk" : "en";
   const savedCount = favoritesReady ? String(favorites.length).padStart(2, "0") : "00";
   const closeFavorites = () => {
@@ -146,9 +171,12 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
           <span>BRANCHSTONE</span><small>BY VIKTORIA</small>
         </a>
         <div className="quiet-index-trigger">
+          {page === "home" && (
+            <a className="all-works-link" href={localeHref("/gallery.html", locale)}>{chrome.allWorks}</a>
+          )}
           <details className="prehydrate-index">
-            <summary aria-label={indexAriaLabel} data-open-label={t.shell.close}><span>{indexLabel}</span></summary>
-            <div className="prehydrate-index__layer">
+            <summary aria-label={indexAriaLabel} aria-controls="prehydrate-index-layer" data-open-label={t.shell.close}><span>{indexLabel}</span></summary>
+            <div id="prehydrate-index-layer" className="prehydrate-index__layer" role="region" aria-label={indexLabel}>
               <IndexRoutes locale={locale} page={page} t={t} />
               <div className="prehydrate-index__utilities" role="group" aria-label={chrome.utilities}>
                 <a href={localeHref(currentPagePath, alternateLocale)}>{chrome.languageValue}</a>
@@ -156,8 +184,7 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
                 <span>{t.shell.favorites} / {savedCount}</span>
                 <a href={`mailto:${CONTACT_EMAIL}`}>{chrome.correspondence}</a>
                 <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">{chrome.studioNotes}</a>
-                <a href={localeHref("/privacy.html", locale)}>{t.shell.privacy}</a>
-                <a href={localeHref("/terms.html", locale)}>{t.shell.terms}</a>
+                <LegalLinks page={page} locale={locale} t={t} />
               </div>
             </div>
           </details>
@@ -186,6 +213,7 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
         <div className="drawer-layer drawer-layer--index" role="presentation">
           <section id="site-index-layer" ref={menuRef} className="site-index" role="dialog" aria-modal="true" aria-labelledby="site-index-title">
             <FocusTrap active={menuOpen} containerRef={menuRef} onClose={() => setMenuOpen(false)} />
+            <IndexMaterial />
             <header className="site-index__header">
               <p id="site-index-title">{indexLabel}</p>
               <button className="site-index__close" type="button" onClick={() => setMenuOpen(false)}>{t.shell.close}</button>
@@ -227,15 +255,14 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
               <nav className="site-index__secondary" aria-label={chrome.utilities}>
                 <a href={`mailto:${CONTACT_EMAIL}`}>{chrome.correspondence}</a>
                 <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">{chrome.studioNotes}</a>
-                <a href={localeHref("/privacy.html", locale)}>{t.shell.privacy}</a>
-                <a href={localeHref("/terms.html", locale)}>{t.shell.terms}</a>
+                <LegalLinks page={page} locale={locale} t={t} />
               </nav>
             </div>
           </section>
         </div>
       )}
 
-      <main id="main-content">{children}</main>
+      <main id="main-content" tabIndex="-1">{children}</main>
 
       {footer && (
         <footer className="site-footer">
@@ -244,8 +271,7 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
             <p>© 2026 Branchstone by Viktoria</p>
             <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">Instagram</a>
             <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-            <a href={localeHref("/privacy.html", locale)}>{t.shell.privacy}</a>
-            <a href={localeHref("/terms.html", locale)}>{t.shell.terms}</a>
+            <LegalLinks page={page} locale={locale} t={t} />
           </div>
         </footer>
       )}

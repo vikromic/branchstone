@@ -16,13 +16,15 @@ import {
 import { StayReveal, useViewportArtworkSelection } from "../features/stay/index.js";
 import {
   catalogStats,
+  catalogStatsFor,
   collectionLabel,
   collections,
   normalizeArtworkId,
   normalizeCollection,
 } from "../domain/catalog.js";
 import { useSite } from "../app/SiteContext.jsx";
-import { MaterialSeamRun } from "../features/MaterialSeamRun.jsx";
+import gallerySeamMobile from "../assets/material-stage/home-top-composite-alpha.webp";
+import gallerySeamDesktop from "../assets/material-stage/home-top-vault-desktop-short-alpha.webp";
 import "../styles/gallery.css";
 
 const modalHistoryKey = "branchstoneArtworkModal";
@@ -315,16 +317,21 @@ export function GalleryPage() {
     setModalId(null);
   }, [modalId]);
 
+  const collectionWorks = useMemo(
+    () => collection === "all"
+      ? catalog
+      : catalog.filter((artwork) => artwork.collectionId === collection),
+    [catalog, collection],
+  );
+  const availabilityStats = useMemo(() => catalogStatsFor(collectionWorks), [collectionWorks]);
   const visibleWorks = useMemo(
-    () => catalog.filter((artwork) => {
-      const inCollection = collection === "all" || artwork.collectionId === collection;
-      const inAvailability =
-        availability === "all"
-        || (availability === "available" && !artwork.sold)
-        || (availability === "collected" && artwork.sold);
-      return inCollection && inAvailability;
-    }),
-    [availability, catalog, collection],
+    () => availability === "all"
+      ? collectionWorks
+      : collectionWorks.filter((artwork) => (
+        (availability === "available" && !artwork.sold)
+        || (availability === "collected" && artwork.sold)
+      )),
+    [availability, collectionWorks],
   );
   const favoriteIds = useMemo(() => new Set(favorites), [favorites]);
   const modalArtwork = modalId ? findArtwork(catalog, modalId) : null;
@@ -345,13 +352,18 @@ export function GalleryPage() {
           </p>
         </div>
         <dl className="gallery-intro__counts" aria-label={locale === "uk" ? "Стан архіву" : "Archive status"}>
-          <div><dt>{locale === "uk" ? "Усього" : "All works"}</dt><dd>{catalogStats.total}</dd></div>
-          <div><dt>{t.common.available}</dt><dd>{catalogStats.available}</dd></div>
-          <div><dt>{t.common.collected}</dt><dd>{catalogStats.collected}</dd></div>
+          <div><dt>{locale === "uk" ? "Усього" : "All works"}</dt><dd>{availabilityStats.total}</dd></div>
+          <div><dt>{t.common.available}</dt><dd>{availabilityStats.available}</dd></div>
+          <div><dt>{t.common.collected}</dt><dd>{availabilityStats.collected}</dd></div>
         </dl>
       </section>
 
-      <MaterialSeamRun className="gallery-material-seam" />
+      <div className="gallery-material-seam" aria-hidden="true">
+        <picture>
+          <source media="(min-width: 760px)" srcSet={gallerySeamDesktop} />
+          <img src={gallerySeamMobile} alt="" draggable="false" decoding="async" />
+        </picture>
+      </div>
 
       <section className="gallery-controls" aria-labelledby="filters-title">
         <div className="gallery-controls__heading">
@@ -361,9 +373,9 @@ export function GalleryPage() {
 
         <div className="gallery-status-filter" role="group" aria-label={locale === "uk" ? "Фільтр за доступністю" : "Filter by availability"}>
           {[
-            ["all", t.common.all, catalogStats.total],
-            ["available", t.common.available, catalogStats.available],
-            ["collected", t.common.collected, catalogStats.collected],
+            ["all", t.common.all, collectionWorks.length],
+            ["available", t.common.available, availabilityStats.available],
+            ["collected", t.common.collected, availabilityStats.collected],
           ].map(([id, label, count]) => (
             <button key={id} type="button" aria-pressed={availability === id} onClick={() => selectAvailability(id)}>
               <span>{label}</span><small>{String(count).padStart(2, "0")}</small>

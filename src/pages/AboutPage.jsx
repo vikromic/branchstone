@@ -180,6 +180,16 @@ function ProcessChapter({ content }) {
         <h2 id="process-title">{content.processTitle}</h2>
         <p>{content.processNote}</p>
       </div>
+      <div className="about-process__material" aria-hidden="true">
+        <picture>
+          <source
+            type="image/webp"
+            srcSet={`${assetUrl("img/artist_statement-400w.webp")} 400w, ${assetUrl("img/artist_statement.webp")} 640w`}
+            sizes="(min-width: 68rem) 25rem, (min-width: 48rem) 42vw, 100vw"
+          />
+          <img src={assetUrl("img/artist_statement.jpeg")} alt="" loading="lazy" decoding="async" />
+        </picture>
+      </div>
       <ol className="process-ledger">
         {content.process.map(([title, description], index) => (
           <li key={title}>
@@ -211,15 +221,15 @@ function HighlightsChapter({ locale, content }) {
       <div className="highlight-ledger">
         {highlights.map((highlight, index) => (
           <article className="highlight-entry" key={highlight.id}>
-            <a href={highlight.link} target="_blank" rel="noreferrer" aria-label={`${content.openFeature}: ${highlight.title}`}>
+            <a className="highlight-entry__link" href={highlight.link} target="_blank" rel="noreferrer">
               <img src={assetUrl(highlight.image)} alt="" loading="lazy" />
+              <div className="highlight-entry__copy">
+                <p className="highlight-entry__meta">{String(index + 1).padStart(2, "0")} / {highlight.date} / {highlight.source}</p>
+                <h3>{highlight.title}</h3>
+                <p>{highlight.subtitle}</p>
+                <span className="highlight-entry__action">{content.openFeature}</span>
+              </div>
             </a>
-            <div className="highlight-entry__copy">
-              <p className="highlight-entry__meta">{String(index + 1).padStart(2, "0")} / {highlight.date} / {highlight.source}</p>
-              <h3>{highlight.title}</h3>
-              <p>{highlight.subtitle}</p>
-              <a href={highlight.link} target="_blank" rel="noreferrer">{content.openFeature}</a>
-            </div>
           </article>
         ))}
       </div>

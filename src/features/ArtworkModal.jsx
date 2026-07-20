@@ -11,7 +11,7 @@ import {
 } from "@phosphor-icons/react";
 import { useSite } from "../app/SiteContext.jsx";
 import { useModalLayer } from "../app/useModalLayer.js";
-import { localeHref } from "../domain/content.js";
+import { contactInquiryHref } from "../domain/content.js";
 import {
   StayArtworkImage,
   StayPhase,
@@ -20,8 +20,6 @@ import {
 } from "./stay/index.js";
 
 export function artworkContactHref(artwork, locale, kind = "original") {
-  const search = new URLSearchParams();
-  search.set("art", artwork.id);
   const message = kind === "print"
     ? locale === "uk"
       ? `Вітаю, мене цікавить принт роботи «${artwork.name}».`
@@ -29,8 +27,7 @@ export function artworkContactHref(artwork, locale, kind = "original") {
     : locale === "uk"
       ? `Вітаю, мене цікавить оригінал роботи «${artwork.name}». Будь ласка, розкажіть про актуальну доступність та умови придбання.`
       : `Hello, I’m interested in the original work “${artwork.name}.” Please share its current availability and acquisition details.`;
-  search.set("message", message);
-  return localeHref(`/contact.html?${search.toString()}`, locale);
+  return contactInquiryHref(locale, message, artwork.id);
 }
 
 export function storyParagraphs(story) {
@@ -306,13 +303,31 @@ export function ArtworkModal({ artwork, onClose }) {
   }, [imageCount]);
 
   const onPointerDown = (event) => {
-    if (event.pointerType === "mouse" && event.button !== 0) return;
-    gestureStartRef.current = { x: event.clientX, y: event.clientY };
+    if (
+      event.isPrimary === false
+      || gestureStartRef.current
+      || (event.pointerType === "mouse" && event.button !== 0)
+    ) return;
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    gestureStartRef.current = {
+      x: event.clientX,
+      y: event.clientY,
+      pointerId: event.pointerId,
+    };
+  };
+
+  const finishGesture = (event) => {
+    const start = gestureStartRef.current;
+    if (!start || start.pointerId !== event.pointerId) return null;
+    gestureStartRef.current = null;
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+      event.currentTarget.releasePointerCapture?.(event.pointerId);
+    }
+    return start;
   };
 
   const onPointerUp = (event) => {
-    const start = gestureStartRef.current;
-    gestureStartRef.current = null;
+    const start = finishGesture(event);
     if (!start) return;
     const deltaX = event.clientX - start.x;
     const deltaY = event.clientY - start.y;
@@ -340,6 +355,7 @@ export function ArtworkModal({ artwork, onClose }) {
         className="artwork-dialog"
         activeKey={`${artwork.id}:${currentImageIndex}`}
         active
+        settleOnMount
         waitForArtwork
         scrollTargetRef={scrollLayerRef}
         phasePresence={{ materials: true, story: storyParagraphs(artwork.story).length > 0, availability: true }}
@@ -372,18 +388,23 @@ export function ArtworkModal({ artwork, onClose }) {
             alt={`${artwork.name}, ${currentImageIndex + 1} / ${imageCount}`}
             className="artwork-dialog__visual"
             loading="eager"
-              fetchPriority="high"
-              onImageSettled={() => {
-                setSettledImageKey(currentImageKey);
-                controllerRef.current?.motion.settle("carousel");
-              }}
+            fetchPriority="high"
+            onImageSettled={() => {
+              setSettledImageKey(currentImageKey);
+              controllerRef.current?.motion.settle("carousel");
+            }}
           >
             <div
               className="artwork-dialog__gesture-surface"
               onPointerDown={onPointerDown}
               onPointerUp={onPointerUp}
-              onPointerCancel={() => {
-                gestureStartRef.current = null;
+              onPointerCancel={(event) => {
+                finishGesture(event);
+              }}
+              onLostPointerCapture={(event) => {
+                if (gestureStartRef.current?.pointerId === event.pointerId) {
+                  gestureStartRef.current = null;
+                }
               }}
               aria-hidden="true"
             />

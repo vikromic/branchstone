@@ -1800,3 +1800,48 @@ This log tracks the 1% iterative improvements toward an "Apple-grade" digital ga
 ### Status
 
 - **VERIFIED / COMMITTED**
+
+---
+
+## [Iteration: SUPPORTING_PAGES_SURGICAL_DESKTOP_PASS]
+
+### Objective
+
+- **Surface:** Gallery, Practice, Commission, Correspondence, site index, legal pages, shared shell, and 404, with mobile regressions checked alongside the desktop work.
+- **Observed:** Supporting pages still read as stretched mobile compositions on desktop. The Gallery cropped or enlarged low-resolution masters, short desktops allowed chrome/seam collisions, Paper Gallery inherited a low-contrast white header, Contact could retain generated group-inquiry text after all works were removed, and the index loaded a desktop-only material on mobile.
+- **Direction:** Extend the approved Eroded Vault / Carried Ground system across the whole archive: open editorial fields, real material imagery, quiet ledger typography, honest intrinsic artwork sizing, and one responsive shell contract.
+
+### What changed
+
+- Reframed Gallery around a compact archive threshold and natural responsive seam; collection counts now agree everywhere, modal images never crop or upscale, each carousel frame re-arms the Stay sequence, and the resolved modal removes its now-redundant reveal control.
+- Rebuilt Practice and Commission process sections as asymmetric desktop compositions using real project imagery rather than repeated ledger/card patterns. Commission now uses a generated environmental soil surface with separate 600×916 mobile and 1717×916 desktop sources.
+- Rebalanced Correspondence into a 0.72/1.28 desktop writing register, raised form/context contrast, and modeled generated inquiry provenance once for both direct and saved-group paths. Repeated `art` parameters preserve every work when storage fallback is required; removing the final associated ticket removes only the exact generated sentence and preserves visitor prose.
+- Reworked the index into a content-sized archive map with a natural bottom material fade, truthful/current labels, no false horizontal scroll, and a desktop-media-gated source that is not selected on mobile.
+- Centralized header height, inquiry URL creation, catalog counting, and legal link rendering at their owners; removed the obsolete `MaterialSeamRun` component and unused desktop seam assets.
+- Added Paper-theme Gallery/header contrast, legal/404 light surfaces, truthful saved-work controls, a visible skip target, and explicit focus treatment for scripted Commission steps.
+
+### Migration and compatibility
+
+- No stored-data migration is required. Existing favorites, pending-inquiry, commission-draft, theme, and locale envelopes are unchanged.
+- Existing single-`art` Contact links remain valid. The same URL boundary now also accepts repeated `art` parameters for the real multi-work fallback caller.
+- Published routes and locale paths are unchanged; no external message was sent and nothing was deployed.
+
+### Visual evidence
+
+- Gallery desktop/mobile: `/tmp/branchstone-desktop-improvements-2026-07-20/gallery-desktop-soil-golden.png`, `/tmp/branchstone-desktop-improvements-2026-07-20/gallery-mobile-paper-golden.png`, `/tmp/branchstone-desktop-improvements-2026-07-20/gallery-mobile-modal-after-swipe.png`.
+- Practice and Commission: `/tmp/branchstone-desktop-improvements-2026-07-20/practice-desktop-1366x600.png`, `/tmp/branchstone-desktop-improvements-2026-07-20/practice-process-desktop.png`, `/tmp/branchstone-desktop-improvements-2026-07-20/commission-desktop-soil.png`, `/tmp/branchstone-desktop-improvements-2026-07-20/commission-mobile-uk.png`.
+- Correspondence, index, and legal: `/tmp/branchstone-desktop-improvements-2026-07-20/contact-register-desktop.png`, `/tmp/branchstone-desktop-improvements-2026-07-20/index-desktop-soil.png`, `/tmp/branchstone-desktop-improvements-2026-07-20/privacy-desktop-paper.png`, `/tmp/branchstone-desktop-improvements-2026-07-20/404-desktop-paper.png`.
+
+### Verification
+
+- Live in-app Browser checks covered 390×844, 1024×768, 1366×600, 1440×1000, and 1920×1080 across EN/UK and Soil/Paper.
+- A locale-controlled 32-state route matrix passed eight EN/UK routes at mobile and short-desktop sizes with zero horizontal overflow, missing headings/titles, or broken visible images.
+- Real pointer swipe changed Born Of Burn `01 / 05` to `02 / 05`; at 220 ms materials were entering while story/availability remained pending, and by 1.9 s all four phases were resolved again. The resolved reveal control was hidden and the modal body lock remained active.
+- Paper Gallery computed dark shell chrome on its light intro and collection status/filter counts both resolved to `4 / 0 / 4`. Contact preserved appended Ukrainian visitor prose after removing the final work from a two-work inquiry.
+- Mobile Commission selected the 600×916 source and desktop selected the 1717×916 source. Both rendered without horizontal overflow; the mobile header plus hero matched the 844 px viewport within subpixel rounding.
+- Focused tests passed 48/48 after independent-review fixes. The final full-suite and production-build results are recorded in `design-qa.md`.
+- Final verification passed 18 test files / 125 tests, the production client and SSR builds, prerendering, and artifact validation for all 16 localized entries and the 32/19/13 catalog invariants.
+
+### Status
+
+- **VERIFIED / COMMITTED**

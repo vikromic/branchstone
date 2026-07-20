@@ -47,13 +47,15 @@ class IntersectionObserverStub {
   }
 }
 
-function pointerEvent(type, pointerId, isPrimary = true) {
+function pointerEvent(type, pointerId, isPrimary = true, coordinates = {}) {
   const event = new Event(type, { bubbles: true, cancelable: true });
   Object.defineProperties(event, {
     pointerId: { configurable: true, value: pointerId },
     pointerType: { configurable: true, value: "touch" },
     isPrimary: { configurable: true, value: isPrimary },
     button: { configurable: true, value: 0 },
+    clientX: { configurable: true, value: coordinates.clientX ?? 0 },
+    clientY: { configurable: true, value: coordinates.clientY ?? 0 },
   });
   return event;
 }
@@ -177,6 +179,20 @@ describe("Gallery Stay stream", () => {
     fireEvent.click(within(collection).getByRole("button", { name: /Golden/ }));
     await waitFor(() => expect(archiveArticles()).toHaveLength(4));
     expect(new URL(window.location.href).searchParams.get("collection")).toBe("golden");
+
+    const goldenWorks = getCatalog("en").filter(({ collectionId }) => collectionId === "golden");
+    expect(within(availability).getByRole("button", { name: /All/ }))
+      .toHaveTextContent(String(goldenWorks.length).padStart(2, "0"));
+    expect(within(availability).getByRole("button", { name: /Available/ }))
+      .toHaveTextContent(String(goldenWorks.filter(({ sold }) => !sold).length).padStart(2, "0"));
+    expect(within(availability).getByRole("button", { name: /Collected/ }))
+      .toHaveTextContent(String(goldenWorks.filter(({ sold }) => sold).length).padStart(2, "0"));
+    expect([...screen.getByLabelText("Archive status").querySelectorAll("dd")].map(({ textContent }) => textContent))
+      .toEqual([
+        String(goldenWorks.length),
+        String(goldenWorks.filter(({ sold }) => !sold).length),
+        String(goldenWorks.filter(({ sold }) => sold).length),
+      ]);
   });
 
   it("does not hand an active selection to the next work while touch scrolling is still held", async () => {
@@ -424,7 +440,7 @@ describe("Gallery Stay stream", () => {
     expect(normalizedUrl.searchParams.has("artwork")).toBe(false);
   });
 
-  it("opens art-first, keeps carousel focus, supports pointer swipe, and resets reveal on every frame", async () => {
+  it("auto-settles art-first, keeps carousel focus, captures pointer swipe, and resets every frame", async () => {
     const artwork = getCatalog("en").find(({ id }) => id === "born-of-burn");
     window.history.replaceState({}, "", "/gallery.html?art=born-of-burn");
     renderGallery();
@@ -436,17 +452,17 @@ describe("Gallery Stay stream", () => {
     expect(materials).toHaveAttribute("data-stay-state", "pending");
 
     fireEvent.load(image);
-    expect(materials).toHaveAttribute("data-stay-state", "pending");
+    await waitFor(() => expect(materials).toHaveAttribute("data-stay-state", "resolved"));
+    expect(dialog.querySelector("[data-stay-phase='availability']"))
+      .toHaveAttribute("data-stay-state", "resolved");
+    expect(dialog).toHaveAttribute("data-stay-fully-revealed", "true");
+
     const scrollLayer = dialog.closest(".artwork-dialog-layer");
     Object.defineProperty(scrollLayer, "onscrollend", { configurable: true, value: null });
     fireEvent.scroll(scrollLayer);
+    expect(materials).toHaveAttribute("data-stay-state", "pending");
     scrollLayer.dispatchEvent(new Event("scrollend", { bubbles: true }));
     await waitFor(() => expect(materials).toHaveAttribute("data-stay-state", "resolved"));
-
-    fireEvent.scroll(scrollLayer);
-    expect(materials).toHaveAttribute("data-stay-state", "pending");
-    fireEvent.click(within(dialog).getByRole("button", { name: "Let the work settle" }));
-    expect(materials).toHaveAttribute("data-stay-state", "resolved");
 
     const nextButton = within(dialog).getByRole("button", { name: "Next image" });
     nextButton.focus();
@@ -457,24 +473,38 @@ describe("Gallery Stay stream", () => {
     expect(nextButton.isConnected).toBe(true);
     expect(materials).toHaveAttribute("data-stay-state", "pending");
     expect(materials).toHaveAttribute("inert");
+    fireEvent.load(image);
+    await waitFor(() => expect(materials).toHaveAttribute("data-stay-state", "resolved"));
 
     fireEvent.keyDown(document, { key: "ArrowRight" });
     expect(dialog.querySelector(".artwork-dialog__visual img").getAttribute("src"))
       .toBe(artwork.images[0]);
 
     const gestureSurface = dialog.querySelector(".artwork-dialog__gesture-surface");
-    fireEvent.pointerDown(gestureSurface, {
-      pointerId: 4,
-      pointerType: "touch",
+    gestureSurface.setPointerCapture = vi.fn();
+    gestureSurface.hasPointerCapture = vi.fn(() => true);
+    gestureSurface.releasePointerCapture = vi.fn();
+    fireEvent(gestureSurface, pointerEvent("pointerdown", 4, true, {
       clientX: 260,
       clientY: 120,
-    });
-    fireEvent.pointerUp(gestureSurface, {
-      pointerId: 4,
-      pointerType: "touch",
+    }));
+    fireEvent(gestureSurface, pointerEvent("pointerdown", 5, false, {
+      clientX: 20,
+      clientY: 120,
+    }));
+    fireEvent(gestureSurface, pointerEvent("pointerup", 5, false, {
+      clientX: 300,
+      clientY: 120,
+    }));
+    expect(dialog.querySelector(".artwork-dialog__visual img").getAttribute("src"))
+      .toBe(artwork.images[0]);
+    fireEvent(gestureSurface, pointerEvent("pointerup", 4, true, {
       clientX: 100,
       clientY: 126,
-    });
+    }));
+    expect(gestureSurface.setPointerCapture).toHaveBeenCalledWith(4);
+    expect(gestureSurface.setPointerCapture).toHaveBeenCalledTimes(1);
+    expect(gestureSurface.releasePointerCapture).toHaveBeenCalledWith(4);
     expect(dialog.querySelector(".artwork-dialog__visual img").getAttribute("src"))
       .toBe(artwork.images[1]);
   });
