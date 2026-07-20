@@ -3,7 +3,7 @@ import { artworkById, getCatalog } from "../domain/catalog.js";
 import { copy, isUkrainianPath, localeHref } from "../domain/content.js";
 import { decodeFavoriteStorage, encodeFavoriteStorage } from "../domain/favorites.js";
 import { getPageMetadata } from "../domain/metadata.js";
-import { safeRead, safeRemove, safeWrite, storageKeys } from "../domain/storage.js";
+import { purgeExpiredEnvelopes, safeRead, safeRemove, safeWrite, storageKeys } from "../domain/storage.js";
 
 const SiteContext = createContext(null);
 
@@ -78,6 +78,7 @@ export function SiteProvider({ children, initialLocale = "en" }) {
   const catalog = useMemo(() => getCatalog(locale), [locale]);
 
   useEffect(() => {
+    purgeExpiredEnvelopes();
     const nextLocale = readLocale();
     setLocaleState(nextLocale);
     document.documentElement.lang = nextLocale;

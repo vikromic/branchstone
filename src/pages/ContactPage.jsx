@@ -6,10 +6,8 @@ import { normalizeArtworkId } from "../domain/catalog.js";
 import { copyText } from "../domain/clipboard.js";
 import { CONTACT_EMAIL, INSTAGRAM_URL, localeHref } from "../domain/content.js";
 import { readEnvelope, safeRemove, storageKeys } from "../domain/storage.js";
-import memorySeam from "../assets/material-stage/memory-seam.webp";
+import memorySeam from "../assets/material-stage/memory-seam-alpha.webp";
 import "../styles/contact.css";
-
-const INQUIRY_TTL = 60 * 60 * 1000;
 
 const contactCopy = {
   en: {
@@ -164,6 +162,13 @@ const contactCopy = {
   },
 };
 
+const statusToneByKey = Object.freeze({
+  invalid: "invalid",
+  handoffStarted: "handoff",
+  copied: "copied",
+  copyError: "copy-error",
+});
+
 function resolveInquiryEntry(entry, catalog) {
   if (!entry || typeof entry !== "object") return null;
   const id = normalizeArtworkId(entry.id);
@@ -240,7 +245,7 @@ export function ContactPage() {
       return;
     }
 
-    const pending = readEnvelope(storageKeys.pendingInquiry, INQUIRY_TTL);
+    const pending = readEnvelope(storageKeys.pendingInquiry);
     if (!pending || !Array.isArray(pending.artworks) || !pending.artworks.length) return;
     const resolved = pending.artworks.map((entry) => resolveInquiryEntry(entry, catalog)).filter(Boolean);
     safeRemove(storageKeys.pendingInquiry);
@@ -270,8 +275,16 @@ export function ContactPage() {
     const { name, value } = event.target;
     event.target.setCustomValidity("");
     setValues((current) => ({ ...current, [name]: value }));
-    if (status?.type === "invalid") setStatus(null);
+    if (status === "invalid") setStatus(null);
   };
+
+  useEffect(() => {
+    if (status !== "invalid" || !formRef.current) return;
+    for (const name of ["name", "subject", "message"]) {
+      const control = formRef.current.elements.namedItem(name);
+      control.setCustomValidity(control.value.trim() ? "" : text.emptyField);
+    }
+  }, [status, text.emptyField]);
 
   const validate = () => {
     for (const name of ["name", "subject", "message"]) {
@@ -280,7 +293,7 @@ export function ContactPage() {
     }
     const firstInvalid = findFirstInvalid(formRef.current);
     if (!firstInvalid) return true;
-    setStatus({ type: "invalid", message: text.invalid });
+    setStatus("invalid");
     firstInvalid.focus();
     firstInvalid.reportValidity();
     return false;
@@ -293,7 +306,7 @@ export function ContactPage() {
     if (values.website) return;
     if (!validate()) return;
     const letter = prepareLetter();
-    setStatus({ type: "handoff", message: text.handoffStarted });
+    setStatus("handoffStarted");
     window.location.href = letter.mailto;
   };
 
@@ -301,9 +314,9 @@ export function ContactPage() {
     if (!validate()) return;
     try {
       await copyText(prepareLetter().plain);
-      setStatus({ type: "copied", message: text.copied });
+      setStatus("copied");
     } catch {
-      setStatus({ type: "copy-error", message: text.copyError });
+      setStatus("copyError");
     }
   };
 
@@ -349,7 +362,7 @@ export function ContactPage() {
                     <article className="inquiry-ticket" key={artwork.id}>
                       <span className="inquiry-ticket__number">{String(index + 1).padStart(2, "0")}</span>
                       {artwork.mainImage ? (
-                        <img src={artwork.mainImage} alt="" />
+                        <img src={artwork.mainImage} alt="" loading="lazy" decoding="async" />
                       ) : (
                         <span className="inquiry-ticket__placeholder" aria-hidden="true">BS</span>
                       )}
@@ -409,8 +422,8 @@ export function ContactPage() {
                 </button>
               </div>
               <p className="correspondence-form__handoff">{text.handoff}</p>
-              <p className={`contact-form-status${status ? ` contact-form-status--${status.type}` : ""}`} aria-live="polite">
-                {status?.message ?? ""}
+              <p className={`contact-form-status${status ? ` contact-form-status--${statusToneByKey[status]}` : ""}`} aria-live="polite">
+                {status ? text[status] : ""}
               </p>
               </fieldset>
               <noscript><p className="correspondence-form__noscript">{text.noScript} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p></noscript>

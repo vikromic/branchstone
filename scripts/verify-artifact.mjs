@@ -6,7 +6,7 @@ const root = process.cwd();
 const stage = resolve(root, ".stage");
 const docs = resolve(root, "docs");
 const ukrainianMarkers = {
-  "index.html": ["АРХІВ"],
+  "index.html": ["усі роботи"],
   "gallery.html": ["ЖИВИЙ АРХІВ МАТЕРІАЛІВ", "Роботи, що несуть землю"],
   "about.html": ["01 / Походження", "05 / Продовження", "Галерея Rena Charles"],
   "commissions.html": ["ФОРМА / МАТЕРІЯ / ПАМ’ЯТЬ"],
@@ -16,8 +16,26 @@ const ukrainianMarkers = {
   "404.html": ["Цей шар уже вивітрився."],
 };
 
+function verifyPrehydrateContract(html, filename) {
+  const prehydrate = html.indexOf("<script data-branchstone-prehydrate");
+  const theme = html.indexOf("branchstone-theme");
+  const body = html.indexOf("<body");
+  const root = html.indexOf('<div id="root"');
+  if (prehydrate < 0) throw new Error(`${filename}: pre-hydration contract is missing`);
+  if (!(prehydrate < theme && theme < body && body < root)) {
+    throw new Error(`${filename}: pre-hydration, theme, body, and SSR root ordering is unsafe`);
+  }
+  if (!html.includes("prefers-reduced-motion: reduce") || !html.includes("stay-enhanced")) {
+    throw new Error(`${filename}: motion enhancement gate is missing`);
+  }
+  if (filename.endsWith("index.html") && (!html.includes('pageId === "home"') || !html.includes("currentLocation.replace(target)"))) {
+    throw new Error(`${filename}: Home legacy artwork redirect is missing`);
+  }
+}
+
 for (const filename of htmlFiles) {
   const html = await readFile(resolve(stage, filename), "utf8");
+  verifyPrehydrateContract(html, filename);
   if (!html.includes("<main")) throw new Error(`${filename}: raw HTML has no semantic main content`);
   if (!html.includes("<h1")) throw new Error(`${filename}: raw HTML has no h1`);
   if (!html.includes('<template id="branchstone-uk-root">')) throw new Error(`${filename}: Ukrainian prerender template is missing`);
@@ -28,6 +46,7 @@ for (const filename of htmlFiles) {
   if (/docs\/(?:js|css)\//.test(html)) throw new Error(`${filename}: legacy asset reference remains`);
 
   const ukrainianHtml = await readFile(resolve(stage, "uk", filename), "utf8");
+  verifyPrehydrateContract(ukrainianHtml, `uk/${filename}`);
   if (!ukrainianHtml.includes('<html lang="uk"')) throw new Error(`uk/${filename}: live document language is not Ukrainian`);
   if (!ukrainianHtml.includes('data-initial-locale="uk"')) throw new Error(`uk/${filename}: Ukrainian root is not live`);
   if (ukrainianHtml.includes('id="branchstone-uk-root"')) throw new Error(`uk/${filename}: locale still depends on a script-swapped template`);

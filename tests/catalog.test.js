@@ -1,3 +1,5 @@
+import { access } from "node:fs/promises";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   artworkRecords,
@@ -6,6 +8,7 @@ import {
   getCatalog,
   normalizeArtworkId,
   normalizeCollection,
+  streamPrimaryPaths,
 } from "../src/domain/catalog.js";
 
 describe("catalog contract", () => {
@@ -33,6 +36,28 @@ describe("catalog contract", () => {
     expect(ukrainian).toHaveLength(english.length);
     expect(ukrainian.map(({ id }) => id)).toEqual(english.map(({ id }) => id));
     expect(ukrainian.map(({ imagePaths }) => imagePaths[0])).toEqual(english.map(({ imagePaths }) => imagePaths[0]));
+  });
+
+  it("keeps an explicit on-disk stream primary without changing carousel order", async () => {
+    expect(Object.keys(streamPrimaryPaths)).toEqual(artworkRecords.map(({ id }) => id));
+    await Promise.all(artworkRecords.map(async (record) => {
+      expect(record.streamPrimaryPath).toBe(streamPrimaryPaths[record.id]);
+      expect(record.imagePaths[0]).toBe(record.en.main_image);
+      await access(resolve("docs", record.streamPrimaryPath));
+    }));
+  });
+
+  it("preserves the five intentionally empty English stories instead of inventing copy", () => {
+    const emptyStoryIds = getCatalog("en")
+      .filter(({ story }) => !story.trim())
+      .map(({ id }) => id);
+    expect(emptyStoryIds).toEqual([
+      "christmas-joy",
+      "full",
+      "moonglow",
+      "golden-monstera",
+      "november-forest",
+    ]);
   });
 
   it("accepts canonical, display-name and legacy collection aliases", () => {

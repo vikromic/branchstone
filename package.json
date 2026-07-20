@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "dev:lan": "vite --host 0.0.0.0 --port 8082",
     "test": "vitest run",
     "build:client": "vite build",
     "build:ssr": "vite build --ssr src/entry-server.jsx --outDir .stage-ssr",

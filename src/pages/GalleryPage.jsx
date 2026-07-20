@@ -1,7 +1,19 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowUpRight, BookmarkSimple, Eye, SlidersHorizontal } from "@phosphor-icons/react";
+import {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { SiteShell } from "../app/SiteShell.jsx";
-import { ArtworkModal, artworkContactHref } from "../features/ArtworkModal.jsx";
+import {
+  ArtworkModal,
+  ArtworkNarrative,
+  ArtworkSurface,
+  storyParagraphs,
+} from "../features/ArtworkModal.jsx";
+import { StayReveal, useViewportArtworkSelection } from "../features/stay/index.js";
 import {
   catalogStats,
   collectionLabel,
@@ -10,6 +22,7 @@ import {
   normalizeCollection,
 } from "../domain/catalog.js";
 import { useSite } from "../app/SiteContext.jsx";
+import { MaterialSeamRun } from "../features/MaterialSeamRun.jsx";
 import "../styles/gallery.css";
 
 const modalHistoryKey = "branchstoneArtworkModal";
@@ -43,56 +56,139 @@ function safeNormalizeCollection(value) {
   }
 }
 
-function WorkRecord({ artwork, position, isFavorite, onOpen, onFavorite, locale, t }) {
+function normalizeAvailability(value) {
+  return value === "available" || value === "collected" ? value : "all";
+}
+
+const WorkRecord = memo(function WorkRecord({
+  artwork,
+  position,
+  isActive,
+  isFavorite,
+  onActivate,
+  onRegister,
+  onOpen,
+  onFavorite,
+  locale,
+  t,
+}) {
+  const articleRef = useRef(null);
+  const controllerRef = useRef(null);
+  const explicitRevealRef = useRef(false);
+  const [stayAnnouncement, setStayAnnouncement] = useState("");
+  const titleId = `gallery-work-${artwork.id}-title`;
+  const descriptionId = `gallery-work-${artwork.id}-story`;
+
+  const setArticleRef = useCallback((node) => {
+    articleRef.current = node;
+    onRegister(artwork.id, node);
+  }, [artwork.id, onRegister]);
+
+  useEffect(() => {
+    if (!isActive) {
+      setStayAnnouncement("");
+      return;
+    }
+    const focusedInside = articleRef.current?.contains(document.activeElement);
+    if (!explicitRevealRef.current && !focusedInside) return;
+    explicitRevealRef.current = false;
+    controllerRef.current?.settle();
+  }, [isActive]);
+
+  const activate = () => onActivate(artwork.id);
+
+  const reveal = () => {
+    if (isActive) {
+      controllerRef.current?.settle();
+      return;
+    }
+    explicitRevealRef.current = true;
+    activate();
+  };
+
+  const surfaceArtwork = {
+    ...artwork,
+    locale,
+    viewLabel: t.common.view,
+  };
+
   return (
-    <article className="gallery-work" data-sold={artwork.sold ? "true" : "false"}>
-      <header className="gallery-work__ledger">
-        <span>{String(position + 1).padStart(2, "0")}</span>
-        <p>{artwork.collection}</p>
-        <span>{artwork.year}</span>
-      </header>
-      <div className="gallery-work__visual">
-        <img
-          src={artwork.mainImage}
-          alt={artwork.name}
-          loading={position === 0 ? "eager" : "lazy"}
-          fetchPriority={position === 0 ? "high" : "auto"}
+    <StayReveal
+      as="article"
+      ref={setArticleRef}
+      controllerRef={controllerRef}
+      className="gallery-work"
+      activeKey={artwork.id}
+      active={isActive}
+      observeWindowScroll={isActive}
+      waitForArtwork
+      phasePresence={{ materials: true, story: storyParagraphs(artwork.story).length > 0, availability: true }}
+      onPhaseChange={(phase, state) => {
+        if (state !== "resolved" || !isActive) return;
+        const phaseLabels = locale === "uk"
+          ? { materials: "Матеріали відкрито.", story: "Історію відкрито.", availability: "Доступність відкрито." }
+          : { materials: "Materials revealed.", story: "Story revealed.", availability: "Availability revealed." };
+        if (phaseLabels[phase]) setStayAnnouncement(phaseLabels[phase]);
+      }}
+      data-artwork-id={artwork.id}
+      data-gallery-active={isActive ? "true" : "false"}
+      data-sold={artwork.sold ? "true" : "false"}
+      aria-labelledby={titleId}
+    >
+      <ArtworkSurface
+        artwork={surfaceArtwork}
+        src={artwork.streamPrimary}
+        alt={artwork.name}
+        className="gallery-work__visual"
+        loading={position === 0 ? "eager" : "lazy"}
+        fetchPriority={position === 0 ? "high" : "auto"}
+        onOpen={(event) => onOpen(artwork.id, event.currentTarget)}
+        openId={`artwork-open-${artwork.id}`}
+      />
+
+      <ArtworkNarrative
+        artwork={artwork}
+        locale={locale}
+        t={t}
+        isFavorite={isFavorite}
+        onFavorite={onFavorite}
+        onReveal={reveal}
+        onOpen={(event) => onOpen(artwork.id, event.currentTarget)}
+        titleId={titleId}
+        descriptionId={descriptionId}
+      />
+      <span className="sr-only" aria-live="polite" aria-atomic="true">
+        {isActive ? stayAnnouncement : ""}
+      </span>
+    </StayReveal>
+  );
+});
+
+function GalleryStream({ artworks, favoriteIds, locale, onFavorite, onOpen, t }) {
+  const {
+    activeId,
+    activateArtwork,
+    registerArtwork,
+  } = useViewportArtworkSelection(artworks);
+
+  return (
+    <div className="gallery-stream">
+      {artworks.map((artwork, position) => (
+        <WorkRecord
+          key={artwork.id}
+          artwork={artwork}
+          position={position}
+          isActive={activeId === artwork.id}
+          isFavorite={favoriteIds.has(artwork.id)}
+          onActivate={activateArtwork}
+          onRegister={registerArtwork}
+          onOpen={onOpen}
+          onFavorite={onFavorite}
+          locale={locale}
+          t={t}
         />
-        <button
-          id={`artwork-open-${artwork.id}`}
-          className="gallery-work__open"
-          type="button"
-          onClick={(event) => onOpen(artwork.id, event.currentTarget)}
-          aria-label={`${t.common.view}: ${artwork.name}`}
-        >
-          <Eye aria-hidden="true" />
-          <span>{t.common.view}</span>
-        </button>
-        <button
-          className="gallery-save"
-          type="button"
-          aria-pressed={isFavorite}
-          onClick={() => onFavorite(artwork.id)}
-          aria-label={`${isFavorite ? t.common.saved : t.common.save}: ${artwork.name}`}
-        >
-          <BookmarkSimple weight={isFavorite ? "fill" : "regular"} aria-hidden="true" />
-        </button>
-      </div>
-      <footer className="gallery-work__caption">
-        <div>
-          <h2>{artwork.name}</h2>
-          <p>{artwork.materials}</p>
-          {!artwork.sold && (
-            <a className="gallery-work__inquire" href={artworkContactHref(artwork, locale, "original")}>
-              {t.common.inquire}<ArrowUpRight aria-hidden="true" />
-            </a>
-          )}
-        </div>
-        <p className="gallery-status" data-sold={artwork.sold ? "true" : "false"}>
-          {artwork.sold ? t.common.collected : t.common.available}
-        </p>
-      </footer>
-    </article>
+      ))}
+    </div>
   );
 }
 
@@ -109,7 +205,10 @@ export function GalleryPage() {
     const url = new URL(window.location.href);
     const rawCollection = url.searchParams.get("collection");
     const normalizedCollection = safeNormalizeCollection(rawCollection);
+    const rawAvailability = url.searchParams.get("availability");
+    const normalizedAvailability = normalizeAvailability(rawAvailability);
     setCollection(normalizedCollection);
+    setAvailability(normalizedAvailability);
 
     const canonicalArtwork = url.searchParams.get("art");
     const legacyArtwork = url.searchParams.get("artwork");
@@ -123,6 +222,11 @@ export function GalleryPage() {
       changed = true;
     } else if (rawCollection && rawCollection !== normalizedCollection) {
       url.searchParams.set("collection", normalizedCollection);
+      changed = true;
+    }
+
+    if (rawAvailability && normalizedAvailability === "all") {
+      url.searchParams.delete("availability");
       changed = true;
     }
 
@@ -156,10 +260,12 @@ export function GalleryPage() {
     previousModalId.current = modalId;
     if (!closedArtworkId || modalId) return;
     requestAnimationFrame(() => {
-      const target = triggerRef.current?.isConnected
-        ? triggerRef.current
-        : document.getElementById(`artwork-open-${closedArtworkId}`) ?? document.getElementById("works-title");
+      const savedTrigger = triggerRef.current;
+      const target = savedTrigger?.id === closedArtworkId && savedTrigger.node?.isConnected
+        ? savedTrigger.node
+        : document.getElementById("works-title");
       target?.focus?.({ preventScroll: true });
+      triggerRef.current = null;
     });
   }, [modalId]);
 
@@ -172,8 +278,18 @@ export function GalleryPage() {
     window.history.replaceState(window.history.state, "", href);
   };
 
-  const openArtwork = (id, trigger) => {
-    triggerRef.current = trigger;
+  const selectAvailability = (nextAvailability) => {
+    const normalizedAvailability = normalizeAvailability(nextAvailability);
+    setAvailability(normalizedAvailability);
+    const href = galleryUrl((search) => {
+      if (normalizedAvailability === "all") search.delete("availability");
+      else search.set("availability", normalizedAvailability);
+    });
+    window.history.replaceState(window.history.state, "", href);
+  };
+
+  const openArtwork = useCallback((id, trigger) => {
+    triggerRef.current = { id, node: trigger };
     if (modalId === id) return;
     const href = galleryUrl((search) => {
       search.delete("artwork");
@@ -182,7 +298,7 @@ export function GalleryPage() {
     const nextState = { ...(window.history.state || {}), [modalHistoryKey]: id };
     window.history.pushState(nextState, "", href);
     setModalId(id);
-  };
+  }, [modalId]);
 
   const closeArtwork = useCallback(() => {
     if (historyClosePending.current) return;
@@ -203,26 +319,29 @@ export function GalleryPage() {
     () => catalog.filter((artwork) => {
       const inCollection = collection === "all" || artwork.collectionId === collection;
       const inAvailability =
-        availability === "all" ||
-        (availability === "available" && !artwork.sold) ||
-        (availability === "collected" && artwork.sold);
+        availability === "all"
+        || (availability === "available" && !artwork.sold)
+        || (availability === "collected" && artwork.sold);
       return inCollection && inAvailability;
     }),
     [availability, catalog, collection],
   );
-
+  const favoriteIds = useMemo(() => new Set(favorites), [favorites]);
   const modalArtwork = modalId ? findArtwork(catalog, modalId) : null;
 
   return (
-    <SiteShell page="gallery">
+    <SiteShell page="gallery" immersive footer={false}>
       <section className="gallery-intro" aria-labelledby="works-title">
-        <p className="kicker">{locale === "uk" ? "ЖИВИЙ АРХІВ МАТЕРІАЛІВ / 2019—ДОТЕПЕР" : "LIVING MATERIAL ARCHIVE / 2019—NOW"}</p>
+        <p className="gallery-intro__index">BRANCHSTONE / {String(catalogStats.total).padStart(2, "0")}</p>
         <div className="gallery-intro__title">
-          <h1 id="works-title" tabIndex="-1">{locale === "uk" ? "Роботи, що несуть землю" : "Works that carry the ground"}</h1>
+          <p>{locale === "uk" ? "ЖИВИЙ АРХІВ МАТЕРІАЛІВ / 2019—ДОТЕПЕР" : "LIVING MATERIAL ARCHIVE / 2019—NOW"}</p>
+          <h1 id="works-title" tabIndex="-1">
+            {locale === "uk" ? "Роботи, що несуть землю" : "Works that carry the ground"}
+          </h1>
           <p>
             {locale === "uk"
-              ? "Живопис, дерево, попіл і знайдені матеріали — не декор, а свідки місця та пам’яті."
-              : "Paint, wood, ash, and found matter—not decoration, but witnesses to place and memory."}
+              ? "Рухайтеся архівом. Зупинка обирає роботу: спершу проявляються матеріали, потім історія і лише тоді — доступність."
+              : "Move through the archive. Your stop selects the work: materials appear first, then the story, and only then availability."}
           </p>
         </div>
         <dl className="gallery-intro__counts" aria-label={locale === "uk" ? "Стан архіву" : "Archive status"}>
@@ -232,10 +351,11 @@ export function GalleryPage() {
         </dl>
       </section>
 
+      <MaterialSeamRun className="gallery-material-seam" />
+
       <section className="gallery-controls" aria-labelledby="filters-title">
         <div className="gallery-controls__heading">
-          <SlidersHorizontal aria-hidden="true" />
-          <h2 id="filters-title">{locale === "uk" ? "Шари архіву" : "Archive layers"}</h2>
+          <h2 id="filters-title">{locale === "uk" ? "Знайти роботу" : "Find a work"}</h2>
           <p aria-live="polite">{String(visibleWorks.length).padStart(2, "0")} {locale === "uk" ? "робіт" : "works"}</p>
         </div>
 
@@ -245,7 +365,7 @@ export function GalleryPage() {
             ["available", t.common.available, catalogStats.available],
             ["collected", t.common.collected, catalogStats.collected],
           ].map(([id, label, count]) => (
-            <button key={id} type="button" aria-pressed={availability === id} onClick={() => setAvailability(id)}>
+            <button key={id} type="button" aria-pressed={availability === id} onClick={() => selectAvailability(id)}>
               <span>{label}</span><small>{String(count).padStart(2, "0")}</small>
             </button>
           ))}
@@ -265,31 +385,25 @@ export function GalleryPage() {
 
       <section className="gallery-archive" aria-label={locale === "uk" ? "Архів робіт" : "Artwork archive"}>
         {visibleWorks.length ? (
-          <div className="gallery-archive__grid">
-            {visibleWorks.map((artwork) => (
-              <WorkRecord
-                key={artwork.id}
-                artwork={artwork}
-                position={artwork.index}
-                isFavorite={favorites.includes(artwork.id)}
-                onOpen={openArtwork}
-                onFavorite={toggleFavorite}
-                locale={locale}
-                t={t}
-              />
-            ))}
-          </div>
+          <GalleryStream
+            artworks={visibleWorks}
+            favoriteIds={favoriteIds}
+            locale={locale}
+            onFavorite={toggleFavorite}
+            onOpen={openArtwork}
+            t={t}
+          />
         ) : (
           <div className="gallery-empty" role="status">
             <p>{locale === "uk" ? "У цьому шарі поки немає робіт." : "No works sit in this layer yet."}</p>
-            <button type="button" onClick={() => { selectCollection("all"); setAvailability("all"); }}>
+            <button type="button" onClick={() => { selectCollection("all"); selectAvailability("all"); }}>
               {locale === "uk" ? "Показати весь архів" : "Show the full archive"}
             </button>
           </div>
         )}
       </section>
 
-      {modalArtwork && <ArtworkModal artwork={modalArtwork} onClose={closeArtwork} />}
+      {modalArtwork ? <ArtworkModal artwork={modalArtwork} onClose={closeArtwork} /> : null}
     </SiteShell>
   );
 }

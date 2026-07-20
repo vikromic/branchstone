@@ -8,7 +8,6 @@ import { readEnvelope, storageKeys, writeEnvelope } from "../domain/storage.js";
 import commissionMaterial from "../assets/material-stage/top-strata.webp";
 import "../styles/commissions.css";
 
-const DRAFT_TTL = 24 * 60 * 60 * 1000;
 const LAST_STEP = 3;
 
 const emptyData = Object.freeze({
@@ -24,6 +23,21 @@ const emptyData = Object.freeze({
   timeline: "",
   vision: "",
   referral: "",
+});
+
+const draftFieldLimits = Object.freeze({
+  name: 120,
+  email: 254,
+  commissionType: 32,
+  scale: 32,
+  placement: 300,
+  dimensions: 300,
+  budget: 300,
+  colors: 300,
+  materials: 300,
+  timeline: 300,
+  vision: 1200,
+  referral: 300,
 });
 
 const text = {
@@ -66,6 +80,7 @@ const text = {
       privacy: "Your draft stays only in this browser for 24 hours. The final link opens your own email app; you review and send the message yourself.",
       privacyUnavailable: "This browser blocked local draft storage. You can continue, but this request will not be restored after you leave or reload the page.",
       steps: ["Correspondence", "Scale", "Direction", "Review"],
+      progressLabel: "Request progress",
       restored: "Your draft from this browser has been restored.",
       stepOne: {
         title: "Where can the conversation continue?",
@@ -202,6 +217,7 @@ const text = {
       privacy: "Чернетка зберігається лише в цьому браузері протягом 24 годин. Фінальне посилання відкриє вашу поштову програму; ви самі переглянете й надішлете лист.",
       privacyUnavailable: "Браузер заблокував локальне збереження чернетки. Можна продовжити, але після виходу або перезавантаження цей запит не відновиться.",
       steps: ["Листування", "Масштаб", "Напрям", "Перевірка"],
+      progressLabel: "Прогрес запиту",
       restored: "Чернетку з цього браузера відновлено.",
       stepOne: {
         title: "Де продовжити розмову?",
@@ -320,7 +336,7 @@ function sanitizeDraft(saved) {
   };
   const data = { ...emptyData };
   Object.entries(aliases).forEach(([key, value]) => {
-    if (typeof value === "string") data[key] = value.slice(0, key === "vision" ? 1200 : 300);
+    if (typeof value === "string") data[key] = value.slice(0, draftFieldLimits[key]);
   });
   data.commissionType = ({ custom: "open" })[data.commissionType] ?? data.commissionType;
   if (!["open", "abstract", "nature", "mixed-media"].includes(data.commissionType)) data.commissionType = emptyData.commissionType;
@@ -360,12 +376,11 @@ function wizardReducer(state, action) {
   }
 }
 
-function validateContact(data, locale) {
+function validateContact(data) {
   const errors = {};
-  const messages = text[locale].wizard.errors;
-  if (!data.name.trim()) errors.name = messages.name;
-  if (!data.email.trim()) errors.email = messages.email;
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) errors.email = messages.emailInvalid;
+  if (!data.name.trim()) errors.name = "name";
+  if (!data.email.trim()) errors.email = "email";
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) errors.email = "emailInvalid";
   return errors;
 }
 
@@ -421,7 +436,6 @@ function CommissionWizard({ locale }) {
     handoffStatus: "",
   });
   const [draftReady, setDraftReady] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
   const [draftUnavailable, setDraftUnavailable] = useState(false);
   const [honeypot, setHoneypot] = useState("");
   const fields = useRef({});
@@ -430,10 +444,9 @@ function CommissionWizard({ locale }) {
   const draftChanged = useRef(false);
 
   useEffect(() => {
-    const saved = sanitizeDraft(readEnvelope(storageKeys.commissionDraft, DRAFT_TTL));
+    const saved = sanitizeDraft(readEnvelope(storageKeys.commissionDraft));
     if (saved) dispatch({ type: "RESTORE", payload: saved });
     setDraftReady(true);
-    setIsHydrated(true);
   }, []);
 
   useEffect(() => {
@@ -469,13 +482,18 @@ function CommissionWizard({ locale }) {
   };
 
   const next = () => {
-    const errors = state.step === 0 ? validateContact(state.data, locale) : {};
+    const errors = state.step === 0 ? validateContact(state.data) : {};
     if (!Object.keys(errors).length) {
       focusStepAfterNavigation.current = true;
       draftChanged.current = true;
     }
     dispatch({ type: "NEXT", errors });
     if (Object.keys(errors).length) focusFirstInvalid(errors);
+  };
+
+  const submitStep = (event) => {
+    event.preventDefault();
+    if (state.step < LAST_STEP) next();
   };
 
   const back = () => {
@@ -485,24 +503,24 @@ function CommissionWizard({ locale }) {
   };
 
   const openEmail = (event) => {
-    const errors = validateContact(state.data, locale);
+    const errors = validateContact(state.data);
     if (honeypot || Object.keys(errors).length) {
       event.preventDefault();
       dispatch({ type: "ERRORS", errors });
-      dispatch({ type: "HANDOFF_STATUS", value: w.review.blocked });
+      dispatch({ type: "HANDOFF_STATUS", value: "blocked" });
       focusFirstInvalid(errors);
       return;
     }
     const persisted = persistDraft(state);
     setDraftUnavailable(!persisted);
-    dispatch({ type: "HANDOFF_STATUS", value: persisted ? w.review.opened : w.review.openedNoDraft });
+    dispatch({ type: "HANDOFF_STATUS", value: persisted ? "opened" : "openedNoDraft" });
   };
 
   const copyMessage = async () => {
-    const errors = validateContact(state.data, locale);
+    const errors = validateContact(state.data);
     if (honeypot || Object.keys(errors).length) {
       dispatch({ type: "ERRORS", errors });
-      dispatch({ type: "HANDOFF_STATUS", value: w.review.blocked });
+      dispatch({ type: "HANDOFF_STATUS", value: "blocked" });
       focusFirstInvalid(errors);
       return;
     }
@@ -510,9 +528,9 @@ function CommissionWizard({ locale }) {
     setDraftUnavailable(!persisted);
     try {
       await copyText(`${CONTACT_EMAIL}\n${subject}\n\n${message}`);
-      dispatch({ type: "HANDOFF_STATUS", value: persisted ? w.review.copied : w.review.copiedNoDraft });
+      dispatch({ type: "HANDOFF_STATUS", value: persisted ? "copied" : "copiedNoDraft" });
     } catch {
-      dispatch({ type: "HANDOFF_STATUS", value: w.review.copyFailed });
+      dispatch({ type: "HANDOFF_STATUS", value: "copyFailed" });
     }
   };
 
@@ -542,20 +560,20 @@ function CommissionWizard({ locale }) {
       <div className="commission-wizard__sheet">
         <ol className="commission-progress" aria-label={locale === "uk" ? "Етапи запиту" : "Request steps"}>
           {w.steps.map((label, index) => (
-            <li key={label} className={index < state.step ? "is-complete" : index === state.step ? "is-current" : ""} aria-current={index === state.step ? "step" : undefined}>
+            <li key={label} className={index < state.step ? "is-complete" : index === state.step ? "is-current" : ""} aria-current={index === state.step ? "step" : undefined} aria-label={label}>
               <span aria-hidden="true">{index < state.step ? <Check weight="bold" /> : String(index + 1).padStart(2, "0")}</span>
-              <span>{label}</span>
+              <span className="commission-progress__label">{label}</span>
             </li>
           ))}
         </ol>
-        <div className="commission-progress__meter" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow={state.step + 1} aria-valuetext={`${w.steps[state.step]}, ${state.step + 1} / 4`}>
-          <i style={{ inlineSize: `${((state.step + 1) / 4) * 100}%` }} />
+        <div className="commission-progress__meter" role="progressbar" aria-label={w.progressLabel} aria-valuemin="1" aria-valuemax="4" aria-valuenow={state.step + 1} aria-valuetext={`${w.steps[state.step]}, ${state.step + 1} / 4`}>
+          <i aria-hidden="true" style={{ inlineSize: `${((state.step + 1) / 4) * 100}%` }} />
         </div>
 
         {state.restored && <p className="commission-draft-notice" role="status">{w.restored}</p>}
 
-        <form className="commission-form" noValidate onSubmit={(event) => event.preventDefault()}>
-          <fieldset className="commission-form__interactive" disabled={!isHydrated}>
+        <form className="commission-form" noValidate onSubmit={submitStep}>
+          <fieldset className="commission-form__interactive" disabled={!draftReady}>
           <div className="honeypot" aria-hidden="true">
             <label htmlFor="commission-website">Website</label>
             <input id="commission-website" name="website" type="text" tabIndex="-1" autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
@@ -569,11 +587,11 @@ function CommissionWizard({ locale }) {
                 <p>{w.stepOne.intro}</p>
               </header>
               <div className="commission-form__two-up">
-                <Field id="commission-name" label={w.stepOne.name} required error={state.errors.name}>
-                  <input ref={register("name")} id="commission-name" name="name" type="text" autoComplete="name" value={state.data.name} onChange={update} aria-invalid={Boolean(state.errors.name)} aria-describedby={state.errors.name ? "commission-name-error" : undefined} required />
+                <Field id="commission-name" label={w.stepOne.name} required error={state.errors.name ? w.errors[state.errors.name] : null}>
+                  <input ref={register("name")} id="commission-name" name="name" type="text" autoComplete="name" maxLength={draftFieldLimits.name} value={state.data.name} onChange={update} aria-invalid={Boolean(state.errors.name)} aria-describedby={state.errors.name ? "commission-name-error" : undefined} required />
                 </Field>
-                <Field id="commission-email" label={w.stepOne.email} required error={state.errors.email}>
-                  <input ref={register("email")} id="commission-email" name="email" type="email" inputMode="email" autoComplete="email" value={state.data.email} onChange={update} aria-invalid={Boolean(state.errors.email)} aria-describedby={state.errors.email ? "commission-email-error" : undefined} required />
+                <Field id="commission-email" label={w.stepOne.email} required error={state.errors.email ? w.errors[state.errors.email] : null}>
+                  <input ref={register("email")} id="commission-email" name="email" type="email" inputMode="email" autoComplete="email" maxLength={draftFieldLimits.email} value={state.data.email} onChange={update} aria-invalid={Boolean(state.errors.email)} aria-describedby={state.errors.email ? "commission-email-error" : undefined} required />
                 </Field>
               </div>
               <p className="commission-required-note">* {w.required}</p>
@@ -601,14 +619,14 @@ function CommissionWizard({ locale }) {
               </fieldset>
               <div className="commission-form__two-up">
                 <Field id="commission-placement" label={w.stepTwo.placement}>
-                  <input id="commission-placement" name="placement" type="text" maxLength="300" placeholder={w.stepTwo.placementPlaceholder} value={state.data.placement} onChange={update} />
+                  <input id="commission-placement" name="placement" type="text" maxLength={draftFieldLimits.placement} placeholder={w.stepTwo.placementPlaceholder} value={state.data.placement} onChange={update} />
                 </Field>
                 <Field id="commission-dimensions" label={w.stepTwo.dimensions}>
-                  <input id="commission-dimensions" name="dimensions" type="text" maxLength="300" placeholder={w.stepTwo.dimensionsPlaceholder} value={state.data.dimensions} onChange={update} />
+                  <input id="commission-dimensions" name="dimensions" type="text" maxLength={draftFieldLimits.dimensions} placeholder={w.stepTwo.dimensionsPlaceholder} value={state.data.dimensions} onChange={update} />
                 </Field>
               </div>
               <Field id="commission-budget" label={w.stepTwo.budget}>
-                <input id="commission-budget" name="budget" type="text" maxLength="300" placeholder={w.stepTwo.budgetPlaceholder} value={state.data.budget} onChange={update} />
+                <input id="commission-budget" name="budget" type="text" maxLength={draftFieldLimits.budget} placeholder={w.stepTwo.budgetPlaceholder} value={state.data.budget} onChange={update} />
               </Field>
             </section>
           )}
@@ -627,20 +645,20 @@ function CommissionWizard({ locale }) {
               </Field>
               <div className="commission-form__two-up">
                 <Field id="commission-colors" label={w.stepThree.colors}>
-                  <input id="commission-colors" name="colors" type="text" maxLength="300" placeholder={w.stepThree.colorsPlaceholder} value={state.data.colors} onChange={update} />
+                  <input id="commission-colors" name="colors" type="text" maxLength={draftFieldLimits.colors} placeholder={w.stepThree.colorsPlaceholder} value={state.data.colors} onChange={update} />
                 </Field>
                 <Field id="commission-materials" label={w.stepThree.materials}>
-                  <input id="commission-materials" name="materials" type="text" maxLength="300" placeholder={w.stepThree.materialsPlaceholder} value={state.data.materials} onChange={update} />
+                  <input id="commission-materials" name="materials" type="text" maxLength={draftFieldLimits.materials} placeholder={w.stepThree.materialsPlaceholder} value={state.data.materials} onChange={update} />
                 </Field>
               </div>
               <Field id="commission-timeline" label={w.stepThree.timeline}>
-                <input id="commission-timeline" name="timeline" type="text" maxLength="300" placeholder={w.stepThree.timelinePlaceholder} value={state.data.timeline} onChange={update} />
+                <input id="commission-timeline" name="timeline" type="text" maxLength={draftFieldLimits.timeline} placeholder={w.stepThree.timelinePlaceholder} value={state.data.timeline} onChange={update} />
               </Field>
               <Field id="commission-vision" label={w.stepThree.vision}>
-                <textarea id="commission-vision" name="vision" rows="6" maxLength="1200" placeholder={w.stepThree.visionPlaceholder} value={state.data.vision} onChange={update} />
+                <textarea id="commission-vision" name="vision" rows="6" maxLength={draftFieldLimits.vision} placeholder={w.stepThree.visionPlaceholder} value={state.data.vision} onChange={update} />
               </Field>
               <Field id="commission-referral" label={w.stepThree.referral}>
-                <input id="commission-referral" name="referral" type="text" maxLength="300" placeholder={w.stepThree.referralPlaceholder} value={state.data.referral} onChange={update} />
+                <input id="commission-referral" name="referral" type="text" maxLength={draftFieldLimits.referral} placeholder={w.stepThree.referralPlaceholder} value={state.data.referral} onChange={update} />
               </Field>
             </section>
           )}
@@ -672,7 +690,7 @@ function CommissionWizard({ locale }) {
                   <Copy aria-hidden="true" />{w.review.copy}
                 </button>
               </div>
-              {state.handoffStatus && <p className="commission-handoff__status" role="status" aria-live="polite">{state.handoffStatus}</p>}
+              {state.handoffStatus && <p className="commission-handoff__status" role="status" aria-live="polite">{w.review[state.handoffStatus]}</p>}
             </section>
           )}
 
@@ -683,7 +701,7 @@ function CommissionWizard({ locale }) {
               </button>
             ) : <span />}
             {state.step < LAST_STEP && (
-              <button className="button button--bone" type="button" onClick={next}>
+              <button className="button button--bone" type="submit">
                 {w.next}<ArrowRight aria-hidden="true" />
               </button>
             )}
@@ -716,9 +734,8 @@ function ScaleStudy({ content }) {
       <ol className="commission-scale__studies">
         {content.options.map(([title, description], index) => (
           <li key={title}>
-            <div className={`commission-scale__outline commission-scale__outline--${index + 1}`} aria-hidden="true"><i /></div>
+            <p className="commission-scale__number">0{index + 1}</p>
             <div>
-              <p className="commission-scale__number">0{index + 1}</p>
               <h3>{title}</h3>
               <p>{description}</p>
             </div>

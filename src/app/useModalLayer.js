@@ -10,8 +10,23 @@ const focusableSelector = [
 ].join(",");
 
 function focusableElements(container) {
+  const view = container.ownerDocument.defaultView;
   return [...container.querySelectorAll(focusableSelector)].filter(
-    (element) => !element.hidden && element.getAttribute("aria-hidden") !== "true",
+    (element) => {
+      if (element.closest("[inert]")) return false;
+
+      let current = element;
+      while (current) {
+        if (current.hidden || current.getAttribute("aria-hidden") === "true") return false;
+        const style = view?.getComputedStyle(current);
+        if (style?.display === "none" || style?.visibility === "hidden" || style?.visibility === "collapse") {
+          return false;
+        }
+        if (current === container) break;
+        current = current.parentElement;
+      }
+      return true;
+    },
   );
 }
 
@@ -51,7 +66,11 @@ export function useModalLayer({ active = true, containerRef, initialFocusRef, on
     if (lockClass) document.body.classList.add(lockClass);
 
     const focusInitial = () => {
-      const target = initialFocusRef?.current ?? focusableElements(container)[0] ?? container;
+      const controls = focusableElements(container);
+      const requestedInitialFocus = initialFocusRef?.current;
+      const target = requestedInitialFocus && controls.includes(requestedInitialFocus)
+        ? requestedInitialFocus
+        : controls[0] ?? container;
       target?.focus?.({ preventScroll: true });
     };
     focusInitial();
@@ -65,39 +84,54 @@ export function useModalLayer({ active = true, containerRef, initialFocusRef, on
       if (event.key !== "Tab") return;
 
       const controls = focusableElements(container);
+      event.preventDefault();
       if (!controls.length) {
-        event.preventDefault();
         container.focus();
         return;
       }
-      const first = controls[0];
-      const last = controls.at(-1);
-      if (!container.contains(document.activeElement)) {
-        event.preventDefault();
-        (event.shiftKey ? last : first).focus();
-      } else if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
+      const activeIndex = controls.indexOf(document.activeElement);
+      const nextIndex = activeIndex < 0
+        ? event.shiftKey ? controls.length - 1 : 0
+        : (activeIndex + (event.shiftKey ? -1 : 1) + controls.length) % controls.length;
+      controls[nextIndex].focus();
     };
 
     const keepFocusInside = (event) => {
       if (!container.contains(event.target)) focusInitial();
     };
-    const retainFocusAfterRemoval = new MutationObserver(() => {
-      if (!container.contains(document.activeElement)) focusInitial();
-    });
+    let focusRecoveryTimer = null;
+    const recoverFocus = () => {
+      focusRecoveryTimer = null;
+      const activeElement = document.activeElement;
+      const activeIsValid = activeElement === container
+        || focusableElements(container).includes(activeElement);
+      if (!activeIsValid) focusInitial();
+    };
+    const scheduleFocusRecovery = () => {
+      if (focusRecoveryTimer !== null) return;
+      focusRecoveryTimer = container.ownerDocument.defaultView?.setTimeout(recoverFocus, 0)
+        ?? globalThis.setTimeout(recoverFocus, 0);
+    };
+    const retainFocusAfterChange = new MutationObserver(scheduleFocusRecovery);
 
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("focusin", keepFocusInside);
-    retainFocusAfterRemoval.observe(container, { childList: true, subtree: true });
+    document.addEventListener("focusout", scheduleFocusRecovery, true);
+    retainFocusAfterChange.observe(container, {
+      attributes: true,
+      attributeFilter: ["aria-hidden", "class", "data-stay-state", "data-stay-visible", "hidden", "inert", "style"],
+      childList: true,
+      subtree: true,
+    });
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("focusin", keepFocusInside);
-      retainFocusAfterRemoval.disconnect();
+      document.removeEventListener("focusout", scheduleFocusRecovery, true);
+      retainFocusAfterChange.disconnect();
+      if (focusRecoveryTimer !== null) {
+        container.ownerDocument.defaultView?.clearTimeout(focusRecoveryTimer);
+        globalThis.clearTimeout(focusRecoveryTimer);
+      }
       if (lockClass) document.body.classList.remove(lockClass);
       for (const { element, inert, ariaHidden } of previousBackgroundState) {
         element.inert = inert;

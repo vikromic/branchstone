@@ -7,6 +7,7 @@ import { SiteShell } from "../app/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
 import { assetUrl } from "../domain/catalog.js";
 import { localeHref } from "../domain/content.js";
+import bottomStrataAlpha from "../assets/material-stage/bottom-strata-alpha.webp";
 import "../styles/editorial.css";
 
 const pageCopy = {
@@ -112,7 +113,7 @@ function AboutHero({ content }) {
           <source
             type="image/webp"
             srcSet={`${assetUrl("img/about-me-400w.webp")} 400w, ${assetUrl("img/about-me-800w.webp")} 800w, ${assetUrl("img/about-me.webp")} 1920w`}
-            sizes="(max-width: 759px) 100vw, 48vw"
+            sizes="100vw"
           />
           <img src={assetUrl("img/about-me.jpeg")} alt={content.portraitAlt} fetchPriority="high" />
         </picture>
@@ -124,7 +125,7 @@ function AboutHero({ content }) {
         <p className="about-hero__introduction">{content.introduction}</p>
       </div>
       <div className="material-separator" aria-hidden="true">
-        <img src={assetUrl("img/artist_statement.jpeg")} alt="" />
+        <img src={bottomStrataAlpha} alt="" />
       </div>
     </section>
   );

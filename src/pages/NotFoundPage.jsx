@@ -1,6 +1,6 @@
 import { SiteShell } from "../app/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
-import { assetUrl } from "../domain/catalog.js";
+import julyPinesStage from "../assets/material-stage/july-pines-stage.webp";
 import { localeHref } from "../domain/content.js";
 import "../styles/editorial.css";
 
@@ -32,7 +32,7 @@ export function NotFoundPage() {
   return (
     <SiteShell page="notFound" footer={false}>
       <section className="not-found-page" aria-labelledby="not-found-title">
-        <img className="not-found-page__material" src={assetUrl("img/artist_statement.jpeg")} alt={content.imageAlt} />
+        <img className="not-found-page__material" src={julyPinesStage} alt={content.imageAlt} />
         <div className="not-found-page__record">
           <p className="kicker">{content.eyebrow}</p>
           <p className="not-found-page__code" aria-label={content.errorLabel}>404</p>
