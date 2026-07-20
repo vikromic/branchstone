@@ -21,6 +21,25 @@ describe("material art direction", () => {
     expect(ruleFor(contact, ".contact-hero__material")).not.toContain("object-fit: fill");
   });
 
+  it("uses one unified geological edge on mobile and desktop", async () => {
+    const home = await readFile(resolve(root, "src/styles/home.css"), "utf8");
+    const mobileTop = ruleFor(home, ".home-material-layer--top");
+
+    expect(mobileTop).toContain("top: 0");
+    expect(mobileTop).toContain("width: 142%");
+    expect(mobileTop).toContain("height: auto");
+    expect(home).not.toContain(".home-memory-seam");
+    expect(home).not.toContain("memory-seam-desktop-alpha.webp");
+    expect(home).toMatch(/@media \(min-width: 560px\) and \(max-width: 699px\) and \(min-height: 621px\)[\s\S]*?\.home-stay-details\s*\{[\s\S]*?top: 42%;/);
+    expect(home).toMatch(/@media \(min-width: 700px\)[\s\S]*?\.home-material-layer--top\s*\{[\s\S]*?width: 100%;/);
+    expect(home).toMatch(/@media \(min-width: 1681px\)[\s\S]*?\.home-material-frame__bottom-bound\s*\{[\s\S]*?width: min\(100%, 120rem\);[\s\S]*?overflow: hidden;/);
+    expect(home).toMatch(/@media \(min-width: 1681px\)[\s\S]*?\.home-stay-details\s*\{[\s\S]*?top: 31%;[\s\S]*?right: max\(3rem, calc\(\(100vw - min\(72vw, 68rem\)\) \/ 2 - 14\.5rem\)\);/);
+    expect(home).toMatch(/@media \(max-height: 620px\) and \(orientation: landscape\)[\s\S]*?\.home-stay-details\s*\{[\s\S]*?top: 24%;/);
+    expect(home).toMatch(/@media \(min-width: 700px\) and \(max-height: 620px\) and \(orientation: landscape\)[\s\S]*?\.home-stay-details\s*\{[\s\S]*?top: 36%;/);
+    expect(home).toMatch(/@media \(min-width: 700px\) and \(max-height: 620px\) and \(min-aspect-ratio: 9 \/ 4\)[\s\S]*?\.home-stay-details\s*\{[\s\S]*?top: 42%;/);
+    expect(home).toMatch(/@media \(max-width: 699px\) and \(max-height: 620px\) and \(orientation: landscape\)[\s\S]*?\.home-material-layer--top\s*\{[\s\S]*?width: 108%;/);
+  });
+
   it("subtracts the matching header height from the 404 field at every desktop breakpoint", async () => {
     const editorial = await readFile(resolve(root, "src/styles/editorial.css"), "utf8");
 

@@ -157,6 +157,22 @@ describe("Home mobile Stay stream", () => {
     const renderedIds = works.map((work) => work.dataset.homeWorkId);
 
     expect(document.querySelector("[data-home-stream]")).toBeInTheDocument();
+    const materialFrame = document.querySelector(".home-material-frame");
+    const responsiveTopSources = materialFrame.querySelectorAll("picture source");
+    const mobileTopImage = materialFrame.querySelector(".home-material-layer--top");
+    expect(responsiveTopSources).toHaveLength(2);
+    expect(responsiveTopSources[0]).toHaveAttribute(
+      "media",
+      "(min-width: 700px) and (max-height: 620px) and (min-aspect-ratio: 9 / 4)",
+    );
+    expect(responsiveTopSources[0].getAttribute("srcset"))
+      .toContain("home-top-vault-desktop-short-alpha.webp");
+    expect(responsiveTopSources[1]).toHaveAttribute("media", "(min-width: 700px)");
+    expect(responsiveTopSources[1].getAttribute("srcset"))
+      .toContain("home-top-vault-desktop-alpha.webp");
+    expect(mobileTopImage.getAttribute("src")).toContain("home-top-composite-alpha.webp");
+    expect(materialFrame.querySelector(".home-memory-seam")).not.toBeInTheDocument();
+    expect(materialFrame.querySelector(".home-material-frame__bottom-bound")).toBeInTheDocument();
     expect(renderedIds.length).toBeGreaterThan(2);
     expect(renderedIds).toHaveLength(expectedIds.length);
     expect(new Set(renderedIds)).toEqual(new Set(expectedIds));

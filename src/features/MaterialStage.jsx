@@ -9,10 +9,11 @@ import {
   StayReveal,
   useViewportArtworkSelection,
 } from "./stay/index.js";
-import { MaterialSeamRun } from "./MaterialSeamRun.jsx";
 import bottomStrata from "../assets/material-stage/bottom-strata-alpha.webp";
+import homeTopComposite from "../assets/material-stage/home-top-composite-alpha.webp";
+import homeTopVaultDesktop from "../assets/material-stage/home-top-vault-desktop-alpha.webp";
+import homeTopVaultShortDesktop from "../assets/material-stage/home-top-vault-desktop-short-alpha.webp";
 import julyPinesStage from "../assets/material-stage/july-pines-stage.webp";
-import topStrata from "../assets/material-stage/top-strata-alpha.webp";
 
 const homeCopy = {
   en: {
@@ -227,21 +228,29 @@ export function MaterialStage() {
         className={`home-material-frame${activeId === "july-pines" ? " is-intro-frame" : ""}`}
         aria-hidden="true"
       >
-        <MaterialSeamRun className="home-memory-seam" />
-        <img
-          className="home-material-layer home-material-layer--top"
-          src={topStrata}
-          alt=""
-          draggable="false"
-          decoding="async"
-        />
-        <img
-          className="home-material-layer home-material-layer--bottom"
-          src={bottomStrata}
-          alt=""
-          draggable="false"
-          decoding="async"
-        />
+        <picture>
+          <source
+            media="(min-width: 700px) and (max-height: 620px) and (min-aspect-ratio: 9 / 4)"
+            srcSet={homeTopVaultShortDesktop}
+          />
+          <source media="(min-width: 700px)" srcSet={homeTopVaultDesktop} />
+          <img
+            className="home-material-layer home-material-layer--top"
+            src={homeTopComposite}
+            alt=""
+            draggable="false"
+            decoding="async"
+          />
+        </picture>
+        <div className="home-material-frame__bottom-bound">
+          <img
+            className="home-material-layer home-material-layer--bottom"
+            src={bottomStrata}
+            alt=""
+            draggable="false"
+            decoding="async"
+          />
+        </div>
         <div className="home-material-frame__shade" />
       </div>
     </div>
