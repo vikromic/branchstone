@@ -53,6 +53,12 @@ describe("shared site shell", () => {
     const { container } = renderShell("home");
 
     expect(screen.getByRole("link", { name: "all works" })).toHaveAttribute("href", "/gallery.html");
+    const primaryNavigation = container.querySelector(".primary-navigation");
+    expect(within(primaryNavigation).getByRole("link", { name: "Works" })).toHaveAttribute("href", "/gallery.html");
+    expect(within(primaryNavigation).getByRole("link", { name: "Exhibitions" })).toHaveAttribute("href", "/exhibitions.html");
+    expect(within(primaryNavigation).getByRole("link", { name: "Practice" })).toHaveAttribute("href", "/about.html");
+    expect(within(primaryNavigation).getByRole("link", { name: "Contact" })).toHaveAttribute("href", "/contact.html");
+    expect(within(primaryNavigation).queryByRole("link", { name: "Commission" })).not.toBeInTheDocument();
     const indexControl = container.querySelector("button.index-control");
     expect(indexControl).toHaveAccessibleName("Open the site index");
 
@@ -61,6 +67,8 @@ describe("shared site shell", () => {
     const desktopMaterial = container.querySelector(".site-index__material source");
     expect(desktopMaterial).toHaveAttribute("media", "(min-width: 760px)");
     expect(container.querySelector(".site-index__material img")).not.toHaveAttribute("src");
+    expect(within(screen.getByRole("dialog", { name: "index" })).getByRole("link", { name: "Commission guide" }))
+      .toHaveAttribute("href", "/commissions.html");
   });
 
   it("names Instagram truthfully and marks legal links as the current page", () => {

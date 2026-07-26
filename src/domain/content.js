@@ -3,7 +3,14 @@ export const INSTAGRAM_URL = "https://www.instagram.com/thebranchstone/";
 
 export const copy = {
   en: {
-    nav: { home: "Home", gallery: "Works", about: "Practice", commissions: "Commission", contact: "Correspondence" },
+    nav: {
+      home: "Home",
+      gallery: "Works",
+      exhibitions: "Exhibitions",
+      about: "Practice",
+      commissions: "Commission",
+      contact: "Contact",
+    },
     shell: {
       menu: "Menu",
       close: "Close",
@@ -38,7 +45,14 @@ export const copy = {
     },
   },
   uk: {
-    nav: { home: "Головна", gallery: "Роботи", about: "Практика", commissions: "Замовити", contact: "Листування" },
+    nav: {
+      home: "Головна",
+      gallery: "Роботи",
+      exhibitions: "Виставки",
+      about: "Практика",
+      commissions: "Замовити",
+      contact: "Контакти",
+    },
     shell: {
       menu: "Меню",
       close: "Закрити",

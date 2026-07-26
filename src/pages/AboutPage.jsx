@@ -1,7 +1,3 @@
-import { useId, useMemo, useState } from "react";
-import { Minus, Plus } from "@phosphor-icons/react";
-import englishHighlights from "../../docs/json_data/highlights.json";
-import ukrainianHighlights from "../../docs/json_data/ukr/highlights_uk.json";
 import feedbackSource from "../../docs/json_data/feedbacks.json";
 import { SiteShell } from "../app/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
@@ -15,19 +11,21 @@ const pageCopy = {
     eyebrow: "Practice / living material archive",
     title: "Working with nature, memory, and time through texture.",
     introduction: "My name is Viktoria. I create under the name Branchstone. My work sits between painting and nature.",
-    chapters: ["01 / Origin", "02 / Method", "03 / Record", "04 / Elsewhere", "05 / Continue"],
+    routes: [["Statement", "#artist-statement"], ["Biography", "#biography"], ["Method", "#method"]],
+    chapters: ["01 / Statement", "02 / Biography", "03 / Method", "04 / Elsewhere", "05 / Continue"],
     portraitAlt: "Viktoria, the artist behind Branchstone, sitting in warm evening light",
     portraitNote: "Viktoria / Branchstone\nNorthern California",
-    storyTitle: "What the material carries",
-    storyIntro: "I create textured, abstract pieces using bark, branches, stones, and other natural materials. These elements are not decoration. They enter the process as collaborators, shaping the work as much as my hands do.",
-    story: [
-      "I grew up on the Donbas lands, surrounded by wide steppes, the scent of wild tarragon, and red rock terricones rising from the ground. That landscape taught me to notice texture, contrast, and silence long before art became a conscious practice.",
-      "Later, Texas offered another material language: sun-bleached wood, dry grasses, and cracked soil. Now, in Northern California, I continue the dialogue with redwoods, coastal bark, and mosses. Each place leaves a mark on how I see, remember, and make.",
+    statementTitle: "Artist statement",
+    statement: [
+      "I create textured, abstract pieces using bark, branches, stones, and other natural materials. These elements are not decoration. They enter the process as collaborators, shaping the work as much as my hands do.",
       "My process is slow and intuitive. I work through layering, patience, and attention, letting every piece develop in its own rhythm. No two works are the same. Each holds its own balance of fragility, weight, and history.",
       "Every material I use has already lived a life. I extend that life into another form—one that makes room for stillness, reflection, and grounding. Branchstone is about staying rooted while evolving; resilience that does not harden; quiet stories finding a surface.",
     ],
-    readMore: "Continue reading",
-    readLess: "Fold story",
+    biographyTitle: "Biography",
+    biography: [
+      "I grew up on the Donbas lands, surrounded by wide steppes, the scent of wild tarragon, and red rock terricones rising from the ground. That landscape taught me to notice texture, contrast, and silence long before art became a conscious practice.",
+      "Later, Texas offered another material language: sun-bleached wood, dry grasses, and cracked soil. Now, in Northern California, I continue the dialogue with redwoods, coastal bark, and mosses. Each place leaves a mark on how I see, remember, and make.",
+    ],
     placesLabel: "Places carried forward",
     places: [
       ["01", "Donbas, Ukraine", "Where texture and contrast first entered memory."],
@@ -42,33 +40,32 @@ const pageCopy = {
       ["Layering", "Paint and found matter are composed gradually. The work is adjusted until every element has space to speak."],
       ["Preparing", "The finished surface is stabilized, mounted, and prepared for a life beyond the studio without erasing its natural character."],
     ],
-    highlightsTitle: "Field notes",
-    highlightsNote: "Press, exhibitions, and conversations",
-    openFeature: "Open feature",
     collectorsTitle: "Held in other places",
     collectorsNote: "Notes from collectors",
     invitationTitle: "Continue through the archive.",
-    invitationText: "See the works already formed, or begin a conversation about a piece made for a particular place.",
+    invitationText: "See the works already formed, or review the public record of exhibitions and published conversations.",
     gallery: "Enter the works",
-    commission: "Begin a commission",
+    exhibitions: "View exhibitions",
   },
   uk: {
     eyebrow: "Практика / живий архів матеріалів",
     title: "Робота з природою, пам’яттю та часом через текстуру.",
     introduction: "Мене звати Вікторія. Я створюю мистецтво під ім’ям Branchstone. Моя практика лежить між живописом і природою.",
-    chapters: ["01 / Походження", "02 / Метод", "03 / Літопис", "04 / В інших місцях", "05 / Продовження"],
+    routes: [["Statement", "#artist-statement"], ["Біографія", "#biography"], ["Метод", "#method"]],
+    chapters: ["01 / Statement", "02 / Біографія", "03 / Метод", "04 / В інших місцях", "05 / Продовження"],
     portraitAlt: "Вікторія, художниця Branchstone, у теплому вечірньому світлі",
     portraitNote: "Вікторія / Branchstone\nПівнічна Каліфорнія",
-    storyTitle: "Що несе матеріал",
-    storyIntro: "Я створюю текстурні абстрактні роботи з кори, гілок, каміння та інших природних матеріалів. Це не декор. Матеріали входять у процес як співавтори й формують роботу разом із моїми руками.",
-    story: [
-      "Я виросла на землях Донбасу, серед широких степів, запаху полину й червоних териконів, що підіймалися над землею. Цей ландшафт навчив мене помічати текстуру, контраст і тишу задовго до того, як мистецтво стало усвідомленою практикою.",
-      "Пізніше Техас відкрив іншу мову матеріалу: вибілене сонцем дерево, сухі трави й потрісканий ґрунт. Тепер, у Північній Каліфорнії, я продовжую цей діалог із секвоями, прибережною корою та мохами. Кожне місце залишає слід у тому, як я бачу, пам’ятаю і створюю.",
+    statementTitle: "Statement художниці",
+    statement: [
+      "Я створюю текстурні абстрактні роботи з кори, гілок, каміння та інших природних матеріалів. Це не декор. Матеріали входять у процес як співавтори й формують роботу разом із моїми руками.",
       "Мій процес повільний та інтуїтивний. Я працюю через нашарування, терпіння й уважність, дозволяючи кожній роботі розвиватися у власному ритмі. Жодні дві роботи не повторюються. Кожна тримає свій баланс крихкості, ваги та історії.",
       "Кожен матеріал уже прожив своє життя. Я продовжую його в іншій формі—тій, що залишає простір для тиші, споглядання й заземлення. Branchstone — це про коріння і рух водночас; про стійкість, що не стає жорсткою; про тихі історії, які знаходять поверхню.",
     ],
-    readMore: "Читати далі",
-    readLess: "Згорнути історію",
+    biographyTitle: "Біографія",
+    biography: [
+      "Я виросла на землях Донбасу, серед широких степів, запаху полину й червоних териконів, що підіймалися над землею. Цей ландшафт навчив мене помічати текстуру, контраст і тишу задовго до того, як мистецтво стало усвідомленою практикою.",
+      "Пізніше Техас відкрив іншу мову матеріалу: вибілене сонцем дерево, сухі трави й потрісканий ґрунт. Тепер, у Північній Каліфорнії, я продовжую цей діалог із секвоями, прибережною корою та мохами. Кожне місце залишає слід у тому, як я бачу, пам’ятаю і створюю.",
+    ],
     placesLabel: "Місця, що залишилися в роботі",
     places: [
       ["01", "Донбас, Україна", "Звідси текстура й контраст увійшли в пам’ять."],
@@ -83,21 +80,14 @@ const pageCopy = {
       ["Нашарування", "Фарба і знайдені матеріали поступово входять у композицію. Я працюю, доки кожен елемент не отримає простір говорити."],
       ["Підготовка", "Завершена поверхня стабілізується, монтується й готується до життя поза студією без втрати природного характеру."],
     ],
-    highlightsTitle: "Польові нотатки",
-    highlightsNote: "Преса, виставки та розмови",
-    openFeature: "Відкрити публікацію",
     collectorsTitle: "Збережені в інших місцях",
     collectorsNote: "Нотатки колекціонерів",
     invitationTitle: "Продовжуйте рух архівом.",
-    invitationText: "Перегляньте вже створені роботи або почніть розмову про твір для конкретного простору.",
+    invitationText: "Перегляньте вже створені роботи або відкрийте публічний літопис виставок і публікацій.",
     gallery: "До робіт",
-    commission: "Почати замовлення",
+    exhibitions: "До виставок",
   },
 };
-
-const ukrainianHighlightById = new Map(
-  ukrainianHighlights.highlights.map((highlight) => [highlight.id, highlight]),
-);
 
 const ukrainianFeedback = [
   { name: "Сара Мітчелл", location: "Плейно, Техас", review: "Робота Вікторії принесла частинку лісу в наш дім." },
@@ -123,6 +113,9 @@ function AboutHero({ content }) {
         <p className="kicker">{content.eyebrow}</p>
         <h1 id="about-title">{content.title}</h1>
         <p className="about-hero__introduction">{content.introduction}</p>
+        <nav className="about-hero__routes" aria-label={content.eyebrow}>
+          {content.routes.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
+        </nav>
       </div>
       <div className="material-separator" aria-hidden="true">
         <img src={bottomStrataAlpha} alt="" />
@@ -131,31 +124,29 @@ function AboutHero({ content }) {
   );
 }
 
-function StoryChapter({ content }) {
-  const [expanded, setExpanded] = useState(false);
-  const foldId = useId();
-
+function StatementChapter({ content }) {
   return (
-    <section className="about-story editorial-chapter" aria-labelledby="story-title">
+    <section id="artist-statement" className="about-statement editorial-chapter" aria-labelledby="statement-title">
       <div className="editorial-chapter__heading">
         <p className="chapter-number">{content.chapters[0]}</p>
-        <h2 id="story-title">{content.storyTitle}</h2>
+        <h2 id="statement-title">{content.statementTitle}</h2>
       </div>
-      <div className="about-story__body">
-        <p className="about-story__lead">{content.storyIntro}</p>
-        <div id={foldId} className="about-story__fold" hidden={!expanded}>
-          {content.story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-        </div>
-        <button
-          type="button"
-          className="editorial-fold"
-          aria-expanded={expanded}
-          aria-controls={foldId}
-          onClick={() => setExpanded((open) => !open)}
-        >
-          <span>{expanded ? content.readLess : content.readMore}</span>
-          {expanded ? <Minus aria-hidden="true" /> : <Plus aria-hidden="true" />}
-        </button>
+      <div className="about-statement__body">
+        {content.statement.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      </div>
+    </section>
+  );
+}
+
+function BiographyChapter({ content }) {
+  return (
+    <section id="biography" className="about-biography editorial-chapter" aria-labelledby="biography-title">
+      <div className="editorial-chapter__heading">
+        <p className="chapter-number">{content.chapters[1]}</p>
+        <h2 id="biography-title">{content.biographyTitle}</h2>
+      </div>
+      <div className="about-biography__body">
+        {content.biography.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
       </div>
       <div className="places-ledger" aria-label={content.placesLabel}>
         <p className="kicker">{content.placesLabel}</p>
@@ -174,9 +165,9 @@ function StoryChapter({ content }) {
 
 function ProcessChapter({ content }) {
   return (
-    <section className="about-process editorial-chapter" aria-labelledby="process-title">
+    <section id="method" className="about-process editorial-chapter" aria-labelledby="process-title">
       <div className="editorial-chapter__heading">
-        <p className="chapter-number">{content.chapters[1]}</p>
+        <p className="chapter-number">{content.chapters[2]}</p>
         <h2 id="process-title">{content.processTitle}</h2>
         <p>{content.processNote}</p>
       </div>
@@ -199,40 +190,6 @@ function ProcessChapter({ content }) {
           </li>
         ))}
       </ol>
-    </section>
-  );
-}
-
-function HighlightsChapter({ locale, content }) {
-  const highlights = useMemo(
-    () => englishHighlights.highlights.map((highlight) => (
-      locale === "uk" ? { ...highlight, ...(ukrainianHighlightById.get(highlight.id) ?? {}) } : highlight
-    )),
-    [locale],
-  );
-
-  return (
-    <section className="about-highlights editorial-chapter" aria-labelledby="highlights-title">
-      <div className="editorial-chapter__heading">
-        <p className="chapter-number">{content.chapters[2]}</p>
-        <h2 id="highlights-title">{content.highlightsTitle}</h2>
-        <p>{content.highlightsNote}</p>
-      </div>
-      <div className="highlight-ledger">
-        {highlights.map((highlight, index) => (
-          <article className="highlight-entry" key={highlight.id}>
-            <a className="highlight-entry__link" href={highlight.link} target="_blank" rel="noreferrer">
-              <img src={assetUrl(highlight.image)} alt="" loading="lazy" />
-              <div className="highlight-entry__copy">
-                <p className="highlight-entry__meta">{String(index + 1).padStart(2, "0")} / {highlight.date} / {highlight.source}</p>
-                <h3>{highlight.title}</h3>
-                <p>{highlight.subtitle}</p>
-                <span className="highlight-entry__action">{content.openFeature}</span>
-              </div>
-            </a>
-          </article>
-        ))}
-      </div>
     </section>
   );
 }
@@ -268,17 +225,17 @@ export function AboutPage() {
     <SiteShell page="about">
       <div className="editorial-page about-page">
         <AboutHero content={content} />
-        <StoryChapter content={content} />
+        <StatementChapter content={content} />
+        <BiographyChapter content={content} />
         <ProcessChapter content={content} />
-        <HighlightsChapter locale={locale} content={content} />
         <CollectorsChapter locale={locale} content={content} />
-        <section className="about-invitation" aria-labelledby="about-invitation-title">
+        <section className="editorial-invitation" aria-labelledby="about-invitation-title">
           <p className="kicker">{content.chapters[4]}</p>
           <h2 id="about-invitation-title">{content.invitationTitle}</h2>
           <p>{content.invitationText}</p>
-          <div className="about-invitation__actions">
+          <div className="editorial-invitation__actions">
             <a className="button button--bone" href={localeHref("/gallery.html", locale)}>{content.gallery}</a>
-            <a className="button button--line" href={localeHref("/commissions.html", locale)}>{content.commission}</a>
+            <a className="button button--line" href={localeHref("/exhibitions.html", locale)}>{content.exhibitions}</a>
           </div>
         </section>
       </div>

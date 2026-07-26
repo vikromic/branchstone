@@ -13,6 +13,8 @@
 - A work resolves artwork → materials → story → availability after the viewport settles. Do not add an artificial selection delay.
 - Only the introductory July Pines state receives the geological top and bottom frame.
 - Gallery reuses the Stay reveal behavior, supports deep links, filters, saved works, a carousel modal, and EN/UK routes.
+- The professional primary navigation is Works → Exhibitions → Practice → Contact. Home remains the wordmark destination; Commission remains a compatible secondary route.
+- Exhibitions owns the five authored exhibition/press records. Practice exposes Statement, Biography, and Method directly instead of burying the public record inside the artist story.
 - Reduced motion must expose the fully resolved semantic state. Focus, history, and scroll locking must remain recoverable.
 
 ## Source and content ownership

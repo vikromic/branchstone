@@ -1,6 +1,7 @@
 export const sitePages = Object.freeze([
   { id: "home", filename: "index.html" },
   { id: "gallery", filename: "gallery.html" },
+  { id: "exhibitions", filename: "exhibitions.html" },
   { id: "about", filename: "about.html" },
   { id: "commissions", filename: "commissions.html" },
   { id: "contact", filename: "contact.html" },

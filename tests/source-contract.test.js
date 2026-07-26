@@ -32,8 +32,9 @@ describe("published source contract", () => {
 
   it("publishes every indexed page in both real locale namespaces", async () => {
     const sitemap = await readFile(resolve(root, "docs/sitemap.xml"), "utf8");
-    expect(sitemap.match(/<loc>/g)).toHaveLength(14);
+    expect(sitemap.match(/<loc>/g)).toHaveLength(16);
     expect(sitemap).toContain("https://branchstone.art/uk/gallery.html");
+    expect(sitemap).toContain("https://branchstone.art/uk/exhibitions.html");
     expect(sitemap).toContain("https://branchstone.art/uk/terms.html");
   });
 });

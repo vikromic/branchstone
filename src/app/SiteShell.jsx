@@ -12,8 +12,9 @@ import { useSite } from "./SiteContext.jsx";
 import { useModalLayer } from "./useModalLayer.js";
 import { pagePathById } from "../../site-pages.js";
 
-const routes = ["home", "gallery", "about", "commissions", "contact"]
+const routes = ["home", "gallery", "exhibitions", "about", "contact"]
   .map((id) => [id, pagePathById[id]]);
+const primaryRoutes = routes.filter(([id]) => id !== "home");
 
 const quietChromeCopy = {
   en: {
@@ -26,6 +27,7 @@ const quietChromeCopy = {
     soil: "Soil",
     paper: "Paper",
     correspondence: "Email the studio",
+    commissionGuide: "Commission guide",
     studioNotes: "Studio notes / Instagram",
     removeSaved: "Remove from saved works",
     utilities: "Studio and legal links",
@@ -40,6 +42,7 @@ const quietChromeCopy = {
     soil: "Ґрунт",
     paper: "Папір",
     correspondence: "Написати до студії",
+    commissionGuide: "Гайд із замовлення",
     studioNotes: "Нотатки студії / Instagram",
     removeSaved: "Видалити зі збережених робіт",
     utilities: "Студійні та юридичні посилання",
@@ -51,15 +54,27 @@ function FocusTrap({ active, containerRef, onClose }) {
   return null;
 }
 
-function IndexRoutes({ className, locale, page, t }) {
+function RouteNavigation({ className, items = routes, locale, numbered = false, page, t }) {
   return (
     <nav className={className} aria-label={t.shell.primaryNavigation}>
-      {routes.map(([id, href], index) => (
+      {items.map(([id, href], index) => (
         <a key={id} aria-current={page === id ? "page" : undefined} href={localeHref(href, locale)}>
-          <span>{String(index + 1).padStart(2, "0")}</span>{t.nav[id]}
+          {numbered && <span>{String(index + 1).padStart(2, "0")}</span>}
+          {t.nav[id]}
         </a>
       ))}
     </nav>
+  );
+}
+
+function SecondaryLinks({ chrome, locale, page, t }) {
+  return (
+    <>
+      <a href={`mailto:${CONTACT_EMAIL}`}>{chrome.correspondence}</a>
+      <a aria-current={page === "commissions" ? "page" : undefined} href={localeHref("/commissions.html", locale)}>{chrome.commissionGuide}</a>
+      <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">{chrome.studioNotes}</a>
+      <LegalLinks page={page} locale={locale} t={t} />
+    </>
   );
 }
 
@@ -170,6 +185,7 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
         <a className="wordmark" href={localeHref("/", locale)} aria-label={t.shell.homeLabel}>
           <span>BRANCHSTONE</span><small>BY VIKTORIA</small>
         </a>
+        <RouteNavigation className="primary-navigation" items={primaryRoutes} locale={locale} page={page} t={t} />
         <div className="quiet-index-trigger">
           {page === "home" && (
             <a className="all-works-link" href={localeHref("/gallery.html", locale)}>{chrome.allWorks}</a>
@@ -177,14 +193,12 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
           <details className="prehydrate-index">
             <summary aria-label={indexAriaLabel} aria-controls="prehydrate-index-layer" data-open-label={t.shell.close}><span>{indexLabel}</span></summary>
             <div id="prehydrate-index-layer" className="prehydrate-index__layer" role="region" aria-label={indexLabel}>
-              <IndexRoutes locale={locale} page={page} t={t} />
+              <RouteNavigation locale={locale} numbered page={page} t={t} />
               <div className="prehydrate-index__utilities" role="group" aria-label={chrome.utilities}>
                 <a href={localeHref(currentPagePath, alternateLocale)}>{chrome.languageValue}</a>
                 <span>{chrome.appearance} / {theme === "soil" ? chrome.soil : chrome.paper}</span>
                 <span>{t.shell.favorites} / {savedCount}</span>
-                <a href={`mailto:${CONTACT_EMAIL}`}>{chrome.correspondence}</a>
-                <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">{chrome.studioNotes}</a>
-                <LegalLinks page={page} locale={locale} t={t} />
+                <SecondaryLinks chrome={chrome} locale={locale} page={page} t={t} />
               </div>
             </div>
           </details>
@@ -218,7 +232,7 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
               <p id="site-index-title">{indexLabel}</p>
               <button className="site-index__close" type="button" onClick={() => setMenuOpen(false)}>{t.shell.close}</button>
             </header>
-            <IndexRoutes className="site-index__routes" locale={locale} page={page} t={t} />
+            <RouteNavigation className="site-index__routes" locale={locale} numbered page={page} t={t} />
             <div className="site-index__utilities">
               <p className="site-index__utility-label">{t.shell.archive}</p>
               <div className="site-index__utility-actions">
@@ -253,9 +267,7 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
                 </button>
               </div>
               <nav className="site-index__secondary" aria-label={chrome.utilities}>
-                <a href={`mailto:${CONTACT_EMAIL}`}>{chrome.correspondence}</a>
-                <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">{chrome.studioNotes}</a>
-                <LegalLinks page={page} locale={locale} t={t} />
+                <SecondaryLinks chrome={chrome} locale={locale} page={page} t={t} />
               </nav>
             </div>
           </section>

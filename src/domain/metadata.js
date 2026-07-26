@@ -7,6 +7,10 @@ export const pageMetadata = Object.freeze({
     en: { title: "Works — Branchstone by Viktoria", description: "Explore 32 mixed-media works across Branchstone's living material archive." },
     uk: { title: "Роботи — Branchstone від Вікторії", description: "Перегляньте 32 роботи змішаних медіа в живому матеріальному архіві Branchstone." },
   },
+  exhibitions: {
+    en: { title: "Exhibitions & Press — Branchstone by Viktoria", description: "Selected exhibitions, events, interviews, and published conversations from Viktoria's Branchstone practice." },
+    uk: { title: "Виставки та преса — Branchstone від Вікторії", description: "Вибрані виставки, події, інтерв’ю та публікації про мистецьку практику Вікторії Branchstone." },
+  },
   about: {
     en: { title: "Practice — Branchstone by Viktoria", description: "Viktoria's practice moves between painting and nature, carrying material memory from Donbas to California." },
     uk: { title: "Практика — Branchstone від Вікторії", description: "Практика Вікторії поєднує живопис і природу, несучи матеріальну пам’ять від Донбасу до Каліфорнії." },
@@ -16,8 +20,8 @@ export const pageMetadata = Object.freeze({
     uk: { title: "Індивідуальна робота — Branchstone", description: "Почніть уважну розмову про унікальну роботу Branchstone, створену для вашого простору." },
   },
   contact: {
-    en: { title: "Correspondence — Branchstone by Viktoria", description: "Contact Viktoria about an artwork, a commission, exhibitions, or press." },
-    uk: { title: "Листування — Branchstone від Вікторії", description: "Напишіть Вікторії про роботу, індивідуальне замовлення, виставку або пресу." },
+    en: { title: "Contact — Branchstone by Viktoria", description: "Contact Viktoria about gallery, curatorial, collection, press, artwork, or commission enquiries." },
+    uk: { title: "Контакти — Branchstone від Вікторії", description: "Напишіть Вікторії щодо галерейної, кураторської чи колекційної співпраці, преси, робіт або індивідуальних замовлень." },
   },
   privacy: {
     en: { title: "Privacy — Branchstone by Viktoria", description: "How Branchstone handles preferences, inquiry drafts, and correspondence." },

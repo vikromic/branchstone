@@ -20,6 +20,7 @@ const previousUk = resolve(docs, ".branchstone-uk-previous");
 const nextHtml = resolve(docs, ".branchstone-html-next");
 const previousHtml = resolve(docs, ".branchstone-html-previous");
 const temporaryPaths = [nextAssets, previousAssets, nextUk, previousUk, nextHtml, previousHtml];
+const backedUpHtml = new Set();
 
 async function currentPublishedGeneration() {
   try {
@@ -69,7 +70,12 @@ try {
 
   for (const filename of htmlFiles) {
     await cp(resolve(stage, filename), resolve(nextHtml, filename));
-    await cp(resolve(docs, filename), resolve(previousHtml, filename));
+    try {
+      await cp(resolve(docs, filename), resolve(previousHtml, filename));
+      backedUpHtml.add(filename);
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
   }
 } catch (error) {
   for (const temporary of temporaryPaths) {
@@ -105,9 +111,13 @@ try {
   }
 } catch (error) {
   for (const filename of htmlFiles) {
-    const restorePath = resolve(docs, `.${filename}.restore`);
-    await cp(resolve(previousHtml, filename), restorePath);
-    await rename(restorePath, resolve(docs, filename));
+    if (backedUpHtml.has(filename)) {
+      const restorePath = resolve(docs, `.${filename}.restore`);
+      await cp(resolve(previousHtml, filename), restorePath);
+      await rename(restorePath, resolve(docs, filename));
+    } else {
+      await rm(resolve(docs, filename), { force: true });
+    }
   }
   if (installedAssets) await rm(generatedAssets, { recursive: true, force: true });
   if (movedPreviousAssets) await rename(previousAssets, generatedAssets);

@@ -8,7 +8,8 @@ const docs = resolve(root, "docs");
 const ukrainianMarkers = {
   "index.html": ["усі роботи"],
   "gallery.html": ["ЖИВИЙ АРХІВ МАТЕРІАЛІВ", "Роботи, що несуть землю"],
-  "about.html": ["01 / Походження", "05 / Продовження", "Галерея Rena Charles"],
+  "exhibitions.html": ["Вибрана преса", "Галерея Rena Charles", "Запити від галерей"],
+  "about.html": ["Statement художниці", "02 / Біографія", "05 / Продовження"],
   "commissions.html": ["ФОРМА / МАТЕРІЯ / ПАМ’ЯТЬ"],
   "contact.html": ["Почніть із нотатки."],
   "privacy.html": ["НОТАТКИ"],
@@ -77,4 +78,4 @@ for (const artwork of artworks) {
 
 const cname = (await readFile(resolve(docs, "CNAME"), "utf8")).trim();
 if (cname !== "branchstone.art") throw new Error(`Unexpected CNAME: ${cname}`);
-console.log("Artifact contract verified: 16 localized prerendered entries, 32/19/13 catalog invariants, locale joins, primary media, and deployment files.");
+console.log(`Artifact contract verified: ${htmlFiles.length * 2} localized prerendered entries, 32/19/13 catalog invariants, locale joins, primary media, and deployment files.`);

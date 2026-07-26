@@ -59,6 +59,8 @@ describe("Vite document routing", () => {
     ["/", "home"],
     ["/gallery.html", "gallery"],
     ["/uk/gallery.html?collection=following-her-steps", "gallery"],
+    ["/exhibitions.html", "exhibitions"],
+    ["/uk/exhibitions.html", "exhibitions"],
     ["/404.html", "notFound"],
   ])("keeps known document %s on its own entrypoint", async (path, page) => {
     const response = await documentRequest(path);
@@ -71,7 +73,8 @@ describe("Vite document routing", () => {
   it.each([
     ["/uk/", "uk", "Branchstone від Вікторії — мистецтво змішаних медіа"],
     ["/uk/gallery.html", "uk", "Роботи — Branchstone від Вікторії"],
-    ["/uk/contact.html", "uk", "Листування — Branchstone від Вікторії"],
+    ["/uk/exhibitions.html", "uk", "Виставки та преса — Branchstone від Вікторії"],
+    ["/uk/contact.html", "uk", "Контакти — Branchstone від Вікторії"],
   ])("serves localized initial document metadata for %s", async (path, lang, title) => {
     const response = await documentRequest(path);
     const html = await response.text();

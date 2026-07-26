@@ -11,10 +11,10 @@ import "../styles/contact.css";
 
 const contactCopy = {
   en: {
-    eyebrow: "CORRESPONDENCE / OPEN CHANNEL",
+    eyebrow: "CONTACT / STUDIO CHANNEL",
     title: "Begin with a note.",
     introduction:
-      "Ask about a work, a commission, or the practice behind Branchstone. Your words remain in this form until you choose how to carry them into your own email app.",
+      "Gallery, curatorial, jury, press, collection, artwork, and commission enquiries are welcome. Your words remain in this form until you choose how to carry them into your own email app.",
     marker: "STUDIO LETTER / 01",
     sheetTitle: "Write to the studio",
     sheetIntroduction:
@@ -86,10 +86,10 @@ const contactCopy = {
     preparedBy: "Prepared on branchstone.art — not sent by the website.",
   },
   uk: {
-    eyebrow: "ЛИСТУВАННЯ / ВІДКРИТИЙ КАНАЛ",
+    eyebrow: "КОНТАКТИ / КАНАЛ СТУДІЇ",
     title: "Почніть із нотатки.",
     introduction:
-      "Запитайте про роботу, індивідуальне замовлення або практику Branchstone. Ваші слова залишаються у цій формі, доки ви самі не перенесете їх у свою поштову програму.",
+      "Вітаються запити від галерей, кураторів, журі, преси й колекціонерів, а також щодо окремих робіт та індивідуальних замовлень. Ваші слова залишаються у цій формі, доки ви самі не перенесете їх у свою поштову програму.",
     marker: "ЛИСТ ДО СТУДІЇ / 01",
     sheetTitle: "Написати до студії",
     sheetIntroduction:
