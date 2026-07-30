@@ -198,6 +198,84 @@ describe("Stay reveal choreography", () => {
     }
   });
 
+  it("keeps forced-resolved phases interactive across an active-key image change", async () => {
+    const controllerRef = { current: null };
+    const { rerender } = render(
+      <HookHarness
+        controllerRef={controllerRef}
+        activeKey="earth:0"
+        forceResolved
+        waitForArtwork
+      />,
+    );
+    await flushMicrotasks();
+
+    rerender(
+      <HookHarness
+        controllerRef={controllerRef}
+        activeKey="earth:1"
+        forceResolved
+        waitForArtwork
+      />,
+    );
+    await flushMicrotasks();
+
+    expect(screen.getByTestId("root")).toHaveAttribute("data-stay-fully-revealed", "true");
+    expect(screen.getByTestId("root")).toHaveAttribute("data-stay-image-state", "pending");
+    for (const phase of ["materials", "story", "availability"]) {
+      const node = screen.getByTestId(phase);
+      expect(node).toHaveAttribute("data-stay-state", "resolved");
+      expect(node.inert).toBe(false);
+    }
+  });
+
+  it("restores enhanced choreography when a hydration-only force resolves", async () => {
+    const controllerRef = { current: null };
+    const { rerender } = render(
+      <HookHarness
+        controllerRef={controllerRef}
+        activeKey="earth"
+        forceResolved
+        settleOnMount
+        waitForArtwork
+      />,
+    );
+    await flushMicrotasks();
+    expect(controllerRef.current.isEnhanced).toBe(false);
+    expect(screen.getByTestId("availability")).toHaveAttribute("data-stay-state", "resolved");
+
+    rerender(
+      <HookHarness
+        controllerRef={controllerRef}
+        activeKey="earth"
+        forceResolved={false}
+        settleOnMount
+        waitForArtwork
+      />,
+    );
+    await flushMicrotasks();
+    await flushMicrotasks();
+
+    expect(controllerRef.current.isEnhanced).toBe(true);
+    expect(screen.getByTestId("materials")).toHaveAttribute("data-stay-state", "pending");
+    expect(screen.getByTestId("materials").inert).toBe(true);
+  });
+
+  it("never makes a skipped phase inert while force-resolved", async () => {
+    render(
+      <HookHarness
+        controllerRef={{ current: null }}
+        activeKey="earth"
+        forceResolved
+        phasePresence={{ story: false }}
+      />,
+    );
+    await flushMicrotasks();
+
+    expect(screen.getByTestId("story")).toHaveAttribute("data-stay-state", "skipped");
+    expect(screen.getByTestId("story").inert).toBe(false);
+  });
+
   it("shares one reduced-motion media subscription across Stay roots", async () => {
     const addEventListener = vi.fn();
     const removeEventListener = vi.fn();
@@ -868,7 +946,7 @@ describe("Stay reveal choreography", () => {
     expect(screen.getByTestId("image")).toHaveAttribute("data-stay-image-state", "ready");
   });
 
-  it("keeps the stalled-image watchdog alive when focus reveals after stillness", async () => {
+  it("keeps a stalled image pending when the watchdog releases the narrative", async () => {
     vi.useFakeTimers();
     const controllerRef = { current: null };
     render(
@@ -892,9 +970,12 @@ describe("Stay reveal choreography", () => {
     });
     await flushMicrotasks();
 
-    expect(screen.getByTestId("image")).toHaveAttribute("data-stay-image-state", "error");
+    expect(screen.getByTestId("image")).toHaveAttribute("data-stay-image-state", "pending");
     expect(controllerRef.current.failure).toBe("watchdog");
     expect(screen.getByTestId("availability")).toHaveAttribute("data-stay-state", "resolved");
+
+    fireEvent.load(screen.getByTestId("image"));
+    expect(screen.getByTestId("image")).toHaveAttribute("data-stay-image-state", "ready");
   });
 
   it("treats AbortError as artwork reset and non-abort failures as fail-open", async () => {
@@ -958,7 +1039,7 @@ describe("Stay reveal choreography", () => {
     expect(controllerRef.current.failure).toBe("watchdog");
   });
 
-  it("fails an indefinitely pending artwork image open through a neutral watchdog error", async () => {
+  it("resolves narrative after the watchdog but waits for a native image outcome", async () => {
     vi.useFakeTimers();
     const controllerRef = { current: null };
     render(
@@ -983,11 +1064,48 @@ describe("Stay reveal choreography", () => {
     });
     await flushMicrotasks();
 
-    expect(controllerRef.current.artworkImageState).toBe("error");
-    expect(screen.getByTestId("root")).toHaveAttribute("data-stay-image-state", "error");
-    expect(screen.getByTestId("image")).toHaveAttribute("data-stay-image-state", "error");
+    expect(controllerRef.current.artworkImageState).toBe("pending");
+    expect(screen.getByTestId("root")).toHaveAttribute("data-stay-image-state", "pending");
+    expect(screen.getByTestId("image")).toHaveAttribute("data-stay-image-state", "pending");
     expect(screen.getByTestId("availability")).toHaveAttribute("data-stay-state", "resolved");
     expect(screen.getByTestId("availability").inert).toBe(false);
     expect(controllerRef.current.failure).toBe("watchdog");
+
+    fireEvent.error(screen.getByTestId("image"));
+    expect(controllerRef.current.artworkImageState).toBe("error");
+    expect(screen.getByTestId("root")).toHaveAttribute("data-stay-image-state", "error");
+    expect(screen.getByTestId("image")).toHaveAttribute("data-stay-image-state", "error");
+  });
+
+  it("returns an errored image to pending and ignores terminal events from a stale node", () => {
+    const controllerRef = { current: null };
+    const externalLoad = vi.fn();
+    render(
+      <HookHarness
+        controllerRef={controllerRef}
+        activeKey="earth"
+        waitForArtwork
+      />,
+    );
+
+    const currentImage = screen.getByTestId("image");
+    fireEvent.error(currentImage);
+    expect(controllerRef.current.artworkImageState).toBe("error");
+
+    act(() => controllerRef.current.retryArtworkImage());
+    expect(controllerRef.current.artworkImageState).toBe("pending");
+    expect(currentImage).toHaveAttribute("data-stay-image-state", "pending");
+
+    const staleImage = document.createElement("img");
+    act(() => {
+      controllerRef.current.getArtworkImageProps({ onLoad: externalLoad }).onLoad({
+        currentTarget: staleImage,
+      });
+    });
+    expect(controllerRef.current.artworkImageState).toBe("pending");
+    expect(externalLoad).not.toHaveBeenCalled();
+
+    fireEvent.load(currentImage);
+    expect(controllerRef.current.artworkImageState).toBe("ready");
   });
 });

@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { artworkById, getCatalog } from "../domain/catalog.js";
 import { copy, isUkrainianPath, localeHref } from "../domain/content.js";
 import { decodeFavoriteStorage, encodeFavoriteStorage } from "../domain/favorites.js";
+import { safeMatchMedia, subscribeMediaQuery } from "../domain/media-query.js";
 import { getPageMetadata } from "../domain/metadata.js";
 import { purgeExpiredEnvelopes, safeRead, safeRemove, safeWrite, storageKeys } from "../domain/storage.js";
 
@@ -75,11 +76,13 @@ export function SiteProvider({ children, initialLocale = "en" }) {
   const [storageUnavailable, setStorageUnavailable] = useState(false);
   const unknownFavorites = useRef([]);
   const themeIsExplicit = useRef(false);
+  const localeRef = useRef(initialLocale === "uk" ? "uk" : "en");
   const catalog = useMemo(() => getCatalog(locale), [locale]);
 
   useEffect(() => {
     purgeExpiredEnvelopes();
     const nextLocale = readLocale();
+    localeRef.current = nextLocale;
     setLocaleState(nextLocale);
     document.documentElement.lang = nextLocale;
     updateDocumentMetadata(nextLocale);
@@ -88,8 +91,8 @@ export function SiteProvider({ children, initialLocale = "en" }) {
     const normalizedUrl = localeHref(currentUrl, nextLocale);
     if (normalizedUrl !== currentUrl) window.history.replaceState(window.history.state, "", normalizedUrl);
     const storedTheme = readStoredTheme();
-    const colorScheme = window.matchMedia("(prefers-color-scheme: light)");
-    const nextTheme = storedTheme ?? (colorScheme.matches ? "paper" : "soil");
+    const colorScheme = safeMatchMedia("(prefers-color-scheme: light)", window);
+    const nextTheme = storedTheme ?? (colorScheme?.matches ? "paper" : "soil");
     themeIsExplicit.current = storedTheme !== null;
     setThemeState(nextTheme);
     applyDocumentTheme(nextTheme);
@@ -104,12 +107,30 @@ export function SiteProvider({ children, initialLocale = "en" }) {
       setThemeState(systemTheme);
       applyDocumentTheme(systemTheme);
     };
-    colorScheme.addEventListener?.("change", followSystemTheme);
-    return () => colorScheme.removeEventListener?.("change", followSystemTheme);
+    return subscribeMediaQuery(colorScheme, followSystemTheme);
+  }, []);
+
+  useEffect(() => {
+    const synchronizeLocaleFromHistory = () => {
+      const nextLocale = localeRef.current;
+      setLocaleState(nextLocale);
+      document.documentElement.lang = nextLocale;
+      updateDocumentMetadata(nextLocale);
+      if (!safeWrite(storageKeys.language, nextLocale)) setStorageUnavailable(true);
+      const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      const normalizedUrl = localeHref(currentUrl, nextLocale);
+      if (normalizedUrl !== currentUrl) {
+        window.history.replaceState(window.history.state, "", normalizedUrl);
+      }
+    };
+
+    window.addEventListener("popstate", synchronizeLocaleFromHistory);
+    return () => window.removeEventListener("popstate", synchronizeLocaleFromHistory);
   }, []);
 
   const setLocale = useCallback((nextLocale) => {
     const normalized = nextLocale === "uk" ? "uk" : "en";
+    localeRef.current = normalized;
     setLocaleState(normalized);
     document.documentElement.lang = normalized;
     updateDocumentMetadata(normalized);

@@ -54,6 +54,24 @@ describe("catalog contract", () => {
     }));
   });
 
+  it("provides downscale-only, intrinsic mobile previews and responsive primaries", () => {
+    for (const artwork of getCatalog("en")) {
+      expect(artwork.streamPreview).toMatch(/artwork-index.*\.webp/);
+      expect(artwork.streamPreviewWidth).toBeGreaterThan(0);
+      expect(artwork.streamPreviewHeight).toBeGreaterThan(0);
+      expect(artwork.streamPreviewWidth).toBeLessThanOrEqual(720);
+      expect(artwork.streamPreviewWidth).toBeLessThanOrEqual(artwork.streamPrimaryWidth);
+      expect(artwork.streamPreviewHeight / artwork.streamPreviewWidth)
+        .toBeCloseTo(artwork.streamPrimaryHeight / artwork.streamPrimaryWidth, 2);
+      if (artwork.streamPreviewWidth < artwork.streamPrimaryWidth) {
+        expect(artwork.streamSrcSet).toContain(`${artwork.streamPreviewWidth}w`);
+        expect(artwork.streamSrcSet).toContain(`${artwork.streamPrimaryWidth}w`);
+      } else {
+        expect(artwork.streamSrcSet).toBeUndefined();
+      }
+    }
+  });
+
   it("preserves the five intentionally empty English stories instead of inventing copy", () => {
     const emptyStoryIds = getCatalog("en")
       .filter(({ story }) => !story.trim())

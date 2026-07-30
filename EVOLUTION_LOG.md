@@ -113,3 +113,37 @@ This is a concise record of verified product-level iterations. Git history is th
 - Local publishing verified 18 localized HTML files, 60 current plus 60 previous asset names, and 120 resolving dependency paths without residue.
 - In-app Chromium verification covered 390×844 Home/index and EN/UK Exhibitions plus 1280×720 Works, Exhibitions, Practice, and Contact through real clicks. The checked flows had no broken images, horizontal overflow, or console warning/error.
 - Public `branchstone.art` still serves the previous remote revision and returns the custom 404 for `/exhibitions.html`; the new information architecture is therefore not yet live. Physical-device verification was not run.
+
+## 2026-07-29 — Continuous mobile archive improvement
+
+### Outcome
+
+- Replaced the 32-scene mobile Gallery stream with a scan-first semantic artwork index while preserving the atmospheric Stay experience from the desktop breakpoint.
+- Added explicit native filters, full-composition previews, immediate mobile modal details, adjacent-work navigation, and direct-link close recovery to the matching work and scroll position.
+- Kept direct links unowned across adjacent-work stepping so Close remains in Gallery, and added hash-targeted prerender details so the archive remains functional without JavaScript.
+- Added deterministic bounded WebP delivery derivatives for all 32 real artwork masters, mobile environmental surfaces, and the Gallery-only desktop seam; source artwork remains unchanged.
+- Made Index continuously reachable on mobile and modeled Index → Saved Works as nested browser-history layers with Back/Forward, focus, body-lock, and scroll recovery.
+- Removed the root 320 px reflow floor and broad overflow masking, added safe-area handling, protected Saved/Contact artwork from crop, repaired Contact contrast, and exposed a fail-open hydration message.
+- Kept explicit language choice durable across Index Close/Back, made pre-hydration artwork links same-document, suppressed the desktop SSR index before hydration, and kept mobile modal materials, story, Save, and Inquire interactive across every image step.
+- Added source-aware image recovery with bounded timeout, late-load recovery, explicit retry, stale-node guards, localized feedback, and focus restoration that does not steal an intentional focus move.
+- Made mobile selects and all desktop filter buttons honestly disabled until URL-derived hydration state is ready, and made `matchMedia` subscription fail open to the usable mobile index in restricted environments.
+- Strengthened the first-preview loading priority, Paper/Soil filter affordance, mobile metadata/action type scale, stable artwork aspect estimates, and progressive no-JS details.
+
+### Compatibility
+
+- Catalog IDs, artwork masters, canonical EN/UK routes, query parameters, favorites, inquiry state, and theme/language storage remain unchanged.
+- The mobile/desktop Gallery presentation split is responsive only; both modes use the same catalog, filtering, modal, deep-link, and saved-work contracts.
+- No persisted-data, schema, URL, or server migration is required. Rollback is a source-and-generated-preview revert.
+
+### Verification
+
+- Full suite passed 24 files / 233 tests.
+- Current client/SSR builds and all 18 localized prerendered entries passed.
+- In-app Chromium covered the exact EN/UK route matrix at 320 and 430 px, focused Gallery and shell-history flows at 390 px, 32 px default-font stress, and desktop Home/Gallery regression without horizontal overflow in the checked states.
+- The final fresh five-run desktop profile produced median/max LCP 2.168/2.180 s, INP 40/40 ms, and CLS 0.000114/0.000114. The fresh five-run mobile profile produced median/max LCP 1.788/1.792 s, INP 64/72 ms, and CLS 0.09185/0.09185.
+- The EN/UK × 320/430 × normal/32 px matrix passed 8/8. The far lazy-preview and modal step/close/focus-return journey passed 5/5. Runtime fingerprints matched before and after; all browser processes, listeners, servers, ports, and profiles were cleaned up.
+- Final independent closure used native Codex plus exact-route Gemini 3.6 Flash High. Both approved the frozen implementation with no provable P0–P2. Earlier Claude Opus findings were fixed before the freeze and Opus was not repeatedly rerun on the final state.
+- Added a bounded physical-device audit server that re-runs all local gates, serves one isolated full closure with exact case-sensitive paths and real MIME, exposes deterministic error/stall/hydration faults with hit counts, and fails closed on traversal, wrong-case/nonexistent targets, identity drift, release failure, interrupted shutdown, or cleanup failure. Its 23 focused tests and real CLI/SIGINT smoke passed; interrupted sessions clean up but remain machine-invalid, and the rebuilt `.stage` bytes stayed identical to the performance-tested artifact.
+- Two native Codex adversarial audits and a final exact-route Gemini 3.6 Flash High immutable review approved the harness/protocol with no current P0–P2; these reviews do not substitute for the unexecuted physical lanes.
+- Physical iOS/Android behavior, OS-level 200% text scaling, real-device touch/GPU smoothness, and moderated target-user comprehension were not run and remain required for final mobile UX approval. Exact-build physical-device and moderated-test protocols are ready in `mobile-device-validation.md` and `mobile-usability-validation.md`.
+- The verified tree remains uncommitted on base HEAD `e20e64fec048b40bee51794c63e7c74add9ec2df`; no push, publication, or deployment was performed.

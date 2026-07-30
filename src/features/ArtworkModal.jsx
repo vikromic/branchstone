@@ -11,13 +11,37 @@ import {
 } from "@phosphor-icons/react";
 import { useSite } from "../app/SiteContext.jsx";
 import { useModalLayer } from "../app/useModalLayer.js";
-import { contactInquiryHref } from "../domain/content.js";
+import { contactInquiryHref, localeHref } from "../domain/content.js";
 import {
   StayArtworkImage,
   StayPhase,
   StayReveal,
   useStayRevealContext,
 } from "./stay/index.js";
+
+const pendingImageAnnouncementDelayMs = 500;
+const imageRecoveryDelayMs = 15000;
+
+function initialImageRecovery(source) {
+  return {
+    source,
+    attempt: 0,
+    requestSource: source,
+    stalled: false,
+    retrying: false,
+  };
+}
+
+function retryImageSource(source, attempt) {
+  try {
+    const url = new URL(source, globalThis.location?.href ?? "https://branchstone.art/");
+    url.searchParams.set("branchstone-retry", `${attempt}-${Date.now()}`);
+    return url.href;
+  } catch {
+    const separator = String(source).includes("?") ? "&" : "?";
+    return `${source}${separator}branchstone-retry=${attempt}-${Date.now()}`;
+  }
+}
 
 export function artworkContactHref(artwork, locale, kind = "original") {
   const message = kind === "print"
@@ -30,11 +54,30 @@ export function artworkContactHref(artwork, locale, kind = "original") {
   return contactInquiryHref(locale, message, artwork.id);
 }
 
+export function artworkLocaleHref(
+  artworkId,
+  locale,
+  href = globalThis.location?.href,
+) {
+  const url = new URL(href ?? "/gallery.html", "https://branchstone.art");
+  url.pathname = "/gallery.html";
+  url.searchParams.delete("artwork");
+  url.searchParams.set("art", artworkId);
+  url.hash = "";
+  return localeHref(`${url.pathname}${url.search}`, locale);
+}
+
 export function storyParagraphs(story) {
   return String(story)
     .split(/\n{2,}/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean);
+}
+
+export function artworkImageUnavailableLabel(locale) {
+  return locale === "uk"
+    ? "Зображення тимчасово недоступне"
+    : "Image temporarily unavailable";
 }
 
 export function ArtworkSurface({
@@ -44,20 +87,174 @@ export function ArtworkSurface({
   className = "",
   loading = "lazy",
   fetchPriority = "auto",
+  height,
+  announcePending = false,
+  recoverable = false,
   onImageSettled,
   onOpen,
   openId,
+  sizes,
+  srcSet,
+  width,
   children,
 }) {
-  const { artworkImageState: imageState } = useStayRevealContext();
+  const {
+    artworkImageState: imageState,
+    retryArtworkImage,
+  } = useStayRevealContext();
+  const imageRef = useRef(null);
+  const retryButtonRef = useRef(null);
   const onImageSettledRef = useRef(onImageSettled);
   onImageSettledRef.current = onImageSettled;
+  const announcementSourceRef = useRef(src);
+  const pendingAnnouncementPublishedRef = useRef(false);
+  const [imageRecovery, setImageRecovery] = useState(() => initialImageRecovery(src));
+  const activeRecovery = imageRecovery.source === src
+    ? imageRecovery
+    : initialImageRecovery(src);
   const unavailable = imageState === "error";
+  const pendingLabel = artwork.locale === "uk"
+    ? "Матеріал проявляється"
+    : "Material coming into view";
+  const unavailableLabel = artworkImageUnavailableLabel(artwork.locale);
+  const longWaitLabel = artwork.locale === "uk"
+    ? "Зображення завантажується довше, ніж очікувалося. Можна продовжити чекати або спробувати ще раз."
+    : "This image is taking longer than expected. You can keep waiting or try again.";
+  const retryLabel = artwork.locale === "uk" ? "Спробувати ще раз" : "Try again";
+  const retryingLabel = artwork.locale === "uk"
+    ? "Пробуємо завантажити зображення ще раз…"
+    : "Trying the image again…";
+  const recoveryVisible = recoverable && (
+    activeRecovery.stalled
+    || activeRecovery.retrying
+    || unavailable
+  );
+  const recoveryMessage = activeRecovery.retrying
+    ? retryingLabel
+    : unavailable
+      ? unavailableLabel
+      : longWaitLabel;
+  const [imageAnnouncement, setImageAnnouncement] = useState("");
   const phaseClassName = ["artwork-surface", className].filter(Boolean).join(" ");
+
+  useEffect(() => {
+    setImageRecovery((current) => (
+      current.source === src ? current : initialImageRecovery(src)
+    ));
+  }, [src]);
 
   useEffect(() => {
     if (imageState !== "pending") onImageSettledRef.current?.(imageState);
   }, [imageState, src]);
+
+  useEffect(() => {
+    if (!recoverable || imageState !== "pending") return undefined;
+    const source = src;
+    const attempt = activeRecovery.attempt;
+    const recoveryId = globalThis.setTimeout(() => {
+      setImageRecovery((current) => {
+        const matching = current.source === source
+          ? current
+          : initialImageRecovery(source);
+        if (matching.attempt !== attempt) return current;
+        return { ...matching, stalled: true, retrying: false };
+      });
+    }, imageRecoveryDelayMs);
+    return () => globalThis.clearTimeout(recoveryId);
+  }, [activeRecovery.attempt, imageState, recoverable, src]);
+
+  useEffect(() => {
+    if (!announcePending) return undefined;
+    if (announcementSourceRef.current !== src) {
+      announcementSourceRef.current = src;
+      pendingAnnouncementPublishedRef.current = false;
+      setImageAnnouncement("");
+    }
+    if (activeRecovery.retrying) {
+      pendingAnnouncementPublishedRef.current = true;
+      setImageAnnouncement(retryingLabel);
+      return undefined;
+    }
+    if (activeRecovery.stalled && imageState === "pending") {
+      pendingAnnouncementPublishedRef.current = true;
+      setImageAnnouncement(longWaitLabel);
+      return undefined;
+    }
+    if (imageState === "pending") {
+      const announcementId = globalThis.setTimeout(() => {
+        pendingAnnouncementPublishedRef.current = true;
+        setImageAnnouncement(pendingLabel);
+      }, pendingImageAnnouncementDelayMs);
+      return () => globalThis.clearTimeout(announcementId);
+    }
+    if (imageState === "error") {
+      pendingAnnouncementPublishedRef.current = false;
+      setImageAnnouncement(unavailableLabel);
+      return undefined;
+    }
+    if (pendingAnnouncementPublishedRef.current) {
+      pendingAnnouncementPublishedRef.current = false;
+      setImageAnnouncement(
+        artwork.locale === "uk" ? "Зображення завантажено" : "Image ready",
+      );
+    } else {
+      setImageAnnouncement("");
+    }
+    return undefined;
+  }, [
+    activeRecovery.retrying,
+    activeRecovery.stalled,
+    announcePending,
+    artwork.locale,
+    imageState,
+    longWaitLabel,
+    pendingLabel,
+    retryingLabel,
+    src,
+    unavailableLabel,
+  ]);
+
+  const restoreFocusAfterRecovery = () => {
+    const retryButton = retryButtonRef.current;
+    if (!retryButton || retryButton.ownerDocument.activeElement !== retryButton) return;
+    const root = retryButton.closest("[data-stay-root]");
+    const stableControl = root?.querySelector(".artwork-dialog__carousel-controls button")
+      ?? root?.querySelector("[data-modal-close]")
+      ?? root?.querySelector(".artwork-surface__open");
+    globalThis.queueMicrotask?.(() => stableControl?.focus?.({ preventScroll: true }));
+  };
+
+  const handleImageLoad = () => {
+    restoreFocusAfterRecovery();
+    setImageRecovery((current) => {
+      if (current.source !== src) return current;
+      return { ...current, stalled: false, retrying: false };
+    });
+  };
+
+  const handleImageError = () => {
+    setImageRecovery((current) => {
+      if (current.source !== src) return current;
+      return { ...current, stalled: false, retrying: false };
+    });
+  };
+
+  const retryImage = () => {
+    if (activeRecovery.retrying) return;
+    const attempt = activeRecovery.attempt + 1;
+    const selectedSource = imageRef.current?.currentSrc
+      || imageRef.current?.src
+      || activeRecovery.requestSource
+      || src;
+    retryArtworkImage();
+    setImageRecovery({
+      source: src,
+      attempt,
+      requestSource: retryImageSource(selectedSource, attempt),
+      stalled: false,
+      retrying: true,
+    });
+  };
 
   return (
     <StayPhase
@@ -65,14 +262,26 @@ export function ArtworkSurface({
       phase="artwork"
       className={phaseClassName}
       data-image-state={imageState}
+      data-image-recovery={recoveryVisible ? (
+        activeRecovery.retrying ? "retrying" : unavailable ? "error" : "stalled"
+      ) : "idle"}
     >
       <StayArtworkImage
-        src={src}
+        key={`${src}:${activeRecovery.attempt}`}
+        ref={imageRef}
+        src={activeRecovery.requestSource}
         alt={unavailable ? "" : alt}
         loading={loading}
         decoding="async"
         fetchPriority={fetchPriority}
+        height={height}
         draggable="false"
+        sizes={sizes}
+        srcSet={activeRecovery.attempt > 0 ? undefined : srcSet}
+        width={width}
+        data-image-request-attempt={activeRecovery.attempt}
+        onLoad={handleImageLoad}
+        onError={handleImageError}
       />
       <div
         className="artwork-surface__placeholder"
@@ -82,15 +291,38 @@ export function ArtworkSurface({
       >
         {imageState === "pending" ? (
           <span className="artwork-surface__loading">
-            {artwork.locale === "uk" ? "Матеріал проявляється" : "Material coming into view"}
+            {pendingLabel}
           </span>
         ) : null}
-        {unavailable ? (
+        {unavailable && !recoverable ? (
           <span className="artwork-surface__error">
-            {artwork.locale === "uk" ? "Зображення тимчасово недоступне" : "Image temporarily unavailable"}
+            {unavailableLabel}
           </span>
         ) : null}
       </div>
+      {recoveryVisible ? (
+        <div
+          className="artwork-surface__recovery"
+          role={announcePending ? undefined : "status"}
+          aria-live={announcePending ? undefined : "polite"}
+          aria-atomic={announcePending ? undefined : "true"}
+        >
+          <p>{recoveryMessage}</p>
+          <button
+            ref={retryButtonRef}
+            type="button"
+            onClick={retryImage}
+            aria-disabled={activeRecovery.retrying ? "true" : undefined}
+          >
+            {retryLabel}
+          </button>
+        </div>
+      ) : null}
+      {announcePending ? (
+        <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+          {imageAnnouncement}
+        </span>
+      ) : null}
       {onOpen ? (
         <button
           id={openId}
@@ -234,21 +466,37 @@ export function ArtworkNarrative({
                 : locale === "uk" ? "Запитати про оригінал" : "Inquire about the original"}
               <ArrowUpRight aria-hidden="true" />
             </a>
-          ) : (
+          ) : null}
+          {artwork.sold ? (
             <p className="artwork-narrative__collected-note">
               {locale === "uk" ? "Робота у приватній колекції." : "This work is held in a private collection."}
             </p>
-          )}
+          ) : null}
         </div>
       </StayPhase>
     </div>
   );
 }
 
-export function ArtworkModal({ artwork, onClose }) {
+export function ArtworkModal({
+  artwork,
+  forceResolved = false,
+  onClose,
+  onStepWork,
+  workCount = 1,
+  workPosition = 1,
+}) {
   const { locale, t, favorites, toggleFavorite } = useSite();
-  const [imageIndex, setImageIndex] = useState(0);
+  const alternateLocale = locale === "uk" ? "en" : "uk";
+  const languageLabel = locale === "uk"
+    ? "Перейти на англійську"
+    : "Switch to Ukrainian";
+  const [imageSelection, setImageSelection] = useState(() => ({
+    artworkId: artwork.id,
+    index: 0,
+  }));
   const scrollLayerRef = useRef(null);
+  const recordRef = useRef(null);
   const dialogRef = useRef(null);
   const closeRef = useRef(null);
   const controllerRef = useRef(null);
@@ -262,12 +510,25 @@ export function ArtworkModal({ artwork, onClose }) {
     [artwork.images, artwork.streamPrimary],
   );
   const imageCount = displayImages.length;
+  const imageIndex = imageSelection.artworkId === artwork.id ? imageSelection.index : 0;
   const currentImageIndex = Math.min(imageIndex, Math.max(imageCount - 1, 0));
   const currentImage = displayImages[currentImageIndex];
   const currentImageKey = `${artwork.id}:${currentImageIndex}:${currentImage}`;
 
   useEffect(() => {
-    setImageIndex(0);
+    setImageSelection((current) => (
+      current.artworkId === artwork.id && current.index === 0
+        ? current
+        : { artworkId: artwork.id, index: 0 }
+    ));
+    setSettledImageKey(null);
+    const activeGesture = gestureStartRef.current;
+    if (activeGesture?.surface?.hasPointerCapture?.(activeGesture.pointerId)) {
+      activeGesture.surface.releasePointerCapture?.(activeGesture.pointerId);
+    }
+    gestureStartRef.current = null;
+    scrollLayerRef.current?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });
+    recordRef.current?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });
   }, [artwork.id]);
 
   useModalLayer({
@@ -284,14 +545,10 @@ export function ArtworkModal({ artwork, onClose }) {
       || settledImageKey !== currentImageKey
       || typeof Image !== "function"
     ) return undefined;
-    const previous = new Image();
     const next = new Image();
-    previous.fetchPriority = "low";
     next.fetchPriority = "low";
-    previous.src = displayImages[(currentImageIndex - 1 + imageCount) % imageCount];
     next.src = displayImages[(currentImageIndex + 1) % imageCount];
     return () => {
-      previous.src = "";
       next.src = "";
     };
   }, [currentImageIndex, currentImageKey, displayImages, imageCount, settledImageKey]);
@@ -299,8 +556,14 @@ export function ArtworkModal({ artwork, onClose }) {
   const stepImage = useCallback((direction) => {
     if (imageCount < 2) return;
     controllerRef.current?.motion.begin("carousel");
-    setImageIndex((current) => (current + direction + imageCount) % imageCount);
-  }, [imageCount]);
+    setImageSelection((current) => {
+      const currentIndex = current.artworkId === artwork.id ? current.index : 0;
+      return {
+        artworkId: artwork.id,
+        index: (currentIndex + direction + imageCount) % imageCount,
+      };
+    });
+  }, [artwork.id, imageCount]);
 
   const onPointerDown = (event) => {
     if (
@@ -310,6 +573,8 @@ export function ArtworkModal({ artwork, onClose }) {
     ) return;
     event.currentTarget.setPointerCapture?.(event.pointerId);
     gestureStartRef.current = {
+      artworkId: artwork.id,
+      surface: event.currentTarget,
       x: event.clientX,
       y: event.clientY,
       pointerId: event.pointerId,
@@ -320,9 +585,10 @@ export function ArtworkModal({ artwork, onClose }) {
     const start = gestureStartRef.current;
     if (!start || start.pointerId !== event.pointerId) return null;
     gestureStartRef.current = null;
-    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
-      event.currentTarget.releasePointerCapture?.(event.pointerId);
+    if (start.surface?.hasPointerCapture?.(event.pointerId)) {
+      start.surface.releasePointerCapture?.(event.pointerId);
     }
+    if (start.artworkId !== artwork.id) return null;
     return start;
   };
 
@@ -355,6 +621,7 @@ export function ArtworkModal({ artwork, onClose }) {
         className="artwork-dialog"
         activeKey={`${artwork.id}:${currentImageIndex}`}
         active
+        forceResolved={forceResolved}
         settleOnMount
         waitForArtwork
         scrollTargetRef={scrollLayerRef}
@@ -368,62 +635,120 @@ export function ArtworkModal({ artwork, onClose }) {
           <p className="artwork-dialog__position">
             {t.shell.archiveIndex} / {String(artwork.index + 1).padStart(2, "0")}
           </p>
-          <button
-            ref={closeRef}
-            className="artwork-dialog__close"
-            type="button"
-            data-modal-close
-            onClick={onClose}
-            aria-label={t.common.close}
-          >
-            <X aria-hidden="true" />
-            <span>{t.common.close}</span>
-          </button>
+          <div className="artwork-dialog__actions">
+            <a
+              className="artwork-dialog__locale"
+              href={artworkLocaleHref(artwork.id, alternateLocale)}
+              aria-label={languageLabel}
+            >
+              {alternateLocale === "uk" ? "УКР" : "EN"}
+            </a>
+            <button
+              ref={closeRef}
+              className="artwork-dialog__close"
+              type="button"
+              data-modal-close
+              onClick={onClose}
+              aria-label={t.common.close}
+            >
+              <X aria-hidden="true" />
+              <span>{t.common.close}</span>
+            </button>
+          </div>
         </header>
 
         <div className="artwork-dialog__body">
-          <ArtworkSurface
-            artwork={artworkForSurface}
-            src={currentImage}
-            alt={`${artwork.name}, ${currentImageIndex + 1} / ${imageCount}`}
-            className="artwork-dialog__visual"
-            loading="eager"
-            fetchPriority="high"
-            onImageSettled={() => {
-              setSettledImageKey(currentImageKey);
-              controllerRef.current?.motion.settle("carousel");
-            }}
-          >
-            <div
-              className="artwork-dialog__gesture-surface"
-              onPointerDown={onPointerDown}
-              onPointerUp={onPointerUp}
-              onPointerCancel={(event) => {
-                finishGesture(event);
+          <div className="artwork-dialog__art-column">
+            <ArtworkSurface
+              artwork={artworkForSurface}
+              src={currentImage}
+              srcSet={currentImage === artwork.streamPrimary ? artwork.streamSrcSet : undefined}
+              sizes="(min-width: 1180px) 56vw, (min-width: 760px) 52vw, calc(100vw - 2rem)"
+              width={currentImage === artwork.streamPrimary ? artwork.streamPrimaryWidth : undefined}
+              height={currentImage === artwork.streamPrimary ? artwork.streamPrimaryHeight : undefined}
+              alt={`${artwork.name}, ${currentImageIndex + 1} / ${imageCount}`}
+              className="artwork-dialog__visual"
+              loading="eager"
+              fetchPriority="high"
+              announcePending
+              recoverable
+              onImageSettled={(state) => {
+                if (state === "ready") setSettledImageKey(currentImageKey);
+                controllerRef.current?.motion.settle("carousel");
               }}
-              onLostPointerCapture={(event) => {
-                if (gestureStartRef.current?.pointerId === event.pointerId) {
-                  gestureStartRef.current = null;
-                }
-              }}
-              aria-hidden="true"
-            />
-            {imageCount > 1 ? (
-              <div className="artwork-dialog__carousel-controls">
-                <button type="button" onClick={() => stepImage(-1)} aria-label={locale === "uk" ? "Попереднє зображення" : "Previous image"}>
+            >
+              <div
+                className="artwork-dialog__gesture-surface"
+                onPointerDown={onPointerDown}
+                onPointerUp={onPointerUp}
+                onPointerCancel={(event) => {
+                  finishGesture(event);
+                }}
+                onLostPointerCapture={(event) => {
+                  if (gestureStartRef.current?.pointerId === event.pointerId) {
+                    gestureStartRef.current = null;
+                  }
+                }}
+                aria-hidden="true"
+              />
+              {imageCount > 1 ? (
+                <div className="artwork-dialog__carousel-controls">
+                  <button type="button" onClick={() => stepImage(-1)} aria-label={locale === "uk" ? "Попереднє зображення" : "Previous image"}>
+                    <ArrowLeft aria-hidden="true" />
+                  </button>
+                  <p aria-live="polite" aria-atomic="true">
+                    <span>{locale === "uk" ? "Зображення" : "Image"}</span>
+                    <span>
+                      {String(currentImageIndex + 1).padStart(2, "0")}
+                      {" / "}
+                      {String(imageCount).padStart(2, "0")}
+                    </span>
+                  </p>
+                  <button type="button" onClick={() => stepImage(1)} aria-label={locale === "uk" ? "Наступне зображення" : "Next image"}>
+                    <ArrowRight aria-hidden="true" />
+                  </button>
+                </div>
+              ) : null}
+            </ArtworkSurface>
+            {workCount > 1 && onStepWork ? (
+              <nav
+                className="artwork-dialog__work-navigation"
+                aria-label={locale === "uk" ? "Перехід між роботами" : "Browse works"}
+              >
+                <button
+                  type="button"
+                  onClick={() => onStepWork(-1)}
+                  aria-label={locale === "uk" ? "Назад до попередньої роботи" : "Previous work"}
+                >
                   <ArrowLeft aria-hidden="true" />
+                  <span>{locale === "uk" ? "Назад" : "Prev"}</span>
                 </button>
-                <p aria-live="polite" aria-atomic="true">
-                  {String(currentImageIndex + 1).padStart(2, "0")} / {String(imageCount).padStart(2, "0")}
+                <p aria-hidden="true">
+                  <span>{locale === "uk" ? "Робота" : "Work"}</span>
+                  <span>
+                    {String(workPosition).padStart(2, "0")}
+                    {" / "}
+                    {String(workCount).padStart(2, "0")}
+                  </span>
                 </p>
-                <button type="button" onClick={() => stepImage(1)} aria-label={locale === "uk" ? "Наступне зображення" : "Next image"}>
+                <span className="sr-only" aria-live="polite" aria-atomic="true">
+                  {locale === "uk"
+                    ? `${artwork.name} — робота ${workPosition} з ${workCount}`
+                    : `${artwork.name} — work ${workPosition} of ${workCount}`}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onStepWork(1)}
+                  aria-label={locale === "uk" ? "Далі до наступної роботи" : "Next work"}
+                >
+                  <span>{locale === "uk" ? "Далі" : "Next"}</span>
                   <ArrowRight aria-hidden="true" />
                 </button>
-              </div>
+              </nav>
             ) : null}
-          </ArtworkSurface>
+          </div>
 
-          <div className="artwork-dialog__record">
+          <div key={artwork.id} ref={recordRef} className="artwork-dialog__record">
             <ArtworkNarrative
               artwork={artwork}
               locale={locale}

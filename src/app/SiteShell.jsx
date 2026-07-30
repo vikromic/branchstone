@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { X } from "@phosphor-icons/react";
 import indexMaterial from "../assets/material-stage/bottom-strata-alpha.webp";
 import {
@@ -15,6 +15,7 @@ import { pagePathById } from "../../site-pages.js";
 const routes = ["home", "gallery", "exhibitions", "about", "contact"]
   .map((id) => [id, pagePathById[id]]);
 const primaryRoutes = routes.filter(([id]) => id !== "home");
+const shellLayerHistoryKey = "branchstoneShellLayer";
 
 const quietChromeCopy = {
   en: {
@@ -30,6 +31,7 @@ const quietChromeCopy = {
     commissionGuide: "Commission guide",
     studioNotes: "Studio notes / Instagram",
     removeSaved: "Remove from saved works",
+    backToIndex: "Back to index",
     utilities: "Studio and legal links",
   },
   uk: {
@@ -45,6 +47,7 @@ const quietChromeCopy = {
     commissionGuide: "Гайд із замовлення",
     studioNotes: "Нотатки студії / Instagram",
     removeSaved: "Видалити зі збережених робіт",
+    backToIndex: "Назад до індексу",
     utilities: "Студійні та юридичні посилання",
   },
 };
@@ -54,11 +57,24 @@ function FocusTrap({ active, containerRef, onClose }) {
   return null;
 }
 
-function RouteNavigation({ className, items = routes, locale, numbered = false, page, t }) {
+function RouteNavigation({
+  className,
+  items = routes,
+  locale,
+  numbered = false,
+  onNavigate,
+  page,
+  t,
+}) {
   return (
     <nav className={className} aria-label={t.shell.primaryNavigation}>
       {items.map(([id, href], index) => (
-        <a key={id} aria-current={page === id ? "page" : undefined} href={localeHref(href, locale)}>
+        <a
+          key={id}
+          aria-current={page === id ? "page" : undefined}
+          href={localeHref(href, locale)}
+          onClick={onNavigate}
+        >
           {numbered && <span>{String(index + 1).padStart(2, "0")}</span>}
           {t.nav[id]}
         </a>
@@ -67,13 +83,19 @@ function RouteNavigation({ className, items = routes, locale, numbered = false, 
   );
 }
 
-function SecondaryLinks({ chrome, locale, page, t }) {
+function SecondaryLinks({ chrome, locale, onNavigate, page, t }) {
   return (
     <>
       <a href={`mailto:${CONTACT_EMAIL}`}>{chrome.correspondence}</a>
-      <a aria-current={page === "commissions" ? "page" : undefined} href={localeHref("/commissions.html", locale)}>{chrome.commissionGuide}</a>
+      <a
+        aria-current={page === "commissions" ? "page" : undefined}
+        href={localeHref("/commissions.html", locale)}
+        onClick={onNavigate}
+      >
+        {chrome.commissionGuide}
+      </a>
       <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">{chrome.studioNotes}</a>
-      <LegalLinks page={page} locale={locale} t={t} />
+      <LegalLinks page={page} locale={locale} onNavigate={onNavigate} t={t} />
     </>
   );
 }
@@ -89,11 +111,23 @@ function IndexMaterial() {
   );
 }
 
-function LegalLinks({ page, locale, t }) {
+function LegalLinks({ page, locale, onNavigate, t }) {
   return (
     <>
-      <a aria-current={page === "privacy" ? "page" : undefined} href={localeHref("/privacy.html", locale)}>{t.shell.privacy}</a>
-      <a aria-current={page === "terms" ? "page" : undefined} href={localeHref("/terms.html", locale)}>{t.shell.terms}</a>
+      <a
+        aria-current={page === "privacy" ? "page" : undefined}
+        href={localeHref("/privacy.html", locale)}
+        onClick={onNavigate}
+      >
+        {t.shell.privacy}
+      </a>
+      <a
+        aria-current={page === "terms" ? "page" : undefined}
+        href={localeHref("/terms.html", locale)}
+        onClick={onNavigate}
+      >
+        {t.shell.terms}
+      </a>
     </>
   );
 }
@@ -127,7 +161,7 @@ function FavoritesDrawer({ onClose }) {
             <p className="kicker">{t.shell.archiveIndex} / {String(saved.length).padStart(2, "0")}</p>
             <h2 id="saved-title">{t.shell.favorites}</h2>
           </div>
-          <button className="icon-control" type="button" onClick={onClose} aria-label={t.shell.close}><X aria-hidden="true" /></button>
+          <button className="icon-control" type="button" onClick={onClose} aria-label={chrome.backToIndex}><X aria-hidden="true" /></button>
         </header>
         {saved.length ? (
           <>
@@ -135,7 +169,14 @@ function FavoritesDrawer({ onClose }) {
               {saved.map((artwork, index) => (
                 <article className="saved-row" key={artwork.id}>
                   <span className="ledger-number">{String(index + 1).padStart(2, "0")}</span>
-                  <img src={artwork.mainImage} alt="" loading="lazy" decoding="async" />
+                  <img
+                    src={artwork.streamPreview ?? artwork.mainImage}
+                    alt=""
+                    width={artwork.streamPreviewWidth}
+                    height={artwork.streamPreviewHeight}
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div><h3>{artwork.name}</h3><p>{artwork.collection}</p></div>
                   <button type="button" onClick={() => removeFavorite(artwork.id)} aria-label={`${chrome.removeSaved}: ${artwork.name}`}><X aria-hidden="true" /></button>
                 </article>
@@ -162,6 +203,8 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const menuRef = useRef(null);
   const indexControlRef = useRef(null);
+  const historyClosePending = useRef(false);
+  const previousLayer = useRef(null);
   const { locale, setLocale, theme, setTheme, t, favorites, favoritesReady, favoriteMigrationNotice, dismissFavoriteMigrationNotice, storageUnavailable, dismissStorageNotice } = useSite();
   const currentPagePath = pagePathById[page] ?? pagePathById.notFound;
   const chrome = quietChromeCopy[locale];
@@ -169,14 +212,105 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
   const indexAriaLabel = chrome.openIndex;
   const alternateLocale = locale === "en" ? "uk" : "en";
   const savedCount = favoritesReady ? String(favorites.length).padStart(2, "0") : "00";
-  const closeFavorites = () => {
+  const synchronizeLayerFromHistory = useCallback((state = window.history.state) => {
+    const layer = state?.[shellLayerHistoryKey];
+    historyClosePending.current = false;
+    setMenuOpen(layer === "index");
+    setFavoritesOpen(layer === "favorites");
+  }, []);
+
+  const openLayer = useCallback((layer, { replace = false } = {}) => {
+    const nextState = {
+      ...(window.history.state || {}),
+      [shellLayerHistoryKey]: layer,
+    };
+    window.history[replace ? "replaceState" : "pushState"](
+      nextState,
+      "",
+      window.location.href,
+    );
+    historyClosePending.current = false;
+    setMenuOpen(layer === "index");
+    setFavoritesOpen(layer === "favorites");
+  }, []);
+
+  const closeLayer = useCallback((layer) => {
+    if (historyClosePending.current) return;
+    if (window.history.state?.[shellLayerHistoryKey] === layer) {
+      historyClosePending.current = true;
+      window.history.back();
+      return;
+    }
+    setMenuOpen(false);
     setFavoritesOpen(false);
-    requestAnimationFrame(() => indexControlRef.current?.focus?.({ preventScroll: true }));
-  };
+  }, []);
+
+  const closeFavorites = useCallback(() => closeLayer("favorites"), [closeLayer]);
+  const closeIndex = useCallback(() => closeLayer("index"), [closeLayer]);
+  const leaveLayerForNavigation = useCallback((event) => {
+    if (
+      event.defaultPrevented
+      || event.button !== 0
+      || event.metaKey
+      || event.ctrlKey
+      || event.shiftKey
+      || event.altKey
+    ) return;
+    const currentState = window.history.state || {};
+    if (!Object.prototype.hasOwnProperty.call(currentState, shellLayerHistoryKey)) return;
+    const layerToRestore = currentState[shellLayerHistoryKey];
+    const navigationEvent = event.nativeEvent;
+    const nextState = { ...currentState };
+    delete nextState[shellLayerHistoryKey];
+    window.history.replaceState(nextState, "", window.location.href);
+    historyClosePending.current = false;
+    queueMicrotask(() => {
+      if (!navigationEvent.defaultPrevented) return;
+      const restoredState = window.history.state || {};
+      if (Object.prototype.hasOwnProperty.call(restoredState, shellLayerHistoryKey)) return;
+      window.history.replaceState({
+        ...restoredState,
+        [shellLayerHistoryKey]: layerToRestore,
+      }, "", window.location.href);
+    });
+  }, []);
 
   useEffect(() => {
+    const fallbackIndex = document.querySelector(".prehydrate-index[open]");
+    if (fallbackIndex) fallbackIndex.open = false;
     document.documentElement.dataset.hydrated = "true";
-  }, []);
+    if (fallbackIndex) {
+      openLayer("index", {
+        replace: window.history.state?.[shellLayerHistoryKey] === "index",
+      });
+    } else {
+      synchronizeLayerFromHistory();
+    }
+  }, [openLayer, synchronizeLayerFromHistory]);
+
+  useEffect(() => {
+    const onPopState = (event) => synchronizeLayerFromHistory(event.state);
+    const onPageShow = (event) => {
+      if (event.persisted) synchronizeLayerFromHistory();
+    };
+    window.addEventListener("popstate", onPopState);
+    window.addEventListener("pageshow", onPageShow);
+    return () => {
+      window.removeEventListener("popstate", onPopState);
+      window.removeEventListener("pageshow", onPageShow);
+    };
+  }, [synchronizeLayerFromHistory]);
+
+  useEffect(() => {
+    const layer = menuOpen ? "index" : favoritesOpen ? "favorites" : null;
+    const priorLayer = previousLayer.current;
+    previousLayer.current = layer;
+    if (!priorLayer || layer) return undefined;
+    const focusFrame = requestAnimationFrame(
+      () => indexControlRef.current?.focus?.({ preventScroll: true }),
+    );
+    return () => globalThis.cancelAnimationFrame?.(focusFrame);
+  }, [favoritesOpen, menuOpen]);
 
   return (
     <div className={`site-frame page-${page}${immersive ? " site-frame--immersive" : ""}`}>
@@ -206,7 +340,7 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
             ref={indexControlRef}
             className="index-control"
             type="button"
-            onClick={() => setMenuOpen(true)}
+            onClick={() => openLayer("index")}
             aria-expanded={menuOpen}
             aria-haspopup="dialog"
             aria-controls="site-index-layer"
@@ -226,13 +360,20 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
       {menuOpen && (
         <div className="drawer-layer drawer-layer--index" role="presentation">
           <section id="site-index-layer" ref={menuRef} className="site-index" role="dialog" aria-modal="true" aria-labelledby="site-index-title">
-            <FocusTrap active={menuOpen} containerRef={menuRef} onClose={() => setMenuOpen(false)} />
+            <FocusTrap active={menuOpen} containerRef={menuRef} onClose={closeIndex} />
             <IndexMaterial />
             <header className="site-index__header">
               <p id="site-index-title">{indexLabel}</p>
-              <button className="site-index__close" type="button" onClick={() => setMenuOpen(false)}>{t.shell.close}</button>
+              <button className="site-index__close" type="button" onClick={closeIndex}>{t.shell.close}</button>
             </header>
-            <RouteNavigation className="site-index__routes" locale={locale} numbered page={page} t={t} />
+            <RouteNavigation
+              className="site-index__routes"
+              locale={locale}
+              numbered
+              onNavigate={leaveLayerForNavigation}
+              page={page}
+              t={t}
+            />
             <div className="site-index__utilities">
               <p className="site-index__utility-label">{t.shell.archive}</p>
               <div className="site-index__utility-actions">
@@ -241,7 +382,6 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
                   aria-label={t.shell.language}
                   onClick={(event) => {
                     event.preventDefault();
-                    setMenuOpen(false);
                     setLocale(alternateLocale);
                   }}
                 >
@@ -257,8 +397,7 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
                 <button
                   type="button"
                   onClick={() => {
-                    setMenuOpen(false);
-                    setFavoritesOpen(true);
+                    openLayer("favorites");
                   }}
                   aria-haspopup="dialog"
                   aria-label={`${t.shell.favorites}: ${favorites.length}`}
@@ -267,7 +406,13 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
                 </button>
               </div>
               <nav className="site-index__secondary" aria-label={chrome.utilities}>
-                <SecondaryLinks chrome={chrome} locale={locale} page={page} t={t} />
+                <SecondaryLinks
+                  chrome={chrome}
+                  locale={locale}
+                  onNavigate={leaveLayerForNavigation}
+                  page={page}
+                  t={t}
+                />
               </nav>
             </div>
           </section>

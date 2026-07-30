@@ -14,7 +14,10 @@ const publishedAssets = resolve(docs, "assets");
 const htmlFiles = [...rootHtmlFiles, ...rootHtmlFiles.map((filename) => `uk/${filename}`)];
 const localReference = /(?:src|href)=["']([^"']+)["']/g;
 const cssReference = /url\(\s*["']?([^"')]+)["']?\s*\)/g;
-const scriptReference = /["'`]((?:\/|\.\/|\.\.\/)[^"'`\s]+\.(?:css|html|jpe?g|js|json|png|svg|webp|woff2?)(?:\?[^"'`\s]*)?)["'`]/gi;
+// Quoted object keys are module identifiers emitted by transforms such as
+// import.meta.glob; they are lookup labels, not browser fetches. Dynamic
+// templates are not exact paths and therefore cannot be resolved here.
+const scriptReference = /["'`]((?:\/|\.\/|\.\.\/)[^"'`\s$]+\.(?:css|html|jpe?g|js|json|png|svg|webp|woff2?)(?:\?[^"'`\s$]*)?)["'`](?!\s*:)/gi;
 
 function deploymentPath(reference, owner = "") {
   if (!reference || /^(?:[a-z]+:|#|\/\/)/i.test(reference)) return null;

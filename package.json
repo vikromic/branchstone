@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "dev:lan": "vite --host 0.0.0.0 --port 8082",
+    "device:audit": "npm test && npm run build && npm run verify:artifact && node scripts/device-audit-server.mjs",
+    "assets:gallery-previews": "node scripts/generate-artwork-previews.mjs",
+    "assets:mobile-materials": "node scripts/generate-mobile-materials.mjs",
     "test": "vitest run",
     "build:client": "vite build",
     "build:ssr": "vite build --ssr src/entry-server.jsx --outDir .stage-ssr",

@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -19,6 +19,48 @@ describe("material art direction", () => {
     expect(ruleFor(editorial, ".material-separator img")).not.toContain("object-fit: fill");
     expect(ruleFor(contact, ".contact-hero__material")).toContain("object-fit: cover");
     expect(ruleFor(contact, ".contact-hero__material")).not.toContain("object-fit: fill");
+  });
+
+  it("serves bounded material surfaces without putting desktop seams on the mobile path", async () => {
+    const mobileAssets = [
+      "gallery-seam-mobile.webp",
+      "memory-seam-mobile.webp",
+      "bottom-strata-mobile.webp",
+    ];
+    const [about, exhibitions, contact, gallery, generator, desktopGalleryStat, ...mobileAssetStats] = await Promise.all([
+      readFile(resolve(root, "src/pages/AboutPage.jsx"), "utf8"),
+      readFile(resolve(root, "src/pages/ExhibitionsPage.jsx"), "utf8"),
+      readFile(resolve(root, "src/pages/ContactPage.jsx"), "utf8"),
+      readFile(resolve(root, "src/pages/GalleryPage.jsx"), "utf8"),
+      readFile(resolve(root, "scripts/generate-mobile-materials.mjs"), "utf8"),
+      stat(resolve(root, "src/assets/material-stage/gallery-seam-desktop.webp")),
+      ...mobileAssets.map((filename) => stat(resolve(
+        root,
+        "src/assets/material-stage",
+        filename,
+      ))),
+    ]);
+
+    for (const page of [about, exhibitions, contact]) {
+      expect(page).toContain('media="(max-width: 759px)"');
+      expect(page).toContain('loading="lazy"');
+      expect(page).toContain('fetchPriority="low"');
+    }
+    expect(about).toContain("bottom-strata-mobile.webp");
+    expect(exhibitions).toContain("bottom-strata-mobile.webp");
+    expect(contact).toContain("memory-seam-mobile.webp");
+    expect(gallery).toContain("gallery-seam-mobile.webp");
+    expect(gallery).toContain("gallery-seam-desktop.webp");
+    expect(gallery).toContain('width="645"');
+    expect(gallery).toContain('loading="eager"');
+    expect(gallery).toContain('fetchPriority="auto"');
+    expect(gallery).toContain('fetchPriority={position < 2 ? "high" : "auto"}');
+    expect(generator).toContain('"gallery-seam-desktop.webp"');
+    expect(generator).toContain('"645"');
+    expect(generator).toContain('"1290"');
+    expect(generator).toContain('"1817"');
+    expect(desktopGalleryStat.size).toBeLessThanOrEqual(100 * 1024);
+    expect(mobileAssetStats.every(({ size }) => size <= 180 * 1024)).toBe(true);
   });
 
   it("uses one unified geological edge on mobile and desktop", async () => {

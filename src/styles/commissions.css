@@ -1,7 +1,6 @@
 .commission-page {
   background: var(--ground-deep);
   color: var(--ink);
-  overflow: clip;
 }
 
 .commission-page h1,

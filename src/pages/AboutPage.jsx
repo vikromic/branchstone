@@ -4,6 +4,7 @@ import { useSite } from "../app/SiteContext.jsx";
 import { assetUrl } from "../domain/catalog.js";
 import { localeHref } from "../domain/content.js";
 import bottomStrataAlpha from "../assets/material-stage/bottom-strata-alpha.webp";
+import bottomStrataMobile from "../assets/material-stage/bottom-strata-mobile.webp";
 import "../styles/editorial.css";
 
 const pageCopy = {
@@ -118,7 +119,10 @@ function AboutHero({ content }) {
         </nav>
       </div>
       <div className="material-separator" aria-hidden="true">
-        <img src={bottomStrataAlpha} alt="" />
+        <picture>
+          <source media="(max-width: 759px)" srcSet={bottomStrataMobile} />
+          <img src={bottomStrataAlpha} alt="" loading="lazy" fetchPriority="low" decoding="async" />
+        </picture>
       </div>
     </section>
   );

@@ -194,6 +194,7 @@ function initialSnapshot(activeKey, fullyResolved = false, generation = 0) {
 export function useStayReveal({
   activeKey = "stay",
   active = true,
+  forceResolved = false,
   phasePresence,
   reducedMotion,
   settleOnMount = false,
@@ -217,7 +218,10 @@ export function useStayReveal({
   const presenceRef = useRef(presence);
   presenceRef.current = presence;
 
-  const [snapshot, setSnapshot] = useState(() => initialSnapshot(activeKey, reducedMotion === true));
+  const [snapshot, setSnapshot] = useState(() => initialSnapshot(
+    activeKey,
+    reducedMotion === true || forceResolved,
+  ));
   const [artworkImageSnapshot, setArtworkImageSnapshot] = useState(() => ({
     key: activeKey,
     state: waitForArtwork ? "pending" : "ready",
@@ -225,11 +229,12 @@ export function useStayReveal({
   const renderedArtworkImageSnapshot = artworkImageSnapshot.key === activeKey
     ? artworkImageSnapshot
     : { key: activeKey, state: waitForArtwork ? "pending" : "ready" };
+  const mustResolve = isReducedMotion || forceResolved;
   let renderedSnapshot = snapshot;
-  if (snapshot.key !== activeKey || (!active && !isReducedMotion)) {
-    renderedSnapshot = initialSnapshot(activeKey, isReducedMotion);
+  if (snapshot.key !== activeKey || (!active && !mustResolve)) {
+    renderedSnapshot = initialSnapshot(activeKey, mustResolve);
   }
-  else if (isReducedMotion && snapshot.completedThrough < STAY_PHASES.length - 1) {
+  else if (mustResolve && snapshot.completedThrough < STAY_PHASES.length - 1) {
     renderedSnapshot = {
       ...snapshot,
       completedThrough: STAY_PHASES.length - 1,
@@ -252,6 +257,8 @@ export function useStayReveal({
   activeKeyRef.current = activeKey;
   const reducedMotionRef = useRef(isReducedMotion);
   reducedMotionRef.current = isReducedMotion;
+  const forceResolvedRef = useRef(forceResolved);
+  forceResolvedRef.current = forceResolved;
   const activeRef = useRef(active);
   activeRef.current = active;
   const armedRef = useRef(Boolean(settleOnMount && active));
@@ -272,6 +279,7 @@ export function useStayReveal({
   const previousKeyRef = useRef(activeKey);
   const previousActiveRef = useRef(active);
   const previousReducedMotionRef = useRef(isReducedMotion);
+  const previousForceResolvedRef = useRef(forceResolved);
   const artworkImageStateRef = useRef(renderedArtworkImageSnapshot);
   artworkImageStateRef.current = renderedArtworkImageSnapshot;
   const animatePhaseRef = useRef(animatePhase);
@@ -320,6 +328,7 @@ export function useStayReveal({
       node.inert = Boolean(
         enhancedRef.current
         && !reducedMotionRef.current
+        && !forceResolvedRef.current
         && state !== "resolved"
         && state !== "entering",
       );
@@ -414,8 +423,8 @@ export function useStayReveal({
 
   const resetToArtwork = useCallback(() => {
     const generation = cancelReveal();
-    if (reducedMotionRef.current) {
-      revealAll("reduced-motion");
+    if (reducedMotionRef.current || forceResolvedRef.current) {
+      revealAll(reducedMotionRef.current ? "reduced-motion" : "force-resolved");
       return;
     }
     publish(initialSnapshot(activeKeyRef.current, false, generation));
@@ -523,6 +532,10 @@ export function useStayReveal({
     [publishArtworkImageState],
   );
 
+  const retryArtworkImage = useCallback(() => {
+    publishArtworkImageState("pending");
+  }, [publishArtworkImageState]);
+
   const getArtworkRef = useCallback((externalRef) => {
     if (!artworkRefCallbacksRef.current.has(externalRef)) {
       artworkRefCallbacksRef.current.set(externalRef, (node) => {
@@ -556,8 +569,16 @@ export function useStayReveal({
       return {
         ...rest,
         ref: getArtworkRef(externalRef),
-        onLoad: composeHandlers(() => markArtworkReady("ready"), externalLoad),
-        onError: composeHandlers(() => markArtworkReady("error"), externalError),
+        onLoad: (event) => {
+          if (event.currentTarget !== artworkImageRef.current) return;
+          markArtworkReady("ready");
+          externalLoad?.(event);
+        },
+        onError: (event) => {
+          if (event.currentTarget !== artworkImageRef.current) return;
+          markArtworkReady("error");
+          externalError?.(event);
+        },
         "data-stay-image-state": renderedArtworkImageSnapshot.state,
       };
     },
@@ -900,11 +921,11 @@ export function useStayReveal({
       const index = PHASE_INDEX.get(phase);
       if (index === undefined) throw new Error(`Unknown Stay phase: ${phase}`);
       if (!presence[index]) return "skipped";
-      if (isReducedMotion || renderedSnapshot.completedThrough >= index) return "resolved";
+      if (mustResolve || renderedSnapshot.completedThrough >= index) return "resolved";
       if (renderedSnapshot.entering === index) return "entering";
       return "pending";
     },
-    [currentPresenceMask, isReducedMotion, renderedSnapshot.completedThrough, renderedSnapshot.entering],
+    [currentPresenceMask, mustResolve, renderedSnapshot.completedThrough, renderedSnapshot.entering],
   );
 
   const getPhaseProps = useCallback(
@@ -918,10 +939,10 @@ export function useStayReveal({
         "data-stay-phase": phase,
         "data-stay-state": state,
         "data-stay-visible": state === "resolved" || state === "entering" ? "true" : "false",
-        inert: Boolean(isEnhanced && !isReducedMotion && isPending),
+        inert: Boolean(isEnhanced && !isReducedMotion && !forceResolved && isPending),
       };
     },
-    [getPhaseRef, getPhaseState, isEnhanced, isReducedMotion],
+    [forceResolved, getPhaseRef, getPhaseState, isEnhanced, isReducedMotion],
   );
 
   const getMotionSurfaceProps = useCallback(
@@ -1022,9 +1043,12 @@ export function useStayReveal({
     const enhanced = enhancementClassPresent
       && canQueryMotionPreference
       && !mediaMatches
+      && !forceResolvedRef.current
       && reducedMotion !== true;
+    enhancedRef.current = enhanced;
     setIsEnhanced(enhanced);
     if (enhanced) evaluateStillness();
+    else if (forceResolvedRef.current) revealAll("force-resolved");
     else revealAll(mediaMatches || reducedMotion === true ? "reduced-motion" : "fallback");
     return () => {
       mountedRef.current = false;
@@ -1056,6 +1080,43 @@ export function useStayReveal({
       evaluateStillness();
     }
   }, [evaluateStillness, isReducedMotion, resetToArtwork, revealAll]);
+
+  useEffect(() => {
+    if (previousForceResolvedRef.current === forceResolved) return;
+    previousForceResolvedRef.current = forceResolved;
+    if (forceResolved) {
+      enhancedRef.current = false;
+      setIsEnhanced(false);
+      revealAll("force-resolved");
+      return;
+    }
+
+    const canQueryMotionPreference = typeof globalThis.matchMedia === "function";
+    const mediaMatches = canQueryMotionPreference && readSharedReducedMotion();
+    const enhancementClassPresent = Boolean(
+      globalThis.document?.documentElement?.classList?.contains("stay-enhanced"),
+    );
+    const enhanced = enhancementClassPresent
+      && canQueryMotionPreference
+      && !mediaMatches
+      && reducedMotion !== true;
+    enhancedRef.current = enhanced;
+    setIsEnhanced(enhanced);
+    if (enhanced) {
+      armedRef.current = Boolean(settleOnMount && activeRef.current);
+      resetToArtwork();
+      evaluateStillness();
+    } else {
+      revealAll(mediaMatches || reducedMotion === true ? "reduced-motion" : "fallback");
+    }
+  }, [
+    evaluateStillness,
+    forceResolved,
+    reducedMotion,
+    resetToArtwork,
+    revealAll,
+    settleOnMount,
+  ]);
 
   useEffect(() => {
     if (previousActiveRef.current === active) return undefined;
@@ -1169,7 +1230,9 @@ export function useStayReveal({
         || artworkImageStateRef.current.state !== "pending"
         || !snapshotRef.current.isStill
       ) return;
-      publishArtworkImageState("error");
+      // A slow response is not an image failure. Release the narrative so the
+      // interface cannot stay blocked, but keep the image pending until its
+      // native load/error event provides the real outcome.
       revealAll("watchdog");
     }, effectiveWatchdogMs);
 
@@ -1179,7 +1242,6 @@ export function useStayReveal({
   }, [
     effectiveWatchdogMs,
     isReducedMotion,
-    publishArtworkImageState,
     renderedArtworkImageSnapshot.key,
     renderedArtworkImageSnapshot.state,
     renderedSnapshot.isStill,
@@ -1335,6 +1397,7 @@ export function useStayReveal({
       revealThrough,
       revealAll,
       markArtworkReady,
+      retryArtworkImage,
       settle: forceSettle,
     }),
     [
@@ -1354,6 +1417,7 @@ export function useStayReveal({
       isReducedMotion,
       markArtworkReady,
       pulse,
+      retryArtworkImage,
       renderedSnapshot.entering,
       renderedSnapshot.failure,
       renderedSnapshot.isStill,

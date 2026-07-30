@@ -13,6 +13,7 @@ const root = process.cwd();
 function runtimeFor(
   href,
   {
+    desktop = false,
     reducedMotion = false,
     storedLocale = null,
     languages = ["en-US"],
@@ -42,7 +43,14 @@ function runtimeFor(
     location,
     localStorage: { getItem: vi.fn(() => storedLocale) },
     navigator: { languages, language: languages[0] },
-    matchMedia: vi.fn(() => motionPreference),
+    matchMedia: vi.fn((query) => (
+      query === "(min-width: 760px)"
+        ? {
+          matches: desktop,
+          addEventListener: vi.fn(),
+        }
+        : motionPreference
+    )),
     setTimeout: vi.fn((callback, delay) => {
       timeouts.push({ callback, delay });
       return timeouts.length;
@@ -85,6 +93,25 @@ describe("Branchstone pre-hydration contract", () => {
     expect(harness.classes.has("stay-enhanced")).toBe(true);
   });
 
+  it("marks the desktop Gallery layout before paint and fails open after a boot stall", () => {
+    const harness = runtimeFor("https://branchstone.art/gallery.html", { desktop: true });
+
+    runBranchstonePrehydrate("gallery", harness.runtime);
+
+    expect(harness.runtime.document.documentElement.dataset.galleryLayout).toBe("stream");
+    harness.timeouts[0].callback();
+    expect(harness.runtime.document.documentElement.dataset.hydrationStalled).toBe("true");
+  });
+
+  it("gives Contact eight seconds before offering its progressive fallback", () => {
+    const harness = runtimeFor("https://branchstone.art/contact.html");
+
+    runBranchstonePrehydrate("contact", harness.runtime);
+
+    expect(harness.timeouts).toHaveLength(1);
+    expect(harness.timeouts[0].delay).toBe(8000);
+  });
+
   it("adds the enhancement class before paint only for motion-capable sessions", () => {
     const harness = runtimeFor("https://branchstone.art/gallery.html");
 
@@ -100,16 +127,32 @@ describe("Branchstone pre-hydration contract", () => {
     expect(harness.classes.has("stay-enhanced")).toBe(false);
   });
 
-  it("keeps reduced-motion and unknown-motion sessions in the fully resolved SSR state", () => {
-    const reduced = runtimeFor("https://branchstone.art/about.html", { reducedMotion: true });
-    const unknown = runtimeFor("https://branchstone.art/about.html");
-    unknown.runtime.matchMedia = undefined;
+  it.each(["reduced", "missing", "throwing"])(
+    "keeps %s motion-preference sessions resolved while retaining the boot-failure timer",
+    (motionContract) => {
+      const harness = runtimeFor("https://branchstone.art/about.html", {
+        reducedMotion: motionContract === "reduced",
+      });
+      if (motionContract === "missing") harness.runtime.matchMedia = undefined;
+      if (motionContract === "throwing") {
+        harness.runtime.matchMedia = vi.fn(() => {
+          throw new Error("motion preference unavailable");
+        });
+      }
 
-    expect(runBranchstonePrehydrate("about", reduced.runtime).enhanced).toBe(false);
-    expect(runBranchstonePrehydrate("about", unknown.runtime).enhanced).toBe(false);
-    expect(reduced.classes.has("stay-enhanced")).toBe(false);
-    expect(unknown.classes.has("stay-enhanced")).toBe(false);
-  });
+      expect(runBranchstonePrehydrate("about", harness.runtime)).toEqual({
+        enhanced: false,
+        redirected: false,
+      });
+      expect(harness.classes.has("stay-enhanced")).toBe(false);
+      expect(harness.timeouts).toHaveLength(1);
+      expect(harness.timeouts[0].delay).toBe(4000);
+
+      harness.timeouts[0].callback();
+      expect(harness.classes.has("stay-enhanced")).toBe(false);
+      expect(harness.runtime.document.documentElement.dataset.hydrationStalled).toBe("true");
+    },
+  );
 
   it("fails open when the React bundle never marks the page hydrated", () => {
     const broken = runtimeFor("https://branchstone.art/gallery.html");
@@ -119,6 +162,7 @@ describe("Branchstone pre-hydration contract", () => {
     expect(broken.timeouts[0].delay).toBe(4000);
     broken.timeouts[0].callback();
     expect(broken.classes.has("stay-enhanced")).toBe(false);
+    expect(broken.runtime.document.documentElement.dataset.hydrationStalled).toBe("true");
 
     broken.motionPreference.matches = false;
     broken.motionListeners[0]();
@@ -129,6 +173,7 @@ describe("Branchstone pre-hydration contract", () => {
     hydrated.runtime.document.documentElement.dataset.hydrated = "true";
     hydrated.timeouts[0].callback();
     expect(hydrated.classes.has("stay-enhanced")).toBe(true);
+    expect(hydrated.runtime.document.documentElement.dataset.hydrationStalled).toBeUndefined();
   });
 
   it("injects the blocking contract at the start of head for every page template", async () => {

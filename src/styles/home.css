@@ -281,7 +281,8 @@ html.stay-enhanced .home-stay-detail[data-stay-state="pending"] {
   display: inline-flex;
   align-items: center;
   gap: 0.28rem;
-  min-height: 2.4rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   margin-top: 0.28rem;
   color: inherit;
   font-size: 0.6rem;

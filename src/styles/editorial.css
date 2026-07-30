@@ -147,6 +147,12 @@
   filter: saturate(0.76) contrast(1.06) brightness(0.72);
 }
 
+.material-separator picture {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .editorial-chapter {
   padding: clamp(5rem, 16vw, 9rem) var(--safe-gutter-right) clamp(5rem, 16vw, 9rem) var(--safe-gutter-left);
 }
@@ -450,6 +456,7 @@
 
 .collector-notes figure {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.75rem;
   margin: 0;
 }
@@ -481,6 +488,7 @@
 .editorial-invitation {
   min-height: 34rem;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-content: center;
   gap: 1.25rem;
   padding: clamp(5rem, 16vw, 9rem) var(--safe-gutter-right) clamp(5rem, 16vw, 9rem) var(--safe-gutter-left);
@@ -497,6 +505,7 @@
   margin-bottom: 0;
   font: 510 clamp(2rem, 8vw, 4rem) / 1.02 var(--sans);
   letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
   text-wrap: balance;
 }
 

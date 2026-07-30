@@ -1,6 +1,7 @@
 import englishHighlights from "../../docs/json_data/highlights.json";
 import ukrainianHighlights from "../../docs/json_data/ukr/highlights_uk.json";
 import bottomStrataAlpha from "../assets/material-stage/bottom-strata-alpha.webp";
+import bottomStrataMobile from "../assets/material-stage/bottom-strata-mobile.webp";
 import { SiteShell } from "../app/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
 import { assetUrl } from "../domain/catalog.js";
@@ -129,7 +130,10 @@ export function ExhibitionsPage() {
             <div><dt>{content.press}</dt><dd>{String(press.length).padStart(2, "0")}</dd></div>
           </dl>
           <div className="material-separator" aria-hidden="true">
-            <img src={bottomStrataAlpha} alt="" />
+            <picture>
+              <source media="(max-width: 759px)" srcSet={bottomStrataMobile} />
+              <img src={bottomStrataAlpha} alt="" loading="lazy" fetchPriority="low" decoding="async" />
+            </picture>
           </div>
         </section>
 

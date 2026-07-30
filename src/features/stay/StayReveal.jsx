@@ -20,6 +20,7 @@ export const StayReveal = forwardRef(function StayReveal(
     as: Element = "div",
     activeKey,
     active,
+    forceResolved,
     phasePresence,
     reducedMotion,
     settleOnMount,
@@ -39,6 +40,7 @@ export const StayReveal = forwardRef(function StayReveal(
   const controller = useStayReveal({
     activeKey,
     active,
+    forceResolved,
     phasePresence,
     reducedMotion,
     settleOnMount,

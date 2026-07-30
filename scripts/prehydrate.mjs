@@ -61,6 +61,16 @@ export function runBranchstonePrehydrate(pageId, runtime = globalThis) {
     return { enhanced: false, redirected: true, target };
   }
 
+  if (pageId === "gallery" && root.dataset) {
+    try {
+      root.dataset.galleryLayout = runtime.matchMedia?.("(min-width: 760px)")?.matches
+        ? "stream"
+        : "index";
+    } catch {
+      root.dataset.galleryLayout = "index";
+    }
+  }
+
   let motionPreference;
   try {
     if (typeof runtime.matchMedia === "function") {
@@ -78,12 +88,19 @@ export function runBranchstonePrehydrate(pageId, runtime = globalThis) {
   };
   const enhanced = syncMotionClass();
   motionPreference?.addEventListener?.("change", syncMotionClass);
-  if (enhanced && typeof runtime.setTimeout === "function") {
+  if (typeof runtime.setTimeout === "function") {
     runtime.setTimeout(() => {
       if (root.dataset?.hydrated === "true") return;
       enhancementExpired = true;
+      if (pageId === "contact") {
+        const fallback = runtime.document?.querySelector?.("[data-contact-boot-fallback]");
+        fallback?.setAttribute("role", "status");
+        fallback?.setAttribute("aria-live", "polite");
+        fallback?.setAttribute("aria-atomic", "true");
+      }
+      if (root.dataset) root.dataset.hydrationStalled = "true";
       syncMotionClass();
-    }, 4000);
+    }, pageId === "contact" ? 8000 : 4000);
   }
   return { enhanced, redirected: false };
 }

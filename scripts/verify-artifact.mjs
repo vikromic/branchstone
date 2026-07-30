@@ -44,6 +44,12 @@ for (const filename of htmlFiles) {
   for (const marker of ukrainianMarkers[filename]) {
     if (!html.includes(marker)) throw new Error(`${filename}: Ukrainian marker is missing: ${marker}`);
   }
+  if (
+    filename === "gallery.html"
+    && (html.match(/class="gallery-index-work"/g) ?? []).length !== 64
+  ) {
+    throw new Error(`${filename}: live and fallback locale archives must each expose all 32 linked works`);
+  }
   if (/docs\/(?:js|css)\//.test(html)) throw new Error(`${filename}: legacy asset reference remains`);
 
   const ukrainianHtml = await readFile(resolve(stage, "uk", filename), "utf8");
@@ -54,6 +60,12 @@ for (const filename of htmlFiles) {
   if (!ukrainianHtml.includes("<main") || !ukrainianHtml.includes("<h1")) throw new Error(`uk/${filename}: semantic content is missing`);
   for (const marker of ukrainianMarkers[filename]) {
     if (!ukrainianHtml.includes(marker)) throw new Error(`uk/${filename}: live Ukrainian marker is missing: ${marker}`);
+  }
+  if (
+    filename === "gallery.html"
+    && (ukrainianHtml.match(/class="gallery-index-work"/g) ?? []).length !== 32
+  ) {
+    throw new Error(`uk/${filename}: progressive archive must expose all 32 linked works`);
   }
 }
 

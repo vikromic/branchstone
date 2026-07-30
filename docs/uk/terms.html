@@ -45,6 +45,13 @@
     }
     return { enhanced: false, redirected: true, target };
   }
+  if (pageId === "gallery" && root2.dataset) {
+    try {
+      root2.dataset.galleryLayout = runtime.matchMedia?.("(min-width: 760px)")?.matches ? "stream" : "index";
+    } catch {
+      root2.dataset.galleryLayout = "index";
+    }
+  }
   let motionPreference;
   try {
     if (typeof runtime.matchMedia === "function") {
@@ -60,12 +67,19 @@
   };
   const enhanced = syncMotionClass();
   motionPreference?.addEventListener?.("change", syncMotionClass);
-  if (enhanced && typeof runtime.setTimeout === "function") {
+  if (typeof runtime.setTimeout === "function") {
     runtime.setTimeout(() => {
       if (root2.dataset?.hydrated === "true") return;
       enhancementExpired = true;
+      if (pageId === "contact") {
+        const fallback = runtime.document?.querySelector?.("[data-contact-boot-fallback]");
+        fallback?.setAttribute("role", "status");
+        fallback?.setAttribute("aria-live", "polite");
+        fallback?.setAttribute("aria-atomic", "true");
+      }
+      if (root2.dataset) root2.dataset.hydrationStalled = "true";
       syncMotionClass();
-    }, 4e3);
+    }, pageId === "contact" ? 8e3 : 4e3);
   }
   return { enhanced, redirected: false };
 })("terms");</script>
@@ -83,11 +97,11 @@
     <link rel="icon" href="/favicon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
     <script>(function(){var t=null;try{var v=localStorage.getItem('branchstone-theme');t=v?JSON.parse(v):null}catch(e){}if(t==='light'||t==='paper'||((t!=='dark'&&t!=='soil')&&matchMedia('(prefers-color-scheme:light)').matches)){document.documentElement.dataset.theme='paper';document.querySelector('meta[name="theme-color"]').content='#e9e0d3'}})()</script>
-    <script type="module" crossorigin src="/assets/terms-iSZ16e2b.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/SiteShell-C0y9hs8r.js">
-    <link rel="modulepreload" crossorigin href="/assets/PrivacyPage-DiRNx3NT.js">
-    <link rel="stylesheet" crossorigin href="/assets/SiteShell-BY2vLTPS.css">
-    <link rel="stylesheet" crossorigin href="/assets/editorial-a4oUmt7W.css">
+    <script type="module" crossorigin src="/assets/terms-sn-YIryh.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/SiteShell-2ufSEyRs.js">
+    <link rel="modulepreload" crossorigin href="/assets/PrivacyPage-BPRUsIxr.js">
+    <link rel="stylesheet" crossorigin href="/assets/SiteShell-Db0sVmdK.css">
+    <link rel="stylesheet" crossorigin href="/assets/editorial-Cr89tZq7.css">
   </head>
   <body data-page="terms">
     <div id="root" data-initial-locale="uk"><div class="site-frame page-terms"><a class="skip-link" href="#main-content">До основного вмісту</a><header class="site-header"><a class="wordmark" href="/uk/" aria-label="Branchstone by Viktoria, головна сторінка"><span>BRANCHSTONE</span><small>BY VIKTORIA</small></a><nav class="primary-navigation" aria-label="Основна навігація"><a href="/uk/gallery.html">Роботи</a><a href="/uk/exhibitions.html">Виставки</a><a href="/uk/about.html">Практика</a><a href="/uk/contact.html">Контакти</a></nav><div class="quiet-index-trigger"><details class="prehydrate-index"><summary aria-label="Відкрити індекс сайту" aria-controls="prehydrate-index-layer" data-open-label="Закрити"><span>індекс</span></summary><div id="prehydrate-index-layer" class="prehydrate-index__layer" role="region" aria-label="індекс"><nav aria-label="Основна навігація"><a href="/uk/"><span>01</span>Головна</a><a href="/uk/gallery.html"><span>02</span>Роботи</a><a href="/uk/exhibitions.html"><span>03</span>Виставки</a><a href="/uk/about.html"><span>04</span>Практика</a><a href="/uk/contact.html"><span>05</span>Контакти</a></nav><div class="prehydrate-index__utilities" role="group" aria-label="Студійні та юридичні посилання"><a href="/terms.html">English</a><span>Вигляд<!-- --> / <!-- -->Ґрунт</span><span>Збережені роботи<!-- --> / <!-- -->00</span><a href="mailto:thebranchstone@gmail.com">Написати до студії</a><a href="/uk/commissions.html">Гайд із замовлення</a><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Нотатки студії / Instagram</a><a href="/uk/privacy.html">Політика конфіденційності</a><a aria-current="page" href="/uk/terms.html">Умови надання послуг</a></div></div></details><button class="index-control" type="button" aria-expanded="false" aria-haspopup="dialog" aria-controls="site-index-layer" aria-label="Відкрити індекс сайту">індекс</button></div></header><main id="main-content" tabindex="-1"><div class="editorial-page legal-page"><header class="legal-hero"><p class="kicker">Запис сайту / умови</p><h1>Умови для роботи й розмови.</h1><p>Ці умови стосуються використання сайту Branchstone. Конкретні умови продажу або замовлення узгоджуються окремо в письмовій формі до того, як будь-яка сторона бере на себе зобов’язання.</p><time dateTime="2026-07-18">Оновлено 18 липня 2026 року</time></header><article class="legal-document"><div class="legal-document__index" aria-hidden="true"><span>BRANCHSTONE</span><span>08<!-- --> <!-- -->НОТАТКИ</span></div><div class="legal-document__sections"><section aria-labelledby="terms-section-1"><p class="legal-section__number">01</p><div><h2 id="terms-section-1">Користування сайтом</h2><p>Ви можете переглядати архів, зберігати роботи у своєму браузері й звертатися до Branchstone щодо доступних або індивідуальних робіт. Не заважайте роботі сайту, не намагайтеся отримати несанкціонований доступ і не використовуйте його вміст у спосіб, що вводить в оману.</p></div></section><section aria-labelledby="terms-section-2"><p class="legal-section__number">02</p><div><h2 id="terms-section-2">Твори та вміст сайту</h2><p>Твори, фотографії, тексти й візуальна ідентичність залишаються інтелектуальною власністю відповідного власника. Перегляд на сайті не передає права власності та не надає комерційної ліцензії.</p><ul><li>Не відтворюйте й не поширюйте зображення робіт без письмового дозволу.</li><li>Не використовуйте роботи чи матеріали сайту для комерційного навчання, реклами, товарів або похідних продуктів без письмової угоди.</li><li>Можна поширити посилання на публічну сторінку із зазначенням Branchstone, якщо це не створює враження підтримки чи партнерства.</li></ul></div></section><section aria-labelledby="terms-section-3"><p class="legal-section__number">03</p><div><h2 id="terms-section-3">Наявність і запити</h2><p>Робота з позначкою «доступна» все одно може бути предметом поточної розмови або нещодавнього продажу. Запит, список збережених робіт чи підготовлений лист не резервують роботу й не є замовленням. Наявність підтверджується безпосередньо Branchstone.</p></div></section><section aria-labelledby="terms-section-4"><p class="legal-section__number">04</p><div><h2 id="terms-section-4">Придбання та індивідуальні роботи</h2><p>Ціна, графік оплати, можливий завдаток, обсяг, розміри, матеріали, правки, орієнтовні строки, доставка, страхування, скасування та повернення узгоджуються письмово для конкретної роботи до оплати або початку роботи в студії.</p><p>Сайт не замінює таку письмову домовленість. Замовлення починається лише після погодження умов обома сторонами та отримання узгодженого стартового платежу, якщо він передбачений.</p></div></section><section aria-labelledby="terms-section-5"><p class="legal-section__number">05</p><div><h2 id="terms-section-5">Природні матеріали та вигляд</h2><p>Роботи Branchstone містять знайдені й органічні матеріали. Фактура, колір, поверхня та невеликі природні зміни є частиною їхнього характеру. Екрани також можуть передавати колір і масштаб інакше, ніж фізична робота. За потреби надаються рекомендації з догляду, монтажу й поводження.</p></div></section><section aria-labelledby="terms-section-6"><p class="legal-section__number">06</p><div><h2 id="terms-section-6">Доставка та подальший догляд</h2><p>Пакування, перевізник, адреса, строки, вартість, страхування, огляд після отримання й порядок дій у разі пошкодження узгоджуються для конкретної покупки. Якщо пакунок виглядає пошкодженим, зв’яжіться з Branchstone якнайшвидше та збережіть пакування до з’ясування обставин.</p></div></section><section aria-labelledby="terms-section-7"><p class="legal-section__number">07</p><div><h2 id="terms-section-7">Зовнішні посилання та зміни</h2><p>Посилання на публікації, виставки, Instagram та інші зовнішні сервіси надані для контексту. Branchstone не контролює ці сервіси. Умови можуть оновлюватися разом зі змінами сайту або студійного процесу; дата вище позначає показану тут версію.</p></div></section><section aria-labelledby="terms-section-8"><p class="legal-section__number">08</p><div><h2 id="terms-section-8">Запитання до зобов’язання</h2><p>Якщо певна умова впливає на ваше рішення, запитайте про неї до оплати або затвердження замовлення. Пишіть на:</p><p><a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a></p></div></section></div></article></div></main><footer class="site-footer"><div class="footer-statement"><p class="kicker">БУДЬТЕ В КУРСІ / БЕЗ ПІДПИСКИ</p><h2>Слідкуйте за тим, що формується.</h2></div><div class="footer-ledger"><p>© 2026 Branchstone by Viktoria</p><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Instagram</a><a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a><a href="/uk/privacy.html">Політика конфіденційності</a><a aria-current="page" href="/uk/terms.html">Умови надання послуг</a></div></footer></div></div>

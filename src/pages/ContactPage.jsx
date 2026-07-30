@@ -7,6 +7,7 @@ import { copyText } from "../domain/clipboard.js";
 import { CONTACT_EMAIL, INSTAGRAM_URL, localeHref } from "../domain/content.js";
 import { readEnvelope, safeRemove, storageKeys } from "../domain/storage.js";
 import memorySeam from "../assets/material-stage/memory-seam-alpha.webp";
+import memorySeamMobile from "../assets/material-stage/memory-seam-mobile.webp";
 import "../styles/contact.css";
 
 const contactCopy = {
@@ -46,6 +47,7 @@ const contactCopy = {
     removeWork: "Remove from this inquiry",
     worksRemaining: "Works remaining in this inquiry: {count}.",
     noScript: "JavaScript is needed to prepare the addressed letter without exposing its contents in the page URL. You can still email the studio directly.",
+    bootFallback: "The letter is still preparing. You can email the studio directly:",
     pendingMessage: "I’m interested in these saved works and would like to know more about them.",
     artworkSubject: "Artwork inquiry",
     desk: "DIRECT CHANNELS",
@@ -121,6 +123,7 @@ const contactCopy = {
     removeWork: "Прибрати із запиту",
     worksRemaining: "Робіт у цьому запиті: {count}.",
     noScript: "JavaScript потрібен, щоб підготувати адресований лист без показу його вмісту в URL сторінки. Ви все одно можете написати студії напряму.",
+    bootFallback: "Лист ще готується. Ви можете написати студії напряму:",
     pendingMessage: "Мене цікавлять ці збережені роботи, і я хотів би дізнатися про них більше.",
     artworkSubject: "Запит про роботу",
     desk: "ПРЯМІ КАНАЛИ",
@@ -233,13 +236,20 @@ export function ContactPage() {
   const { locale, catalog } = useSite();
   const text = contactCopy[locale];
   const formRef = useRef(null);
+  const bootFallbackRef = useRef(null);
   const generatedInquiryRef = useRef(null);
   const [isHydrated, setIsHydrated] = useState(false);
   const [values, setValues] = useState({ name: "", email: "", subject: "", message: "", website: "" });
   const [ticketRefs, setTicketRefs] = useState([]);
   const [status, setStatus] = useState(null);
 
-  useEffect(() => setIsHydrated(true), []);
+  useEffect(() => {
+    const fallback = bootFallbackRef.current;
+    fallback?.setAttribute("role", "status");
+    fallback?.removeAttribute("aria-live");
+    fallback?.removeAttribute("aria-atomic");
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -373,7 +383,17 @@ export function ContactPage() {
     <SiteShell page="contact">
       <div className="contact-correspondence">
         <header className="contact-hero">
-          <img className="contact-hero__material" src={memorySeam} alt="" aria-hidden="true" />
+          <picture className="contact-hero__material-picture" aria-hidden="true">
+            <source media="(max-width: 759px)" srcSet={memorySeamMobile} />
+            <img
+              className="contact-hero__material"
+              src={memorySeam}
+              alt=""
+              loading="lazy"
+              fetchPriority="low"
+              decoding="async"
+            />
+          </picture>
           <div className="contact-hero__grain" aria-hidden="true"><span>BR / ST</span><span>VI / 24</span></div>
           <div className="contact-hero__copy">
             <p className="kicker">{text.eyebrow}</p>
@@ -402,7 +422,14 @@ export function ContactPage() {
                     <article className="inquiry-ticket" key={artwork.id}>
                       <span className="inquiry-ticket__number">{String(index + 1).padStart(2, "0")}</span>
                       {artwork.mainImage ? (
-                        <img src={artwork.mainImage} alt="" loading="lazy" decoding="async" />
+                        <img
+                          src={artwork.streamPreview ?? artwork.mainImage}
+                          alt=""
+                          width={artwork.streamPreviewWidth}
+                          height={artwork.streamPreviewHeight}
+                          loading="lazy"
+                          decoding="async"
+                        />
                       ) : (
                         <span className="inquiry-ticket__placeholder" aria-hidden="true">BS</span>
                       )}
@@ -466,6 +493,15 @@ export function ContactPage() {
                 {status ? text[status] : ""}
               </p>
               </fieldset>
+              <p
+                ref={bootFallbackRef}
+                className="correspondence-form__boot-fallback"
+                data-contact-boot-fallback=""
+                role="status"
+                suppressHydrationWarning
+              >
+                {text.bootFallback} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              </p>
               <noscript><p className="correspondence-form__noscript">{text.noScript} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p></noscript>
             </form>
           </div>
