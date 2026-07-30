@@ -1,85 +1,68 @@
-# 🎨 Branchstone: Gallery Sentinel (CLAUDE.md)
+# Branchstone engineering guide
 
-## 🧭 Product Reality
-- **Branchstone is gallery-first.** `gallery.html` is the primary product surface, the main proof of quality, and the fastest path to collector intent.
-- **Homepage is a funnel, not the destination.** `index.html` must guide users into the gallery with minimal friction, then get out of the way.
-- **Secondary pages support the gallery.** `about.html`, `commissions.html`, and `contact.html` exist to build trust, answer objections, and complete inquiry flow without stealing focus from the work.
-- **When priorities conflict, protect the art.** Favor faster artwork discovery, better artwork inspection, cleaner inquiry flow, and calmer mobile browsing over decorative complexity.
+## Product truth
 
-## 🔁 Continuous Ralph-Loop Mode
-- **Operate in an endless improvement loop.** There is no final “done” state; each pass should leave the experience measurably better.
-- **Do not anchor to a fixed bug list.** Re-scout the live site every iteration and choose the highest-leverage improvement visible now.
-- **Avoid overfitting to one past issue.** A solved problem is not a permanent priority; fresh observation always wins.
-- **If no obvious bug exists, improve quality anyway.** Reduce friction in hierarchy, spacing, touch ergonomics, motion, readability, resilience, perceived performance, or architectural clarity.
-- **Ship coherent units.** Each iteration should revolve around one clear improvement theme or one tightly related bundle, not random scattered tweaks.
-- **For open-ended Ralph operation, think in long batches.** It is acceptable to run very large iteration batches such as `500`, then inspect the accumulated result and launch the next batch.
-- **Safety cap, not finish line.** In open-ended hardening mode, the iteration cap exists to bound unattended runtime, not to declare the site complete.
-- **Default behavior assumes no personality overlay.** The operating model in this file must stand on its own with plain Claude behavior.
-- **If a personality overlay is enabled, `Mission Control` is the safest optional fit.** It should reinforce telemetry, verification, and go/no-go discipline without overriding the gallery-first priorities in this file.
+- Branchstone is an artist portfolio and living material archive, not a generic landing page.
+- The approved visual system is **Carried Ground / Eroded Vault**: real artwork, quiet typography, irregular geological material, and no card-template or sticker aesthetic.
+- Mobile is the first design truth. Desktop is separately composed; it must never look like a widened phone layout.
+- Protect artist artwork with bounded, deterministic delivery derivatives from the real masters. Never synthesize, crop, cosmetically enlarge, or replace it.
 
-## 📱 Page Priority & Audit Order
-1. **Gallery mobile browse state**: first paint, header chrome, collection filters, artwork density, card legibility, card actions.
-2. **Gallery interaction states**: deep-linked artwork, modal open/close, swipe or tap ergonomics, favorites, inquiry entry points.
-3. **Homepage-to-gallery funnel**: hero, featured works, CTA clarity, how quickly the user reaches real art.
-4. **Supporting pages**: about, commissions, contact, legal.
-5. **Desktop refinement**: only after mobile gallery quality is protected.
+## Core interaction contract
 
-## 👀 Mandatory Scouting Protocol
-- **Run the site locally** from the `/docs` directory before making decisions.
-- **Use Playwright `/chrome` before any edit and before any commit.** No exceptions.
-- **Scout mobile first** at multiple narrow widths. Treat common phone widths such as `360`, `390`, and `430` as required checkpoints unless the task explicitly says otherwise.
-- **Start every audit on `gallery.html`.** Inspect at least:
-  - initial load and first artwork visibility
-  - filter pill discoverability and horizontal scroll behavior
-  - artwork card readability and tap targets
-  - favorites and inquiry affordances
-  - modal entry, close behavior, and deep-link state
-- **Then inspect `index.html` as the funnel** into the gallery, not as the primary destination.
-- **Proof of Sight is mandatory.** Before proposing or making changes, record what you actually observed in the live DOM, screenshot, or interaction flow.
+- Home uses native vertical scrolling and viewport snapping to select seven works.
+- A work resolves artwork → materials → story → availability after the viewport settles. Do not add an artificial selection delay.
+- Only the introductory July Pines state receives the geological top and bottom frame.
+- Gallery is scan-first on mobile: its complete semantic artwork index, native filters, full-composition previews, deep links, saved works, and modal work navigation must remain immediately usable without waiting for the desktop narrative sequence.
+- Prerendered Gallery links must resolve without JavaScript to matching static artwork details. Hydration may remove that progressive fallback only after the enhanced mobile index or desktop Stay stream can own the same journey.
+- The coherent progressive index remains the desktop Gallery's pending and fail-open contract until the enhanced Stay stream owns the journey; if hydration stalls, that fallback must reappear.
+- From the desktop Gallery breakpoint, the archive retains the atmospheric Stay reveal stream. Mobile and desktop deliberately share catalog, URL, modal, history, and artwork-integrity contracts without sharing the same presentation mode.
+- The professional primary navigation is Works → Exhibitions → Practice → Contact. Home remains the wordmark destination; Commission remains a compatible secondary route.
+- Exhibitions owns the five authored exhibition/press records. Practice exposes Statement, Biography, and Method directly instead of burying the public record inside the artist story.
+- Reduced motion must expose the fully resolved semantic state. Focus, history, and scroll locking must remain recoverable.
 
-## 🎯 Universal Friction Hunt
-On every loop, search for the most meaningful issue or opportunity in these categories:
+## Source and content ownership
 
-- **Art prominence:** anything that visually competes with, crops, muddies, or delays the artwork.
-- **Touch ergonomics:** cramped controls, weak thumb-zone placement, accidental taps, poor close targets, hard-to-swipe areas.
-- **Hierarchy and pacing:** too much copy before the art, muddy headings, weak CTA order, broken rhythm, cheap-looking density.
-- **Motion and polish:** non-physical easing, janky transitions, blocked interactions, non-interruptible states, reflow-heavy animation.
-- **Performance and perceived speed:** slow first useful paint, unstable card loading, expensive effects, redundant DOM or CSS complexity.
-- **Accessibility and resilience:** focus handling, contrast, reduced-motion respect, keyboard flow, long text overflow, translation stress, deep-link robustness.
-- **Architecture and maintainability:** duplicated CSS/JS, div-soup, leaky responsibilities, missing abstractions, fragile state coupling.
+- React source: `src/`
+- Page entry documents: root `*.html` and `site-pages.js`
+- Tests: `tests/`
+- Build/publish tooling: `scripts/`, `vite.config.js`, and `package.json`
+- Physical-device validation harness: `scripts/device-audit-server.mjs`; it assembles and hashes an isolated full closure, serves only exact case-sensitive paths, records injected-fault hits, and must never mutate `docs/` or substitute for physical results.
+- Artist content and media: `docs/json_data/` and `docs/img/` — preserve these unless the artist explicitly requests a content change.
+- Mobile artwork previews: `src/assets/artwork-index/`, deterministically generated from the real masters by `scripts/generate-artwork-previews.mjs`. These are delivery derivatives, never replacement artwork.
+- Bounded environmental materials: the `*-mobile.webp` files and Gallery-only `gallery-seam-desktop.webp` in `src/assets/material-stage/`, generated by `scripts/generate-mobile-materials.mjs`. Environmental material may be resized; artist artwork may not be altered.
+- Production artifact: generated HTML, `docs/uk/`, and `docs/assets/`. GitHub Pages currently serves `codex/branchstone-carried-ground:/docs`, so this artifact is required even though it is generated.
 
-## 🌟 Aesthetic & Interaction Standard
-- **The UI is the Invisible Frame.** It should feel premium, calm, and precise while remaining visually subordinate to the artwork.
-- **Use Apple Liquid Glass discipline.** Continuous curvature, refined translucency, precise borders, and neutral depth are expected when glass surfaces appear.
-- **Protect art safety.** No tinted glows, noisy gradients, attention-stealing animations, or intrusive overlays that contaminate the artwork.
-- **Preserve generous breathing room.** The gallery should feel curated, not crowded, especially on mobile.
-- **Honor spring-like physicality.** Motion must feel weighted, smooth, and interruptible.
-- **Never animate layout properties.** Restrict animation to `transform`, `opacity`, and other non-reflow triggers.
+## Working rules
 
-## 🧪 Verification & Regression Discipline
-- **Verify the exact touched flow in `/chrome` after every change.**
-- **Re-check adjacent gallery states.** If a change touches gallery cards, also re-check filters, modal entry, and first-scroll rhythm. If it touches the homepage funnel, re-check gallery landing quality.
-- **Compare against your earlier Proof of Sight.** State what is better now and confirm what did not regress.
-- **No commit without zero-regression confidence** in layout, art prominence, touch comfort, and perceived performance.
-- **If the change feels cheaper, revert it.** Quality bar matters more than keeping work.
-- **A successful iteration is commit-worthy.** If an iteration produced a verified net improvement and updated the evolution log, commit it immediately.
-- **Do not commit failed or unverified passes.** If the change regressed the UI, could not be verified, or did not produce a clear improvement, keep working without committing that pass.
+- Reproduce visible behavior before changing it. For UI changes, inspect the real rendered page at relevant mobile and desktop viewports.
+- Make one coherent change set, update all affected callers, and remove artifacts made obsolete by the change.
+- Keep route, locale, storage, and inquiry contracts backward compatible unless an explicit migration is documented.
+- Prefer existing domain and component owners over duplicate helpers or page-specific patches.
+- Surface broken states; do not hide data, image, storage, or hydration failures.
+- Update `EVOLUTION_LOG.md` with the current verified outcome. Git history is the detailed archive; do not add screenshot dumps or temporary-run transcripts to the repository.
 
-## 📝 Logging & Commit Hygiene
-- **Update `docs/EVOLUTION_LOG.md` every iteration.** Record:
-  - what you observed
-  - what you changed
-  - what you verified
-  - why the result is a net improvement
-- **Commit after each successful iteration** using Conventional Commit format.
-- **Success means:** proof-of-sight before change, verified improvement after change, no observed regression in adjacent gallery states, and evolution log updated.
-- **High-iteration Ralph runs may create many commits.** That is acceptable. Prioritize auditability and rollback safety over a tidy commit count.
-- **Never claim the site is finished.** After logging and verification, continue scouting for the next highest-leverage improvement until the human stops the loop.
+## Verification
 
-## 🎯 Targeted Issue Resolution Mode
-When running a targeted Ralph-Loop batch to resolve a specific list of issues:
-- Address the issues one by one, verifying each fix using `/chrome` before moving to the next.
-- Do not get distracted by open-ended improvements until the specific issues are completely resolved and verified.
-- Continue to obey all Apple Liquid Glass aesthetic standards, art prominence rules, and zero-regression policies while fixing the issues.
-- After all issues are fixed, output the completion token to end the targeted loop.
+For source changes, run:
 
+```bash
+npm test
+npm run build
+npm run verify:artifact
+```
+
+For a publish refresh, run:
+
+```bash
+npm run publish
+```
+
+`npm run publish` must leave `docs/assets/` as the current `.stage/assets/` generation plus at most one previous generation for cached-HTML safety, preserve that fallback across identical local republishes, and keep `docs/img/`, `docs/json_data/`, `docs/CNAME`, and hand-maintained documentation intact.
+
+For visual changes, also verify the touched flow in a real browser, mobile first, then at the desktop breakpoints affected. State physical-device limits honestly.
+
+## Commit standard
+
+- Commit only a verified net improvement.
+- Use Conventional Commit messages.
+- Never claim global completion; report what was verified and what remains outside the evidence boundary.

@@ -1,341 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#F8F6F3" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#141210" media="(prefers-color-scheme: dark)">
-  <title>Terms of Service | Branchstone Art</title>
-  <link rel="canonical" href="https://branchstone.art/terms.html">
-  <meta name="description" content="Terms of service for Branchstone Art - Guidelines for using our website and commissioning artwork.">
+<!doctype html>
+<html lang="en" data-theme="soil">
+  <head>
+    <script data-branchstone-prehydrate="">(function runBranchstonePrehydrate(pageId, runtime = globalThis) {
+  const root2 = runtime.document?.documentElement;
+  const currentLocation = runtime.location;
+  if (!root2 || !currentLocation?.href) return { enhanced: false, redirected: false };
+  const url = new URL(currentLocation.href);
+  const legacyArtwork = pageId === "home" ? url.searchParams.get("artwork") : null;
+  if (legacyArtwork) {
+    let locale = "en";
+    const pathIsUkrainian = url.pathname === "/uk" || url.pathname.startsWith("/uk/");
+    const requestedLocale = url.searchParams.get("lang");
+    if (pathIsUkrainian) locale = "uk";
+    else if (requestedLocale === "uk" || requestedLocale === "en") locale = requestedLocale;
+    else {
+      let storedLocale = null;
+      try {
+        storedLocale = runtime.localStorage?.getItem("branchstone.language");
+      } catch {
+      }
+      if (storedLocale === "uk" || storedLocale === "en") locale = storedLocale;
+      else {
+        try {
+          const languages = runtime.navigator?.languages?.length ? runtime.navigator.languages : [runtime.navigator?.language];
+          if (languages.some((language) => /^uk(?:-|$)/i.test(language || ""))) locale = "uk";
+        } catch {
+        }
+      }
+    }
+    let artworkId = String(legacyArtwork).replace(/^artwork-/, "");
+    if (artworkId === "mermaids-dream") artworkId = "mermaid-s-dream";
+    url.pathname = locale === "uk" ? "/uk/gallery.html" : "/gallery.html";
+    url.searchParams.delete("artwork");
+    url.searchParams.delete("lang");
+    url.searchParams.set("art", artworkId);
+    const target = `${url.pathname}${url.search}${url.hash}`;
+    const previousVisibility = root2.style.visibility;
+    root2.style.visibility = "hidden";
+    try {
+      currentLocation.replace(target);
+    } catch (error) {
+      root2.style.visibility = previousVisibility;
+      throw error;
+    }
+    return { enhanced: false, redirected: true, target };
+  }
+  if (pageId === "gallery" && root2.dataset) {
+    try {
+      root2.dataset.galleryLayout = runtime.matchMedia?.("(min-width: 760px)")?.matches ? "stream" : "index";
+    } catch {
+      root2.dataset.galleryLayout = "index";
+    }
+  }
+  let motionPreference;
+  try {
+    if (typeof runtime.matchMedia === "function") {
+      motionPreference = runtime.matchMedia("(prefers-reduced-motion: reduce)");
+    }
+  } catch {
+  }
+  let enhancementExpired = false;
+  const syncMotionClass = () => {
+    const enhanced2 = Boolean(!enhancementExpired && motionPreference && !motionPreference.matches);
+    root2.classList.toggle("stay-enhanced", enhanced2);
+    return enhanced2;
+  };
+  const enhanced = syncMotionClass();
+  motionPreference?.addEventListener?.("change", syncMotionClass);
+  if (typeof runtime.setTimeout === "function") {
+    runtime.setTimeout(() => {
+      if (root2.dataset?.hydrated === "true") return;
+      enhancementExpired = true;
+      if (pageId === "contact") {
+        const fallback = runtime.document?.querySelector?.("[data-contact-boot-fallback]");
+        fallback?.setAttribute("role", "status");
+        fallback?.setAttribute("aria-live", "polite");
+        fallback?.setAttribute("aria-atomic", "true");
+      }
+      if (root2.dataset) root2.dataset.hydrationStalled = "true";
+      syncMotionClass();
+    }, pageId === "contact" ? 8e3 : 4e3);
+  }
+  return { enhanced, redirected: false };
+})("terms");</script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap&subset=latin,cyrillic" rel="stylesheet">
-
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="manifest" href="site.webmanifest">
-
-  <link rel="stylesheet" href="css/tokens.css?v=24">
-  <link rel="stylesheet" href="css/base.css?v=23">
-  <link rel="stylesheet" href="css/typography.css?v=24">
-  <link rel="stylesheet" href="css/components.css?v=26">
-  <link rel="stylesheet" href="css/layout.css?v=29">
-  <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=26">
-  <link rel="stylesheet" href="css/qa-fixes.css?v=27">
-  <link rel="stylesheet" href="css/language-switcher.css?v=26">
-
-  <script type="module" src="js/main.js"></script>
-</head>
-<body data-theme="light">
-
-  <a href="#main-content" class="skip-link" data-skip-link>Skip to main content</a>
-
-  <header class="header">
-    <div class="header__container">
-      <a href="index.html" class="header__logo" aria-label="Branchstone Home">
-        BRANCHSTONE
-      </a>
-
-      <nav class="header__nav" aria-label="Main navigation">
-        <ul class="header__nav-list">
-          <li><a href="index.html" class="header__nav-link" data-i18n="nav.home">Home</a></li>
-          <li><a href="gallery.html" class="header__nav-link" data-i18n="nav.gallery">Gallery</a></li>
-          <li><a href="about.html" class="header__nav-link" data-i18n="nav.about">About</a></li>
-          <li><a href="commissions.html" class="header__nav-link" data-i18n="nav.commissions">Commissions</a></li>
-          <li><a href="contact.html" class="header__nav-link" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      <button class="header__favorites" aria-label="View favorites" type="button">
-        <svg class="header__favorites-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-        <span class="header__favorites-count">0</span>
-      </button>
-
-      <button class="language-switcher" aria-label="Switch to Ukrainian" type="button">
-        <span class="language-switcher__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-          </svg>
-        </span>
-        <span class="language-switcher__label">EN</span>
-      </button>
-
-      <button class="header__theme-toggle" aria-label="Toggle theme" type="button">
-        <svg class="header__theme-icon header__theme-icon--sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="header__theme-icon header__theme-icon--moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
-
-      <button class="header__menu-toggle" aria-label="Toggle menu" aria-expanded="false" type="button">
-        <span class="header__menu-icon"></span>
-        <span class="header__menu-icon"></span>
-        <span class="header__menu-icon"></span>
-      </button>
-    </div>
-  </header>
-
-  <div class="mobile-menu" id="mobile-menu" hidden>
-    <div class="mobile-menu__backdrop"></div>
-    <nav class="mobile-menu__nav" aria-label="Mobile navigation">
-      <ul class="mobile-menu__list">
-        <li><a href="index.html" class="mobile-menu__link" data-i18n="nav.home">Home</a></li>
-        <li><a href="gallery.html" class="mobile-menu__link" data-i18n="nav.gallery">Gallery</a></li>
-        <li><a href="about.html" class="mobile-menu__link" data-i18n="nav.about">About</a></li>
-        <li><a href="commissions.html" class="mobile-menu__link" data-i18n="nav.commissions">Commissions</a></li>
-        <li><a href="contact.html" class="mobile-menu__link" data-i18n="nav.contact">Contact</a></li>
-      </ul>
-      <div class="mobile-menu__language-switcher">
-        <button class="language-switcher" aria-label="Switch to Ukrainian" type="button">
-          <span class="language-switcher__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-          </span>
-          <span class="language-switcher__label">EN</span>
-        </button>
-      </div>
-    </nav>
-  </div>
-
-  <!-- Favorites Panel -->
-  <div class="favorites-backdrop" role="presentation" hidden></div>
-
-  <aside
-    class="favorites-panel"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="favorites-title"
-    aria-describedby="favorites-description"
-    hidden>
-
-    <!-- Header -->
-    <header class="favorites-panel__header">
-      <div class="favorites-panel__title-group">
-        <h2 id="favorites-title" class="favorites-panel__title" data-i18n="favorites.title">
-          Your Favorites
-        </h2>
-        <p id="favorites-description" class="favorites-panel__count">
-          <span data-count>0</span> <span data-i18n="favorites.piecesSaved">pieces saved</span>
-        </p>
-      </div>
-      <button
-        class="favorites-panel__close"
-        aria-label="Close favorites panel"
-        type="button">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </header>
-
-    <!-- Content Area -->
-    <div class="favorites-panel__content">
-
-      <!-- Favorites List (populated by JavaScript) -->
-      <ul class="favorites-list" role="list">
-        <!-- Items will be inserted here by JavaScript -->
-      </ul>
-
-      <!-- Empty State -->
-      <div class="favorites-empty">
-        <svg class="favorites-empty__icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-        <h3 class="favorites-empty__title" data-i18n="favorites.emptyTitle">No Favorites Yet</h3>
-        <p class="favorites-empty__description" data-i18n="favorites.emptyDescription">
-          Click the heart icon on artworks to save them here
-        </p>
-        <a href="gallery.html" class="btn btn--primary" data-i18n="favorites.browseCollection">
-          Browse the Collection
-        </a>
-      </div>
-
-    </div>
-
-    <!-- Footer / Actions -->
-    <footer class="favorites-panel__footer">
-      <button
-        class="btn btn--secondary btn--block favorites-panel__clear"
-        type="button">
-        <span data-i18n="favorites.clearAll">Clear All</span>
-      </button>
-      <button
-        class="btn btn--primary btn--block favorites-panel__inquire"
-        type="button">
-        <span data-i18n="favorites.inquireAbout">Inquire About</span> <span data-selected-count>0</span> <span data-i18n="favorites.pieces">Piece<span data-plural>s</span></span>
-      </button>
-    </footer>
-
-  </aside>
-
-  <main id="main-content">
-    <section class="hero--small py-section-lg">
-      <div class="container">
-        <h1 class="heading-xl">Terms of Service</h1>
-        <p class="hero__subtitle">Last updated: December 2025</p>
-      </div>
-    </section>
-
-    <section class="section--contact py-section">
-      <div class="container container-narrow">
-        <article class="prose">
-          <h2 class="heading-md mb-6">Acceptance of Terms</h2>
-          <p class="mb-8">By accessing and using Branchstone Art website, you accept and agree to be bound by these Terms of Service.</p>
-
-          <h2 class="heading-md mb-6">Intellectual Property</h2>
-          <p class="mb-6">All artwork, images, and content on this website are the intellectual property of Viktoria (Branchstone) and are protected by copyright laws. You may not:</p>
-          <ul class="mb-8 legal-list">
-            <li class="legal-list-item">Reproduce, distribute, or display artwork without written permission</li>
-            <li class="legal-list-item">Use images for commercial purposes</li>
-            <li class="legal-list-item">Create derivative works from the artwork</li>
-          </ul>
-
-          <h2 class="heading-md mb-6">Commission Terms</h2>
-          <p class="mb-6">When commissioning artwork from Branchstone:</p>
-          <ul class="mb-8 legal-list">
-            <li class="legal-list-item">A non-refundable deposit is required to begin work</li>
-            <li class="legal-list-item">Final payment is due upon completion before shipping</li>
-            <li class="legal-list-item">The artist retains reproduction rights unless otherwise agreed in writing</li>
-            <li class="legal-list-item">Timelines are estimates and may vary based on complexity</li>
-            <li class="legal-list-item">Custom pieces are non-refundable once work has begun</li>
-          </ul>
-
-          <h2 class="heading-md mb-6">Shipping & Handling</h2>
-          <p class="mb-8">Artwork is carefully packaged for shipping. The buyer assumes responsibility once the package is handed to the carrier. Insurance is recommended for high-value pieces.</p>
-
-          <h2 class="heading-md mb-6">Limitation of Liability</h2>
-          <p class="mb-8">Branchstone Art is not liable for any indirect, incidental, or consequential damages arising from the use of this website or purchase of artwork.</p>
-
-          <h2 class="heading-md mb-6">Changes to Terms</h2>
-          <p class="mb-8">We reserve the right to modify these terms at any time. Changes will be posted on this page with an updated revision date.</p>
-
-          <h2 class="heading-md mb-6">Contact</h2>
-          <p class="mb-6">For questions about these terms, please contact:</p>
-          <p><a href="mailto:thebranchstone@gmail.com" class="text-accent">thebranchstone@gmail.com</a></p>
-        </article>
-      </div>
-    </section>
-    <!-- Newsletter Signup -->
-    <section class="newsletter" aria-labelledby="newsletter-heading">
-      <div class="newsletter__container">
-        <h2 id="newsletter-heading" class="newsletter__title" data-i18n="home.newsletter.title">Stay Inspired</h2>
-        <p class="newsletter__text" data-i18n="home.newsletter.text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
-        <form class="newsletter__form" id="newsletter-form" novalidate>
-          <input
-            type="email"
-            class="newsletter__input"
-            data-i18n="home.newsletter.placeholder"
-            placeholder="Enter your email"
-            aria-label="Email address"
-            required
-            autocomplete="email"
-            inputmode="email"
-          >
-          <button type="submit" class="newsletter__button" data-i18n="home.newsletter.button">Subscribe</button>
-        </form>
-        <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
-        <p class="newsletter__privacy"><span data-i18n="home.newsletter.privacyText">We respect your privacy.</span> <a href="privacy.html" data-i18n="home.newsletter.privacyLink">Privacy Policy</a></p>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Back to Top Button -->
-  <button
-    class="back-to-top"
-    data-back-to-top
-    aria-label="Back to top"
-    hidden
-    type="button">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <polyline points="18 15 12 9 6 15"></polyline>
-    </svg>
-  </button>
-
-  <footer class="footer">
-    <div class="footer__container">
-      <div class="footer__brand">
-        <a href="index.html" class="footer__logo" aria-label="Branchstone Home">
-          BRANCHSTONE
-        </a>
-        <p class="footer__tagline" data-i18n="home.footer.tagline">Art inspired by natural textures and quiet resilience</p>
-      </div>
-
-      <nav class="footer__nav" aria-label="Footer navigation">
-        <div class="footer__nav-column">
-          <h3 class="footer__nav-heading" data-i18n="home.footer.navigation">Navigation</h3>
-          <ul class="footer__nav-list">
-            <li><a href="gallery.html" class="footer__nav-link" data-i18n="nav.gallery">Gallery</a></li>
-            <li><a href="about.html" class="footer__nav-link" data-i18n="nav.about">About</a></li>
-            <li><a href="commissions.html" class="footer__nav-link" data-i18n="nav.commissions">Commissions</a></li>
-            <li><a href="contact.html" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer__nav-column">
-          <h3 class="footer__nav-heading" data-i18n="home.footer.legal">Legal</h3>
-          <ul class="footer__nav-list">
-            <li><a href="privacy.html" class="footer__nav-link" data-i18n="home.footer.privacyPolicy">Privacy Policy</a></li>
-            <li><a href="terms.html" class="footer__nav-link" data-i18n="home.footer.termsOfService">Terms of Service</a></li>
-          </ul>
-        </div>
-      </nav>
-
-      <div class="footer__social">
-        <h3 class="footer__social-heading" data-i18n="home.footer.connect">Connect</h3>
-        <ul class="footer__social-list">
-          <li>
-            <a href="https://instagram.com/branchstone.art" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Follow on Instagram">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-            </a>
-          </li>
-        </ul>
-        <p class="footer__email">
-          <a href="mailto:thebranchstone@gmail.com" class="footer__email-link">thebranchstone@gmail.com</a>
-        </p>
-
-        <!-- Trust Badges -->
-        <div class="footer__trust-badges">
-          <div class="trust-badge-small">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <span data-i18n="home.footer.secureCheckout">Secure checkout</span>
-          </div>
-          <div class="trust-badge-small">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-            <span data-i18n="home.footer.established">Est. 2013</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer__bottom">
-      <p class="footer__copyright">&copy; <span id="copyright-year">2026</span> <span data-i18n="home.footer.copyright">Branchstone. All rights reserved.</span></p>
-    </div>
-  </footer>
-
-</body>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#15110e" />
+    <title>Terms — Branchstone by Viktoria</title>
+    <meta name="description" content="Terms for viewing, purchasing, and commissioning work from Branchstone." />
+    <link rel="canonical" href="https://branchstone.art/terms.html" />
+    <link rel="alternate" hreflang="en" href="https://branchstone.art/terms.html" />
+    <link rel="alternate" hreflang="uk" href="https://branchstone.art/uk/terms.html" />
+    <link rel="alternate" hreflang="x-default" href="https://branchstone.art/terms.html" />
+    <meta name="robots" content="index,follow" />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script>(function(){var t=null;try{var v=localStorage.getItem('branchstone-theme');t=v?JSON.parse(v):null}catch(e){}if(t==='light'||t==='paper'||((t!=='dark'&&t!=='soil')&&matchMedia('(prefers-color-scheme:light)').matches)){document.documentElement.dataset.theme='paper';document.querySelector('meta[name="theme-color"]').content='#e9e0d3'}})()</script>
+    <script type="module" crossorigin src="/assets/terms-sn-YIryh.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/SiteShell-2ufSEyRs.js">
+    <link rel="modulepreload" crossorigin href="/assets/PrivacyPage-BPRUsIxr.js">
+    <link rel="stylesheet" crossorigin href="/assets/SiteShell-Db0sVmdK.css">
+    <link rel="stylesheet" crossorigin href="/assets/editorial-Cr89tZq7.css">
+  </head>
+  <body data-page="terms">
+    <div id="root" data-initial-locale="en"><div class="site-frame page-terms"><a class="skip-link" href="#main-content">Skip to content</a><header class="site-header"><a class="wordmark" href="/" aria-label="Branchstone by Viktoria, home"><span>BRANCHSTONE</span><small>BY VIKTORIA</small></a><nav class="primary-navigation" aria-label="Primary navigation"><a href="/gallery.html">Works</a><a href="/exhibitions.html">Exhibitions</a><a href="/about.html">Practice</a><a href="/contact.html">Contact</a></nav><div class="quiet-index-trigger"><details class="prehydrate-index"><summary aria-label="Open the site index" aria-controls="prehydrate-index-layer" data-open-label="Close"><span>index</span></summary><div id="prehydrate-index-layer" class="prehydrate-index__layer" role="region" aria-label="index"><nav aria-label="Primary navigation"><a href="/"><span>01</span>Home</a><a href="/gallery.html"><span>02</span>Works</a><a href="/exhibitions.html"><span>03</span>Exhibitions</a><a href="/about.html"><span>04</span>Practice</a><a href="/contact.html"><span>05</span>Contact</a></nav><div class="prehydrate-index__utilities" role="group" aria-label="Studio and legal links"><a href="/uk/terms.html">Українська</a><span>Appearance<!-- --> / <!-- -->Soil</span><span>Saved works<!-- --> / <!-- -->00</span><a href="mailto:thebranchstone@gmail.com">Email the studio</a><a href="/commissions.html">Commission guide</a><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Studio notes / Instagram</a><a href="/privacy.html">Privacy</a><a aria-current="page" href="/terms.html">Terms</a></div></div></details><button class="index-control" type="button" aria-expanded="false" aria-haspopup="dialog" aria-controls="site-index-layer" aria-label="Open the site index">index</button></div></header><main id="main-content" tabindex="-1"><div class="editorial-page legal-page"><header class="legal-hero"><p class="kicker">Site record / terms</p><h1>Terms for the work and the conversation.</h1><p>These terms cover use of the Branchstone website. The specific terms of a sale or commission are confirmed separately in writing before either side commits.</p><time dateTime="2026-07-18">Revised 18 July 2026</time></header><article class="legal-document"><div class="legal-document__index" aria-hidden="true"><span>BRANCHSTONE</span><span>08<!-- --> <!-- -->NOTES</span></div><div class="legal-document__sections"><section aria-labelledby="terms-section-1"><p class="legal-section__number">01</p><div><h2 id="terms-section-1">Using this site</h2><p>You may browse the archive, save works in your browser, and contact Branchstone about available or commissioned work. Please do not interfere with the site, attempt unauthorized access, or use its content in a misleading way.</p></div></section><section aria-labelledby="terms-section-2"><p class="legal-section__number">02</p><div><h2 id="terms-section-2">Artwork and site content</h2><p>The artworks, photographs, writing, and visual identity remain the intellectual property of their respective owner. Viewing them on this site does not transfer ownership or grant a commercial license.</p><ul><li>Do not reproduce or distribute artwork images without written permission.</li><li>Do not use the work or site content for commercial training, promotion, merchandise, or derivative products without a written agreement.</li><li>You may share a link to a public page when you credit Branchstone and do not imply endorsement.</li></ul></div></section><section aria-labelledby="terms-section-3"><p class="legal-section__number">03</p><div><h2 id="terms-section-3">Availability and inquiries</h2><p>A work marked available can still be subject to an ongoing conversation or a recent sale. An inquiry, saved-work list, or prepared email does not reserve a work and is not an order. Availability is confirmed directly by Branchstone.</p></div></section><section aria-labelledby="terms-section-4"><p class="legal-section__number">04</p><div><h2 id="terms-section-4">Purchases and commissions</h2><p>Price, payment schedule, any deposit, scope, dimensions, materials, revisions, estimated timing, delivery, insurance, cancellation, and return terms are confirmed in writing for the particular work before payment or studio work begins.</p><p>The website does not replace that written agreement. A commission begins only when both sides have agreed to the project terms and any agreed starting payment has been received.</p></div></section><section aria-labelledby="terms-section-5"><p class="legal-section__number">05</p><div><h2 id="terms-section-5">Natural material and appearance</h2><p>Branchstone works include found and organic materials. Texture, colour, surface, and small natural changes are part of their character. Screen images can also display colour and scale differently from the physical work. Care, installation, and handling guidance will be supplied when relevant.</p></div></section><section aria-labelledby="terms-section-6"><p class="legal-section__number">06</p><div><h2 id="terms-section-6">Delivery and aftercare</h2><p>Packaging, carrier, destination, timing, cost, insurance, inspection on arrival, and any remedy for damage are agreed for the individual transaction. Contact Branchstone promptly if a delivered package appears damaged and keep the packaging while the situation is reviewed.</p></div></section><section aria-labelledby="terms-section-7"><p class="legal-section__number">07</p><div><h2 id="terms-section-7">External links and changes</h2><p>Links to publications, exhibitions, Instagram, or other external services are provided for context. Branchstone does not control those services. These site terms may be updated when the website or studio process changes; the revision date above identifies the version shown here.</p></div></section><section aria-labelledby="terms-section-8"><p class="legal-section__number">08</p><div><h2 id="terms-section-8">Questions before committing</h2><p>If a condition matters to your decision, ask before paying or approving a commission. Write to:</p><p><a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a></p></div></section></div></article></div></main><footer class="site-footer"><div class="footer-statement"><p class="kicker">STAY INFORMED / NO SUBSCRIPTION NEEDED</p><h2>Follow what is taking form.</h2></div><div class="footer-ledger"><p>© 2026 Branchstone by Viktoria</p><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Instagram</a><a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a><a href="/privacy.html">Privacy</a><a aria-current="page" href="/terms.html">Terms</a></div></footer></div></div><template id="branchstone-uk-root"><div class="site-frame page-terms"><a class="skip-link" href="#main-content">До основного вмісту</a><header class="site-header"><a class="wordmark" href="/uk/" aria-label="Branchstone by Viktoria, головна сторінка"><span>BRANCHSTONE</span><small>BY VIKTORIA</small></a><nav class="primary-navigation" aria-label="Основна навігація"><a href="/uk/gallery.html">Роботи</a><a href="/uk/exhibitions.html">Виставки</a><a href="/uk/about.html">Практика</a><a href="/uk/contact.html">Контакти</a></nav><div class="quiet-index-trigger"><details class="prehydrate-index"><summary aria-label="Відкрити індекс сайту" aria-controls="prehydrate-index-layer" data-open-label="Закрити"><span>індекс</span></summary><div id="prehydrate-index-layer" class="prehydrate-index__layer" role="region" aria-label="індекс"><nav aria-label="Основна навігація"><a href="/uk/"><span>01</span>Головна</a><a href="/uk/gallery.html"><span>02</span>Роботи</a><a href="/uk/exhibitions.html"><span>03</span>Виставки</a><a href="/uk/about.html"><span>04</span>Практика</a><a href="/uk/contact.html"><span>05</span>Контакти</a></nav><div class="prehydrate-index__utilities" role="group" aria-label="Студійні та юридичні посилання"><a href="/terms.html">English</a><span>Вигляд<!-- --> / <!-- -->Ґрунт</span><span>Збережені роботи<!-- --> / <!-- -->00</span><a href="mailto:thebranchstone@gmail.com">Написати до студії</a><a href="/uk/commissions.html">Гайд із замовлення</a><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Нотатки студії / Instagram</a><a href="/uk/privacy.html">Політика конфіденційності</a><a aria-current="page" href="/uk/terms.html">Умови надання послуг</a></div></div></details><button class="index-control" type="button" aria-expanded="false" aria-haspopup="dialog" aria-controls="site-index-layer" aria-label="Відкрити індекс сайту">індекс</button></div></header><main id="main-content" tabindex="-1"><div class="editorial-page legal-page"><header class="legal-hero"><p class="kicker">Запис сайту / умови</p><h1>Умови для роботи й розмови.</h1><p>Ці умови стосуються використання сайту Branchstone. Конкретні умови продажу або замовлення узгоджуються окремо в письмовій формі до того, як будь-яка сторона бере на себе зобов’язання.</p><time dateTime="2026-07-18">Оновлено 18 липня 2026 року</time></header><article class="legal-document"><div class="legal-document__index" aria-hidden="true"><span>BRANCHSTONE</span><span>08<!-- --> <!-- -->НОТАТКИ</span></div><div class="legal-document__sections"><section aria-labelledby="terms-section-1"><p class="legal-section__number">01</p><div><h2 id="terms-section-1">Користування сайтом</h2><p>Ви можете переглядати архів, зберігати роботи у своєму браузері й звертатися до Branchstone щодо доступних або індивідуальних робіт. Не заважайте роботі сайту, не намагайтеся отримати несанкціонований доступ і не використовуйте його вміст у спосіб, що вводить в оману.</p></div></section><section aria-labelledby="terms-section-2"><p class="legal-section__number">02</p><div><h2 id="terms-section-2">Твори та вміст сайту</h2><p>Твори, фотографії, тексти й візуальна ідентичність залишаються інтелектуальною власністю відповідного власника. Перегляд на сайті не передає права власності та не надає комерційної ліцензії.</p><ul><li>Не відтворюйте й не поширюйте зображення робіт без письмового дозволу.</li><li>Не використовуйте роботи чи матеріали сайту для комерційного навчання, реклами, товарів або похідних продуктів без письмової угоди.</li><li>Можна поширити посилання на публічну сторінку із зазначенням Branchstone, якщо це не створює враження підтримки чи партнерства.</li></ul></div></section><section aria-labelledby="terms-section-3"><p class="legal-section__number">03</p><div><h2 id="terms-section-3">Наявність і запити</h2><p>Робота з позначкою «доступна» все одно може бути предметом поточної розмови або нещодавнього продажу. Запит, список збережених робіт чи підготовлений лист не резервують роботу й не є замовленням. Наявність підтверджується безпосередньо Branchstone.</p></div></section><section aria-labelledby="terms-section-4"><p class="legal-section__number">04</p><div><h2 id="terms-section-4">Придбання та індивідуальні роботи</h2><p>Ціна, графік оплати, можливий завдаток, обсяг, розміри, матеріали, правки, орієнтовні строки, доставка, страхування, скасування та повернення узгоджуються письмово для конкретної роботи до оплати або початку роботи в студії.</p><p>Сайт не замінює таку письмову домовленість. Замовлення починається лише після погодження умов обома сторонами та отримання узгодженого стартового платежу, якщо він передбачений.</p></div></section><section aria-labelledby="terms-section-5"><p class="legal-section__number">05</p><div><h2 id="terms-section-5">Природні матеріали та вигляд</h2><p>Роботи Branchstone містять знайдені й органічні матеріали. Фактура, колір, поверхня та невеликі природні зміни є частиною їхнього характеру. Екрани також можуть передавати колір і масштаб інакше, ніж фізична робота. За потреби надаються рекомендації з догляду, монтажу й поводження.</p></div></section><section aria-labelledby="terms-section-6"><p class="legal-section__number">06</p><div><h2 id="terms-section-6">Доставка та подальший догляд</h2><p>Пакування, перевізник, адреса, строки, вартість, страхування, огляд після отримання й порядок дій у разі пошкодження узгоджуються для конкретної покупки. Якщо пакунок виглядає пошкодженим, зв’яжіться з Branchstone якнайшвидше та збережіть пакування до з’ясування обставин.</p></div></section><section aria-labelledby="terms-section-7"><p class="legal-section__number">07</p><div><h2 id="terms-section-7">Зовнішні посилання та зміни</h2><p>Посилання на публікації, виставки, Instagram та інші зовнішні сервіси надані для контексту. Branchstone не контролює ці сервіси. Умови можуть оновлюватися разом зі змінами сайту або студійного процесу; дата вище позначає показану тут версію.</p></div></section><section aria-labelledby="terms-section-8"><p class="legal-section__number">08</p><div><h2 id="terms-section-8">Запитання до зобов’язання</h2><p>Якщо певна умова впливає на ваше рішення, запитайте про неї до оплати або затвердження замовлення. Пишіть на:</p><p><a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a></p></div></section></div></article></div></main><footer class="site-footer"><div class="footer-statement"><p class="kicker">БУДЬТЕ В КУРСІ / БЕЗ ПІДПИСКИ</p><h2>Слідкуйте за тим, що формується.</h2></div><div class="footer-ledger"><p>© 2026 Branchstone by Viktoria</p><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Instagram</a><a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a><a href="/uk/privacy.html">Політика конфіденційності</a><a aria-current="page" href="/uk/terms.html">Умови надання послуг</a></div></footer></div></template><script>(function(){var r=document.getElementById('root'),t=document.getElementById('branchstone-uk-root'),l='en',q=new URLSearchParams(location.search).get('lang'),p=location.pathname==='/uk'||location.pathname.startsWith('/uk/'),s=null;if(p){l='uk'}else if(q==='uk'||q==='en'){l=q;try{localStorage.setItem('branchstone.language',q)}catch(e){}}else{try{s=localStorage.getItem('branchstone.language')}catch(e){}if(s==='uk'||s==='en')l=s;else{var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language];if(n.some(function(x){return /^uk(?:-|$)/i.test(x||'')}))l='uk'}}r.dataset.initialLocale=l;if(l==='uk'){document.documentElement.lang='uk';r.replaceChildren(t.content.cloneNode(true));document.title="Умови — Branchstone";var d=document.querySelector('meta[name="description"]');if(d)d.content="Умови перегляду, придбання та індивідуального замовлення робіт Branchstone.";var ot=document.querySelector('meta[property="og:title"]');if(ot)ot.content="Умови — Branchstone";var od=document.querySelector('meta[property="og:description"]');if(od)od.content="Умови перегляду, придбання та індивідуального замовлення робіт Branchstone.";var u=new URL(location.href);if(u.pathname!=='/uk'&&!u.pathname.startsWith('/uk/'))u.pathname=u.pathname==='/'?'/uk/':'/uk'+u.pathname;u.searchParams.delete('lang');history.replaceState(history.state,'',u.pathname+u.search+u.hash)}else if(q==='en'){var e=new URL(location.href);e.searchParams.delete('lang');history.replaceState(history.state,'',e.pathname+e.search+e.hash)}t.remove()})()</script>
+  </body>
 </html>

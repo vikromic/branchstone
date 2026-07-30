@@ -1,78 +1,25 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-.venv/
-*.egg-info/
-dist/
-build/
-
-# Environment variables
-.env
-.env.local
-.env.secrets
-*.local
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Local test files
-run-local.sh.local
-run-llm-tests.sh
-
-# Codeana payloads directory
-.codeana-payloads/
-
-# Dry-run output directory
-.codeana-dry-run/
-
-# Debug bundles (runtime artifacts)
-.debug/
-
-# Test/Coverage artifacts
-.coverage
-htmlcov/
-.pytest_cache/
-vectors.db
-
-# Adversarial verification test artifacts
-tests/fixtures/llm_responses/*.json
-tests/reports/output/*.md
-!tests/reports/output/.gitkeep
-
-# Poetry lock file (regenerate with: poetry lock)
-poetry.lock
-
-# Claude Code configuration (user-specific)
-CLAUDE.md
-CLAUDE.md.*
-.claudeignore
-.claude/
-.claude-flow/
-.swarm/
-
-.mcp.json
-
-# Playwright MCP artifacts
-.playwright-mcp/
-
-# Claude Flow runtime (npm artifacts for agentic-flow)
+# Dependencies and generated builds
 node_modules/
-package.json
-package-lock.json
+.stage/
+.stage-ssr/
+build/
+coverage/
 
-src/codeana/.codeana-dry-run
-src/codeana/.codeana-payloads
-src/codeana/prev
+# Local browser and test evidence
+.playwright-mcp/
+playwright-report/
+test-results/
+artifacts/
+screenshots/
+tmp/
+*.log
+
+# Local configuration and editor state
+.env
+.env.*
+!.env.example
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~

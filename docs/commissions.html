@@ -1,975 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#F8F6F3" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#141210" media="(prefers-color-scheme: dark)">
-  <meta name="description" content="Commission custom artwork from Viktoria Branchstone. Bespoke creations crafted with premium natural materials.">
-  <meta name="keywords" content="art commissions, custom artwork, bespoke art, Branchstone, Viktoria">
-  <title>Commissions | Branchstone Art</title>
-  <link rel="canonical" href="https://branchstone.art/commissions.html">
-  <!-- Open Graph -->
-  <meta property="og:title" content="Commissions | Branchstone Art">
-  <meta property="og:description" content="Commission custom mixed-media artwork from Viktoria. Bespoke creations crafted with premium natural materials.">
-  <meta property="og:image" content="https://branchstone.art/img/cover.jpeg">
-  <meta property="og:url" content="https://branchstone.art/commissions.html">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-
-  <!-- Preconnect to Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@400;500;600&display=swap&subset=latin,cyrillic" rel="stylesheet">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="manifest" href="site.webmanifest">
-
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/tokens.css?v=24">
-  <link rel="stylesheet" href="css/base.css?v=23">
-  <link rel="stylesheet" href="css/typography.css?v=24">
-  <link rel="stylesheet" href="css/components.css?v=26">
-  <link rel="stylesheet" href="css/layout.css?v=29">
-  <link rel="stylesheet" href="css/mobile-ux-improvements.css?v=26">
-  <link rel="stylesheet" href="css/mobile-gallery-improvements.css?v=25">
-  <link rel="stylesheet" href="css/qa-fixes.css?v=27">
-  <link rel="stylesheet" href="css/language-switcher.css?v=26">
-</head>
-<body data-theme="light">
-
-  <!-- MED-005: Skip to Main Content Link -->
-  <a href="#main-content" class="skip-link" data-skip-link>Skip to main content</a>
-
-
-  <!-- Header -->
-  <header class="header">
-    <div class="header__container">
-      <a href="index.html" class="header__logo" aria-label="Branchstone Home">
-        BRANCHSTONE
-      </a>
-
-      <nav class="header__nav" aria-label="Main navigation">
-        <ul class="header__nav-list">
-          <li><a href="index.html" class="header__nav-link" data-i18n="nav.home">Home</a></li>
-          <li><a href="gallery.html" class="header__nav-link" data-i18n="nav.gallery">Gallery</a></li>
-          <li><a href="about.html" class="header__nav-link" data-i18n="nav.about">About</a></li>
-          <li><a href="commissions.html" class="header__nav-link header__nav-link--active" aria-current="page" data-i18n="nav.commissions">Commissions</a></li>
-          <li><a href="contact.html" class="header__nav-link" data-i18n="nav.contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      <button class="header__favorites" aria-label="View favorites" type="button">
-        <svg class="header__favorites-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-        <span class="header__favorites-count">0</span>
-      </button>
-
-      <button class="language-switcher" aria-label="Switch to Ukrainian" type="button">
-        <span class="language-switcher__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-          </svg>
-        </span>
-        <span class="language-switcher__label">EN</span>
-      </button>
-
-      <button class="header__theme-toggle" aria-label="Toggle theme" type="button">
-        <svg class="header__theme-icon header__theme-icon--sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="header__theme-icon header__theme-icon--moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
-
-      <button class="header__menu-toggle" aria-label="Toggle menu" aria-expanded="false" type="button">
-        <span class="header__menu-icon"></span>
-        <span class="header__menu-icon"></span>
-        <span class="header__menu-icon"></span>
-      </button>
-    </div>
-  </header>
-
-  <div class="mobile-menu" id="mobile-menu" hidden>
-    <div class="mobile-menu__backdrop"></div>
-    <nav class="mobile-menu__nav" aria-label="Mobile navigation">
-      <ul class="mobile-menu__list">
-        <li><a href="index.html" class="mobile-menu__link" data-i18n="nav.home">Home</a></li>
-        <li><a href="gallery.html" class="mobile-menu__link" data-i18n="nav.gallery">Gallery</a></li>
-        <li><a href="about.html" class="mobile-menu__link" data-i18n="nav.about">About</a></li>
-        <li><a href="commissions.html" class="mobile-menu__link" data-i18n="nav.commissions">Commissions</a></li>
-        <li><a href="contact.html" class="mobile-menu__link" data-i18n="nav.contact">Contact</a></li>
-      </ul>
-      <div class="mobile-menu__language-switcher">
-        <button class="language-switcher" aria-label="Switch to Ukrainian" type="button">
-          <span class="language-switcher__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-          </span>
-          <span class="language-switcher__label">EN</span>
-        </button>
-      </div>
-    </nav>
-  </div>
-
-  <!-- Favorites Panel -->
-  <div class="favorites-backdrop" role="presentation" hidden></div>
-
-  <aside
-    class="favorites-panel"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="favorites-title"
-    aria-describedby="favorites-description"
-    hidden>
-
-    <!-- Header -->
-    <header class="favorites-panel__header">
-      <div class="favorites-panel__title-group">
-        <h2 id="favorites-title" class="favorites-panel__title" data-i18n="favorites.title">
-          Your Favorites
-        </h2>
-        <p id="favorites-description" class="favorites-panel__count">
-          <span data-count>0</span> <span data-i18n="favorites.piecesSaved">pieces saved</span>
-        </p>
-      </div>
-      <button
-        class="favorites-panel__close"
-        aria-label="Close favorites panel"
-        type="button">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </header>
-
-    <!-- Content Area -->
-    <div class="favorites-panel__content">
-
-      <!-- Favorites List (populated by JavaScript) -->
-      <ul class="favorites-list" role="list">
-        <!-- Items will be inserted here by JavaScript -->
-      </ul>
-
-      <!-- Empty State -->
-      <div class="favorites-empty">
-        <svg class="favorites-empty__icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-        <h3 class="favorites-empty__title" data-i18n="favorites.emptyTitle">No Favorites Yet</h3>
-        <p class="favorites-empty__description" data-i18n="favorites.emptyDescription">
-          Click the heart icon on artworks to save them here
-        </p>
-        <a href="gallery.html" class="btn btn--primary" data-i18n="favorites.browseCollection">
-          Browse the Collection
-        </a>
-      </div>
-
-    </div>
-
-    <!-- Footer / Actions -->
-    <footer class="favorites-panel__footer">
-      <button
-        class="btn btn--secondary btn--block favorites-panel__clear"
-        type="button">
-        <span data-i18n="favorites.clearAll">Clear All</span>
-      </button>
-      <button
-        class="btn btn--primary btn--block favorites-panel__inquire"
-        type="button">
-        <span data-i18n="favorites.inquireAbout">Inquire About</span> <span data-selected-count>0</span> <span data-i18n="favorites.pieces">Piece<span data-plural>s</span></span>
-      </button>
-    </footer>
-
-  </aside>
-
-  <!-- Main Content -->
-  <main id="main-content">
-    <!-- HERO SECTION -->
-    <section class="hero hero-commissions">
-      <div class="container">
-        <div class="hero-content">
-          <h1 class="hero-title" data-i18n="commissions.title">Commission Custom Art</h1>
-          <p class="hero-subtitle" data-i18n="commissions.subtitle">Bespoke creations crafted exclusively for you, with premium natural materials and artistic vision</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- HOW IT WORKS SECTION -->
-    <section class="section section-process">
-      <div class="container">
-        <header class="section-header">
-          <h2 class="section-title" data-i18n="commissions.commissionProcess.title">The Commission Process</h2>
-          <p class="section-description" data-i18n="commissions.commissionProcess.subtitle">From concept to completion, a collaborative journey to create your unique piece</p>
-        </header>
-
-        <div class="process-grid">
-          <div class="process-step">
-            <div class="process-number">1</div>
-            <div class="process-content">
-              <h3 class="process-title" data-i18n="commissions.commissionProcess.stage_1.title">Initial Consultation</h3>
-              <p class="process-description" data-i18n="commissions.commissionProcess.stage_1.text">We'll discuss your vision, preferred size, materials, and artistic direction to ensure your piece perfectly captures your intention.</p>
-            </div>
-          </div>
-
-          <div class="process-step">
-            <div class="process-number">2</div>
-            <div class="process-content">
-              <h3 class="process-title" data-i18n="commissions.commissionProcess.stage_2.title">Concept Development</h3>
-              <p class="process-description" data-i18n="commissions.commissionProcess.stage_2.text">I'll create preliminary sketches and suggest material selections, working closely with you to refine the concept.</p>
-            </div>
-          </div>
-
-          <div class="process-step">
-            <div class="process-number">3</div>
-            <div class="process-content">
-              <h3 class="process-title" data-i18n="commissions.commissionProcess.stage_3.title">Deposit Payment</h3>
-              <p class="process-description" data-i18n="commissions.commissionProcess.stage_3.text">A $50 deposit secures your commission slot and allows me to begin sourcing materials and preparing your piece.</p>
-            </div>
-          </div>
-
-          <div class="process-step">
-            <div class="process-number">4</div>
-            <div class="process-content">
-              <h3 class="process-title" data-i18n="commissions.commissionProcess.stage_4.title">Creation</h3>
-              <p class="process-description" data-i18n="commissions.commissionProcess.stage_4.text">Over 4-8 weeks, I'll craft your piece with meticulous attention to detail, sharing progress photos along the way.</p>
-            </div>
-          </div>
-
-          <div class="process-step">
-            <div class="process-number">5</div>
-            <div class="process-content">
-              <h3 class="process-title" data-i18n="commissions.commissionProcess.stage_5.title">Delivery</h3>
-              <p class="process-description" data-i18n="commissions.commissionProcess.stage_5.text">Your completed artwork is carefully packaged with protective materials and shipped securely to your location.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING SECTION -->
-    <section class="section section-pricing">
-      <div class="container">
-        <header class="section-header">
-          <h2 class="section-title" data-i18n="commissions.pricingGuide.title">Pricing Guide</h2>
-          <p class="section-description" data-i18n="commissions.pricingGuide.subtitle">Investment tiers based on size and complexity</p>
-        </header>
-
-        <div class="pricing-grid">
-          <div class="pricing-card card">
-            <div class="pricing-header">
-              <h3 class="pricing-size" data-i18n="commissions.pricingGuide.tiers.small.title">Small</h3>
-              <p class="pricing-dimensions" data-i18n="commissions.pricingGuide.tiers.small.size">8" × 10"</p>
-            </div>
-            <div class="card-body">
-              <p class="pricing-price" data-i18n="commissions.pricingGuide.tiers.small.price">Starting at <strong>$100</strong></p>
-              <ul class="pricing-features">
-                <li data-i18n="commissions.pricingGuide.tiers.small.features.0">Perfect for intimate spaces</li>
-                <li data-i18n="commissions.pricingGuide.tiers.small.features.1">Detailed craftsmanship</li>
-                <li data-i18n="commissions.pricingGuide.tiers.small.features.2">Premium natural materials</li>
-                <li data-i18n="commissions.pricingGuide.tiers.small.features.3">Artwork Record</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="pricing-card card card-featured">
-            <div class="pricing-badge badge badge-primary" data-i18n="commissions.pricingGuide.tiers.medium.badge">Most Popular</div>
-            <div class="pricing-header">
-              <h3 class="pricing-size" data-i18n="commissions.pricingGuide.tiers.medium.title">Medium</h3>
-              <p class="pricing-dimensions" data-i18n="commissions.pricingGuide.tiers.medium.size">16" × 20"</p>
-            </div>
-            <div class="card-body">
-              <p class="pricing-price" data-i18n="commissions.pricingGuide.tiers.medium.price">Starting at <strong>$250</strong></p>
-              <ul class="pricing-features">
-                <li data-i18n="commissions.pricingGuide.tiers.medium.features.0">Ideal statement piece</li>
-                <li data-i18n="commissions.pricingGuide.tiers.medium.features.1">Rich texture and depth</li>
-                <li data-i18n="commissions.pricingGuide.tiers.medium.features.2">Premium natural materials</li>
-                <li data-i18n="commissions.pricingGuide.tiers.medium.features.3">Artwork Record</li>
-                <li data-i18n="commissions.pricingGuide.tiers.medium.features.4">Progress documentation</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="pricing-card card">
-            <div class="pricing-header">
-              <h3 class="pricing-size" data-i18n="commissions.pricingGuide.tiers.large.title">Large</h3>
-              <p class="pricing-dimensions" data-i18n="commissions.pricingGuide.tiers.large.size">24" × 30"+</p>
-            </div>
-            <div class="card-body">
-              <p class="pricing-price" data-i18n="commissions.pricingGuide.tiers.large.price">Starting at <strong>$400+</strong></p>
-              <ul class="pricing-features">
-                <li data-i18n="commissions.pricingGuide.tiers.large.features.0">Commanding focal point</li>
-                <li data-i18n="commissions.pricingGuide.tiers.large.features.1">Extraordinary detail</li>
-                <li data-i18n="commissions.pricingGuide.tiers.large.features.2">Premium natural materials</li>
-                <li data-i18n="commissions.pricingGuide.tiers.large.features.3">Artwork Record</li>
-                <li data-i18n="commissions.pricingGuide.tiers.large.features.4">Full photo documentation</li>
-                <li data-i18n="commissions.pricingGuide.tiers.large.features.5">Custom size available</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="pricing-note">
-          <p data-i18n="commissions.pricingGuide.note"><strong>Note:</strong> Final price depends on complexity, materials selected, and specific requirements. All commissions include consultation, custom design, and secure packaging.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- WHAT'S INCLUDED SECTION -->
-    <section class="section section-included">
-      <div class="container container-narrow">
-        <header class="section-header">
-          <h2 class="section-title" data-i18n="commissions.pricingGuide.whatsIncluded.title">What's Included</h2>
-          <p class="section-description" data-i18n="commissions.pricingGuide.whatsIncluded.subtitle">Every commission comes with comprehensive service and care</p>
-        </header>
-
-        <div class="included-grid">
-          <div class="included-item">
-            <div class="included-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-            </div>
-            <h3 class="included-title" data-i18n="commissions.pricingGuide.whatsIncluded.items.consultation.title">Consultation</h3>
-            <p class="included-description" data-i18n="commissions.pricingGuide.whatsIncluded.items.consultation.text">In-depth discussion to understand your vision and preferences</p>
-          </div>
-
-          <div class="included-item">
-            <div class="included-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                <path d="M2 2l7.586 7.586"></path>
-                <circle cx="11" cy="11" r="2"></circle>
-              </svg>
-            </div>
-            <h3 class="included-title" data-i18n="commissions.pricingGuide.whatsIncluded.items.customDesign.title">Custom Design</h3>
-            <p class="included-description" data-i18n="commissions.pricingGuide.whatsIncluded.items.customDesign.text">Original artwork created specifically for you</p>
-          </div>
-
-          <div class="included-item">
-            <div class="included-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 6v6l4 2"></path>
-              </svg>
-            </div>
-            <h3 class="included-title" data-i18n="commissions.pricingGuide.whatsIncluded.items.materials.title">Premium Natural Materials</h3>
-            <p class="included-description" data-i18n="commissions.pricingGuide.whatsIncluded.items.materials.text">Carefully sourced, natural materials, carefully preserved for lasting beauty</p>
-          </div>
-
-          <div class="included-item">
-            <div class="included-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-                <polyline points="10 9 9 9 8 9"></polyline>
-              </svg>
-            </div>
-            <h3 class="included-title" data-i18n="commissions.pricingGuide.whatsIncluded.items.artworkRecord.title">Artwork Record</h3>
-            <p class="included-description" data-i18n="commissions.pricingGuide.whatsIncluded.items.artworkRecord.text">Signed Artwork information card verifying your unique piece</p>
-          </div>
-
-          <div class="included-item">
-            <div class="included-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <path d="M9 3v18"></path>
-              </svg>
-            </div>
-            <h3 class="included-title" data-i18n="commissions.pricingGuide.whatsIncluded.items.securePackaging.title">Secure Packaging</h3>
-            <p class="included-description" data-i18n="commissions.pricingGuide.whatsIncluded.items.securePackaging.text">Careful packaging to protect your artwork during shipping</p>
-          </div>
-
-          <div class="included-item">
-            <div class="included-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-            </div>
-            <h3 class="included-title" data-i18n="commissions.pricingGuide.whatsIncluded.items.photoDocumentation.title">Photo Documentation</h3>
-            <p class="included-description" data-i18n="commissions.pricingGuide.whatsIncluded.items.photoDocumentation.text">Progress photos showing the creation of your artwork if interested</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- COMMISSION FORM SECTION -->
-    <section class="section section-form">
-      <div class="container container-narrow">
-        <header class="section-header">
-          <h2 class="section-title">Start Your Commission</h2>
-          <p class="section-description">Share your vision and let's create something extraordinary together</p>
-        </header>
-
-        <!-- Progress Indicator -->
-        <div class="wizard-progress" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4" aria-label="Commission form progress">
-          <div class="wizard-progress__track">
-            <div class="wizard-progress__bar" data-wizard-progress-bar></div>
-          </div>
-          <div class="wizard-progress__steps">
-            <div class="wizard-progress__step wizard-progress__step--active" data-step-indicator="1">
-              <span class="wizard-progress__step-number">1</span>
-              <span class="wizard-progress__step-label">Contact</span>
-            </div>
-            <div class="wizard-progress__step" data-step-indicator="2">
-              <span class="wizard-progress__step-number">2</span>
-              <span class="wizard-progress__step-label">Type</span>
-            </div>
-            <div class="wizard-progress__step" data-step-indicator="3">
-              <span class="wizard-progress__step-number">3</span>
-              <span class="wizard-progress__step-label">Details</span>
-            </div>
-            <div class="wizard-progress__step" data-step-indicator="4">
-              <span class="wizard-progress__step-number">4</span>
-              <span class="wizard-progress__step-label">Review</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Trust Badge -->
-        <div class="wizard-trust-badge">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          </svg>
-          <span>No obligation inquiry • Your information is secure • Response within 1-2 days</span>
-        </div>
-
-        <!-- Enhanced Trust Indicators -->
-        <div class="commission-form-trust">
-          <div class="commission-form-trust__item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-            <span><strong>Response within 24-48 hours</strong> to discuss your vision</span>
-          </div>
-          <div class="commission-form-trust__item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <span><strong>No obligation</strong> - Free consultation and quote</span>
-          </div>
-          <div class="commission-form-trust__item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-              <path d="m9 12 2 2 4-4"/>
-            </svg>
-            <span><strong>Secure & confidential</strong> - Your information is protected</span>
-          </div>
-          <div class="commission-form-trust__item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-            <span><strong>Professional service</strong> - 9+ years experience, 10+ satisfied collectors in 2025</span>
-          </div>
-        </div>
-
-        <form class="form wizard-form" id="commissionForm" data-wizard-form novalidate>
-          <!-- Honeypot field for spam prevention -->
-          <input
-            type="text"
-            name="website"
-            class="form__honeypot"
-            tabindex="-1"
-            autocomplete="off"
-            aria-hidden="true"
-          />
-
-          <!-- STEP 1: Basic Contact Information -->
-          <div class="wizard-step wizard-step--active" data-wizard-step="1" data-step-name="contact">
-            <div class="wizard-step__content">
-              <h3 class="wizard-step__title">Let's start with the basics</h3>
-              <p class="wizard-step__description">How can I reach you about your commission?</p>
-
-              <div class="form__group">
-                <label for="commission-name" class="form__label">Name <span class="form__required">*</span></label>
-                <input
-                  type="text"
-                  id="commission-name"
-                  name="name"
-                  class="form__input"
-                  required
-                  placeholder="Your full name"
-                  aria-required="true"
-                  aria-invalid="false"
-                  aria-describedby="commission-name-error"
-                  autocomplete="name"
-                  data-wizard-field
-                >
-                <span id="commission-name-error" class="form__error" role="alert"></span>
-              </div>
-
-              <div class="form__group">
-                <label for="commission-email" class="form__label">Email <span class="form__required">*</span></label>
-                <input
-                  type="email"
-                  id="commission-email"
-                  name="email"
-                  class="form__input"
-                  required
-                  placeholder="your.email@example.com"
-                  aria-required="true"
-                  aria-invalid="false"
-                  aria-describedby="commission-email-error"
-                  autocomplete="email"
-                  data-wizard-field
-                >
-                <span id="commission-email-error" class="form__error" role="alert"></span>
-              </div>
-            </div>
-
-            <div class="wizard-step__actions">
-              <button type="button" class="btn btn-primary btn-lg btn-block" data-wizard-next>
-                Continue
-              </button>
-            </div>
-          </div>
-
-          <!-- STEP 2: Commission Type Selection -->
-          <div class="wizard-step" data-wizard-step="2" data-step-name="type" hidden>
-            <div class="wizard-step__content">
-              <h3 class="wizard-step__title">What type of commission interests you?</h3>
-              <p class="wizard-step__description">Select the style that speaks to you</p>
-
-              <div class="commission-types" role="radiogroup" aria-label="Commission type selection">
-                <label class="commission-type-card">
-                  <input type="radio" name="commission-type" value="abstract" data-wizard-field>
-                  <div class="commission-type-card__content">
-                    <div class="commission-type-card__icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                      </svg>
-                    </div>
-                    <h4 class="commission-type-card__title">Abstract Art</h4>
-                    <p class="commission-type-card__description">Expressive, non-representational pieces</p>
-                  </div>
-                </label>
-
-                <label class="commission-type-card">
-                  <input type="radio" name="commission-type" value="nature" data-wizard-field>
-                  <div class="commission-type-card__content">
-                    <div class="commission-type-card__icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M17 8l4 4-4 4M3 12h18M3 12c0 4.97 4.03 9 9 9 1.74 0 3.35-.5 4.72-1.36"></path>
-                      </svg>
-                    </div>
-                    <h4 class="commission-type-card__title">Nature Inspired</h4>
-                    <p class="commission-type-card__description">Organic forms and natural textures</p>
-                  </div>
-                </label>
-
-                <label class="commission-type-card">
-                  <input type="radio" name="commission-type" value="mixed-media" data-wizard-field>
-                  <div class="commission-type-card__content">
-                    <div class="commission-type-card__icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="9" y1="3" x2="9" y2="21"></line>
-                      </svg>
-                    </div>
-                    <h4 class="commission-type-card__title">Mixed Media</h4>
-                    <p class="commission-type-card__description">Combined materials and techniques</p>
-                  </div>
-                </label>
-
-                <label class="commission-type-card">
-                  <input type="radio" name="commission-type" value="custom" data-wizard-field checked>
-                  <div class="commission-type-card__content">
-                    <div class="commission-type-card__icon">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                      </svg>
-                    </div>
-                    <h4 class="commission-type-card__title">Not Sure / Custom</h4>
-                    <p class="commission-type-card__description">Let's discuss your unique vision</p>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <div class="wizard-step__actions">
-              <button type="button" class="btn btn-secondary btn-lg" data-wizard-prev>
-                Back
-              </button>
-              <button type="button" class="btn btn-primary btn-lg" data-wizard-next>
-                Continue
-              </button>
-            </div>
-          </div>
-
-          <!-- STEP 3: Size & Budget Preferences -->
-          <div class="wizard-step" data-wizard-step="3" data-step-name="details" hidden>
-            <div class="wizard-step__content">
-              <h3 class="wizard-step__title">Almost there!</h3>
-              <p class="wizard-step__description">Help me understand your preferences</p>
-
-              <div class="form__group">
-                <label for="commission-size" class="form__label">Preferred Size</label>
-                <select
-                  id="commission-size"
-                  name="size"
-                  class="form__select"
-                  aria-invalid="false"
-                  aria-describedby="commission-size-error"
-                  data-wizard-field
-                >
-                  <option value="">Select a size</option>
-                  <option value="small">Small (8" × 10") - $200+</option>
-                  <option value="medium">Medium (16" × 20") - $400+</option>
-                  <option value="large">Large (24" × 30"+) - $700+</option>
-                  <option value="custom">Custom size</option>
-                </select>
-                <span id="commission-size-error" class="form__error" role="alert"></span>
-              </div>
-
-              <div class="form__group">
-                <label for="commission-budget" class="form__label">Budget Range</label>
-                <select
-                  id="commission-budget"
-                  name="budget"
-                  class="form__select"
-                  aria-invalid="false"
-                  aria-describedby="commission-budget-error"
-                  data-wizard-field
-                >
-                  <option value="">Select your budget range</option>
-                  <option value="200-400">$200 - $400</option>
-                  <option value="400-700">$400 - $700</option>
-                  <option value="700+">$700+</option>
-                  <option value="flexible">Flexible</option>
-                </select>
-                <span id="commission-budget-error" class="form__error" role="alert"></span>
-              </div>
-
-              <div class="form__group">
-                <label for="commission-colors" class="form__label">Color Preferences</label>
-                <input
-                  type="text"
-                  id="commission-colors"
-                  name="colors"
-                  class="form__input"
-                  placeholder="e.g., Earth tones, blues and greens, warm neutrals"
-                  aria-invalid="false"
-                  aria-describedby="commission-colors-error"
-                  data-wizard-field
-                >
-                <span class="form-help">What colors resonate with you?</span>
-                <span id="commission-colors-error" class="form__error" role="alert"></span>
-              </div>
-
-              <div class="form__group">
-                <label for="commission-timeline" class="form__label">Timeline Preference</label>
-                <input
-                  type="text"
-                  id="commission-timeline"
-                  name="timeline"
-                  class="form__input"
-                  placeholder="e.g., No rush, Gift for anniversary in 3 months"
-                  aria-invalid="false"
-                  aria-describedby="commission-timeline-error"
-                  data-wizard-field
-                >
-                <span class="form-help">Standard timeline is 4-8 weeks</span>
-                <span id="commission-timeline-error" class="form__error" role="alert"></span>
-              </div>
-            </div>
-
-            <div class="wizard-step__actions">
-              <button type="button" class="btn btn-secondary btn-lg" data-wizard-prev>
-                Back
-              </button>
-              <button type="button" class="btn btn-primary btn-lg" data-wizard-next>
-                Continue
-              </button>
-            </div>
-          </div>
-
-          <!-- STEP 4: Project Details & Review -->
-          <div class="wizard-step" data-wizard-step="4" data-step-name="project" hidden>
-            <div class="wizard-step__content">
-              <h3 class="wizard-step__title">Tell me about your vision</h3>
-              <p class="wizard-step__description">Share as much or as little as you'd like</p>
-
-              <div class="form__group">
-                <label for="commission-theme" class="form__label">Theme / Inspiration</label>
-                <textarea
-                  id="commission-theme"
-                  name="theme"
-                  class="form__textarea"
-                  rows="8"
-                  placeholder="Describe your vision, inspiration, or the feeling you want the artwork to evoke..."
-                  aria-invalid="false"
-                  aria-describedby="commission-theme-error"
-                  data-wizard-field
-                ></textarea>
-                <span class="form-help">Share your inspiration, mood, or any specific ideas you have in mind</span>
-                <span id="commission-theme-error" class="form__error" role="alert"></span>
-              </div>
-
-              <div class="form__group">
-                <label for="commission-referral" class="form__label">How did you hear about me?</label>
-                <input
-                  type="text"
-                  id="commission-referral"
-                  name="referral"
-                  class="form__input"
-                  placeholder="e.g., Instagram, Friend referral, Gallery show"
-                  aria-invalid="false"
-                  aria-describedby="commission-referral-error"
-                  data-wizard-field
-                >
-                <span id="commission-referral-error" class="form__error" role="alert"></span>
-              </div>
-
-              <!-- Summary Review -->
-              <div class="wizard-summary">
-                <h4 class="wizard-summary__title">Your Commission Request</h4>
-                <dl class="wizard-summary__list" data-wizard-summary>
-                  <!-- Summary items will be populated by JavaScript -->
-                </dl>
-              </div>
-            </div>
-
-            <div class="wizard-step__actions">
-              <button type="button" class="btn btn-secondary btn-lg" data-wizard-prev>
-                Back
-              </button>
-              <button type="submit" class="btn btn-primary btn-lg">
-                Submit Request
-              </button>
-            </div>
-          </div>
-
-          <!-- Success Message -->
-          <div
-            class="form__message--success wizard-success"
-            role="status"
-            aria-live="polite"
-            hidden
-          >
-            <div class="wizard-success__icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-              </svg>
-            </div>
-            <h3 class="wizard-success__title">Request Submitted!</h3>
-            <p class="wizard-success__message">
-              Thank you for your commission request! I'll respond within 1-2 business days to discuss your project in detail.
-            </p>
-            <button type="button" class="btn btn-secondary" data-wizard-reset>
-              Start Another Request
-            </button>
-          </div>
-
-          <!-- Error Message -->
-          <div
-            class="form__message--error"
-            role="alert"
-            aria-live="assertive"
-          >
-            <p>
-              Sorry, there was an error submitting your request. Please try again or contact me directly via email.
-            </p>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- FAQ SECTION -->
-    <section class="section section-faq">
-      <div class="container container-narrow">
-        <header class="section-header">
-          <h2 class="section-title" data-i18n="commissions.pricingGuide.faq.title">Frequently Asked Questions</h2>
-        </header>
-
-        <div class="faq">
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="commissions.pricingGuide.faq.items.0.question">Is the deposit refundable?</summary>
-            <div class="faq__answer">
-              <p data-i18n="commissions.pricingGuide.faq.items.0.answer">The $50 deposit is non-refundable once work begins, as it covers initial material sourcing and design time. However, if you need to cancel before I start working on your piece, the deposit can be refunded or applied to a future commission.</p>
-            </div>
-          </details>
-
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="commissions.pricingGuide.faq.items.1.question">Can I see work in progress?</summary>
-            <div class="faq__answer">
-              <p data-i18n="commissions.pricingGuide.faq.items.1.answer">Absolutely! I share progress photos at key milestones throughout the creation process. You'll see your piece come to life and have opportunities to provide feedback during the journey.</p>
-            </div>
-          </details>
-
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="commissions.pricingGuide.faq.items.2.question">What if I don't like the result?</summary>
-            <div class="faq__answer">
-              <p data-i18n="commissions.pricingGuide.faq.items.2.answer">Your satisfaction is important to me. We'll have thorough discussions and concept approval before I begin. During creation, I share progress updates so you can provide input. If there are concerns, we'll work together to address them. Minor adjustments can often be made to ensure you love your piece.</p>
-            </div>
-          </details>
-
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="commissions.pricingGuide.faq.items.3.question">Do you take rush orders?</summary>
-            <div class="faq__answer">
-              <p data-i18n="commissions.pricingGuide.faq.items.3.answer">Rush orders may be possible depending on my current commission queue and the complexity of your project. Please mention your timeline when you inquire, and I'll do my best to accommodate special requests. Rush orders may include an additional fee to prioritize your project.</p>
-            </div>
-          </details>
-
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="commissions.pricingGuide.faq.items.4.question">What materials do you use?</summary>
-            <div class="faq__answer">
-              <p data-i18n="commissions.pricingGuide.faq.items.4.answer">I work primarily with premium natural materials including wood, stone, natural fibers, and eco-friendly mediums. Each piece is unique, and materials are selected based on your vision and the specific requirements of your commission.</p>
-            </div>
-          </details>
-
-          <details class="faq__item">
-            <summary class="faq__question" data-i18n="commissions.pricingGuide.faq.items.5.question">Do you ship internationally?</summary>
-            <div class="faq__answer">
-              <p data-i18n="commissions.pricingGuide.faq.items.5.answer">Yes, I ship worldwide! Shipping costs vary by location and size of the artwork. International shipping is carefully coordinated to ensure your piece arrives safely, and I provide tracking information for all shipments.</p>
-            </div>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA SECTION -->
-    <section class="section section-cta">
-      <div class="container">
-        <div class="cta-box">
-          <h2 class="cta-title" data-i18n="commissions.pricingGuide.finalCTA.title">Ready to Begin?</h2>
-          <p class="cta-description" data-i18n="commissions.pricingGuide.finalCTA.subtitle">Let's create something beautiful together. Reach out to discuss your vision.</p>
-          <div class="cta-actions">
-            <a href="#commissionForm" class="btn btn-primary btn-lg" data-i18n="commissions.pricingGuide.finalCTA.buttons.commission">Request Commission</a>
-            <a href="contact.html" class="btn btn-secondary btn-lg" data-i18n="commissions.pricingGuide.finalCTA.buttons.inquiry">General Inquiry</a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Newsletter Signup -->
-    <section class="newsletter" aria-labelledby="newsletter-heading">
-      <div class="newsletter__container">
-        <h2 id="newsletter-heading" class="newsletter__title" data-i18n="commissions.pricingGuide.stayInspired.title">Stay Inspired</h2>
-        <p class="newsletter__text" data-i18n="commissions.pricingGuide.stayInspired.text">Get notified of new collections, behind-the-scenes content, and exclusive offers. No spam, just art.</p>
-        <form class="newsletter__form" id="newsletter-form" novalidate>
-          <input
-            type="email"
-            class="newsletter__input"
-            placeholder="Enter your email"
-            data-i18n-placeholder="commissions.pricingGuide.stayInspired.emailPlaceholder"
-            aria-label="Email address"
-            required
-            autocomplete="email"
-            inputmode="email"
-          >
-          <button type="submit" class="newsletter__button" data-i18n="commissions.pricingGuide.stayInspired.button">Subscribe</button>
-        </form>
-        <div class="newsletter__message" id="newsletter-message" role="alert" aria-live="polite"></div>
-        <p class="newsletter__privacy" data-i18n="commissions.pricingGuide.stayInspired.privacyNote">We respect your privacy. <a href="privacy.html" data-i18n="commissions.pricingGuide.stayInspired.privacyLink">Privacy Policy</a></p>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Back to Top Button -->
-  <button
-    class="back-to-top"
-    data-back-to-top
-    aria-label="Back to top"
-    hidden
-    type="button">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <polyline points="18 15 12 9 6 15"></polyline>
-    </svg>
-  </button>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer__container">
-      <div class="footer__brand">
-        <a href="index.html" class="footer__logo" aria-label="Branchstone Home">
-          BRANCHSTONE
-        </a>
-        <p class="footer__tagline" data-i18n="home.footer.tagline">Art inspired by natural textures and quiet resilience</p>
-      </div>
-
-      <nav class="footer__nav" aria-label="Footer navigation">
-        <div class="footer__nav-column">
-          <h3 class="footer__nav-heading" data-i18n="home.footer.navigation">Navigation</h3>
-          <ul class="footer__nav-list">
-            <li><a href="gallery.html" class="footer__nav-link" data-i18n="nav.gallery">Gallery</a></li>
-            <li><a href="about.html" class="footer__nav-link" data-i18n="nav.about">About</a></li>
-            <li><a href="commissions.html" class="footer__nav-link" data-i18n="nav.commissions">Commissions</a></li>
-            <li><a href="contact.html" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer__nav-column">
-          <h3 class="footer__nav-heading" data-i18n="home.footer.legal">Legal</h3>
-          <ul class="footer__nav-list">
-            <li><a href="privacy.html" class="footer__nav-link" data-i18n="home.footer.privacyPolicy">Privacy Policy</a></li>
-            <li><a href="terms.html" class="footer__nav-link" data-i18n="home.footer.termsOfService">Terms of Service</a></li>
-          </ul>
-        </div>
-      </nav>
-
-      <div class="footer__social">
-        <h3 class="footer__social-heading" data-i18n="home.footer.connect">Connect</h3>
-        <ul class="footer__social-list">
-          <li>
-            <a href="https://instagram.com/branchstone.art" class="footer__social-link" target="_blank" rel="noopener noreferrer" aria-label="Follow on Instagram">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-            </a>
-          </li>
-        </ul>
-        <p class="footer__email">
-          <a href="mailto:thebranchstone@gmail.com" class="footer__email-link">thebranchstone@gmail.com</a>
-        </p>
-
-        <!-- Trust Badges -->
-        <div class="footer__trust-badges">
-          <div class="trust-badge-small">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            <span data-i18n="home.footer.secureCheckout">Secure checkout</span>
-          </div>
-          <div class="trust-badge-small">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-            <span data-i18n="home.footer.established">Est. 2013</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="footer__bottom">
-      <p class="footer__copyright" data-i18n="home.footer.copyright">&copy; <span id="copyright-year">2026</span> Branchstone. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- Scripts -->
-  <script type="module" src="js/main.js"></script>
-</body>
+<!doctype html>
+<html lang="en" data-theme="soil">
+  <head>
+    <script data-branchstone-prehydrate="">(function runBranchstonePrehydrate(pageId, runtime = globalThis) {
+  const root2 = runtime.document?.documentElement;
+  const currentLocation = runtime.location;
+  if (!root2 || !currentLocation?.href) return { enhanced: false, redirected: false };
+  const url = new URL(currentLocation.href);
+  const legacyArtwork = pageId === "home" ? url.searchParams.get("artwork") : null;
+  if (legacyArtwork) {
+    let locale = "en";
+    const pathIsUkrainian = url.pathname === "/uk" || url.pathname.startsWith("/uk/");
+    const requestedLocale = url.searchParams.get("lang");
+    if (pathIsUkrainian) locale = "uk";
+    else if (requestedLocale === "uk" || requestedLocale === "en") locale = requestedLocale;
+    else {
+      let storedLocale = null;
+      try {
+        storedLocale = runtime.localStorage?.getItem("branchstone.language");
+      } catch {
+      }
+      if (storedLocale === "uk" || storedLocale === "en") locale = storedLocale;
+      else {
+        try {
+          const languages = runtime.navigator?.languages?.length ? runtime.navigator.languages : [runtime.navigator?.language];
+          if (languages.some((language) => /^uk(?:-|$)/i.test(language || ""))) locale = "uk";
+        } catch {
+        }
+      }
+    }
+    let artworkId = String(legacyArtwork).replace(/^artwork-/, "");
+    if (artworkId === "mermaids-dream") artworkId = "mermaid-s-dream";
+    url.pathname = locale === "uk" ? "/uk/gallery.html" : "/gallery.html";
+    url.searchParams.delete("artwork");
+    url.searchParams.delete("lang");
+    url.searchParams.set("art", artworkId);
+    const target = `${url.pathname}${url.search}${url.hash}`;
+    const previousVisibility = root2.style.visibility;
+    root2.style.visibility = "hidden";
+    try {
+      currentLocation.replace(target);
+    } catch (error) {
+      root2.style.visibility = previousVisibility;
+      throw error;
+    }
+    return { enhanced: false, redirected: true, target };
+  }
+  if (pageId === "gallery" && root2.dataset) {
+    try {
+      root2.dataset.galleryLayout = runtime.matchMedia?.("(min-width: 760px)")?.matches ? "stream" : "index";
+    } catch {
+      root2.dataset.galleryLayout = "index";
+    }
+  }
+  let motionPreference;
+  try {
+    if (typeof runtime.matchMedia === "function") {
+      motionPreference = runtime.matchMedia("(prefers-reduced-motion: reduce)");
+    }
+  } catch {
+  }
+  let enhancementExpired = false;
+  const syncMotionClass = () => {
+    const enhanced2 = Boolean(!enhancementExpired && motionPreference && !motionPreference.matches);
+    root2.classList.toggle("stay-enhanced", enhanced2);
+    return enhanced2;
+  };
+  const enhanced = syncMotionClass();
+  motionPreference?.addEventListener?.("change", syncMotionClass);
+  if (typeof runtime.setTimeout === "function") {
+    runtime.setTimeout(() => {
+      if (root2.dataset?.hydrated === "true") return;
+      enhancementExpired = true;
+      if (pageId === "contact") {
+        const fallback = runtime.document?.querySelector?.("[data-contact-boot-fallback]");
+        fallback?.setAttribute("role", "status");
+        fallback?.setAttribute("aria-live", "polite");
+        fallback?.setAttribute("aria-atomic", "true");
+      }
+      if (root2.dataset) root2.dataset.hydrationStalled = "true";
+      syncMotionClass();
+    }, pageId === "contact" ? 8e3 : 4e3);
+  }
+  return { enhanced, redirected: false };
+})("commissions");</script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#15110e" />
+    <title>Commission — Branchstone by Viktoria</title>
+    <meta name="description" content="Begin a considered conversation about a one-of-a-kind Branchstone commission." />
+    <link rel="canonical" href="https://branchstone.art/commissions.html" />
+    <link rel="alternate" hreflang="en" href="https://branchstone.art/commissions.html" />
+    <link rel="alternate" hreflang="uk" href="https://branchstone.art/uk/commissions.html" />
+    <link rel="alternate" hreflang="x-default" href="https://branchstone.art/commissions.html" />
+    <meta property="og:title" content="Commission — Branchstone" />
+    <meta property="og:description" content="Begin a considered conversation about a one-of-a-kind Branchstone commission." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://branchstone.art/commissions.html" />
+    <meta property="og:image" content="https://branchstone.art/img/cover.jpeg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://branchstone.art/img/cover.jpeg" />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script>(function(){var t=null;try{var v=localStorage.getItem('branchstone-theme');t=v?JSON.parse(v):null}catch(e){}if(t==='light'||t==='paper'||((t!=='dark'&&t!=='soil')&&matchMedia('(prefers-color-scheme:light)').matches)){document.documentElement.dataset.theme='paper';document.querySelector('meta[name="theme-color"]').content='#e9e0d3'}})()</script>
+    <script type="module" crossorigin src="/assets/commissions-Aw3GK1XP.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/SiteShell-2ufSEyRs.js">
+    <link rel="modulepreload" crossorigin href="/assets/ArrowDown.es-CYoJyIZ0.js">
+    <link rel="modulepreload" crossorigin href="/assets/ArrowRight.es-2ddER157.js">
+    <link rel="modulepreload" crossorigin href="/assets/EnvelopeSimple.es-Bx95JvFt.js">
+    <link rel="modulepreload" crossorigin href="/assets/clipboard-Dbca_wlT.js">
+    <link rel="stylesheet" crossorigin href="/assets/SiteShell-Db0sVmdK.css">
+    <link rel="stylesheet" crossorigin href="/assets/commissions-Cu0Wsdet.css">
+  </head>
+  <body data-page="commissions">
+    <div id="root" data-initial-locale="en"><div class="site-frame page-commissions"><a class="skip-link" href="#main-content">Skip to content</a><header class="site-header"><a class="wordmark" href="/" aria-label="Branchstone by Viktoria, home"><span>BRANCHSTONE</span><small>BY VIKTORIA</small></a><nav class="primary-navigation" aria-label="Primary navigation"><a href="/gallery.html">Works</a><a href="/exhibitions.html">Exhibitions</a><a href="/about.html">Practice</a><a href="/contact.html">Contact</a></nav><div class="quiet-index-trigger"><details class="prehydrate-index"><summary aria-label="Open the site index" aria-controls="prehydrate-index-layer" data-open-label="Close"><span>index</span></summary><div id="prehydrate-index-layer" class="prehydrate-index__layer" role="region" aria-label="index"><nav aria-label="Primary navigation"><a href="/"><span>01</span>Home</a><a href="/gallery.html"><span>02</span>Works</a><a href="/exhibitions.html"><span>03</span>Exhibitions</a><a href="/about.html"><span>04</span>Practice</a><a href="/contact.html"><span>05</span>Contact</a></nav><div class="prehydrate-index__utilities" role="group" aria-label="Studio and legal links"><a href="/uk/commissions.html">Українська</a><span>Appearance<!-- --> / <!-- -->Soil</span><span>Saved works<!-- --> / <!-- -->00</span><a href="mailto:thebranchstone@gmail.com">Email the studio</a><a aria-current="page" href="/commissions.html">Commission guide</a><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Studio notes / Instagram</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></div></div></details><button class="index-control" type="button" aria-expanded="false" aria-haspopup="dialog" aria-controls="site-index-layer" aria-label="Open the site index">index</button></div></header><main id="main-content" tabindex="-1"><article class="commission-page"><header class="commission-hero"><div class="commission-hero__content"><p class="kicker">COMMISSION / A SHARED ACT OF LISTENING</p><h1>A work made for<!-- --> <em>the place it will inhabit.</em></h1><p class="commission-hero__intro">A commission begins with your space, a memory, or a feeling that has no finished shape yet. Viktoria translates that starting point through bark, stone, pigment, fiber, and patient handwork.</p><a class="commission-hero__jump" href="#commission-request">Begin the request<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z"></path></svg></a></div><div class="commission-hero__material" aria-hidden="true"><picture><source media="(max-width: 759px)" srcSet="/assets/commission-soil-hero-mobile-E3JxDU3s.webp"/><img src="/assets/commission-soil-hero-BQ8rVX6y.webp" alt="" fetchPriority="high"/></picture><p>FORM / MATTER / MEMORY</p></div><p class="commission-hero__note">Each work is one of one. Scope, materials, timing, and price are discussed together before any work begins.</p></header><section class="commission-scale section-shell" aria-labelledby="commission-scale-title"><div class="commission-section-heading"><p class="kicker">01 / SCALE STUDY</p><h2 id="commission-scale-title">Not tiers. Three ways a work can hold a room.</h2><p>These outlines are conversation starters, not fixed products. Proportion can be adjusted to the architecture and the material language of the work.</p></div><ol class="commission-scale__studies"><li><p class="commission-scale__number">0<!-- -->1</p><div><h3>Intimate</h3><p>A close encounter for a shelf, desk, or quiet wall.</p></div></li><li><p class="commission-scale__number">0<!-- -->2</p><div><h3>Room anchor</h3><p>A work with enough presence to organize a living space.</p></div></li><li><p class="commission-scale__number">0<!-- -->3</p><div><h3>Architectural</h3><p>A large or multipart gesture shaped around a particular site.</p></div></li></ol><p class="commission-scale__price-note">Final scope and price are discussed after the first exchange; no payment is taken through this website.</p></section><section class="commission-process section-shell" aria-labelledby="commission-process-title"><div class="commission-section-heading"><p class="kicker">02 / HOW THE WORK TAKES FORM</p><h2 id="commission-process-title">The artistic process</h2></div><div class="commission-process__material" aria-hidden="true"><picture><source type="image/webp" srcSet="/img/art1-400w.webp 400w, /img/art1-800w.webp 800w, /img/art1.webp 1222w" sizes="(min-width: 72rem) 25rem, (min-width: 52rem) 38vw, 100vw"/><img src="/img/art1.jpeg" alt="" loading="lazy" decoding="async"/></picture></div><ol class="commission-process__ledger"><li><span>01</span><h3>Listen</h3><p>We exchange references, dimensions, and the story the work needs to carry.</p></li><li><span>02</span><h3>Gather</h3><p>Viktoria studies the site and selects a material direction for the piece.</p></li><li><span>03</span><h3>Propose</h3><p>You receive a considered concept, scope, timing, and price to review.</p></li><li><span>04</span><h3>Make</h3><p>The work develops by hand, with agreed moments for progress correspondence.</p></li><li><span>05</span><h3>Release</h3><p>Finishing, documentation, packing, and delivery are coordinated for the completed work.</p></li></ol></section><section id="commission-request" class="commission-request section-shell" aria-label="Give the first idea a place to land."><div class="commission-wizard"><div class="commission-wizard__intro"><p class="kicker">03 / REQUEST LEDGER</p><h2>Give the first idea a place to land.</h2><p>This four-part note helps Viktoria understand the beginning of the project. Nothing here commits you to a commission.</p></div><div class="commission-wizard__sheet"><ol class="commission-progress" aria-label="Request steps"><li class="is-current" aria-current="step" aria-label="Correspondence"><span aria-hidden="true">01</span><span class="commission-progress__label">Correspondence</span></li><li class="" aria-label="Scale"><span aria-hidden="true">02</span><span class="commission-progress__label">Scale</span></li><li class="" aria-label="Direction"><span aria-hidden="true">03</span><span class="commission-progress__label">Direction</span></li><li class="" aria-label="Review"><span aria-hidden="true">04</span><span class="commission-progress__label">Review</span></li></ol><div class="commission-progress__meter" role="progressbar" aria-label="Request progress" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-valuetext="Correspondence, 1 / 4"><i aria-hidden="true" style="inline-size:25%"></i></div><form class="commission-form" noValidate=""><fieldset class="commission-form__interactive" disabled=""><div class="honeypot" aria-hidden="true"><label for="commission-website">Website</label><input id="commission-website" type="text" tabindex="-1" autoComplete="off" name="website" value=""/></div><section class="commission-step" aria-labelledby="commission-step-1-title"><header><p class="commission-step__number">01 / 04</p><h3 id="commission-step-1-title" tabindex="-1">Where can the conversation continue?</h3><p>Only your name and email are required. They are placed into an email draft when you choose the final action.</p></header><div class="commission-form__two-up"><div class="commission-field"><label for="commission-name">Your name<span aria-hidden="true"> *</span></label><input id="commission-name" type="text" autoComplete="name" maxLength="120" aria-invalid="false" required="" name="name" value=""/></div><div class="commission-field"><label for="commission-email">Email address<span aria-hidden="true"> *</span></label><input id="commission-email" type="email" inputMode="email" autoComplete="email" maxLength="254" aria-invalid="false" required="" name="email" value=""/></div></div><p class="commission-required-note">* <!-- -->Required</p></section><div class="commission-form__navigation"><span></span><button class="button button--bone" type="submit">Continue<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></button></div></fieldset><noscript><p class="commission-form__noscript">This four-step request needs JavaScript. Write directly to<!-- --> <a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a>.<!-- --> <a href="/contact.html">Or open the correspondence page.</a></p></noscript></form><p class="commission-wizard__privacy">Your draft stays only in this browser for 24 hours. The final link opens your own email app; you review and send the message yourself.</p></div></div></section><section class="commission-faq section-shell" aria-labelledby="commission-faq-title"><div class="commission-section-heading"><p class="kicker">04 / BEFORE WE BEGIN</p><h2 id="commission-faq-title">A few useful answers</h2></div><div class="commission-faq__list"><details><summary><span>01</span>When is the price decided?<i aria-hidden="true"></i></summary><p>After Viktoria understands the desired scale, materials, location, and complexity, you receive a clear scope and price to consider before the work begins.</p></details><details><summary><span>02</span>Do I need a complete concept?<i aria-hidden="true"></i></summary><p>No. Commissions can begin with a room, a memory, a palette, or simply a wish to live with a work made for a particular place.</p></details><details><summary><span>03</span>Can I follow the work in progress?<i aria-hidden="true"></i></summary><p>The proposal identifies the moments when progress can be shared and where your feedback is most useful without interrupting the material process.</p></details><details><summary><span>04</span>Can delivery be arranged outside the United States?<i aria-hidden="true"></i></summary><p>Location is discussed at the proposal stage so packing, customs, insurance, and delivery can be considered as part of the real scope.</p></details></div></section></article></main><footer class="site-footer"><div class="footer-statement"><p class="kicker">STAY INFORMED / NO SUBSCRIPTION NEEDED</p><h2>Follow what is taking form.</h2></div><div class="footer-ledger"><p>© 2026 Branchstone by Viktoria</p><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Instagram</a><a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></div></footer></div></div><template id="branchstone-uk-root"><div class="site-frame page-commissions"><a class="skip-link" href="#main-content">До основного вмісту</a><header class="site-header"><a class="wordmark" href="/uk/" aria-label="Branchstone by Viktoria, головна сторінка"><span>BRANCHSTONE</span><small>BY VIKTORIA</small></a><nav class="primary-navigation" aria-label="Основна навігація"><a href="/uk/gallery.html">Роботи</a><a href="/uk/exhibitions.html">Виставки</a><a href="/uk/about.html">Практика</a><a href="/uk/contact.html">Контакти</a></nav><div class="quiet-index-trigger"><details class="prehydrate-index"><summary aria-label="Відкрити індекс сайту" aria-controls="prehydrate-index-layer" data-open-label="Закрити"><span>індекс</span></summary><div id="prehydrate-index-layer" class="prehydrate-index__layer" role="region" aria-label="індекс"><nav aria-label="Основна навігація"><a href="/uk/"><span>01</span>Головна</a><a href="/uk/gallery.html"><span>02</span>Роботи</a><a href="/uk/exhibitions.html"><span>03</span>Виставки</a><a href="/uk/about.html"><span>04</span>Практика</a><a href="/uk/contact.html"><span>05</span>Контакти</a></nav><div class="prehydrate-index__utilities" role="group" aria-label="Студійні та юридичні посилання"><a href="/commissions.html">English</a><span>Вигляд<!-- --> / <!-- -->Ґрунт</span><span>Збережені роботи<!-- --> / <!-- -->00</span><a href="mailto:thebranchstone@gmail.com">Написати до студії</a><a aria-current="page" href="/uk/commissions.html">Гайд із замовлення</a><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Нотатки студії / Instagram</a><a href="/uk/privacy.html">Політика конфіденційності</a><a href="/uk/terms.html">Умови надання послуг</a></div></div></details><button class="index-control" type="button" aria-expanded="false" aria-haspopup="dialog" aria-controls="site-index-layer" aria-label="Відкрити індекс сайту">індекс</button></div></header><main id="main-content" tabindex="-1"><article class="commission-page"><header class="commission-hero"><div class="commission-hero__content"><p class="kicker">ЗАМОВЛЕННЯ / СПІЛЬНИЙ АКТ СЛУХАННЯ</p><h1>Робота, створена для<!-- --> <em>місця, де вона житиме.</em></h1><p class="commission-hero__intro">Замовлення починається з вашого простору, спогаду чи відчуття, яке ще не має завершеної форми. Вікторія перекладає цю точку початку мовою кори, каменю, пігменту, волокна та повільної ручної роботи.</p><a class="commission-hero__jump" href="#commission-request">Почати запит<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z"></path></svg></a></div><div class="commission-hero__material" aria-hidden="true"><picture><source media="(max-width: 759px)" srcSet="/assets/commission-soil-hero-mobile-E3JxDU3s.webp"/><img src="/assets/commission-soil-hero-BQ8rVX6y.webp" alt="" fetchPriority="high"/></picture><p>ФОРМА / МАТЕРІЯ / ПАМ’ЯТЬ</p></div><p class="commission-hero__note">Кожна робота існує в одному екземплярі. Обсяг, матеріали, терміни й вартість обговорюються разом до початку роботи.</p></header><section class="commission-scale section-shell" aria-labelledby="commission-scale-title"><div class="commission-section-heading"><p class="kicker">01 / ДОСЛІДЖЕННЯ МАСШТАБУ</p><h2 id="commission-scale-title">Не тарифи. Три способи, якими робота може тримати простір.</h2><p>Ці контури — початок розмови, а не фіксовані продукти. Пропорції узгоджуються з архітектурою та матеріальною мовою роботи.</p></div><ol class="commission-scale__studies"><li><p class="commission-scale__number">0<!-- -->1</p><div><h3>Камерна</h3><p>Близька зустріч для полиці, столу або тихої стіни.</p></div></li><li><p class="commission-scale__number">0<!-- -->2</p><div><h3>Центр простору</h3><p>Робота з достатньою присутністю, щоб організувати кімнату.</p></div></li><li><p class="commission-scale__number">0<!-- -->3</p><div><h3>Архітектурна</h3><p>Великий або модульний жест, сформований навколо конкретного місця.</p></div></li></ol><p class="commission-scale__price-note">Остаточний обсяг і вартість обговорюються після першого листування; сайт не приймає оплату.</p></section><section class="commission-process section-shell" aria-labelledby="commission-process-title"><div class="commission-section-heading"><p class="kicker">02 / ЯК РОБОТА НАБУВАЄ ФОРМИ</p><h2 id="commission-process-title">Мистецький процес</h2></div><div class="commission-process__material" aria-hidden="true"><picture><source type="image/webp" srcSet="/img/art1-400w.webp 400w, /img/art1-800w.webp 800w, /img/art1.webp 1222w" sizes="(min-width: 72rem) 25rem, (min-width: 52rem) 38vw, 100vw"/><img src="/img/art1.jpeg" alt="" loading="lazy" decoding="async"/></picture></div><ol class="commission-process__ledger"><li><span>01</span><h3>Почути</h3><p>Ми обмінюємося референсами, розмірами та історією, яку має нести робота.</p></li><li><span>02</span><h3>Зібрати</h3><p>Вікторія вивчає місце та добирає матеріальний напрям для твору.</p></li><li><span>03</span><h3>Запропонувати</h3><p>Ви отримуєте продуману концепцію, обсяг, терміни та вартість для розгляду.</p></li><li><span>04</span><h3>Створити</h3><p>Робота формується вручну, з узгодженими моментами для листів про поступ.</p></li><li><span>05</span><h3>Відпустити</h3><p>Фініш, документація, пакування й доставка координуються для завершеного твору.</p></li></ol></section><section id="commission-request" class="commission-request section-shell" aria-label="Дайте першій ідеї місце, де вона може осісти."><div class="commission-wizard"><div class="commission-wizard__intro"><p class="kicker">03 / РЕЄСТР ЗАПИТУ</p><h2>Дайте першій ідеї місце, де вона може осісти.</h2><p>Ця записка з чотирьох частин допоможе Вікторії зрозуміти початок проєкту. Вона ні до чого вас не зобов’язує.</p></div><div class="commission-wizard__sheet"><ol class="commission-progress" aria-label="Етапи запиту"><li class="is-current" aria-current="step" aria-label="Листування"><span aria-hidden="true">01</span><span class="commission-progress__label">Листування</span></li><li class="" aria-label="Масштаб"><span aria-hidden="true">02</span><span class="commission-progress__label">Масштаб</span></li><li class="" aria-label="Напрям"><span aria-hidden="true">03</span><span class="commission-progress__label">Напрям</span></li><li class="" aria-label="Перевірка"><span aria-hidden="true">04</span><span class="commission-progress__label">Перевірка</span></li></ol><div class="commission-progress__meter" role="progressbar" aria-label="Прогрес запиту" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" aria-valuetext="Листування, 1 / 4"><i aria-hidden="true" style="inline-size:25%"></i></div><form class="commission-form" noValidate=""><fieldset class="commission-form__interactive" disabled=""><div class="honeypot" aria-hidden="true"><label for="commission-website">Website</label><input id="commission-website" type="text" tabindex="-1" autoComplete="off" name="website" value=""/></div><section class="commission-step" aria-labelledby="commission-step-1-title"><header><p class="commission-step__number">01 / 04</p><h3 id="commission-step-1-title" tabindex="-1">Де продовжити розмову?</h3><p>Обов’язкові лише ім’я та email. Вони потраплять у чернетку листа після вашої фінальної дії.</p></header><div class="commission-form__two-up"><div class="commission-field"><label for="commission-name">Ваше ім’я<span aria-hidden="true"> *</span></label><input id="commission-name" type="text" autoComplete="name" maxLength="120" aria-invalid="false" required="" name="name" value=""/></div><div class="commission-field"><label for="commission-email">Email<span aria-hidden="true"> *</span></label><input id="commission-email" type="email" inputMode="email" autoComplete="email" maxLength="254" aria-invalid="false" required="" name="email" value=""/></div></div><p class="commission-required-note">* <!-- -->Обов’язково</p></section><div class="commission-form__navigation"><span></span><button class="button button--bone" type="submit">Далі<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></button></div></fieldset><noscript><p class="commission-form__noscript">Для цього запиту з чотирьох кроків потрібен JavaScript. Напишіть безпосередньо на<!-- --> <a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a>.<!-- --> <a href="/uk/contact.html">Або відкрийте сторінку листування.</a></p></noscript></form><p class="commission-wizard__privacy">Чернетка зберігається лише в цьому браузері протягом 24 годин. Фінальне посилання відкриє вашу поштову програму; ви самі переглянете й надішлете лист.</p></div></div></section><section class="commission-faq section-shell" aria-labelledby="commission-faq-title"><div class="commission-section-heading"><p class="kicker">04 / ПЕРЕД ПОЧАТКОМ</p><h2 id="commission-faq-title">Кілька корисних відповідей</h2></div><div class="commission-faq__list"><details><summary><span>01</span>Коли визначається вартість?<i aria-hidden="true"></i></summary><p>Коли Вікторія розуміє бажаний масштаб, матеріали, місце та складність, ви отримуєте чіткий обсяг і вартість для розгляду до початку роботи.</p></details><details><summary><span>02</span>Чи потрібна мені готова концепція?<i aria-hidden="true"></i></summary><p>Ні. Замовлення може початися з кімнати, спогаду, палітри або простого бажання жити з роботою, створеною для конкретного місця.</p></details><details><summary><span>03</span>Чи бачитиму я процес?<i aria-hidden="true"></i></summary><p>У пропозиції ми визначимо моменти, коли можна поділитися поступом і коли ваш відгук буде найкориснішим, не перериваючи матеріальний процес.</p></details><details><summary><span>04</span>Чи можлива доставка за межі США?<i aria-hidden="true"></i></summary><p>Місце доставки обговорюється на етапі пропозиції, щоб пакування, митні вимоги, страхування й перевезення стали частиною реального обсягу.</p></details></div></section></article></main><footer class="site-footer"><div class="footer-statement"><p class="kicker">БУДЬТЕ В КУРСІ / БЕЗ ПІДПИСКИ</p><h2>Слідкуйте за тим, що формується.</h2></div><div class="footer-ledger"><p>© 2026 Branchstone by Viktoria</p><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Instagram</a><a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a><a href="/uk/privacy.html">Політика конфіденційності</a><a href="/uk/terms.html">Умови надання послуг</a></div></footer></div></template><script>(function(){var r=document.getElementById('root'),t=document.getElementById('branchstone-uk-root'),l='en',q=new URLSearchParams(location.search).get('lang'),p=location.pathname==='/uk'||location.pathname.startsWith('/uk/'),s=null;if(p){l='uk'}else if(q==='uk'||q==='en'){l=q;try{localStorage.setItem('branchstone.language',q)}catch(e){}}else{try{s=localStorage.getItem('branchstone.language')}catch(e){}if(s==='uk'||s==='en')l=s;else{var n=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language];if(n.some(function(x){return /^uk(?:-|$)/i.test(x||'')}))l='uk'}}r.dataset.initialLocale=l;if(l==='uk'){document.documentElement.lang='uk';r.replaceChildren(t.content.cloneNode(true));document.title="Індивідуальна робота — Branchstone";var d=document.querySelector('meta[name="description"]');if(d)d.content="Почніть уважну розмову про унікальну роботу Branchstone, створену для вашого простору.";var ot=document.querySelector('meta[property="og:title"]');if(ot)ot.content="Індивідуальна робота — Branchstone";var od=document.querySelector('meta[property="og:description"]');if(od)od.content="Почніть уважну розмову про унікальну роботу Branchstone, створену для вашого простору.";var u=new URL(location.href);if(u.pathname!=='/uk'&&!u.pathname.startsWith('/uk/'))u.pathname=u.pathname==='/'?'/uk/':'/uk'+u.pathname;u.searchParams.delete('lang');history.replaceState(history.state,'',u.pathname+u.search+u.hash)}else if(q==='en'){var e=new URL(location.href);e.searchParams.delete('lang');history.replaceState(history.state,'',e.pathname+e.search+e.hash)}t.remove()})()</script>
+  </body>
 </html>

@@ -1,0 +1,6 @@
+html.stay-enhanced
+  [data-stay-root][data-stay-reduced-motion="false"]
+  [data-stay-phase][data-stay-visible="false"] {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
