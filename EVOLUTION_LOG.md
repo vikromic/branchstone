@@ -147,3 +147,18 @@ This is a concise record of verified product-level iterations. Git history is th
 - Two native Codex adversarial audits and a final exact-route Gemini 3.6 Flash High immutable review approved the harness/protocol with no current P0–P2; these reviews do not substitute for the unexecuted physical lanes.
 - Physical iOS/Android behavior, OS-level 200% text scaling, real-device touch/GPU smoothness, and moderated target-user comprehension were not run and remain required for final mobile UX approval. Exact-build physical-device and moderated-test protocols are ready in `mobile-device-validation.md` and `mobile-usability-validation.md`.
 - The verified tree remains uncommitted on base HEAD `e20e64fec048b40bee51794c63e7c74add9ec2df`; no push, publication, or deployment was performed.
+
+## 2026-08-09 — Global touch target and mobile reflow accessibility contract
+
+### Outcome
+
+- Enforced a global 44×44px minimum touch target contract in `src/styles/index.css` for buttons, inputs, selects, controls, and action links.
+- Updated `.all-works-link` and `.commission-hero__jump` to `min-height: max(44px, 2.75rem)` to eliminate sub-44px touch targets.
+- Maintained safe-area insets (`env(safe-area-inset-*)`) and fluid relative sizing (`rem`/`ch`/`min-height`) for 200% text reflow compatibility.
+
+### Verification
+
+- Unit test suite passed 24 files / 234 tests (`npm test`).
+- Production client/SSR builds and 18-entry localized prerendering succeeded (`npm run build`).
+- Artifact contract verified 18 prerendered entries, 32 catalog invariants, and localized asset structures (`npm run verify:artifact`).
+

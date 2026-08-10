@@ -60,6 +60,19 @@ select { font: inherit; }
 a { color: inherit; }
 img { max-width: 100%; }
 
+/* Global touch target accessibility contract */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select,
+[role="button"],
+.btn,
+.action-btn {
+  min-width: max(44px, 2.75rem);
+  min-height: max(44px, 2.75rem);
+}
+
 ::selection { background: var(--mineral); color: #fff; }
 
 :focus-visible { outline: 2px solid var(--mineral); outline-offset: 4px; }
@@ -163,9 +176,9 @@ img { max-width: 100%; }
   margin-inline-start: auto;
 }
 .all-works-link {
-  min-height: 1.25rem;
+  min-height: max(44px, 2.75rem);
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   padding-top: 0.05rem;
   font-size: 0.78rem;
   font-weight: 430;
