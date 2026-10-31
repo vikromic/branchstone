@@ -1,421 +1,33 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, Check, Copy, EnvelopeSimple } from "@phosphor-icons/react";
-import { SiteShell } from "../app/SiteShell.jsx";
+import { SiteShell } from "../app/shell/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
-import { copyText } from "../domain/clipboard.js";
-import { assetUrl } from "../domain/catalog.js";
-import { CONTACT_EMAIL, localeHref } from "../domain/content.js";
-import { readEnvelope, storageKeys, writeEnvelope } from "../domain/storage.js";
+import { assetUrl } from "../content/asset-url.js";
+import { commissionCopy } from "../content/copy/commission.js";
+import { CONTACT_EMAIL } from "../content/site.js";
+import {
+  LAST_STEP,
+  buildCommissionMailto,
+  buildCommissionMessage,
+  buildCommissionSubject,
+  createWizardState,
+  draftFieldLimits,
+  getDirectionLabel,
+  getScaleLabel,
+  sanitizeDraft,
+  validateContact,
+  wizardReducer,
+} from "../domain/commission.js";
+import { localeHref } from "../domain/locale.js";
+import { storageKeys } from "../domain/storage.js";
+import { copyText } from "../platform/clipboard.js";
+import { readEnvelope, writeEnvelope } from "../platform/local-storage.js";
 import commissionMaterial from "../assets/material-stage/commission-soil-hero.webp";
 import commissionMaterialMobile from "../assets/material-stage/commission-soil-hero-mobile.webp";
 import "../styles/commissions.css";
 
-const LAST_STEP = 3;
-
-const emptyData = Object.freeze({
-  name: "",
-  email: "",
-  commissionType: "open",
-  scale: "intimate",
-  placement: "",
-  dimensions: "",
-  budget: "",
-  colors: "",
-  materials: "",
-  timeline: "",
-  vision: "",
-  referral: "",
-});
-
-const draftFieldLimits = Object.freeze({
-  name: 120,
-  email: 254,
-  commissionType: 32,
-  scale: 32,
-  placement: 300,
-  dimensions: 300,
-  budget: 300,
-  colors: 300,
-  materials: 300,
-  timeline: 300,
-  vision: 1200,
-  referral: 300,
-});
-
-const text = {
-  en: {
-    hero: {
-      kicker: "COMMISSION / A SHARED ACT OF LISTENING",
-      titleLead: "A work made for",
-      titleEmphasis: "the place it will inhabit.",
-      intro: "A commission begins with your space, a memory, or a feeling that has no finished shape yet. Viktoria translates that starting point through bark, stone, pigment, fiber, and patient handwork.",
-      cta: "Begin the request",
-      note: "Each work is one of one. Scope, materials, timing, and price are discussed together before any work begins.",
-      mark: "FORM / MATTER / MEMORY",
-    },
-    scale: {
-      kicker: "01 / SCALE STUDY",
-      title: "Not tiers. Three ways a work can hold a room.",
-      intro: "These outlines are conversation starters, not fixed products. Proportion can be adjusted to the architecture and the material language of the work.",
-      options: [
-        ["Intimate", "A close encounter for a shelf, desk, or quiet wall."],
-        ["Room anchor", "A work with enough presence to organize a living space."],
-        ["Architectural", "A large or multipart gesture shaped around a particular site."],
-      ],
-      price: "Final scope and price are discussed after the first exchange; no payment is taken through this website.",
-    },
-    process: {
-      kicker: "02 / HOW THE WORK TAKES FORM",
-      title: "The artistic process",
-      steps: [
-        ["Listen", "We exchange references, dimensions, and the story the work needs to carry."],
-        ["Gather", "Viktoria studies the site and selects a material direction for the piece."],
-        ["Propose", "You receive a considered concept, scope, timing, and price to review."],
-        ["Make", "The work develops by hand, with agreed moments for progress correspondence."],
-        ["Release", "Finishing, documentation, packing, and delivery are coordinated for the completed work."],
-      ],
-    },
-    wizard: {
-      kicker: "03 / REQUEST LEDGER",
-      title: "Give the first idea a place to land.",
-      intro: "This four-part note helps Viktoria understand the beginning of the project. Nothing here commits you to a commission.",
-      privacy: "Your draft stays only in this browser for 24 hours. The final link opens your own email app; you review and send the message yourself.",
-      privacyUnavailable: "This browser blocked local draft storage. You can continue, but this request will not be restored after you leave or reload the page.",
-      steps: ["Correspondence", "Scale", "Direction", "Review"],
-      progressLabel: "Request progress",
-      restored: "Your draft from this browser has been restored.",
-      stepOne: {
-        title: "Where can the conversation continue?",
-        intro: "Only your name and email are required. They are placed into an email draft when you choose the final action.",
-        name: "Your name",
-        email: "Email address",
-      },
-      stepTwo: {
-        title: "How should the work meet the space?",
-        intro: "Choose a starting scale. It can change after the site and materials are understood.",
-        scale: "Starting scale",
-        scaleOptions: [
-          ["intimate", "Intimate", "Close, quiet, held nearby"],
-          ["anchor", "Room anchor", "A central presence in the room"],
-          ["architectural", "Architectural", "Large, site-led, or multipart"],
-          ["unsure", "Not sure yet", "Viktoria can help find the proportion"],
-        ],
-        placement: "Where might it live?",
-        placementPlaceholder: "For example: a north-facing entry wall",
-        dimensions: "Known dimensions or constraints",
-        dimensionsPlaceholder: "Wall width, maximum depth, or leave open",
-        budget: "Budget context, if useful",
-        budgetPlaceholder: "Optional — share a range in your preferred currency",
-      },
-      stepThree: {
-        title: "What should the material carry?",
-        intro: "Fragments are welcome. A color, a landscape, or one sentence can be enough.",
-        type: "Direction",
-        typeOptions: [
-          ["open", "Open to the artist"],
-          ["abstract", "Abstract movement"],
-          ["nature", "Nature-led"],
-          ["mixed-media", "Mixed material"],
-        ],
-        colors: "Color atmosphere",
-        colorsPlaceholder: "Mineral blue, scorched umber, pale stone…",
-        materials: "Materials to welcome or avoid",
-        materialsPlaceholder: "Optional sensitivities or preferences",
-        timeline: "Timing context",
-        timelinePlaceholder: "A meaningful date, or no fixed timing",
-        vision: "Memory, place, or intention",
-        visionPlaceholder: "What would you like the work to hold?",
-        referral: "How did you find Branchstone?",
-        referralPlaceholder: "Optional",
-      },
-      review: {
-        title: "Read the note before it leaves your hands.",
-        intro: "You can go back and change anything. The email remains yours to review and send.",
-        labels: {
-          name: "Name",
-          email: "Email",
-          scale: "Starting scale",
-          placement: "Placement",
-          dimensions: "Dimensions",
-          budget: "Budget context",
-          commissionType: "Direction",
-          colors: "Color atmosphere",
-          materials: "Materials",
-          timeline: "Timing",
-          vision: "Intention",
-          referral: "Found Branchstone",
-        },
-        empty: "Open for discussion",
-        handoffTitle: "This does not submit a form.",
-        handoffBody: `The button opens a prepared message addressed to ${CONTACT_EMAIL} in your email app. Review it there, then send it yourself. Your 24-hour draft remains in this browser.`,
-        handoffBodyNoDraft: `The button opens a prepared message addressed to ${CONTACT_EMAIL} in your email app. Review it there, then send it yourself. This browser has blocked local draft storage.`,
-        open: "Open email draft",
-        copy: "Copy message instead",
-        copied: `Message copied. Paste it into an email addressed to ${CONTACT_EMAIL}.`,
-        copiedNoDraft: `Message copied. Paste it into an email addressed to ${CONTACT_EMAIL}. This browser did not save a local draft.`,
-        copyFailed: `Copy was not available. Select the review text above, or write directly to ${CONTACT_EMAIL}.`,
-        opened: "The email handoff was opened. Your request has not been sent by this website, and your draft remains available here.",
-        openedNoDraft: "The email handoff was opened. Your request has not been sent by this website, and this browser did not save a local draft.",
-        blocked: "The request could not be prepared. Please check the required fields.",
-      },
-      required: "Required",
-      errors: {
-        name: "Please add your name.",
-        email: "Please add your email address.",
-        emailInvalid: "Enter an email address in a valid format.",
-      },
-      back: "Back",
-      next: "Continue",
-      noScript: "This four-step request needs JavaScript. Write directly to",
-      noScriptContact: "Or open the correspondence page.",
-    },
-    faq: {
-      kicker: "04 / BEFORE WE BEGIN",
-      title: "A few useful answers",
-      items: [
-        ["When is the price decided?", "After Viktoria understands the desired scale, materials, location, and complexity, you receive a clear scope and price to consider before the work begins."],
-        ["Do I need a complete concept?", "No. Commissions can begin with a room, a memory, a palette, or simply a wish to live with a work made for a particular place."],
-        ["Can I follow the work in progress?", "The proposal identifies the moments when progress can be shared and where your feedback is most useful without interrupting the material process."],
-        ["Can delivery be arranged outside the United States?", "Location is discussed at the proposal stage so packing, customs, insurance, and delivery can be considered as part of the real scope."],
-      ],
-    },
-  },
-  uk: {
-    hero: {
-      kicker: "ЗАМОВЛЕННЯ / СПІЛЬНИЙ АКТ СЛУХАННЯ",
-      titleLead: "Робота, створена для",
-      titleEmphasis: "місця, де вона житиме.",
-      intro: "Замовлення починається з вашого простору, спогаду чи відчуття, яке ще не має завершеної форми. Вікторія перекладає цю точку початку мовою кори, каменю, пігменту, волокна та повільної ручної роботи.",
-      cta: "Почати запит",
-      note: "Кожна робота існує в одному екземплярі. Обсяг, матеріали, терміни й вартість обговорюються разом до початку роботи.",
-      mark: "ФОРМА / МАТЕРІЯ / ПАМ’ЯТЬ",
-    },
-    scale: {
-      kicker: "01 / ДОСЛІДЖЕННЯ МАСШТАБУ",
-      title: "Не тарифи. Три способи, якими робота може тримати простір.",
-      intro: "Ці контури — початок розмови, а не фіксовані продукти. Пропорції узгоджуються з архітектурою та матеріальною мовою роботи.",
-      options: [
-        ["Камерна", "Близька зустріч для полиці, столу або тихої стіни."],
-        ["Центр простору", "Робота з достатньою присутністю, щоб організувати кімнату."],
-        ["Архітектурна", "Великий або модульний жест, сформований навколо конкретного місця."],
-      ],
-      price: "Остаточний обсяг і вартість обговорюються після першого листування; сайт не приймає оплату.",
-    },
-    process: {
-      kicker: "02 / ЯК РОБОТА НАБУВАЄ ФОРМИ",
-      title: "Мистецький процес",
-      steps: [
-        ["Почути", "Ми обмінюємося референсами, розмірами та історією, яку має нести робота."],
-        ["Зібрати", "Вікторія вивчає місце та добирає матеріальний напрям для твору."],
-        ["Запропонувати", "Ви отримуєте продуману концепцію, обсяг, терміни та вартість для розгляду."],
-        ["Створити", "Робота формується вручну, з узгодженими моментами для листів про поступ."],
-        ["Відпустити", "Фініш, документація, пакування й доставка координуються для завершеного твору."],
-      ],
-    },
-    wizard: {
-      kicker: "03 / РЕЄСТР ЗАПИТУ",
-      title: "Дайте першій ідеї місце, де вона може осісти.",
-      intro: "Ця записка з чотирьох частин допоможе Вікторії зрозуміти початок проєкту. Вона ні до чого вас не зобов’язує.",
-      privacy: "Чернетка зберігається лише в цьому браузері протягом 24 годин. Фінальне посилання відкриє вашу поштову програму; ви самі переглянете й надішлете лист.",
-      privacyUnavailable: "Браузер заблокував локальне збереження чернетки. Можна продовжити, але після виходу або перезавантаження цей запит не відновиться.",
-      steps: ["Листування", "Масштаб", "Напрям", "Перевірка"],
-      progressLabel: "Прогрес запиту",
-      restored: "Чернетку з цього браузера відновлено.",
-      stepOne: {
-        title: "Де продовжити розмову?",
-        intro: "Обов’язкові лише ім’я та email. Вони потраплять у чернетку листа після вашої фінальної дії.",
-        name: "Ваше ім’я",
-        email: "Email",
-      },
-      stepTwo: {
-        title: "Як робота має зустрітися з простором?",
-        intro: "Оберіть початковий масштаб. Він може змінитися після того, як ми зрозуміємо місце й матеріали.",
-        scale: "Початковий масштаб",
-        scaleOptions: [
-          ["intimate", "Камерна", "Близька, тиха, поруч із вами"],
-          ["anchor", "Центр простору", "Головна присутність у кімнаті"],
-          ["architectural", "Архітектурна", "Велика, прив’язана до місця або модульна"],
-          ["unsure", "Ще не знаю", "Вікторія допоможе знайти пропорцію"],
-        ],
-        placement: "Де вона могла б жити?",
-        placementPlaceholder: "Наприклад: північна стіна у передпокої",
-        dimensions: "Відомі розміри чи обмеження",
-        dimensionsPlaceholder: "Ширина стіни, гранична глибина або залиште відкритим",
-        budget: "Бюджетний контекст, якщо доречно",
-        budgetPlaceholder: "Необов’язково — діапазон у зручній валюті",
-      },
-      stepThree: {
-        title: "Що має нести матеріал?",
-        intro: "Фрагментів достатньо. Колір, краєвид або одне речення вже можуть стати початком.",
-        type: "Напрям",
-        typeOptions: [
-          ["open", "Довіряю художниці"],
-          ["abstract", "Абстрактний рух"],
-          ["nature", "Природний мотив"],
-          ["mixed-media", "Поєднання матеріалів"],
-        ],
-        colors: "Колірна атмосфера",
-        colorsPlaceholder: "Мінеральний синій, випалена умбра, світлий камінь…",
-        materials: "Матеріали, яких прагнете або уникаєте",
-        materialsPlaceholder: "Необов’язкові чутливості чи побажання",
-        timeline: "Часовий контекст",
-        timelinePlaceholder: "Важлива дата або без фіксованого терміну",
-        vision: "Спогад, місце або намір",
-        visionPlaceholder: "Що ви хотіли б довірити цій роботі?",
-        referral: "Як ви знайшли Branchstone?",
-        referralPlaceholder: "Необов’язково",
-      },
-      review: {
-        title: "Прочитайте записку, перш ніж вона полишить ваші руки.",
-        intro: "Можна повернутися й змінити будь-що. Лист залишається вашим — ви самі його переглядаєте й надсилаєте.",
-        labels: {
-          name: "Ім’я",
-          email: "Email",
-          scale: "Початковий масштаб",
-          placement: "Розміщення",
-          dimensions: "Розміри",
-          budget: "Бюджетний контекст",
-          commissionType: "Напрям",
-          colors: "Колірна атмосфера",
-          materials: "Матеріали",
-          timeline: "Терміни",
-          vision: "Намір",
-          referral: "Знайшли Branchstone",
-        },
-        empty: "Відкрито до обговорення",
-        handoffTitle: "Це не надсилання форми.",
-        handoffBody: `Кнопка відкриє підготовлений лист на адресу ${CONTACT_EMAIL} у вашій поштовій програмі. Перегляньте його там і надішліть самостійно. Чернетка залишиться в цьому браузері на 24 години.`,
-        handoffBodyNoDraft: `Кнопка відкриє підготовлений лист на адресу ${CONTACT_EMAIL} у вашій поштовій програмі. Перегляньте його там і надішліть самостійно. Браузер заблокував локальне збереження чернетки.`,
-        open: "Відкрити чернетку листа",
-        copy: "Скопіювати текст",
-        copied: `Текст скопійовано. Вставте його в лист на адресу ${CONTACT_EMAIL}.`,
-        copiedNoDraft: `Текст скопійовано. Вставте його в лист на адресу ${CONTACT_EMAIL}. Браузер не зберіг локальну чернетку.`,
-        copyFailed: `Копіювання недоступне. Виділіть текст перевірки вище або напишіть на ${CONTACT_EMAIL}.`,
-        opened: "Поштову чернетку відкрито. Цей сайт не надсилав ваш запит, а локальна чернетка залишається доступною.",
-        openedNoDraft: "Поштову чернетку відкрито. Цей сайт не надсилав ваш запит, а браузер не зберіг локальну чернетку.",
-        blocked: "Не вдалося підготувати запит. Перевірте обов’язкові поля.",
-      },
-      required: "Обов’язково",
-      errors: {
-        name: "Додайте, будь ласка, ваше ім’я.",
-        email: "Додайте, будь ласка, email.",
-        emailInvalid: "Введіть email у правильному форматі.",
-      },
-      back: "Назад",
-      next: "Далі",
-      noScript: "Для цього запиту з чотирьох кроків потрібен JavaScript. Напишіть безпосередньо на",
-      noScriptContact: "Або відкрийте сторінку листування.",
-    },
-    faq: {
-      kicker: "04 / ПЕРЕД ПОЧАТКОМ",
-      title: "Кілька корисних відповідей",
-      items: [
-        ["Коли визначається вартість?", "Коли Вікторія розуміє бажаний масштаб, матеріали, місце та складність, ви отримуєте чіткий обсяг і вартість для розгляду до початку роботи."],
-        ["Чи потрібна мені готова концепція?", "Ні. Замовлення може початися з кімнати, спогаду, палітри або простого бажання жити з роботою, створеною для конкретного місця."],
-        ["Чи бачитиму я процес?", "У пропозиції ми визначимо моменти, коли можна поділитися поступом і коли ваш відгук буде найкориснішим, не перериваючи матеріальний процес."],
-        ["Чи можлива доставка за межі США?", "Місце доставки обговорюється на етапі пропозиції, щоб пакування, митні вимоги, страхування й перевезення стали частиною реального обсягу."],
-      ],
-    },
-  },
-};
-
-function sanitizeDraft(saved) {
-  if (!saved || typeof saved !== "object" || !saved.data || typeof saved.data !== "object") return null;
-  const legacy = saved.data;
-  const aliases = {
-    name: legacy.name,
-    email: legacy.email,
-    commissionType: legacy.commissionType ?? legacy["commission-type"],
-    scale: legacy.scale ?? legacy.size,
-    placement: legacy.placement,
-    dimensions: legacy.dimensions,
-    budget: legacy.budget,
-    colors: legacy.colors,
-    materials: legacy.materials,
-    timeline: legacy.timeline,
-    vision: legacy.vision ?? legacy.theme,
-    referral: legacy.referral,
-  };
-  const data = { ...emptyData };
-  Object.entries(aliases).forEach(([key, value]) => {
-    if (typeof value === "string") data[key] = value.slice(0, draftFieldLimits[key]);
-  });
-  data.commissionType = ({ custom: "open" })[data.commissionType] ?? data.commissionType;
-  if (!["open", "abstract", "nature", "mixed-media"].includes(data.commissionType)) data.commissionType = emptyData.commissionType;
-  data.scale = ({ small: "intimate", medium: "anchor", large: "architectural", custom: "unsure", "": "intimate" })[data.scale] ?? data.scale;
-  if (!["intimate", "anchor", "architectural", "unsure"].includes(data.scale)) data.scale = emptyData.scale;
-  const rawStep = Number(saved.step);
-  const step = Number.isInteger(rawStep) ? Math.min(LAST_STEP, Math.max(0, rawStep)) : 0;
-  return { data, step };
-}
-
 function persistDraft(state) {
   return writeEnvelope(storageKeys.commissionDraft, { data: state.data, step: state.step });
-}
-
-function wizardReducer(state, action) {
-  switch (action.type) {
-    case "RESTORE":
-      return { ...state, data: action.payload.data, step: action.payload.step, restored: true };
-    case "FIELD":
-      return {
-        ...state,
-        data: { ...state.data, [action.name]: action.value },
-        errors: { ...state.errors, [action.name]: undefined },
-        handoffStatus: "",
-      };
-    case "NEXT":
-      if (Object.keys(action.errors).length) return { ...state, errors: action.errors };
-      return { ...state, step: Math.min(LAST_STEP, state.step + 1), errors: {}, handoffStatus: "" };
-    case "BACK":
-      return { ...state, step: Math.max(0, state.step - 1), errors: {}, handoffStatus: "" };
-    case "ERRORS":
-      return { ...state, errors: action.errors };
-    case "HANDOFF_STATUS":
-      return { ...state, handoffStatus: action.value };
-    default:
-      return state;
-  }
-}
-
-function validateContact(data) {
-  const errors = {};
-  if (!data.name.trim()) errors.name = "name";
-  if (!data.email.trim()) errors.email = "email";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) errors.email = "emailInvalid";
-  return errors;
-}
-
-function getDirectionLabel(data, wizardText) {
-  return wizardText.stepThree.typeOptions.find(([value]) => value === data.commissionType)?.[1] ?? data.commissionType;
-}
-
-function getScaleLabel(data, wizardText) {
-  return wizardText.stepTwo.scaleOptions.find(([value]) => value === data.scale)?.[1] ?? data.scale;
-}
-
-function buildMessage(data, wizardText, locale) {
-  const lines = [
-    locale === "uk" ? "Вітаю, Вікторіє," : "Hello Viktoria,",
-    "",
-    locale === "uk" ? "Хочу почати розмову про індивідуальну роботу." : "I would like to begin a conversation about a commissioned work.",
-    "",
-    `${wizardText.review.labels.name}: ${data.name.trim()}`,
-    `${wizardText.review.labels.email}: ${data.email.trim()}`,
-    `${wizardText.review.labels.scale}: ${getScaleLabel(data, wizardText)}`,
-    `${wizardText.review.labels.placement}: ${data.placement.trim() || wizardText.review.empty}`,
-    `${wizardText.review.labels.dimensions}: ${data.dimensions.trim() || wizardText.review.empty}`,
-    `${wizardText.review.labels.budget}: ${data.budget.trim() || wizardText.review.empty}`,
-    `${wizardText.review.labels.commissionType}: ${getDirectionLabel(data, wizardText)}`,
-    `${wizardText.review.labels.colors}: ${data.colors.trim() || wizardText.review.empty}`,
-    `${wizardText.review.labels.materials}: ${data.materials.trim() || wizardText.review.empty}`,
-    `${wizardText.review.labels.timeline}: ${data.timeline.trim() || wizardText.review.empty}`,
-    `${wizardText.review.labels.vision}: ${data.vision.trim() || wizardText.review.empty}`,
-    `${wizardText.review.labels.referral}: ${data.referral.trim() || wizardText.review.empty}`,
-    "",
-    locale === "uk" ? "Дякую." : "Thank you.",
-  ];
-  return lines.join("\n");
 }
 
 function Field({ id, label, required = false, error, children }) {
@@ -429,14 +41,9 @@ function Field({ id, label, required = false, error, children }) {
 }
 
 function CommissionWizard({ locale }) {
-  const w = text[locale].wizard;
-  const [state, dispatch] = useReducer(wizardReducer, {
-    data: { ...emptyData },
-    step: 0,
-    errors: {},
-    restored: false,
-    handoffStatus: "",
-  });
+  const w = commissionCopy[locale].wizard;
+  const letterText = commissionCopy[locale].letter;
+  const [state, dispatch] = useReducer(wizardReducer, undefined, createWizardState);
   const [draftReady, setDraftReady] = useState(false);
   const [draftUnavailable, setDraftUnavailable] = useState(false);
   const [honeypot, setHoneypot] = useState("");
@@ -463,11 +70,9 @@ function CommissionWizard({ locale }) {
     stepHeading.current?.focus();
   }, [draftReady, state.step]);
 
-  const message = useMemo(() => buildMessage(state.data, w, locale), [state.data, w, locale]);
-  const subject = locale === "uk"
-    ? `Запит на індивідуальну роботу — ${state.data.name.trim() || "Branchstone"}`
-    : `Commission conversation — ${state.data.name.trim() || "Branchstone"}`;
-  const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+  const message = useMemo(() => buildCommissionMessage(state.data, w, letterText), [state.data, w, letterText]);
+  const subject = buildCommissionSubject(state.data, letterText);
+  const mailto = buildCommissionMailto(CONTACT_EMAIL, subject, message);
 
   const register = (name) => (element) => {
     fields.current[name] = element;
@@ -560,7 +165,7 @@ function CommissionWizard({ locale }) {
       </div>
 
       <div className="commission-wizard__sheet">
-        <ol className="commission-progress" aria-label={locale === "uk" ? "Етапи запиту" : "Request steps"}>
+        <ol className="commission-progress" aria-label={w.stepsLabel}>
           {w.steps.map((label, index) => (
             <li key={label} className={index < state.step ? "is-complete" : index === state.step ? "is-current" : ""} aria-current={index === state.step ? "step" : undefined} aria-label={label}>
               <span aria-hidden="true">{index < state.step ? <Check weight="bold" /> : String(index + 1).padStart(2, "0")}</span>
@@ -800,7 +405,7 @@ function CommissionFaq({ content }) {
 
 export function CommissionsPage() {
   const { locale } = useSite();
-  const content = text[locale];
+  const content = commissionCopy[locale];
 
   return (
     <SiteShell page="commissions">

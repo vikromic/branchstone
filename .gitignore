@@ -2,7 +2,6 @@
 node_modules/
 .stage/
 .stage-ssr/
-build/
 coverage/
 
 # Local browser and test evidence

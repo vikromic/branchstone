@@ -82,25 +82,3 @@ export const StayArtworkImage = forwardRef(function StayArtworkImage(
   const controller = useStayRevealContext();
   return <img {...controller.getArtworkImageProps({ ...imageProps, alt, ref: forwardedRef })} />;
 });
-
-export const StayRevealControl = forwardRef(function StayRevealControl(
-  { onClick, children, type = "button", ...buttonProps },
-  forwardedRef,
-) {
-  const controller = useStayRevealContext();
-  const handleClick = (event) => {
-    onClick?.(event);
-    controller.settle();
-  };
-  return (
-    <button
-      {...buttonProps}
-      ref={forwardedRef}
-      type={type}
-      data-stay-reveal-control=""
-      onClick={handleClick}
-    >
-      {children}
-    </button>
-  );
-});

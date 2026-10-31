@@ -4,8 +4,8 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { branchstonePrehydratePlugin } from "./scripts/prehydrate.mjs";
 import { sitePages } from "./site-pages.js";
-import { isUkrainianPath, localePathname } from "./src/domain/content.js";
-import { getPageMetadata } from "./src/domain/metadata.js";
+import { isUkrainianPath, localePathname } from "./src/domain/locale.js";
+import { getPageMetadata } from "./src/content/metadata.js";
 
 const root = process.cwd();
 const documentPageByPath = new Map(sitePages.flatMap(({ id, filename }) => (

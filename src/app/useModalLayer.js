@@ -144,3 +144,10 @@ export function useModalLayer({ active = true, containerRef, initialFocusRef, on
     };
   }, [active, containerRef, initialFocusRef, lockClass, restoreFocus]);
 }
+
+// Component form of the hook for layers whose container is rendered by the same
+// component that owns the open state.
+export function FocusTrap({ active, containerRef, onClose }) {
+  useModalLayer({ active, containerRef, onClose });
+  return null;
+}

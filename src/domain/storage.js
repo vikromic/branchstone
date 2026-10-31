@@ -13,59 +13,25 @@ export const storageTtls = Object.freeze({
   commissionDraft: 24 * HOUR_IN_MS,
 });
 
-const envelopeTtlByKey = Object.freeze({
+export const envelopeTtlByKey = Object.freeze({
   [storageKeys.pendingInquiry]: storageTtls.pendingInquiry,
   [storageKeys.commissionDraft]: storageTtls.commissionDraft,
 });
 
-export function safeRead(key) {
-  try {
-    return window.localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
-export function safeWrite(key, value) {
-  try {
-    window.localStorage.setItem(key, value);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function safeRemove(key) {
-  try {
-    window.localStorage.removeItem(key);
-  } catch {
-    // Storage can be unavailable; the UI remains usable for this session.
-  }
-}
-
-export function readEnvelope(key, ttl = envelopeTtlByKey[key], now = Date.now()) {
-  const raw = safeRead(key);
-  if (!raw) return null;
+// Decodes a stored `{ value, timestamp }` envelope. `discard` tells the caller
+// to remove the stored string because it is expired or unreadable.
+export function decodeEnvelope(raw, ttl, now) {
+  if (!raw) return { value: null, discard: false };
   try {
     const envelope = JSON.parse(raw);
     if (!envelope || typeof envelope.timestamp !== "number") throw new Error("invalid envelope");
-    if (!Number.isFinite(ttl) || now - envelope.timestamp >= ttl) {
-      safeRemove(key);
-      return null;
-    }
-    return envelope.value ?? envelope;
+    if (!Number.isFinite(ttl) || now - envelope.timestamp >= ttl) return { value: null, discard: true };
+    return { value: envelope.value ?? envelope, discard: false };
   } catch {
-    safeRemove(key);
-    return null;
+    return { value: null, discard: true };
   }
 }
 
-export function writeEnvelope(key, value, timestamp = Date.now()) {
-  return safeWrite(key, JSON.stringify({ value, timestamp }));
-}
-
-export function purgeExpiredEnvelopes(now = Date.now()) {
-  Object.entries(envelopeTtlByKey).forEach(([key, ttl]) => {
-    readEnvelope(key, ttl, now);
-  });
+export function encodeEnvelope(value, timestamp) {
+  return JSON.stringify({ value, timestamp });
 }

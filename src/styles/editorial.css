@@ -211,10 +211,13 @@
   background: var(--surface);
 }
 
-.about-statement,
-.about-biography,
-.about-process {
-  scroll-margin-top: var(--site-header-height);
+/* Below 1040px the sticky header's scroll-padding owns this offset. */
+@media (min-width: 1040px) {
+  .about-statement,
+  .about-biography,
+  .about-process {
+    scroll-margin-top: var(--site-header-height);
+  }
 }
 
 .places-ledger {

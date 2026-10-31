@@ -1,64 +1,12 @@
-import englishHighlights from "../../docs/json_data/highlights.json";
-import ukrainianHighlights from "../../docs/json_data/ukr/highlights_uk.json";
 import bottomStrataAlpha from "../assets/material-stage/bottom-strata-alpha.webp";
 import bottomStrataMobile from "../assets/material-stage/bottom-strata-mobile.webp";
-import { SiteShell } from "../app/SiteShell.jsx";
+import { SiteShell } from "../app/shell/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
-import { assetUrl } from "../domain/catalog.js";
-import { localeHref } from "../domain/content.js";
+import { assetUrl } from "../content/asset-url.js";
+import { exhibitionsCopy } from "../content/copy/exhibitions.js";
+import { getHighlights } from "../content/highlights.js";
+import { localeHref } from "../domain/locale.js";
 import "../styles/editorial.css";
-
-const pageCopy = {
-  en: {
-    eyebrow: "Exhibitions / selected press",
-    title: "A record of work shown, published, and carried into conversation.",
-    introduction: "A selected record of exhibitions and published conversations around the Branchstone practice.",
-    period: "Record",
-    entries: "Entries",
-    exhibitions: "Exhibitions",
-    exhibitionsNote: "Group presentations and gallery events",
-    press: "Selected press",
-    pressNote: "Interviews and published conversations",
-    exhibitionType: "Exhibition",
-    pressType: "Press",
-    openExhibition: "View event record",
-    openPress: "Read feature",
-    contactEyebrow: "Gallery / curatorial / jury enquiries",
-    contactTitle: "Continue the conversation around the work.",
-    contactText: "For exhibitions, jury review, press, acquisitions, or collection enquiries, write directly to Viktoria.",
-    contact: "Contact the studio",
-  },
-  uk: {
-    eyebrow: "Виставки / вибрана преса",
-    title: "Літопис робіт, представлених на виставках, у публікаціях і розмовах.",
-    introduction: "Вибраний літопис виставок і публікацій навколо мистецької практики Branchstone.",
-    period: "Період",
-    entries: "Записів",
-    exhibitions: "Виставки",
-    exhibitionsNote: "Групові презентації та галерейні події",
-    press: "Вибрана преса",
-    pressNote: "Інтерв’ю та опубліковані розмови",
-    exhibitionType: "Виставка",
-    pressType: "Преса",
-    openExhibition: "Відкрити сторінку події",
-    openPress: "Читати матеріал",
-    contactEyebrow: "Запити від галерей / кураторів / журі",
-    contactTitle: "Продовжити розмову навколо робіт.",
-    contactText: "Щодо виставок, розгляду журі, преси, придбання робіт або колекційних запитів напишіть Вікторії напряму.",
-    contact: "Написати до студії",
-  },
-};
-
-const ukrainianHighlightById = new Map(
-  ukrainianHighlights.highlights.map((highlight) => [highlight.id, highlight]),
-);
-
-function recordsFor(locale) {
-  const records = englishHighlights.highlights.map((highlight) => (
-    locale === "uk" ? { ...highlight, ...(ukrainianHighlightById.get(highlight.id) ?? {}) } : highlight
-  ));
-  return records.reverse();
-}
 
 function recordPeriod(records) {
   const years = records
@@ -108,8 +56,8 @@ function RecordSection({ content, records, title, note, type }) {
 
 export function ExhibitionsPage() {
   const { locale } = useSite();
-  const content = pageCopy[locale];
-  const records = recordsFor(locale);
+  const content = exhibitionsCopy[locale];
+  const records = getHighlights(locale);
   const exhibitions = records.filter(({ type }) => type === "gallery");
   const press = records.filter(({ type }) => type === "press");
   const period = recordPeriod(records);

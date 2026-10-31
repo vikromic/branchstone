@@ -1,8 +1,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { getPageMetadata } from "../src/domain/metadata.js";
-import { localePathname } from "../src/domain/content.js";
+import { getPageMetadata } from "../src/content/metadata.js";
+import { localePathname } from "../src/domain/locale.js";
 import { sitePages } from "../site-pages.js";
 
 const root = process.cwd();

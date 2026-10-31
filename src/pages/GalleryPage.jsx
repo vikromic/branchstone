@@ -9,26 +9,34 @@ import {
   useSyncExternalStore,
 } from "react";
 import { CaretDown } from "@phosphor-icons/react";
-import { SiteShell } from "../app/SiteShell.jsx";
+import { SiteShell } from "../app/shell/SiteShell.jsx";
+import { useSite } from "../app/SiteContext.jsx";
+import { catalogStats } from "../content/artworks.js";
+import { artworkCopy } from "../content/copy/artwork.js";
+import { galleryCopy } from "../content/copy/gallery.js";
 import {
-  artworkContactHref,
-  artworkImageUnavailableLabel,
   ArtworkModal,
   ArtworkNarrative,
   ArtworkSurface,
-  storyParagraphs,
-} from "../features/ArtworkModal.jsx";
+} from "../features/artwork/index.js";
 import { StayReveal, useViewportArtworkSelection } from "../features/stay/index.js";
 import {
-  catalogStats,
   catalogStatsFor,
   collectionLabel,
   collections,
-  normalizeArtworkId,
-  normalizeCollection,
+  storyParagraphs,
 } from "../domain/catalog.js";
-import { safeMatchMedia, subscribeMediaQuery } from "../domain/media-query.js";
-import { useSite } from "../app/SiteContext.jsx";
+import {
+  findArtwork,
+  galleryUrl,
+  mobileArtworkHref,
+  normalizeAvailability,
+  relativeUrl,
+  safeNormalizeCollection,
+} from "../domain/gallery-url.js";
+import { artworkContactHref } from "../domain/inquiry.js";
+import { normalizeLocale } from "../domain/locale.js";
+import { safeMatchMedia, subscribeMediaQuery } from "../platform/media-query.js";
 import gallerySeamMobile from "../assets/material-stage/gallery-seam-mobile.webp";
 import gallerySeamDesktop from "../assets/material-stage/gallery-seam-desktop.webp";
 import "../styles/gallery.css";
@@ -60,37 +68,8 @@ function useDesktopGallery() {
   );
 }
 
-function relativeUrl(url) {
-  return `${url.pathname}${url.search}${url.hash}`;
-}
-
-function galleryUrl(update) {
-  const url = new URL(window.location.href);
-  update(url.searchParams);
-  return relativeUrl(url);
-}
-
-function findArtwork(catalog, value) {
-  if (!value) return null;
-  let id;
-  try {
-    id = normalizeArtworkId(decodeURIComponent(String(value)));
-  } catch {
-    return null;
-  }
-  return catalog.find((artwork) => artwork.id === id) ?? null;
-}
-
-function safeNormalizeCollection(value) {
-  try {
-    return normalizeCollection(value);
-  } catch {
-    return "all";
-  }
-}
-
-function normalizeAvailability(value) {
-  return value === "available" || value === "collected" ? value : "all";
+function currentGalleryUrl(update) {
+  return galleryUrl(window.location.href, update);
 }
 
 function galleryIndexAspect(artwork) {
@@ -134,28 +113,18 @@ function galleryIndexStyle(artwork) {
 }
 
 function galleryWorkCount(count, locale) {
-  const normalizedLocale = locale === "uk" ? "uk" : "en";
-  const forms = normalizedLocale === "uk"
-    ? { one: "робота", few: "роботи", many: "робіт", other: "роботи" }
-    : { one: "work", other: "works" };
+  const normalizedLocale = normalizeLocale(locale);
+  const forms = galleryCopy[normalizedLocale].workForms;
   const category = galleryCountRules[normalizedLocale].select(count);
   return `${String(count).padStart(2, "0")} ${forms[category] ?? forms.other}`;
 }
 
-function mobileArtworkHref(artworkId, collection, availability, progressiveOnly = false) {
-  if (progressiveOnly) return `#artwork-details-${artworkId}`;
-  const search = new URLSearchParams();
-  if (collection !== "all") search.set("collection", collection);
-  if (availability !== "all") search.set("availability", availability);
-  search.set("art", artworkId);
-  return `?${search}#artwork-details-${artworkId}`;
-}
-
 function ProgressiveArtworkDetails({ artworks, locale, t }) {
+  const detailsCopy = artworkCopy[locale];
   return (
     <section
       className="gallery-progressive-details"
-      aria-label={locale === "uk" ? "Деталі робіт" : "Artwork details"}
+      aria-label={galleryCopy[locale].progressiveDetails}
     >
       {artworks.map((artwork) => {
         const story = storyParagraphs(artwork.story);
@@ -187,15 +156,15 @@ function ProgressiveArtworkDetails({ artworks, locale, t }) {
             />
             <dl>
               <div>
-                <dt>{locale === "uk" ? "Матеріали" : "Materials"}</dt>
+                <dt>{detailsCopy.materials}</dt>
                 <dd>{artwork.materials}</dd>
               </div>
               <div>
-                <dt>{locale === "uk" ? "Розмір" : "Dimensions"}</dt>
+                <dt>{detailsCopy.dimensions}</dt>
                 <dd>{artwork.dimensions}</dd>
               </div>
               <div>
-                <dt>{locale === "uk" ? "Доступність" : "Availability"}</dt>
+                <dt>{detailsCopy.availability}</dt>
                 <dd>
                   {status}
                   {!artwork.sold && artwork.price ? ` · USD ${artwork.price}` : ""}
@@ -204,27 +173,23 @@ function ProgressiveArtworkDetails({ artworks, locale, t }) {
             </dl>
             {story.length ? (
               <div className="gallery-progressive-detail__story">
-                <h3>{locale === "uk" ? "Історія" : "Story"}</h3>
+                <h3>{detailsCopy.story}</h3>
                 {story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               </div>
             ) : null}
             {artwork.sold ? (
               <p className="gallery-progressive-detail__collected-note">
-                {locale === "uk"
-                  ? "Робота у приватній колекції."
-                  : "This work is held in a private collection."}
+                {detailsCopy.collectedNote}
               </p>
             ) : null}
             <footer>
               {!artwork.sold || artwork.prints ? (
                 <a href={artworkContactHref(artwork, locale, artwork.sold ? "print" : "original")}>
-                  {artwork.sold
-                    ? locale === "uk" ? "Запитати про принт" : "Ask about a print"
-                    : locale === "uk" ? "Запитати про оригінал" : "Inquire about the original"}
+                  {artwork.sold ? detailsCopy.askAboutPrint : detailsCopy.inquireAboutOriginal}
                 </a>
               ) : null}
               <a href={`#artwork-open-${artwork.id}`}>
-                {locale === "uk" ? "Назад до архіву" : "Back to the archive"}
+                {galleryCopy[locale].backToArchive}
               </a>
             </footer>
           </article>
@@ -317,7 +282,7 @@ function MobileGalleryIndex({
                     />
                     {previewFailed ? (
                       <span className="gallery-index-work__preview-error">
-                        {artworkImageUnavailableLabel(locale)}
+                        {artworkCopy[locale].imageUnavailable}
                       </span>
                     ) : null}
                   </span>
@@ -418,9 +383,7 @@ const WorkRecord = memo(function WorkRecord({
       phasePresence={{ materials: true, story: storyParagraphs(artwork.story).length > 0, availability: true }}
       onPhaseChange={(phase, state) => {
         if (state !== "resolved" || !isActive) return;
-        const phaseLabels = locale === "uk"
-          ? { materials: "Матеріали відкрито.", story: "Історію відкрито.", availability: "Доступність відкрито." }
-          : { materials: "Materials revealed.", story: "Story revealed.", availability: "Availability revealed." };
+        const phaseLabels = galleryCopy[locale].revealAnnouncements;
         if (phaseLabels[phase]) setStayAnnouncement(phaseLabels[phase]);
       }}
       data-artwork-id={artwork.id}
@@ -516,6 +479,7 @@ function GalleryStream({ artworks, favoriteIds, locale, onFavorite, onOpen, t })
 
 export function GalleryPage() {
   const { catalog, favorites, locale, t, toggleFavorite } = useSite();
+  const pageCopy = galleryCopy[locale];
   const desktopGallery = useDesktopGallery();
   const [collection, setCollection] = useState("all");
   const [availability, setAvailability] = useState("all");
@@ -608,7 +572,7 @@ export function GalleryPage() {
 
   const selectCollection = (nextCollection) => {
     setCollection(nextCollection);
-    const href = galleryUrl((search) => {
+    const href = currentGalleryUrl((search) => {
       if (nextCollection === "all") search.delete("collection");
       else search.set("collection", nextCollection);
     });
@@ -618,7 +582,7 @@ export function GalleryPage() {
   const selectAvailability = (nextAvailability) => {
     const normalizedAvailability = normalizeAvailability(nextAvailability);
     setAvailability(normalizedAvailability);
-    const href = galleryUrl((search) => {
+    const href = currentGalleryUrl((search) => {
       if (normalizedAvailability === "all") search.delete("availability");
       else search.set("availability", normalizedAvailability);
     });
@@ -628,7 +592,7 @@ export function GalleryPage() {
   const openArtwork = useCallback((id, trigger) => {
     triggerRef.current = { id, node: trigger };
     if (new URL(window.location.href).searchParams.get("art") === id) return;
-    const href = galleryUrl((search) => {
+    const href = currentGalleryUrl((search) => {
       search.delete("artwork");
       search.set("art", id);
     });
@@ -644,7 +608,7 @@ export function GalleryPage() {
       window.history.back();
       return;
     }
-    const href = galleryUrl((search) => {
+    const href = currentGalleryUrl((search) => {
       search.delete("art");
       search.delete("artwork");
     });
@@ -685,7 +649,7 @@ export function GalleryPage() {
     if (modalPosition < 0 || modalSequence.length < 2) return;
     const nextPosition = (modalPosition + direction + modalSequence.length) % modalSequence.length;
     const nextArtwork = modalSequence[nextPosition];
-    const href = galleryUrl((search) => {
+    const href = currentGalleryUrl((search) => {
       search.delete("artwork");
       search.set("art", nextArtwork.id);
     });
@@ -709,18 +673,16 @@ export function GalleryPage() {
       <section className="gallery-intro" aria-labelledby="works-title">
         <p className="gallery-intro__index">BRANCHSTONE / {String(catalogStats.total).padStart(2, "0")}</p>
         <div className="gallery-intro__title">
-          <p>{locale === "uk" ? "ЖИВИЙ АРХІВ МАТЕРІАЛІВ / 2019—ДОТЕПЕР" : "LIVING MATERIAL ARCHIVE / 2019—NOW"}</p>
+          <p>{pageCopy.indexEyebrow}</p>
           <h1 id="works-title" tabIndex="-1">
-            {locale === "uk" ? "Роботи, що несуть землю" : "Works that carry the ground"}
+            {pageCopy.title}
           </h1>
           <p>
-            {locale === "uk"
-              ? "Переглядайте архів у власному темпі. Відкрийте будь-яку роботу, щоб побачити її матеріали, історію та доступність."
-              : "Browse the archive at your own pace. Open any work to see its materials, story, and availability."}
+            {pageCopy.introduction}
           </p>
         </div>
-        <dl className="gallery-intro__counts" aria-label={locale === "uk" ? "Стан архіву" : "Archive status"}>
-          <div><dt>{locale === "uk" ? "Усього" : "All works"}</dt><dd>{catalogStats.total}</dd></div>
+        <dl className="gallery-intro__counts" aria-label={pageCopy.statusLabel}>
+          <div><dt>{pageCopy.allWorks}</dt><dd>{catalogStats.total}</dd></div>
           <div><dt>{t.common.available}</dt><dd>{catalogStats.available}</dd></div>
           <div><dt>{t.common.collected}</dt><dd>{catalogStats.collected}</dd></div>
         </dl>
@@ -744,7 +706,7 @@ export function GalleryPage() {
 
       <section className="gallery-controls" aria-labelledby="filters-title">
         <div className="gallery-controls__heading">
-          <h2 id="filters-title">{locale === "uk" ? "Знайти роботу" : "Find a work"}</h2>
+          <h2 id="filters-title">{pageCopy.findWork}</h2>
           <p aria-live="polite" aria-atomic="true">
             {galleryWorkCount(visibleWorks.length, locale)}
           </p>
@@ -752,7 +714,7 @@ export function GalleryPage() {
 
         <div className="gallery-mobile-filters">
           <label>
-            <span>{locale === "uk" ? "Доступність" : "Availability"}</span>
+            <span>{pageCopy.availability}</span>
             <span className="gallery-mobile-filter__control">
               <select
                 disabled={!filtersReady}
@@ -767,7 +729,7 @@ export function GalleryPage() {
             </span>
           </label>
           <label>
-            <span>{locale === "uk" ? "Колекція" : "Collection"}</span>
+            <span>{pageCopy.collection}</span>
             <span className="gallery-mobile-filter__control">
               <select
                 disabled={!filtersReady}
@@ -786,7 +748,7 @@ export function GalleryPage() {
           </label>
         </div>
 
-        <div className="gallery-status-filter" role="group" aria-label={locale === "uk" ? "Фільтр за доступністю" : "Filter by availability"}>
+        <div className="gallery-status-filter" role="group" aria-label={pageCopy.availabilityFilter}>
           {[
             ["all", t.common.all, collectionWorks.length],
             ["available", t.common.available, availabilityStats.available],
@@ -804,7 +766,7 @@ export function GalleryPage() {
           ))}
         </div>
 
-        <div className="gallery-collection-filter" role="group" aria-label={locale === "uk" ? "Фільтр за колекцією" : "Filter by collection"}>
+        <div className="gallery-collection-filter" role="group" aria-label={pageCopy.collectionFilter}>
           <button
             type="button"
             disabled={!filtersReady}
@@ -827,9 +789,9 @@ export function GalleryPage() {
         </div>
       </section>
 
-      <section className="gallery-archive" aria-label={locale === "uk" ? "Архів робіт" : "Artwork archive"}>
+      <section className="gallery-archive" aria-label={pageCopy.archive}>
         <p className="gallery-archive__pending" role="status">
-          {locale === "uk" ? "Відкриваємо архів…" : "Opening the archive…"}
+          {pageCopy.opening}
         </p>
         {visibleWorks.length ? (
           desktopGallery ? (
@@ -853,9 +815,9 @@ export function GalleryPage() {
           )
         ) : (
           <div className="gallery-empty" role="status">
-            <p>{locale === "uk" ? "У цьому шарі поки немає робіт." : "No works sit in this layer yet."}</p>
+            <p>{pageCopy.empty}</p>
             <button type="button" onClick={() => { selectCollection("all"); selectAvailability("all"); }}>
-              {locale === "uk" ? "Показати весь архів" : "Show the full archive"}
+              {pageCopy.showAll}
             </button>
           </div>
         )}

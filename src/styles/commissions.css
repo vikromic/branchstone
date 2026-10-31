@@ -293,9 +293,13 @@
   --mineral: #3e626e;
   --error: #7b2d24;
 
-  scroll-margin-top: 5rem;
   background: var(--paper);
   color: var(--paper-ink);
+}
+
+/* Below 1040px the sticky header's scroll-padding owns this offset. */
+@media (min-width: 1040px) {
+  .commission-request { scroll-margin-top: 5rem; }
 }
 
 .commission-wizard {

@@ -97,6 +97,11 @@
   color: color-mix(in srgb, var(--paper-ink) 66%, transparent);
 }
 
+/* The hero stays dark in paper; the paper mineral is too dark to read on it. */
+:root[data-theme="paper"] .contact-hero__copy .kicker {
+  color: #a7c6cd;
+}
+
 .contact-hero h1 {
   max-width: 16ch;
   margin: 0;

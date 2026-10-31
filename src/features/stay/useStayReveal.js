@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export const STAY_PHASES = Object.freeze([
+const STAY_PHASES = Object.freeze([
   "artwork",
   "materials",
   "story",

@@ -1,0 +1,43 @@
+:root {
+  color-scheme: dark;
+  --ink: #f2ede5;
+  --ink-muted: rgba(242, 237, 229, 0.64);
+  --ground: #15110e;
+  --ground-deep: #0d0c0b;
+  --surface: #211914;
+  --paper: #e9e0d3;
+  --paper-ink: #211c18;
+  --rule: rgba(242, 237, 229, 0.25);
+  --rule-strong: rgba(242, 237, 229, 0.52);
+  --mineral: #628b95;
+  --copper: #a56343;
+  --error: #ef9d81;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "Inter Variable", "Helvetica Neue", Arial, sans-serif;
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --safe-gutter-left: max(var(--gutter), calc(env(safe-area-inset-left) + 1rem));
+  --safe-gutter-right: max(var(--gutter), calc(env(safe-area-inset-right) + 1rem));
+  --max: 80rem;
+  --ease-material: cubic-bezier(0.22, 1, 0.36, 1);
+  --site-header-height: 5rem;
+  font-family: var(--sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  background: var(--ground);
+  color: var(--ink);
+}
+
+:root[data-theme="paper"] {
+  color-scheme: light;
+  --ink: #241e1a;
+  --ink-muted: rgba(36, 30, 26, 0.68);
+  --ground: #e9e0d3;
+  --ground-deep: #ded3c5;
+  --surface: #f2eadf;
+  --paper: #f6efe5;
+  --paper-ink: #211c18;
+  --rule: rgba(36, 30, 26, 0.24);
+  --rule-strong: rgba(36, 30, 26, 0.5);
+  --mineral: #3c606c;
+  --error: #8f351f;
+}

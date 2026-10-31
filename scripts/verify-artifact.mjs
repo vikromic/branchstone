@@ -79,15 +79,24 @@ if (artworks.length !== 32 || ukrainian.length !== 32) throw new Error("Catalog 
 if (artworks.filter((artwork) => !artwork.sold).length !== 19) throw new Error("Expected 19 available artworks");
 if (artworks.filter((artwork) => artwork.sold).length !== 13) throw new Error("Expected 13 collected artworks");
 
-const uaImages = new Set(ukrainian.map((artwork) => artwork.main_image));
+const ukrainianByImage = new Map(ukrainian.map((artwork) => [artwork.main_image, artwork]));
 for (const artwork of artworks) {
-  if (!uaImages.has(artwork.main_image)) throw new Error(`UA locale join missing ${artwork.main_image}`);
+  const translation = ukrainianByImage.get(artwork.main_image);
+  if (!translation) throw new Error(`UA locale join missing ${artwork.main_image}`);
+  if (JSON.stringify(translation.images ?? []) !== JSON.stringify(artwork.images ?? [])) {
+    throw new Error(`UA image list diverges from EN for ${artwork.main_image}`);
+  }
   const directory = artwork.main_image.slice(0, artwork.main_image.lastIndexOf("/") + 1);
   for (const image of [artwork.main_image, ...(artwork.images ?? []).map((filename) => `${directory}${filename}`)]) {
     await access(resolve(docs, image));
   }
 }
 
+for (const source of ["json_data/highlights.json", "json_data/ukr/highlights_uk.json"]) {
+  const { highlights } = JSON.parse(await readFile(resolve(docs, source), "utf8"));
+  for (const { image } of highlights) if (image) await access(resolve(docs, image));
+}
+
 const cname = (await readFile(resolve(docs, "CNAME"), "utf8")).trim();
 if (cname !== "branchstone.art") throw new Error(`Unexpected CNAME: ${cname}`);
-console.log(`Artifact contract verified: ${htmlFiles.length * 2} localized prerendered entries, 32/19/13 catalog invariants, locale joins, primary media, and deployment files.`);
+console.log(`Artifact contract verified: ${htmlFiles.length * 2} localized prerendered entries, 32/19/13 catalog invariants, EN/UA locale and image joins, artwork and highlight media, and deployment files.`);

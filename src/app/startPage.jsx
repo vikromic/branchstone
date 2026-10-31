@@ -1,13 +1,17 @@
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { SiteProvider } from "./SiteContext.jsx";
-import { isUkrainianPath } from "../domain/content.js";
+import { resolveLocale } from "../domain/locale.js";
 import "../styles/index.css";
 
 export function startPage(Page) {
   const root = document.getElementById("root");
-  const urlLocale = new URL(window.location.href).searchParams.get("lang");
-  const pathIsUkrainian = isUkrainianPath(window.location.pathname);
-  const initialLocale = pathIsUkrainian || urlLocale === "uk" || (urlLocale !== "en" && root.dataset.initialLocale === "uk") ? "uk" : "en";
+  // Hydration must match the prerendered markup, so only URL and the prerendered
+  // document locale decide; stored and browser preferences apply after mount.
+  const initialLocale = resolveLocale({
+    pathname: window.location.pathname,
+    search: window.location.search,
+    prerendered: root.dataset.initialLocale,
+  });
   const page = <SiteProvider initialLocale={initialLocale}><Page /></SiteProvider>;
   if (root.hasChildNodes()) hydrateRoot(root, page);
   else createRoot(root).render(page);

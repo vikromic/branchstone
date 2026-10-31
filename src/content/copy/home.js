@@ -1,0 +1,38 @@
+export const homeCopy = {
+  en: {
+    availabilityLabel: "Availability",
+    available: "Original available",
+    collected: "Private collection",
+    field: "A living stream of material works",
+    last: "enter the living archive",
+    materialsLabel: "Materials",
+    memoryLabel: "Memory",
+    prints: "fine-art prints available",
+    scroll: "scroll · then stay",
+    statement: "What the earth releases, I carry.",
+    view: "View the full work",
+    revealAnnouncements: {
+      materials: "Materials revealed.",
+      story: "Memory revealed.",
+      availability: "Availability revealed.",
+    },
+  },
+  uk: {
+    availabilityLabel: "Доступність",
+    available: "Оригінал доступний",
+    collected: "Приватна колекція",
+    field: "Живий потік матеріальних робіт",
+    last: "увійти до живого архіву",
+    materialsLabel: "Матеріали",
+    memoryLabel: "Пам’ять",
+    prints: "доступні художні принти",
+    scroll: "гортай · тоді залишайся",
+    statement: "Те, що відпускає земля, я несу далі.",
+    view: "Переглянути роботу повністю",
+    revealAnnouncements: {
+      materials: "Матеріали відкрито.",
+      story: "Пам’ять відкрито.",
+      availability: "Доступність відкрито.",
+    },
+  },
+};

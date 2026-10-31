@@ -1,74 +1,39 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { artworkById, getCatalog } from "../domain/catalog.js";
-import { copy, isUkrainianPath, localeHref } from "../domain/content.js";
+import { shellCopy } from "../content/copy/shell.js";
+import { artworkById, getCatalog } from "../content/artworks.js";
 import { decodeFavoriteStorage, encodeFavoriteStorage } from "../domain/favorites.js";
-import { safeMatchMedia, subscribeMediaQuery } from "../domain/media-query.js";
-import { getPageMetadata } from "../domain/metadata.js";
-import { purgeExpiredEnvelopes, safeRead, safeRemove, safeWrite, storageKeys } from "../domain/storage.js";
+import { localeHref, normalizeLocale, resolveLocale } from "../domain/locale.js";
+import { storageKeys } from "../domain/storage.js";
+import { safeMatchMedia, subscribeMediaQuery } from "../platform/media-query.js";
+import { purgeExpiredEnvelopes, safeRead, safeRemove, safeWrite } from "../platform/local-storage.js";
+import { applyDocumentTheme, themeFromStoredValue, themeToStoredValue, updateDocumentMetadata } from "./document-head.js";
 
 const SiteContext = createContext(null);
 
-function readLocale() {
-  if (isUkrainianPath(window.location.pathname)) return "uk";
-  const fromUrl = new URL(window.location.href).searchParams.get("lang");
-  if (fromUrl === "uk" || fromUrl === "en") return fromUrl;
-  const prerendered = document.getElementById("root")?.dataset.initialLocale;
-  if (prerendered === "uk" || prerendered === "en") return prerendered;
-  const stored = safeRead(storageKeys.language);
-  if (stored === "uk" || stored === "en") return stored;
-  const browserLanguages = navigator.languages?.length ? navigator.languages : [navigator.language];
-  return browserLanguages.some((language) => /^uk(?:-|$)/i.test(language)) ? "uk" : "en";
+function browserLanguages() {
+  return navigator.languages?.length ? navigator.languages : [navigator.language];
 }
 
-function readStoredTheme() {
-  const raw = safeRead(storageKeys.theme);
-  if (!raw) return null;
-  try {
-    const value = JSON.parse(raw);
-    if (value === "light" || value === "paper") return "paper";
-    if (value === "dark" || value === "soil") return "soil";
-    return null;
-  } catch {
-    return null;
-  }
+function readLocale() {
+  return resolveLocale({
+    pathname: window.location.pathname,
+    search: window.location.search,
+    prerendered: document.getElementById("root")?.dataset.initialLocale,
+    stored: safeRead(storageKeys.language),
+    languages: browserLanguages(),
+  });
 }
 
 function readFavorites() {
   const raw = safeRead(storageKeys.favorites);
-  const { known, unknown, corrupted, discard } = decodeFavoriteStorage(raw);
+  const { known, unknown, corrupted, discard } = decodeFavoriteStorage(raw, artworkById);
   if (discard) safeRemove(storageKeys.favorites);
   else if (corrupted) safeWrite(storageKeys.favorites, encodeFavoriteStorage(known, unknown));
   return { known, unknown, corrupted };
 }
 
-function updateDocumentMetadata(locale) {
-  const metadata = getPageMetadata(document.body.dataset.page, locale);
-  document.title = metadata.title;
-  const description = document.querySelector('meta[name="description"]');
-  if (description) description.content = metadata.description;
-  const openGraphTitle = document.querySelector('meta[property="og:title"]');
-  if (openGraphTitle) openGraphTitle.content = metadata.title;
-  const openGraphDescription = document.querySelector('meta[property="og:description"]');
-  if (openGraphDescription) openGraphDescription.content = metadata.description;
-  const localizedPath = localeHref(window.location.pathname, locale);
-  const canonical = document.querySelector('link[rel="canonical"]');
-  if (canonical) canonical.href = new URL(localizedPath, window.location.origin).href;
-  const openGraphUrl = document.querySelector('meta[property="og:url"]');
-  if (openGraphUrl) openGraphUrl.content = new URL(localizedPath, window.location.origin).href;
-}
-
-function updateThemeColor(theme) {
-  const themeColor = document.querySelector('meta[name="theme-color"]');
-  if (themeColor) themeColor.content = theme === "paper" ? "#e9e0d3" : "#15110e";
-}
-
-function applyDocumentTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  updateThemeColor(theme);
-}
-
 export function SiteProvider({ children, initialLocale = "en" }) {
-  const [locale, setLocaleState] = useState(initialLocale === "uk" ? "uk" : "en");
+  const [locale, setLocaleState] = useState(normalizeLocale(initialLocale));
   const [theme, setThemeState] = useState("soil");
   const [favorites, setFavorites] = useState([]);
   const [favoritesReady, setFavoritesReady] = useState(false);
@@ -76,12 +41,12 @@ export function SiteProvider({ children, initialLocale = "en" }) {
   const [storageUnavailable, setStorageUnavailable] = useState(false);
   const unknownFavorites = useRef([]);
   const themeIsExplicit = useRef(false);
-  const localeRef = useRef(initialLocale === "uk" ? "uk" : "en");
+  const localeRef = useRef(normalizeLocale(initialLocale));
   const catalog = useMemo(() => getCatalog(locale), [locale]);
 
-  useEffect(() => {
-    purgeExpiredEnvelopes();
-    const nextLocale = readLocale();
+  // The one locale-apply sequence: state, document language and head, stored
+  // preference, and the canonical localized URL (replaced only when it differs).
+  const applyLocale = useCallback((nextLocale) => {
     localeRef.current = nextLocale;
     setLocaleState(nextLocale);
     document.documentElement.lang = nextLocale;
@@ -90,7 +55,12 @@ export function SiteProvider({ children, initialLocale = "en" }) {
     const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     const normalizedUrl = localeHref(currentUrl, nextLocale);
     if (normalizedUrl !== currentUrl) window.history.replaceState(window.history.state, "", normalizedUrl);
-    const storedTheme = readStoredTheme();
+  }, []);
+
+  useEffect(() => {
+    purgeExpiredEnvelopes();
+    applyLocale(readLocale());
+    const storedTheme = themeFromStoredValue(safeRead(storageKeys.theme));
     const colorScheme = safeMatchMedia("(prefers-color-scheme: light)", window);
     const nextTheme = storedTheme ?? (colorScheme?.matches ? "paper" : "soil");
     themeIsExplicit.current = storedTheme !== null;
@@ -108,43 +78,26 @@ export function SiteProvider({ children, initialLocale = "en" }) {
       applyDocumentTheme(systemTheme);
     };
     return subscribeMediaQuery(colorScheme, followSystemTheme);
-  }, []);
+  }, [applyLocale]);
 
   useEffect(() => {
-    const synchronizeLocaleFromHistory = () => {
-      const nextLocale = localeRef.current;
-      setLocaleState(nextLocale);
-      document.documentElement.lang = nextLocale;
-      updateDocumentMetadata(nextLocale);
-      if (!safeWrite(storageKeys.language, nextLocale)) setStorageUnavailable(true);
-      const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-      const normalizedUrl = localeHref(currentUrl, nextLocale);
-      if (normalizedUrl !== currentUrl) {
-        window.history.replaceState(window.history.state, "", normalizedUrl);
-      }
-    };
+    const synchronizeLocaleFromHistory = () => applyLocale(localeRef.current);
 
     window.addEventListener("popstate", synchronizeLocaleFromHistory);
     return () => window.removeEventListener("popstate", synchronizeLocaleFromHistory);
-  }, []);
+  }, [applyLocale]);
 
-  const setLocale = useCallback((nextLocale) => {
-    const normalized = nextLocale === "uk" ? "uk" : "en";
-    localeRef.current = normalized;
-    setLocaleState(normalized);
-    document.documentElement.lang = normalized;
-    updateDocumentMetadata(normalized);
-    if (!safeWrite(storageKeys.language, normalized)) setStorageUnavailable(true);
-    const url = new URL(window.location.href);
-    window.history.replaceState(window.history.state, "", localeHref(`${url.pathname}${url.search}${url.hash}`, normalized));
-  }, []);
+  const setLocale = useCallback(
+    (nextLocale) => applyLocale(normalizeLocale(nextLocale)),
+    [applyLocale],
+  );
 
   const setTheme = useCallback((nextTheme) => {
     const normalized = nextTheme === "paper" ? "paper" : "soil";
     themeIsExplicit.current = true;
     setThemeState(normalized);
     applyDocumentTheme(normalized);
-    if (!safeWrite(storageKeys.theme, JSON.stringify(normalized === "paper" ? "light" : "dark"))) {
+    if (!safeWrite(storageKeys.theme, themeToStoredValue(normalized))) {
       setStorageUnavailable(true);
     }
   }, []);
@@ -183,7 +136,7 @@ export function SiteProvider({ children, initialLocale = "en" }) {
       setLocale,
       theme,
       setTheme,
-      t: copy[locale],
+      t: shellCopy[locale],
       catalog,
       favorites,
       favoritesReady,
