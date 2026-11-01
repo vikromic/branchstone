@@ -27,7 +27,7 @@ The live visual system is **White Cube**: a contemporary gallery language with I
 
 - Shell: a sticky glass header (wordmark, Works → Exhibitions → Practice → Contact from 900 px, and a Menu layer at every width with language, appearance, saved works, Commission, and legal links).
 - Home: an oversized wordmark, the archive facts, a justified grid of selected works that deep-link to Gallery, and studio routes.
-- Gallery: one justified grid at every width (each row shares one height; every preview shows its full composition), availability and collection pill filters, and an artwork detail dialog: image and carousel beside the record, with Prev/Next and ←/→ between works. Opening a work morphs its image with the View Transitions API where supported and motion is allowed.
+- Gallery: one justified grid at every width (each row shares one height; every preview shows its full composition), availability and collection pill filters, and an artwork detail dialog: image and carousel beside the record, with Prev/Next and ←/→ between works. Opening a work morphs its image with the View Transitions API where supported and motion is allowed. The detail image zooms (double-tap or double-click, pinch, trackpad pinch, the zoom button, or + and −) up to the master's own pixels and no further; while zoomed, drag, wheel, or arrow keys pan and Escape returns to the fitted view. Masters too small to gain detail offer no zoom.
 - Practice exposes Statement, Biography, and Method directly. Exhibitions owns the authored exhibition and press records.
 
 ## Architecture

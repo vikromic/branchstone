@@ -4,6 +4,8 @@ import {
   ArrowRight,
   ArrowUpRight,
   BookmarkSimple,
+  MagnifyingGlassMinus,
+  MagnifyingGlassPlus,
   X,
 } from "@phosphor-icons/react";
 import { useSite } from "../../app/SiteContext.jsx";
@@ -12,6 +14,7 @@ import { artworkCopy } from "../../content/copy/artwork.js";
 import { storyParagraphs } from "../../domain/catalog.js";
 import { artworkContactHref } from "../../domain/inquiry.js";
 import { localeHref } from "../../domain/locale.js";
+import { useArtworkZoom } from "./useArtworkZoom.js";
 import "./artwork-dialog.css";
 
 // The detail image animates out of the grid tile that opened it.
@@ -65,6 +68,8 @@ function ArtworkImage({
   height,
   alt,
   onImageSettled,
+  imageStyle,
+  zoomState,
   children,
 }) {
   const copy = artworkCopy[artwork.locale];
@@ -204,6 +209,8 @@ function ArtworkImage({
       data-image-recovery={recoveryVisible ? (
         activeRecovery.retrying ? "retrying" : unavailable ? "error" : "stalled"
       ) : "idle"}
+      data-zoom={zoomState?.zoomed ? "zoomed" : zoomState?.zoomable ? "ready" : "off"}
+      data-zoom-motion={zoomState?.motion}
     >
       <img
         key={imageKey}
@@ -218,7 +225,7 @@ function ArtworkImage({
         decoding="async"
         fetchPriority="high"
         draggable="false"
-        style={{ viewTransitionName: ARTWORK_TRANSITION_NAME }}
+        style={{ viewTransitionName: ARTWORK_TRANSITION_NAME, ...imageStyle }}
         data-image-request-attempt={activeRecovery.attempt}
         onLoad={handleImageLoad}
         onError={handleImageError}
@@ -319,7 +326,9 @@ export function ArtworkModal({
   const dialogRef = useRef(null);
   const closeRef = useRef(null);
   const gestureStartRef = useRef(null);
+  const gestureSurfaceRef = useRef(null);
   const [settledImageKey, setSettledImageKey] = useState(null);
+  const [naturalSize, setNaturalSize] = useState({ key: null, width: 0, height: 0 });
   const titleId = useId();
   const isFavorite = favorites.includes(artwork.id);
   const displayImages = useMemo(
@@ -332,6 +341,17 @@ export function ArtworkModal({
   const currentImage = displayImages[currentImageIndex];
   const currentImageKey = `${artwork.id}:${currentImageIndex}:${currentImage}`;
   const canStepWorks = workCount > 1 && Boolean(onStepWork);
+  const isPrimaryImage = currentImage === artwork.streamPrimary;
+  const imageReady = settledImageKey === currentImageKey && naturalSize.key === currentImageKey;
+  const zoom = useArtworkZoom({
+    targetRef: gestureSurfaceRef,
+    natural: !imageReady
+      ? { width: 0, height: 0 }
+      : isPrimaryImage
+        ? { width: artwork.streamPrimaryWidth, height: artwork.streamPrimaryHeight }
+        : naturalSize,
+    resetKey: currentImageKey,
+  });
 
   useEffect(() => {
     setImageSelection((current) => (
@@ -377,6 +397,12 @@ export function ArtworkModal({
   }, [artwork.id, imageCount]);
 
   const onPointerDown = (event) => {
+    if (zoom.onPointerDown(event)) {
+      // A pinch or a pan owns this gesture, so the pending carousel swipe ends.
+      // The swipe's pointer keeps its capture: it is now the pinch's first finger.
+      if (gestureStartRef.current?.pointerId !== event.pointerId) gestureStartRef.current = null;
+      return;
+    }
     if (
       event.isPrimary === false
       || gestureStartRef.current
@@ -404,16 +430,23 @@ export function ArtworkModal({
   };
 
   const onPointerUp = (event) => {
+    const zoomConsumed = zoom.onPointerUp(event);
     const start = finishGesture(event);
-    if (!start) return;
+    if (zoomConsumed || !start) return;
     const deltaX = event.clientX - start.x;
     const deltaY = event.clientY - start.y;
     if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.25) return;
     stepImage(deltaX > 0 ? -1 : 1);
   };
 
-  // Arrow keys browse works, as in a gallery viewer. Form fields keep their keys.
+  // While zoomed, keys move the image. Otherwise arrow keys browse works, as in
+  // a gallery viewer. Form fields keep their keys.
   const onKeyDown = (event) => {
+    if (zoom.onKeyDown(event)) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
     if (!canStepWorks || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
     if (event.target.closest?.("input, textarea, select")) return;
     if (event.key === "ArrowLeft") onStepWork(-1);
@@ -465,40 +498,73 @@ export function ArtworkModal({
           <ArtworkImage
             artwork={{ ...artwork, locale }}
             src={currentImage}
-            srcSet={currentImage === artwork.streamPrimary ? artwork.streamSrcSet : undefined}
+            srcSet={currentImage === artwork.streamPrimary && !zoom.fullResolution ? artwork.streamSrcSet : undefined}
             sizes="(min-width: 960px) 60vw, calc(100vw - 2.5rem)"
             width={currentImage === artwork.streamPrimary ? artwork.streamPrimaryWidth : undefined}
             height={currentImage === artwork.streamPrimary ? artwork.streamPrimaryHeight : undefined}
             alt={`${artwork.name}, ${currentImageIndex + 1} / ${imageCount}`}
             onImageSettled={(state) => {
-              if (state === "ready") setSettledImageKey(currentImageKey);
+              if (state !== "ready") return;
+              const image = dialogRef.current?.querySelector(".artwork-surface img");
+              setNaturalSize({
+                key: currentImageKey,
+                width: image?.naturalWidth ?? 0,
+                height: image?.naturalHeight ?? 0,
+              });
+              setSettledImageKey(currentImageKey);
             }}
+            imageStyle={zoom.imageStyle}
+            zoomState={zoom}
           >
             <div
+              ref={gestureSurfaceRef}
               className="artwork-dialog__gesture-surface"
               onPointerDown={onPointerDown}
+              onPointerMove={zoom.onPointerMove}
               onPointerUp={onPointerUp}
               onPointerCancel={(event) => {
+                zoom.onPointerCancel(event);
                 finishGesture(event);
               }}
               onLostPointerCapture={(event) => {
+                zoom.onPointerCancel(event);
                 if (gestureStartRef.current?.pointerId === event.pointerId) gestureStartRef.current = null;
               }}
+              title={zoom.zoomable ? modalCopy.zoomHint : undefined}
               aria-hidden="true"
             />
           </ArtworkImage>
-          {imageCount > 1 ? (
+          {imageCount > 1 || zoom.zoomable ? (
             <div className="artwork-dialog__carousel-controls">
-              <button className="icon-control" type="button" onClick={() => stepImage(-1)} aria-label={modalCopy.previousImage}>
-                <ArrowLeft aria-hidden="true" />
-              </button>
-              <p aria-live="polite" aria-atomic="true">
-                <span className="sr-only">{modalCopy.image} </span>
-                {currentImageIndex + 1} / {imageCount}
-              </p>
-              <button className="icon-control" type="button" onClick={() => stepImage(1)} aria-label={modalCopy.nextImage}>
-                <ArrowRight aria-hidden="true" />
-              </button>
+              {imageCount > 1 ? (
+                <>
+                  <button className="icon-control" type="button" onClick={() => stepImage(-1)} aria-label={modalCopy.previousImage}>
+                    <ArrowLeft aria-hidden="true" />
+                  </button>
+                  <p aria-live="polite" aria-atomic="true">
+                    <span className="sr-only">{modalCopy.image} </span>
+                    {currentImageIndex + 1} / {imageCount}
+                  </p>
+                  <button className="icon-control" type="button" onClick={() => stepImage(1)} aria-label={modalCopy.nextImage}>
+                    <ArrowRight aria-hidden="true" />
+                  </button>
+                </>
+              ) : null}
+              {zoom.zoomable ? (
+                <span className="artwork-dialog__zoom">
+                  <button
+                    className="icon-control"
+                    type="button"
+                    aria-pressed={zoom.zoomed}
+                    aria-label={modalCopy.zoom}
+                    title={modalCopy.zoomHint}
+                    onClick={() => zoom.toggle()}
+                  >
+                    {zoom.zoomed ? <MagnifyingGlassMinus aria-hidden="true" /> : <MagnifyingGlassPlus aria-hidden="true" />}
+                  </button>
+                  {zoom.zoomed ? <span className="artwork-dialog__zoom-level" aria-hidden="true">{zoom.percent}%</span> : null}
+                </span>
+              ) : null}
             </div>
           ) : null}
         </div>

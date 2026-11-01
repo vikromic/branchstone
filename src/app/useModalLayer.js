@@ -119,7 +119,7 @@ export function useModalLayer({ active = true, containerRef, initialFocusRef, on
     document.addEventListener("focusout", scheduleFocusRecovery, true);
     retainFocusAfterChange.observe(container, {
       attributes: true,
-      attributeFilter: ["aria-hidden", "class", "data-stay-state", "data-stay-visible", "hidden", "inert", "style"],
+      attributeFilter: ["aria-hidden", "class", "hidden", "inert", "style"],
       childList: true,
       subtree: true,
     });

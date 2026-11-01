@@ -52,3 +52,8 @@ Dated product-level outcomes. Git history holds the detail; this file does not r
 - Exhibitions, Practice, Contact, Commission, legal pages, and the 404 share the new language; Contact gained a copy-address action.
 - Retired the Stay reveal engine, the material-stage imagery and its generator, Cormorant Garamond, and the pre-paint motion class; pre-hydration now only redirects legacy links and arms the stall fallback.
 - Measured on a local production build at 390 px with 4× CPU and Fast 3G: Home and Gallery LCP 1.77 s, CLS 0.
+
+## 2026-11-01 — Artwork zoom
+
+- The artwork detail image now zooms to full resolution: double-tap or double-click, pinch, trackpad pinch, a zoom button, or + and −. While zoomed, drag, wheel, or arrow keys pan, and Escape returns to the fitted view before it closes the dialog.
+- Zoom stops at the master's own pixels and switches the image to the full master. Eight works whose masters are 360 px wide show no zoom on their main image; higher-resolution originals are the only fix.

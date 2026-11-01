@@ -59,6 +59,7 @@ body.gallery-modal-open { overflow: hidden; }
   min-height: 0;
   display: grid;
   place-items: center;
+  overflow: hidden;
 }
 .artwork-surface > img {
   position: relative;
@@ -66,9 +67,11 @@ body.gallery-modal-open { overflow: hidden; }
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transform-origin: 50% 50%;
   user-select: none;
   -webkit-user-drag: none;
 }
+.artwork-surface[data-zoom-motion="smooth"] > img { transition: transform 300ms var(--ease-material); }
 .artwork-surface[data-image-state="error"] > img { visibility: hidden; }
 .artwork-surface__placeholder {
   position: absolute;
@@ -102,6 +105,9 @@ body.gallery-modal-open { overflow: hidden; }
   inset: 0;
   touch-action: pan-y;
 }
+.artwork-surface[data-zoom="ready"] .artwork-dialog__gesture-surface { cursor: zoom-in; }
+.artwork-surface[data-zoom="zoomed"] .artwork-dialog__gesture-surface { cursor: grab; touch-action: none; }
+.artwork-surface[data-zoom="zoomed"] .artwork-dialog__gesture-surface:active { cursor: grabbing; }
 
 .artwork-dialog__carousel-controls {
   display: flex;
@@ -109,7 +115,8 @@ body.gallery-modal-open { overflow: hidden; }
   justify-content: center;
   gap: 0.75rem;
 }
-.artwork-dialog__carousel-controls p {
+.artwork-dialog__carousel-controls p,
+.artwork-dialog__zoom-level {
   margin: 0;
   min-width: 3.5rem;
   color: var(--ink-muted);
@@ -117,6 +124,9 @@ body.gallery-modal-open { overflow: hidden; }
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
+.artwork-dialog__zoom { display: inline-flex; align-items: center; gap: 0.25rem; }
+.artwork-dialog__carousel-controls > p + button + .artwork-dialog__zoom { margin-inline-start: 0.75rem; }
+.artwork-dialog__zoom .icon-control[aria-pressed="true"] { background: var(--ink); color: var(--ground); border-color: var(--ink); }
 
 .artwork-dialog__aside {
   display: grid;

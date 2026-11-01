@@ -1,1 +1,0 @@
-import{u as t,j as a,S as r,s}from"./SiteShell-BUVbjeKk.js";import{L as i,p as o}from"./LegalDocument-CmBMjjwQ.js";/* empty css                  */function p(){const{locale:e}=t();return a.jsx(r,{page:"privacy",children:a.jsx(i,{page:"privacy",content:o[e]})})}s(p);
