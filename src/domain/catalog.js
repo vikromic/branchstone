@@ -135,6 +135,8 @@ export function localizeCatalog(records, locale, toAssetUrl) {
 
 export const HOME_PINNED_ARTWORK_ID = "july-pines";
 
+// July Pines first, then highlighted available works with a story. The count is
+// kept even so the two-column phone grid never ends on a lone orphan.
 export function selectHomeArtworks(catalog) {
   const pinned = catalog.find((artwork) => artwork.id === HOME_PINNED_ARTWORK_ID);
   const availableStories = catalog.filter((artwork) => (
@@ -143,7 +145,8 @@ export function selectHomeArtworks(catalog) {
     && !artwork.sold
     && artwork.story.trim()
   ));
-  return pinned ? [pinned, ...availableStories] : availableStories;
+  const selection = pinned ? [pinned, ...availableStories] : availableStories;
+  return selection.length % 2 ? selection.slice(0, -1) : selection;
 }
 
 // Story text is authored as paragraphs separated by blank lines.

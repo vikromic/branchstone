@@ -7,12 +7,12 @@ const stage = resolve(root, ".stage");
 const docs = resolve(root, "docs");
 const ukrainianMarkers = {
   "index.html": ["Вибрані роботи"],
-  "gallery.html": ["ЖИВИЙ АРХІВ МАТЕРІАЛІВ", "Роботи, що несуть землю"],
+  "gallery.html": ["Живий архів матеріалів", "Роботи, що несуть землю"],
   "exhibitions.html": ["Вибрана преса", "Галерея Rena Charles", "Запити від галерей"],
   "about.html": ["Statement художниці", "02 / Біографія", "05 / Продовження"],
-  "commissions.html": ["01 / ДОСЛІДЖЕННЯ МАСШТАБУ"],
+  "commissions.html": ["01 / Дослідження масштабу"],
   "contact.html": ["Почніть із нотатки."],
-  "privacy.html": ["НОТАТКИ"],
+  "privacy.html": ["Нотатки"],
   "terms.html": ["Умови для роботи й розмови."],
   "404.html": ["Цей шар уже вивітрився."],
 };

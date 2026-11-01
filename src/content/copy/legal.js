@@ -4,7 +4,7 @@ export const privacyCopy = {
     title: "Privacy, in plain language.",
     introduction: "This page describes what the current Branchstone website keeps in your browser, what happens when you choose to write an email, and the choices available to you.",
     revision: "Revised 18 July 2026",
-    indexLabel: "NOTES",
+    indexLabel: "Notes",
     sections: [
       {
         title: "What stays on this device",
@@ -47,7 +47,7 @@ export const privacyCopy = {
     title: "Про приватність простою мовою.",
     introduction: "Тут описано, що поточний сайт Branchstone зберігає у вашому браузері, що відбувається, коли ви вирішуєте надіслати листа, і які дії доступні вам.",
     revision: "Оновлено 18 липня 2026 року",
-    indexLabel: "НОТАТКИ",
+    indexLabel: "Нотатки",
     sections: [
       {
         title: "Що залишається на цьому пристрої",
@@ -93,7 +93,7 @@ export const termsCopy = {
     title: "Terms for the work and the conversation.",
     introduction: "These terms cover use of the Branchstone website. The specific terms of a sale or commission are confirmed separately in writing before either side commits.",
     revision: "Revised 18 July 2026",
-    indexLabel: "NOTES",
+    indexLabel: "Notes",
     sections: [
       {
         title: "Using this site",
@@ -136,7 +136,7 @@ export const termsCopy = {
     title: "Умови для роботи й розмови.",
     introduction: "Ці умови стосуються використання сайту Branchstone. Конкретні умови продажу або замовлення узгоджуються окремо в письмовій формі до того, як будь-яка сторона бере на себе зобов’язання.",
     revision: "Оновлено 18 липня 2026 року",
-    indexLabel: "НОТАТКИ",
+    indexLabel: "Нотатки",
     sections: [
       {
         title: "Користування сайтом",

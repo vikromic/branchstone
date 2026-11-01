@@ -4,6 +4,7 @@ import {
   collections,
   normalizeArtworkId,
   normalizeCollection,
+  selectHomeArtworks,
 } from "../../src/domain/catalog.js";
 
 describe("catalog rules", () => {
@@ -31,5 +32,22 @@ describe("catalog rules", () => {
     expect(normalizeCollection("По її слідах")).toBe("following-her-steps");
     expect(normalizeCollection("Спокій Лісу")).toBe("the-calm-of-the-forest");
     expect(normalizeCollection("<script>alert(1)</script>")).toBe("all");
+  });
+
+  it.each([
+    ["odd", 4, 4],
+    ["even", 3, 4],
+  ])("keeps July Pines first and trims an %s candidate total to an even Home selection", (_label, storyCount, expected) => {
+    const work = (id, extra = {}) => ({ id, highlighted: true, sold: false, story: "A story.", ...extra });
+    const catalog = [
+      work("july-pines", { sold: true }),
+      ...Array.from({ length: storyCount }, (_, index) => work(`story-${index}`)),
+      work("collected", { sold: true }),
+      work("quiet", { story: " " }),
+    ];
+    const selection = selectHomeArtworks(catalog);
+
+    expect(selection).toHaveLength(expected);
+    expect(selection[0].id).toBe("july-pines");
   });
 });

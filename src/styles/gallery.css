@@ -19,6 +19,7 @@
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
 }
+/* Below 1200 px the filters scroll sideways; the faded right edge says there is more. */
 .works-controls__scroller {
   display: flex;
   align-items: center;
@@ -26,22 +27,38 @@
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
-  padding: 0.15rem var(--safe-gutter-right) 0.15rem var(--safe-gutter-left);
+  padding: 0.15rem calc(var(--safe-gutter-right) + 2rem) 0.15rem var(--safe-gutter-left);
   scroll-padding-inline: var(--safe-gutter-left);
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 3rem), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 3rem), transparent);
 }
 .works-controls__scroller::-webkit-scrollbar { display: none; }
 .works-controls__collections { display: flex; gap: 0.5rem; }
-.works-controls__count {
-  margin: 0;
+.works-controls__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
   padding: 0 var(--safe-gutter-right) 0 var(--safe-gutter-left);
   color: var(--ink-muted);
   font-size: var(--text-xs);
+}
+.works-controls__count {
+  margin: 0;
   letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
 }
+.works-controls__legend { display: flex; gap: 1rem; margin: 0; }
 
 @media (min-width: 1200px) {
-  .works-controls__scroller { flex-wrap: wrap; overflow: visible; }
+  .works-controls__scroller {
+    flex-wrap: wrap;
+    overflow: visible;
+    padding-right: var(--safe-gutter-right);
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
 }
 
 .works-archive {

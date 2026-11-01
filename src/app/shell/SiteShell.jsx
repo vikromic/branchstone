@@ -195,7 +195,7 @@ export function SiteShell({ page, children, footer = true }) {
       <a className="skip-link" href="#main-content">{t.shell.skip}</a>
       <header className="site-header">
         <a className="wordmark" href={localeHref("/", locale)} aria-label={t.shell.homeLabel}>
-          <span>Branchstone</span><small>by Viktoria</small>
+          <span>Branchstone</span><small>{t.shell.byline}</small>
         </a>
         <RouteNavigation className="primary-navigation" items={primaryRoutes} locale={locale} page={page} t={t} />
         <div className="quiet-index-trigger">
@@ -302,7 +302,7 @@ export function SiteShell({ page, children, footer = true }) {
         <footer className="site-footer">
           <div className="footer-statement"><p className="kicker">{t.shell.footerKicker}</p><h2>{t.shell.footerTitle}</h2></div>
           <div className="footer-ledger">
-            <p>© 2026 Branchstone by Viktoria</p>
+            <p>© 2026 Branchstone {t.shell.byline}</p>
             <a href={INSTAGRAM_URL} target="_blank" rel="noreferrer">Instagram</a>
             <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
             <LegalLinks page={page} locale={locale} t={t} />

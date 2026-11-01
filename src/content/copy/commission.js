@@ -3,7 +3,7 @@ import { CONTACT_EMAIL } from "../site.js";
 export const commissionCopy = {
   en: {
     hero: {
-      kicker: "COMMISSION / A SHARED ACT OF LISTENING",
+      kicker: "Commission / A shared act of listening",
       titleLead: "A work made for",
       titleEmphasis: "the place it will inhabit.",
       intro: "A commission begins with your space, a memory, or a feeling that has no finished shape yet. Viktoria translates that starting point through bark, stone, pigment, fiber, and patient handwork.",
@@ -11,7 +11,7 @@ export const commissionCopy = {
       note: "Each work is one of one. Scope, materials, timing, and price are discussed together before any work begins.",
     },
     scale: {
-      kicker: "01 / SCALE STUDY",
+      kicker: "01 / Scale study",
       title: "Not tiers. Three ways a work can hold a room.",
       intro: "These outlines are conversation starters, not fixed products. Proportion can be adjusted to the architecture and the material language of the work.",
       options: [
@@ -22,7 +22,7 @@ export const commissionCopy = {
       price: "Final scope and price are discussed after the first exchange; no payment is taken through this website.",
     },
     process: {
-      kicker: "02 / HOW THE WORK TAKES FORM",
+      kicker: "02 / How the work takes form",
       title: "The artistic process",
       steps: [
         ["Listen", "We exchange references, dimensions, and the story the work needs to carry."],
@@ -40,7 +40,7 @@ export const commissionCopy = {
     },
     wizard: {
       stepsLabel: "Request steps",
-      kicker: "03 / REQUEST LEDGER",
+      kicker: "03 / Request ledger",
       title: "Give the first idea a place to land.",
       intro: "This four-part note helps Viktoria understand the beginning of the project. Nothing here commits you to a commission.",
       privacy: "Your draft stays only in this browser for 24 hours. The final link opens your own email app; you review and send the message yourself.",
@@ -134,7 +134,7 @@ export const commissionCopy = {
       noScriptContact: "Or open the correspondence page.",
     },
     faq: {
-      kicker: "04 / BEFORE WE BEGIN",
+      kicker: "04 / Before we begin",
       title: "A few useful answers",
       items: [
         ["When is the price decided?", "After Viktoria understands the desired scale, materials, location, and complexity, you receive a clear scope and price to consider before the work begins."],
@@ -146,7 +146,7 @@ export const commissionCopy = {
   },
   uk: {
     hero: {
-      kicker: "ЗАМОВЛЕННЯ / СПІЛЬНИЙ АКТ СЛУХАННЯ",
+      kicker: "Замовлення / Спільний акт слухання",
       titleLead: "Робота, створена для",
       titleEmphasis: "місця, де вона житиме.",
       intro: "Замовлення починається з вашого простору, спогаду чи відчуття, яке ще не має завершеної форми. Вікторія перекладає цю точку початку мовою кори, каменю, пігменту, волокна та повільної ручної роботи.",
@@ -154,7 +154,7 @@ export const commissionCopy = {
       note: "Кожна робота існує в одному екземплярі. Обсяг, матеріали, терміни й вартість обговорюються разом до початку роботи.",
     },
     scale: {
-      kicker: "01 / ДОСЛІДЖЕННЯ МАСШТАБУ",
+      kicker: "01 / Дослідження масштабу",
       title: "Не тарифи. Три способи, якими робота може тримати простір.",
       intro: "Ці контури — початок розмови, а не фіксовані продукти. Пропорції узгоджуються з архітектурою та матеріальною мовою роботи.",
       options: [
@@ -165,7 +165,7 @@ export const commissionCopy = {
       price: "Остаточний обсяг і вартість обговорюються після першого листування; сайт не приймає оплату.",
     },
     process: {
-      kicker: "02 / ЯК РОБОТА НАБУВАЄ ФОРМИ",
+      kicker: "02 / Як робота набуває форми",
       title: "Мистецький процес",
       steps: [
         ["Почути", "Ми обмінюємося референсами, розмірами та історією, яку має нести робота."],
@@ -183,7 +183,7 @@ export const commissionCopy = {
     },
     wizard: {
       stepsLabel: "Етапи запиту",
-      kicker: "03 / РЕЄСТР ЗАПИТУ",
+      kicker: "03 / Реєстр запиту",
       title: "Дайте першій ідеї місце, де вона може осісти.",
       intro: "Ця записка з чотирьох частин допоможе Вікторії зрозуміти початок проєкту. Вона ні до чого вас не зобов’язує.",
       privacy: "Чернетка зберігається лише в цьому браузері протягом 24 годин. Фінальне посилання відкриє вашу поштову програму; ви самі переглянете й надішлете лист.",
@@ -277,7 +277,7 @@ export const commissionCopy = {
       noScriptContact: "Або відкрийте сторінку листування.",
     },
     faq: {
-      kicker: "04 / ПЕРЕД ПОЧАТКОМ",
+      kicker: "04 / Перед початком",
       title: "Кілька корисних відповідей",
       items: [
         ["Коли визначається вартість?", "Коли Вікторія розуміє бажаний масштаб, матеріали, місце та складність, ви отримуєте чіткий обсяг і вартість для розгляду до початку роботи."],

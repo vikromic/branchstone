@@ -349,9 +349,15 @@ export function GalleryPage() {
             ))}
           </div>
         </div>
-        <p className="works-controls__count" aria-live="polite" aria-atomic="true">
-          {galleryWorkCount(visibleWorks.length, locale)}
-        </p>
+        <div className="works-controls__meta">
+          <p className="works-controls__count" aria-live="polite" aria-atomic="true">
+            {galleryWorkCount(visibleWorks.length, locale)}
+          </p>
+          <p className="works-controls__legend" aria-hidden="true">
+            <span className="status-dot" data-sold="false">{t.common.available}</span>
+            <span className="status-dot" data-sold="true">{t.common.collected}</span>
+          </p>
+        </div>
       </section>
 
       <section className="works-archive" aria-label={pageCopy.archive}>
