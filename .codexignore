@@ -1,349 +1,40 @@
-# ============================================================
-# Universal .codexignore — AI/LLM context exclusions
-# Covers: Python, Java/Spring, Node/TS, Angular, React, Vue,
-#         Go, Rust, .NET, DevOps, mobile, and general tooling
-# ============================================================
-
-# =========================
-# OS / Desktop junk
-# =========================
-.DS_Store
-Thumbs.db
-desktop.ini
-ehthumbs.db
-ehthumbs_vista.db
-*.lnk
-Icon?
-._*
-
-# =========================
-# VCS / metadata
-# =========================
+# Repository and dependency state
 .git/
-.gitignore
-.gitattributes
-.gitmodules
-.hg/
-.hgignore
-.svn/
-
-# =========================
-# IDE / Editor
-# =========================
-.idea/
-.vscode/
-*.iml
-*.ipr
-*.iws
-*.swp
-*.swo
-*.tmp
-*~
-*.bak
-*.orig
-.project
-.classpath
-.settings/
-.eclipseprojects
-*.sublime-project
-*.sublime-workspace
-.vim/
-.nvim/
-tags
-TAGS
-*.code-workspace
-
-# =========================
-# AI / LLM tool artifacts
-# =========================
-.ai/
-.claude/
-.claude-flow/
-.swarm/
-.claudeignore
-.codexignore
-.cursorignore
-.cursor/
-.copilot/
-.continue/
-.aider*
-.mcp.json
-CLAUDE.md
-CLAUDE.md.*
-reviews/
-
-# =========================
-# General build / temp / logs
-# =========================
-build/
-dist/
-out/
-tmp/
-temp/
-logs/
-*.log
-coverage/
-.coverage
-htmlcov/
-.nyc_output/
-.cache/
-target/
-bin/
-obj/
-artifacts/
-
-# =========================
-# Node / NPM / Yarn / PNPM
-# =========================
 node_modules/
-bower_components/
-jspm_packages/
-.yarn/
-.pnp.*
-.npm/
-*.tsbuildinfo
 package-lock.json
-yarn.lock
-pnpm-lock.yaml
-shrinkwrap.yaml
-.npmrc
 
-# =========================
-# Frontend frameworks (Angular/React/Vue/Svelte/Next/Nuxt)
-# =========================
-.next/
-.nuxt/
-.svelte-kit/
-.vite/
-.turbo/
-.angular/
-.output/
-storybook-static/
-build-storybook/
-public/build/
-.docusaurus/
-.cache-loader/
-.parcel-cache/
-.webpack/
-
-# Frontend caches / tools
-.eslintcache
-.stylelintcache
-.husky/
-lint-staged.config.*
-.browserslistrc
-
-# =========================
-# Java / Spring / Maven / Gradle
-# =========================
-target/
-.gradle/
-.mvn/
-mvnw
-mvnw.cmd
-gradlew
-gradlew.bat
-gradle/wrapper/
-*.class
-*.jar
-*.war
-*.ear
-*.lombok/
-.factorypath
-hs_err_pid*
-replay_pid*
-
-# =========================
-# Python
-# =========================
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.so
-venv/
-.venv/
-env/
-.env/
-ENV/
-.Python
-*.egg-info/
-.eggs/
-.pytest_cache/
-.mypy_cache/
-.dmypy.json
-.pyre/
-.pytype/
-.ruff_cache/
-.tox/
-.nox/
-.hypothesis/
-poetry.lock
-Pipfile.lock
-.ipynb_checkpoints/
-
-# =========================
-# Go
-# =========================
-*.exe
-*.exe~
-*.dll
-*.dylib
-vendor/
-pkg/
-
-# =========================
-# Rust
-# =========================
-target/
-Cargo.lock
-**/*.rs.bk
-
-# =========================
-# .NET / C#
-# =========================
-[Bb]in/
-[Oo]bj/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
-packages/
-*.nupkg
-project.lock.json
-
-# =========================
-# Docker / K8s / DevOps
-# =========================
-.chart/
-helmfile.d/.helmfile/**/*
-tmp-charts/
-.kube/
-*.local.yaml
-.terraform/
-*.tfstate
-*.tfstate.*
-.vagrant/
-.kitchen/
-.pulumi/
-
-# =========================
-# CI/CD artifacts
-# =========================
-.github/
-.gitlab-ci-local/
-.circleci/
-.travis.yml
-Jenkinsfile
-jenkins/
-appveyor.yml
-
-# =========================
-# Environment / secrets (NEVER feed to LLM)
-# =========================
-.env
-.env.*
-*.key
-*.pem
-*.crt
-*.pfx
-*.p12
-*.jks
-*.keystore
-*.truststore
-*.secret
-*.secrets
-credentials*
-secrets/
-.envrc
-
-# =========================
-# Test artifacts
-# =========================
-test-output/
+# Reproducible build and test output
+.stage/
+.stage-ssr/
+coverage/
+.playwright-mcp/
+playwright-report/
 test-results/
-junit-report.xml
-reports/
-*.lcov
-*/__snapshots__/
-.codeana-dry-run/
-.codeana-payloads/
+artifacts/
+screenshots/
+tmp/
+*.log
 
-# =========================
-# Database files
-# =========================
-*.db
-*.sqlite
-*.sqlite3
-*.db-journal
-*.db-wal
-*.db-shm
+# Generated deployment copies; inspect source instead
+docs/assets/
+docs/img/
+docs/*.html
+docs/uk/
 
-# =========================
-# Binary / large media assets
-# =========================
+# Binary media and font payloads
 *.png
 *.jpg
 *.jpeg
-*.gif
-*.bmp
-*.ico
 *.webp
-*.svg
-*.psd
-*.ai
+*.gif
 *.mp4
 *.mov
-*.avi
-*.mkv
-*.mp3
-*.wav
-*.flac
-*.ogg
-*.webm
 *.woff
 *.woff2
-*.eot
-*.ttf
-*.otf
 
-# =========================
-# Archives / compressed
-# =========================
-*.zip
-*.tar
-*.tar.gz
-*.tgz
-*.gz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.pdf
-
-# =========================
-# Mobile (iOS / Android)
-# =========================
-Pods/
-*.xcworkspace/
-*.xcuserdata/
-DerivedData/
-.gradle/
-*.apk
-*.aab
-*.ipa
-*.dSYM.zip
-
-# =========================
-# Misc caches / tools
-# =========================
-*.sass-cache
-.sass-cache/
-.direnv/
-.vercel/
-.netlify/
-.serverless/
-.dynamodb/
-.fusebox/
-.node_repl_history
-.debug/
+# Local-only state
+.env
+.env.*
+.DS_Store
+.idea/
+.vscode/

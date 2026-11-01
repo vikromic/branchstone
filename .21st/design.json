@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "project": {
+    "name": "branchstone",
+    "productType": "artist portfolio and living material archive (EN/UK)",
+    "stack": [
+      "react",
+      "vite"
+    ]
+  },
+  "sources": {
+    "tokens": [
+      "src/styles/tokens.css"
+    ],
+    "components": [
+      "src/styles/index.css",
+      "src/features/works/WorksGrid.jsx",
+      "src/features/artwork/ArtworkModal.jsx"
+    ],
+    "assets": [
+      "src/assets"
+    ],
+    "instructions": [
+      "CLAUDE.md"
+    ]
+  },
+  "design": {
+    "colorMode": "dual: Soil (dark) and Paper (light), following the system preference until chosen",
+    "colors": {
+      "ink": "var(--ink)",
+      "inkMuted": "var(--ink-muted)",
+      "ground": "var(--ground)",
+      "groundDeep": "var(--ground-deep)",
+      "surface": "var(--surface)",
+      "rule": "var(--rule)",
+      "accent": "var(--mineral)"
+    },
+    "typography": {
+      "family": "Inter Variable",
+      "display": "weight 600, letter-spacing -0.045em, line-height 0.92",
+      "scale": "--text-xs/sm/md/lg, --title-md/lg/xl"
+    },
+    "spacing": {
+      "gutter": "clamp(1.25rem, 4vw, 3.5rem)",
+      "gridGap": "clamp(0.75rem, 2vw, 1.75rem)",
+      "measure": "38rem"
+    },
+    "radius": {
+      "controls": "999px pills",
+      "cards": "0.75rem-1rem",
+      "artwork": "0, shown whole on a surface mat"
+    },
+    "shadows": {},
+    "motion": {
+      "ease": "cubic-bezier(0.22, 1, 0.36, 1)",
+      "detail": "View Transition morph from grid tile to detail image; off for reduced motion"
+    },
+    "density": "airy editorial pages with a dense justified works grid"
+  },
+  "components": {
+    "installed": [],
+    "preferredPrimitives": [
+      ".display",
+      ".kicker",
+      ".lede",
+      ".button / .button--bone",
+      ".pill",
+      ".segmented",
+      ".status-dot",
+      ".facts",
+      ".page-intro"
+    ],
+    "patterns": [
+      "justified rows via flex-grow proportional to aspect ratio",
+      "split artwork detail: image + carousel beside record",
+      "sticky glass header with Menu layer"
+    ]
+  },
+  "constraints": {
+    "must": [
+      "Artwork is never cropped (object-fit: contain)",
+      "44x44 px touch targets and WCAG AA contrast in both themes",
+      "Mobile first at 390 px; distinct desktop composition; no overflow at 320 px",
+      "Tokens only, no hard-coded colors"
+    ],
+    "avoid": [
+      "Decorative material/soil textures and serif display type (retired Carried Ground look)",
+      "Uppercase letter-spaced body copy"
+    ]
+  },
+  "decisions": [
+    "2026-10-31: Direction E · White Cube selected for the whole portfolio over A Material Register, B Wall at Scale, C Series Chapters, D Open Field, F Studio Bento — most professional for galleries and collectors, artwork-first, simplest to prerender and keep fast."
+  ],
+  "evidence": [
+    {
+      "fact": "project.instructions",
+      "source": "CLAUDE.md"
+    },
+    {
+      "fact": "design.tokens",
+      "source": "src/styles/tokens.css"
+    },
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:vite",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-11-01T05:03:02.999Z"
+}

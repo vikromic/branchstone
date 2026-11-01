@@ -51,6 +51,19 @@
       "image": "img/highlight/voyge-dallas-2026.jpeg",
       "link": "https://voyagedallas.com/interview/viktoria-branchstone-of-santa-rosa-on-life-lessons-legacy-highlight",
       "isFeatured": true
+    },
+    {
+      "id": "renaCharlesGallery-2026",
+      "type": "gallery",
+      "title": "Галерея Rena Charles",
+      "subtitle": "Виставка: «Мистецтво для всіх»",
+      "date": "Лют 2026",
+      "source": "Галерея Rena Charles",
+      "location": "Гілдсбург, Каліфорнія",
+      "description": "Виставка «Мистецтво для всіх» зосереджена на зв’язку, інклюзивності й розмаїтті та утверджує переконання, що мистецтво здатне об’єднувати людей, а кожен голос і кожне бачення мають значення.",
+      "image": "img/highlight/renaCharles2026.jpeg",
+      "link": "https://stayhealdsburg.com/event/art-for-everyone-community-open-house",
+      "isFeatured": true
     }
   ]
 }

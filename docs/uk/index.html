@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="uk" data-theme="soil">
+  <head>
+    <script data-branchstone-prehydrate="">(function runBranchstonePrehydrate(pageId, runtime = globalThis) {
+  const root2 = runtime.document?.documentElement;
+  const currentLocation = runtime.location;
+  if (!root2 || !currentLocation?.href) return { redirected: false };
+  const url = new URL(currentLocation.href);
+  const legacyArtwork = pageId === "home" ? url.searchParams.get("artwork") : null;
+  if (legacyArtwork) {
+    let locale = "en";
+    const pathIsUkrainian = url.pathname === "/uk" || url.pathname.startsWith("/uk/");
+    const requestedLocale = url.searchParams.get("lang");
+    if (pathIsUkrainian) locale = "uk";
+    else if (requestedLocale === "uk" || requestedLocale === "en") locale = requestedLocale;
+    else {
+      let storedLocale = null;
+      try {
+        storedLocale = runtime.localStorage?.getItem("branchstone.language");
+      } catch {
+      }
+      if (storedLocale === "uk" || storedLocale === "en") locale = storedLocale;
+      else {
+        try {
+          const languages = runtime.navigator?.languages?.length ? runtime.navigator.languages : [runtime.navigator?.language];
+          if (languages.some((language) => /^uk(?:-|$)/i.test(language || ""))) locale = "uk";
+        } catch {
+        }
+      }
+    }
+    let artworkId = String(legacyArtwork).replace(/^artwork-/, "");
+    if (artworkId === "mermaids-dream") artworkId = "mermaid-s-dream";
+    url.pathname = locale === "uk" ? "/uk/gallery.html" : "/gallery.html";
+    url.searchParams.delete("artwork");
+    url.searchParams.delete("lang");
+    url.searchParams.set("art", artworkId);
+    const target = `${url.pathname}${url.search}${url.hash}`;
+    const previousVisibility = root2.style.visibility;
+    root2.style.visibility = "hidden";
+    try {
+      currentLocation.replace(target);
+    } catch (error) {
+      root2.style.visibility = previousVisibility;
+      throw error;
+    }
+    return { redirected: true, target };
+  }
+  if (typeof runtime.setTimeout === "function") {
+    runtime.setTimeout(() => {
+      if (root2.dataset?.hydrated === "true") return;
+      if (pageId === "contact") {
+        const fallback = runtime.document?.querySelector?.("[data-contact-boot-fallback]");
+        fallback?.setAttribute("role", "status");
+        fallback?.setAttribute("aria-live", "polite");
+        fallback?.setAttribute("aria-atomic", "true");
+      }
+      if (root2.dataset) root2.dataset.hydrationStalled = "true";
+    }, pageId === "contact" ? 8e3 : 4e3);
+  }
+  return { redirected: false };
+})("home");</script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#15110e" />
+    <title>Branchstone від Вікторії — мистецтво змішаних медіа</title>
+    <meta name="description" content="Живий матеріальний архів Branchstone: роботи з кори, землі, пам’яті й часу." />
+    <link rel="canonical" href="https://branchstone.art/uk/" />
+    <link rel="alternate" hreflang="en" href="https://branchstone.art/" />
+    <link rel="alternate" hreflang="uk" href="https://branchstone.art/uk/" />
+    <link rel="alternate" hreflang="x-default" href="https://branchstone.art/" />
+    <meta property="og:title" content="Branchstone від Вікторії — мистецтво змішаних медіа" />
+    <meta property="og:description" content="Живий матеріальний архів Branchstone: роботи з кори, землі, пам’яті й часу." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://branchstone.art/uk/" />
+    <meta property="og:image" content="https://branchstone.art/img/cover.jpeg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://branchstone.art/img/cover.jpeg" />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script>(function(){var t=null;try{var v=localStorage.getItem('branchstone-theme');t=v?JSON.parse(v):null}catch(e){}if(t==='light'||t==='paper'||((t!=='dark'&&t!=='soil')&&matchMedia('(prefers-color-scheme:light)').matches)){document.documentElement.dataset.theme='paper';document.querySelector('meta[name="theme-color"]').content='#e9e0d3'}})()</script>
+    <script type="module" crossorigin src="/assets/home-C9gnWQgf.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/SiteShell--mBhruj2.js">
+    <link rel="modulepreload" crossorigin href="/assets/ArrowUpRight.es-DSnNAGag.js">
+    <link rel="modulepreload" crossorigin href="/assets/ArrowRight.es-MnfM_A4R.js">
+    <link rel="modulepreload" crossorigin href="/assets/WorksGrid-CT17NBGP.js">
+    <link rel="stylesheet" crossorigin href="/assets/SiteShell-C6tiMbQl.css">
+    <link rel="stylesheet" crossorigin href="/assets/WorksGrid-C_r-siCy.css">
+    <link rel="stylesheet" crossorigin href="/assets/home-Dc0RVv68.css">
+  </head>
+  <body data-page="home">
+    <div id="root" data-initial-locale="uk"><link rel="preload" as="image" href="/assets/july-pines-BzP32BTo.webp" fetchPriority="high"/><link rel="preload" as="image" href="/assets/born-of-burn-GHqlC9na.webp" fetchPriority="high"/><link rel="preload" as="image" href="/assets/spring-fire-BcjNRJQl.webp" fetchPriority="auto"/><link rel="preload" as="image" href="/assets/mermaid-s-dream-GuwxSjgc.webp" fetchPriority="auto"/><div class="site-frame page-home"><a class="skip-link" href="#main-content">До основного вмісту</a><header class="site-header"><a class="wordmark" href="/uk/" aria-label="Branchstone від Вікторії, головна сторінка"><span>Branchstone</span><small>від Вікторії</small></a><nav class="primary-navigation" aria-label="Основна навігація"><a href="/uk/gallery.html">Роботи</a><a href="/uk/exhibitions.html">Виставки</a><a href="/uk/about.html">Практика</a><a href="/uk/contact.html">Контакти</a></nav><div class="quiet-index-trigger"><a class="all-works-link" href="/uk/gallery.html">Усі роботи</a><details class="prehydrate-index"><summary aria-label="Відкрити меню" aria-controls="prehydrate-index-layer" data-open-label="Закрити"><span>Меню</span></summary><div id="prehydrate-index-layer" class="prehydrate-index__layer" role="region" aria-label="Меню"><nav aria-label="Основна навігація"><a aria-current="page" href="/uk/"><span>01</span>Головна</a><a href="/uk/gallery.html"><span>02</span>Роботи</a><a href="/uk/exhibitions.html"><span>03</span>Виставки</a><a href="/uk/about.html"><span>04</span>Практика</a><a href="/uk/contact.html"><span>05</span>Контакти</a></nav><div class="prehydrate-index__utilities" role="group" aria-label="Студійні та юридичні посилання"><a href="/">English</a><span>Вигляд<!-- --> / <!-- -->Ґрунт</span><span>Збережені роботи<!-- --> / <!-- -->00</span><a href="mailto:thebranchstone@gmail.com">Написати до студії</a><a href="/uk/commissions.html">Гайд із замовлення</a><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Нотатки студії / Instagram</a><a href="/uk/privacy.html">Політика конфіденційності</a><a href="/uk/terms.html">Умови надання послуг</a></div></div></details><button class="index-control" type="button" aria-expanded="false" aria-haspopup="dialog" aria-controls="site-index-layer" aria-label="Відкрити меню">Меню</button></div></header><main id="main-content" tabindex="-1"><section class="home-hero" aria-labelledby="home-title"><p class="kicker">Вікторія · Змішана техніка · Північна Каліфорнія</p><h1 id="home-title" class="display home-hero__title">Branchstone</h1><div class="home-hero__row"><div class="home-hero__lead"><p class="lede">Роботи Вікторії у змішаній техніці — з деревини, кори, водоростей, піску та пігментів, зібраних із землі.</p><div class="home-hero__actions"><a class="button button--bone" href="/uk/gallery.html">Переглянути всі роботи</a><a class="button" href="/uk/about.html">Про практику</a></div></div><dl class="facts" aria-label="Архів коротко"><div><dt>Роботи</dt><dd>32</dd></div><div><dt>Доступні</dt><dd>19</dd></div><div><dt>Серії</dt><dd>7</dd></div></dl></div></section><section class="home-selected page-section" aria-labelledby="home-selected-title"><header class="home-section-head"><h2 id="home-selected-title" class="display">Вибрані роботи</h2><p>Перший погляд на архів. Відкрийте будь-яку роботу, щоб побачити її матеріали, історію та доступність.</p></header><ol class="works-grid" role="list"><li class="works-grid__item" data-sold="true" style="--ar:0.8;flex-grow:0.8"><a id="artwork-open-july-pines" class="works-grid__link" href="/uk/gallery.html?art=july-pines"><span class="works-grid__frame" data-preview-error="false"><img src="/assets/july-pines-BzP32BTo.webp" alt="" width="720" height="900" loading="eager" fetchPriority="high" decoding="async" draggable="false"/></span><span class="works-grid__caption"><h3 class="works-grid__title">Липневі Сосни</h3><span class="works-grid__meta"><span class="status-dot" data-sold="true"><span class="sr-only">У колекції</span></span>2025</span></span></a></li><li class="works-grid__item" data-sold="false" style="--ar:0.8;flex-grow:0.8"><a id="artwork-open-born-of-burn" class="works-grid__link" href="/uk/gallery.html?art=born-of-burn"><span class="works-grid__frame" data-preview-error="false"><img src="/assets/born-of-burn-GHqlC9na.webp" alt="" width="360" height="450" loading="eager" fetchPriority="high" decoding="async" draggable="false"/></span><span class="works-grid__caption"><h3 class="works-grid__title">Народженне з Попілу</h3><span class="works-grid__meta"><span class="status-dot" data-sold="false"><span class="sr-only">Доступна</span></span>2025</span></span></a></li><li class="works-grid__item" data-sold="false" style="--ar:0.8008898776418243;flex-grow:0.8008898776418243"><a id="artwork-open-spring-fire" class="works-grid__link" href="/uk/gallery.html?art=spring-fire"><span class="works-grid__frame" data-preview-error="false"><img src="/assets/spring-fire-BcjNRJQl.webp" alt="" width="720" height="899" loading="eager" fetchPriority="auto" decoding="async" draggable="false"/></span><span class="works-grid__caption"><h3 class="works-grid__title">Пожежа на Весні</h3><span class="works-grid__meta"><span class="status-dot" data-sold="false"><span class="sr-only">Доступна</span></span>2025</span></span></a></li><li class="works-grid__item" data-sold="false" style="--ar:0.75;flex-grow:0.75"><a id="artwork-open-mermaid-s-dream" class="works-grid__link" href="/uk/gallery.html?art=mermaid-s-dream"><span class="works-grid__frame" data-preview-error="false"><img src="/assets/mermaid-s-dream-GuwxSjgc.webp" alt="" width="720" height="960" loading="eager" fetchPriority="auto" decoding="async" draggable="false"/></span><span class="works-grid__caption"><h3 class="works-grid__title">Русалчин Сон</h3><span class="works-grid__meta"><span class="status-dot" data-sold="false"><span class="sr-only">Доступна</span></span>2025</span></span></a></li><li class="works-grid__item" data-sold="false" style="--ar:1.019830028328612;flex-grow:1.019830028328612"><a id="artwork-open-dreaming" class="works-grid__link" href="/uk/gallery.html?art=dreaming"><span class="works-grid__frame" data-preview-error="false"><img src="/assets/dreaming-DKcmt-4a.webp" alt="" width="720" height="706" loading="lazy" fetchPriority="auto" decoding="async" draggable="false"/></span><span class="works-grid__caption"><h3 class="works-grid__title">Мрії</h3><span class="works-grid__meta"><span class="status-dot" data-sold="false"><span class="sr-only">Доступна</span></span>2026</span></span></a></li><li class="works-grid__item" data-sold="false" style="--ar:0.9876543209876543;flex-grow:0.9876543209876543"><a id="artwork-open-grounded" class="works-grid__link" href="/uk/gallery.html?art=grounded"><span class="works-grid__frame" data-preview-error="false"><img src="/assets/grounded-BFAQTKoI.webp" alt="" width="720" height="729" loading="lazy" fetchPriority="auto" decoding="async" draggable="false"/></span><span class="works-grid__caption"><h3 class="works-grid__title">Заземлена</h3><span class="works-grid__meta"><span class="status-dot" data-sold="false"><span class="sr-only">Доступна</span></span>2026</span></span></a></li></ol><a class="button home-selected__all" href="/uk/gallery.html">Переглянути всі роботи<!-- --> · <!-- -->32</a></section><section class="home-studio page-section" aria-labelledby="home-studio-title"><h2 id="home-studio-title" class="kicker">Зі студії</h2><ul class="home-studio__list" role="list"><li><a href="/uk/exhibitions.html"><span class="home-studio__name">Виставки</span><span class="home-studio__note">Виставки та публікації.</span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"></path></svg></a></li><li><a href="/uk/about.html"><span class="home-studio__name">Практика</span><span class="home-studio__note">Заява, біографія та метод.</span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"></path></svg></a></li><li><a href="/uk/commissions.html"><span class="home-studio__name">Замовити</span><span class="home-studio__note">Робота для місця, де вона житиме.</span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"></path></svg></a></li></ul></section></main><footer class="site-footer"><div class="footer-statement"><p class="kicker">Будьте в курсі / Без підписки</p><h2>Слідкуйте за тим, що формується.</h2></div><div class="footer-ledger"><p>© 2026 Branchstone <!-- -->від Вікторії</p><a href="https://www.instagram.com/thebranchstone/" target="_blank" rel="noreferrer">Instagram</a><a href="mailto:thebranchstone@gmail.com">thebranchstone@gmail.com</a><a href="/uk/privacy.html">Політика конфіденційності</a><a href="/uk/terms.html">Умови надання послуг</a></div></footer></div></div>
+  </body>
+</html>
