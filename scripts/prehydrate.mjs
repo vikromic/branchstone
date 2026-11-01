@@ -8,7 +8,7 @@ const PAGE_ATTRIBUTE = /<body\b[^>]*\bdata-page="([^"]+)"/;
 export function runBranchstonePrehydrate(pageId, runtime = globalThis) {
   const root = runtime.document?.documentElement;
   const currentLocation = runtime.location;
-  if (!root || !currentLocation?.href) return { enhanced: false, redirected: false };
+  if (!root || !currentLocation?.href) return { redirected: false };
 
   const url = new URL(currentLocation.href);
   const legacyArtwork = pageId === "home" ? url.searchParams.get("artwork") : null;
@@ -58,40 +58,12 @@ export function runBranchstonePrehydrate(pageId, runtime = globalThis) {
       root.style.visibility = previousVisibility;
       throw error;
     }
-    return { enhanced: false, redirected: true, target };
+    return { redirected: true, target };
   }
 
-  if (pageId === "gallery" && root.dataset) {
-    try {
-      root.dataset.galleryLayout = runtime.matchMedia?.("(min-width: 760px)")?.matches
-        ? "stream"
-        : "index";
-    } catch {
-      root.dataset.galleryLayout = "index";
-    }
-  }
-
-  let motionPreference;
-  try {
-    if (typeof runtime.matchMedia === "function") {
-      motionPreference = runtime.matchMedia("(prefers-reduced-motion: reduce)");
-    }
-  } catch {
-    // Without a trustworthy motion preference, leave the fully resolved SSR state visible.
-  }
-
-  let enhancementExpired = false;
-  const syncMotionClass = () => {
-    const enhanced = Boolean(!enhancementExpired && motionPreference && !motionPreference.matches);
-    root.classList.toggle("stay-enhanced", enhanced);
-    return enhanced;
-  };
-  const enhanced = syncMotionClass();
-  motionPreference?.addEventListener?.("change", syncMotionClass);
   if (typeof runtime.setTimeout === "function") {
     runtime.setTimeout(() => {
       if (root.dataset?.hydrated === "true") return;
-      enhancementExpired = true;
       if (pageId === "contact") {
         const fallback = runtime.document?.querySelector?.("[data-contact-boot-fallback]");
         fallback?.setAttribute("role", "status");
@@ -99,10 +71,9 @@ export function runBranchstonePrehydrate(pageId, runtime = globalThis) {
         fallback?.setAttribute("aria-atomic", "true");
       }
       if (root.dataset) root.dataset.hydrationStalled = "true";
-      syncMotionClass();
     }, pageId === "contact" ? 8000 : 4000);
   }
-  return { enhanced, redirected: false };
+  return { redirected: false };
 }
 
 export function inlinePrehydrateScript(pageId) {

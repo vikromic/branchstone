@@ -1,10 +1,9 @@
 export const contactCopy = {
   en: {
-    eyebrow: "CONTACT / STUDIO CHANNEL",
+    eyebrow: "Contact",
     title: "Begin with a note.",
     introduction:
       "Gallery, curatorial, jury, press, collection, artwork, and commission enquiries are welcome. Your words remain in this form until you choose how to carry them into your own email app.",
-    marker: "STUDIO LETTER / 01",
     sheetTitle: "Write to the studio",
     sheetIntroduction:
       "This form does not send or store your message. It prepares a complete email addressed directly to Viktoria.",
@@ -31,20 +30,23 @@ export const contactCopy = {
     copyError: "Copying was blocked by the browser. Select and copy the message field, or email the studio directly.",
     invalid: "Complete the first highlighted field before continuing.",
     emptyField: "This field cannot contain only spaces.",
-    context: "WORKS CARRIED INTO THIS NOTE",
+    context: "Works carried into this note",
     removeWork: "Remove from this inquiry",
     worksRemaining: "Works remaining in this inquiry: {count}.",
     noScript: "JavaScript is needed to prepare the addressed letter without exposing its contents in the page URL. You can still email the studio directly.",
     bootFallback: "The letter is still preparing. You can email the studio directly:",
     pendingMessage: "I’m interested in these saved works and would like to know more about them.",
     artworkSubject: "Artwork inquiry",
-    desk: "DIRECT CHANNELS",
+    desk: "Direct channels",
+    copyAddress: "Copy address",
+    addressCopied: "Email address copied.",
+    addressCopyError: "Copying was blocked by the browser. Select the address above instead.",
     deskTitle: "Studio correspondence",
     emailLabel: "Email",
     instagramLabel: "Studio notes",
     replyLabel: "Replies",
     replyText: "Replies are written personally as studio time allows.",
-    faqEyebrow: "BEFORE YOU WRITE / FIELD NOTES",
+    faqEyebrow: "Before you write",
     faqTitle: "A few useful answers",
     faq: [
       {
@@ -77,11 +79,10 @@ export const contactCopy = {
     preparedBy: "Prepared on branchstone.art — not sent by the website.",
   },
   uk: {
-    eyebrow: "КОНТАКТИ / КАНАЛ СТУДІЇ",
+    eyebrow: "Контакти",
     title: "Почніть із нотатки.",
     introduction:
       "Вітаються запити від галерей, кураторів, журі, преси й колекціонерів, а також щодо окремих робіт та індивідуальних замовлень. Ваші слова залишаються у цій формі, доки ви самі не перенесете їх у свою поштову програму.",
-    marker: "ЛИСТ ДО СТУДІЇ / 01",
     sheetTitle: "Написати до студії",
     sheetIntroduction:
       "Ця форма не надсилає і не зберігає повідомлення. Вона готує повний лист, адресований безпосередньо Вікторії.",
@@ -108,20 +109,23 @@ export const contactCopy = {
     copyError: "Браузер заблокував копіювання. Виділіть текст повідомлення вручну або напишіть студії напряму.",
     invalid: "Заповніть перше виділене поле, перш ніж продовжити.",
     emptyField: "Поле не може містити лише пробіли.",
-    context: "РОБОТИ, ДОДАНІ ДО ЦЬОГО ЛИСТА",
+    context: "Роботи, додані до цього листа",
     removeWork: "Прибрати із запиту",
     worksRemaining: "Робіт у цьому запиті: {count}.",
     noScript: "JavaScript потрібен, щоб підготувати адресований лист без показу його вмісту в URL сторінки. Ви все одно можете написати студії напряму.",
     bootFallback: "Лист ще готується. Ви можете написати студії напряму:",
     pendingMessage: "Мене цікавлять ці збережені роботи, і я хотів би дізнатися про них більше.",
     artworkSubject: "Запит про роботу",
-    desk: "ПРЯМІ КАНАЛИ",
+    desk: "Прямі канали",
+    copyAddress: "Скопіювати адресу",
+    addressCopied: "Адресу скопійовано.",
+    addressCopyError: "Браузер заблокував копіювання. Виділіть адресу вище вручну.",
     deskTitle: "Листування зі студією",
     emailLabel: "Електронна пошта",
     instagramLabel: "Нотатки студії",
     replyLabel: "Відповіді",
     replyText: "Вікторія відповідає особисто, коли це дозволяє робота у студії.",
-    faqEyebrow: "ПЕРЕД ЛИСТОМ / ПОЛЬОВІ НОТАТКИ",
+    faqEyebrow: "Перед листом",
     faqTitle: "Кілька корисних відповідей",
     faq: [
       {

@@ -13,7 +13,7 @@ These hold through any redesign unless the owner explicitly migrates them.
 
 - Routes, locales (`/uk/` prefix), storage keys and envelopes, artwork deep links (`?art=`), and inquiry URLs stay backward compatible. A breaking change needs a documented migration.
 - Every page is prerendered with semantic `<main>` and one `<h1>`. Prerendered Gallery links resolve without JavaScript to matching static artwork details; hydration may remove that fallback only after the enhanced view owns the same journey, and the fallback must reappear if hydration stalls.
-- Index → Saved works and the artwork modal are browser-history layers: Back/Forward restore them, Escape closes them, focus returns to the opener, scroll lock is released.
+- Menu (the site index layer) → Saved works and the artwork modal are browser-history layers: Back/Forward restore them, Escape closes them, focus returns to the opener, scroll lock is released.
 - Contact and Commission hand off through the visitor's email app or clipboard. Never claim a server submission happened.
 - Surface broken states (image, data, storage, hydration failures); never hide them.
 - Reduced motion exposes the fully resolved semantic state.
@@ -23,10 +23,11 @@ These hold through any redesign unless the owner explicitly migrates them.
 
 ## Current presentation
 
-The live visual system is **Carried Ground / Eroded Vault** with two themes, Soil (dark, default) and Paper (light). It holds until a redesign explicitly replaces it.
+The live visual system is **White Cube**: a contemporary gallery language with Inter display type (weight 600, tight tracking), calm whitespace, pill-shaped controls, and sentence case. It has two themes, Soil (dark) and Paper (light); the theme follows the visitor's system preference until they choose one, with Soil as the no-signal fallback. It holds until a redesign explicitly replaces it.
 
-- Home: native vertical scrolling with viewport snapping selects seven works; each resolves artwork → materials → story → availability after the viewport settles, with no artificial delay. Only the introductory July Pines state has the geological top and bottom frame.
-- Gallery: below 760 px a scan-first semantic index (native filters, full-composition previews, saved works, modal navigation) that is usable immediately; from 760 px the atmospheric Stay reveal stream. Both modes share catalog, URL, modal, history, and artwork-integrity contracts.
+- Shell: a sticky glass header (wordmark, Works → Exhibitions → Practice → Contact from 900 px, and a Menu layer at every width with language, appearance, saved works, Commission, and legal links).
+- Home: an oversized wordmark, the archive facts, a justified grid of selected works that deep-link to Gallery, and studio routes.
+- Gallery: one justified grid at every width (each row shares one height; every preview shows its full composition), availability and collection pill filters, and an artwork detail dialog: image and carousel beside the record, with Prev/Next and ←/→ between works. Opening a work morphs its image with the View Transitions API where supported and motion is allowed.
 - Practice exposes Statement, Biography, and Method directly. Exhibitions owns the authored exhibition and press records.
 
 ## Architecture
@@ -37,7 +38,7 @@ src/
   domain/     pure rules: locale and routes, catalog, saved works codec, inquiry, commission, contact letter, gallery URL, storage contract
   platform/   browser I/O: localStorage, matchMedia, clipboard
   app/        runtime: startPage, SiteContext (locale, theme, saved works), document head, modal layer, shell/ (header, index, saved works, footer)
-  features/   presentation modules: home, artwork, stay, legal
+  features/   presentation modules: works (justified grid), artwork (detail dialog), legal
   pages/      page composition and page-specific presentation
   styles/     tokens.css (theme custom properties) imported first by index.css; page stylesheets
   entries/, entry-server.jsx   client and SSR entry points
@@ -59,8 +60,7 @@ A redesign replaces `features/`, `pages/`, and `styles/` (and shell presentation
 - Build and publish: `scripts/`, `vite.config.js`, `vitest.config.js`, `package.json`.
 - Tests: `tests/`, mirroring `src/` layers plus `tests/scripts/` and `tests/support/`.
 - Artist content and media: `docs/json_data/` and `docs/img/`. Preserve them unless the artist requests a change. EN and UK artwork records must list the same images.
-- Mobile artwork previews: `src/assets/artwork-index/`, generated from the masters by `scripts/generate-artwork-previews.mjs`. Delivery derivatives, never replacement artwork.
-- Environmental materials: `src/assets/material-stage/`; the `*-mobile.webp` derivatives and `gallery-seam-desktop.webp` come from `scripts/generate-mobile-materials.mjs`. Environmental material may be resized; artwork may not.
+- Artwork previews: `src/assets/artwork-index/`, generated from the masters by `scripts/generate-artwork-previews.mjs`, feed the justified grids at every width. Delivery derivatives, never replacement artwork.
 - Production artifact: generated `docs/*.html`, `docs/uk/`, and `docs/assets/`. GitHub Pages serves `codex/branchstone-carried-ground:/docs`, so the artifact is committed. Refresh it only with `npm run publish`.
 - Unreferenced media removed from `docs/img` on 2026-10-30 lives outside git in `~/Workspace/branchstone-media-archive` and in git history.
 

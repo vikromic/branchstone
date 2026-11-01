@@ -146,20 +146,12 @@ export function selectHomeArtworks(catalog) {
   return pinned ? [pinned, ...availableStories] : availableStories;
 }
 
-// Story text is authored as paragraphs separated by blank lines. The home
-// excerpt reads only the first non-empty line, so it splits on any line break.
+// Story text is authored as paragraphs separated by blank lines.
 export function storyParagraphs(story, minimumBreak = 2) {
   return String(story)
     .split(new RegExp(`\\n{${minimumBreak},}`))
     .map((paragraph) => paragraph.trim())
     .filter(Boolean);
-}
-
-export function storyExcerpt(story, limit = 190) {
-  const [paragraph = ""] = storyParagraphs(story, 1);
-  if (paragraph.length <= limit) return paragraph;
-  const clipped = paragraph.slice(0, limit + 1).replace(/\s+\S*$/, "").trim();
-  return `${clipped || paragraph.slice(0, limit).trim()}…`;
 }
 
 export function catalogStatsFor(artworks) {

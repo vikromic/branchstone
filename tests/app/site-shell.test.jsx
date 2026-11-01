@@ -46,7 +46,7 @@ describe("shared site shell", () => {
   it("makes all works a direct Gallery link while retaining a distinct index control", () => {
     const { container } = renderShell("home");
 
-    expect(screen.getByRole("link", { name: "all works" })).toHaveAttribute("href", "/gallery.html");
+    expect(screen.getByRole("link", { name: "All works" })).toHaveAttribute("href", "/gallery.html");
     const primaryNavigation = container.querySelector(".primary-navigation");
     expect(within(primaryNavigation).getByRole("link", { name: "Works" })).toHaveAttribute("href", "/gallery.html");
     expect(within(primaryNavigation).getByRole("link", { name: "Exhibitions" })).toHaveAttribute("href", "/exhibitions.html");
@@ -54,14 +54,11 @@ describe("shared site shell", () => {
     expect(within(primaryNavigation).getByRole("link", { name: "Contact" })).toHaveAttribute("href", "/contact.html");
     expect(within(primaryNavigation).queryByRole("link", { name: "Commission" })).not.toBeInTheDocument();
     const indexControl = container.querySelector("button.index-control");
-    expect(indexControl).toHaveAccessibleName("Open the site index");
+    expect(indexControl).toHaveAccessibleName("Open menu");
 
     fireEvent.click(indexControl);
-    expect(screen.getByRole("dialog", { name: "index" })).toBeInTheDocument();
-    const desktopMaterial = container.querySelector(".site-index__material source");
-    expect(desktopMaterial).toHaveAttribute("media", "(min-width: 760px)");
-    expect(container.querySelector(".site-index__material img")).not.toHaveAttribute("src");
-    expect(within(screen.getByRole("dialog", { name: "index" })).getByRole("link", { name: "Commission guide" }))
+    expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
+    expect(within(screen.getByRole("dialog", { name: "Menu" })).getByRole("link", { name: "Commission guide" }))
       .toHaveAttribute("href", "/commissions.html");
   });
 
@@ -76,7 +73,7 @@ describe("shared site shell", () => {
       branchstoneShellLayer: "index",
     });
 
-    const works = within(screen.getByRole("dialog", { name: "index" }))
+    const works = within(screen.getByRole("dialog", { name: "Menu" }))
       .getByRole("link", { name: /Works/ });
     works.focus();
     let stateAtNavigation;
@@ -87,14 +84,14 @@ describe("shared site shell", () => {
     fireEvent.click(works);
 
     expect(stateAtNavigation).toEqual(retainedState);
-    expect(screen.getByRole("dialog", { name: "index" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
     expect(works).toHaveFocus();
     const cleanedSourceEntry = stateAtNavigation;
     await waitFor(() => expect(window.history.state).toEqual({
       ...retainedState,
       branchstoneShellLayer: "index",
     }));
-    expect(screen.getByRole("dialog", { name: "index" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
 
     source.unmount();
     window.history.replaceState({ destination: "gallery" }, "", "/gallery.html");
@@ -121,7 +118,7 @@ describe("shared site shell", () => {
       ...retainedState,
       branchstoneShellLayer: "index",
     });
-    expect(screen.getByRole("dialog", { name: "index" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
 
     window.history.replaceState(retainedState, "", "/about.html");
     const pageShow = new Event("pageshow");
@@ -142,7 +139,7 @@ describe("shared site shell", () => {
     window.history.replaceState(retainedState, "", "/about.html");
     renderShell("about");
     fireEvent.click(document.querySelector("button.index-control"));
-    const works = within(screen.getByRole("dialog", { name: "index" }))
+    const works = within(screen.getByRole("dialog", { name: "Menu" }))
       .getByRole("link", { name: /Works/ });
     window.addEventListener("click", (event) => event.preventDefault(), { once: true });
 
@@ -152,7 +149,7 @@ describe("shared site shell", () => {
       ...retainedState,
       branchstoneShellLayer: "index",
     });
-    expect(screen.getByRole("dialog", { name: "index" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
   });
 
   it("names Instagram truthfully and marks legal links as the current page", () => {
@@ -173,9 +170,9 @@ describe("shared site shell", () => {
     window.localStorage.setItem(storageKeys.favorites, JSON.stringify(["artwork-july-pines"]));
     const { container } = renderShell("about");
 
-    await waitFor(() => expect(container.querySelector("button.index-control")).toHaveAccessibleName("Open the site index"));
+    await waitFor(() => expect(container.querySelector("button.index-control")).toHaveAccessibleName("Open menu"));
     fireEvent.click(container.querySelector("button.index-control"));
-    const indexDialog = screen.getByRole("dialog", { name: "index" });
+    const indexDialog = screen.getByRole("dialog", { name: "Menu" });
     fireEvent.click(within(indexDialog).getByRole("button", { name: "Saved works: 1" }));
 
     expect(await screen.findByRole("button", { name: "Remove from saved works: July Pines" })).toBeInTheDocument();
@@ -189,19 +186,19 @@ describe("shared site shell", () => {
 
     fireEvent.click(indexControl);
     expect(window.history.state).toMatchObject({ branchstoneShellLayer: "index" });
-    expect(screen.getByRole("dialog", { name: "index" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
 
     fireEvent.click(within(
-      screen.getByRole("dialog", { name: "index" }),
+      screen.getByRole("dialog", { name: "Menu" }),
     ).getByRole("button", { name: "Saved works: 0" }));
     expect(window.history.state).toMatchObject({ branchstoneShellLayer: "favorites" });
     expect(screen.getByRole("dialog", { name: "Saved works" })).toBeInTheDocument();
-    expect(screen.queryByRole("dialog", { name: "index" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("dialog", { name: "Menu" })).not.toBeInTheDocument();
 
     const indexState = { branchstoneShellLayer: "index" };
     window.history.replaceState(indexState, "", "/about.html");
     fireEvent(window, new PopStateEvent("popstate", { state: indexState }));
-    await waitFor(() => expect(screen.getByRole("dialog", { name: "index" }))
+    await waitFor(() => expect(screen.getByRole("dialog", { name: "Menu" }))
       .toBeInTheDocument());
     expect(screen.queryByRole("dialog", { name: "Saved works" })).not.toBeInTheDocument();
 
@@ -231,7 +228,7 @@ describe("shared site shell", () => {
     const indexControl = container.querySelector("button.index-control");
 
     fireEvent.click(indexControl);
-    expect(screen.getByRole("dialog", { name: "index" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
 
     window.history.replaceState({}, "", "/about.html");
     fireEvent(window, new PopStateEvent("popstate", { state: {} }));
@@ -242,7 +239,7 @@ describe("shared site shell", () => {
     window.history.replaceState(indexState, "", "/about.html");
     fireEvent(window, new PopStateEvent("popstate", { state: indexState }));
 
-    expect(screen.getByRole("dialog", { name: "index" })).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
     expect(cancelAnimationFrame).toHaveBeenCalledOnce();
     expect(frames.size).toBe(0);
   });
@@ -285,7 +282,7 @@ describe("shared site shell", () => {
     expect(window.history.state).toMatchObject({ branchstoneShellLayer: "index" });
 
     fireEvent.click(within(
-      screen.getByRole("dialog", { name: "index" }),
+      screen.getByRole("dialog", { name: "Menu" }),
     ).getByRole("link", { name: "Українська" }));
 
     await waitFor(() => expect(window.location.pathname).toBe("/uk/about.html"));
@@ -300,7 +297,7 @@ describe("shared site shell", () => {
     expect(new URL(canonical.href).pathname).toBe("/uk/about.html");
     expect(new URL(openGraphUrl.content).pathname).toBe("/uk/about.html");
     expect(window.localStorage.getItem(storageKeys.language)).toBe("uk");
-    expect(container.querySelector(".index-control")).toHaveTextContent("індекс");
+    expect(container.querySelector(".index-control")).toHaveTextContent("Меню");
 
     if (closeTrigger === "visible Close") {
       fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Закрити" }));
@@ -334,7 +331,7 @@ describe("shared site shell", () => {
       await waitFor(() => expect(fallbackIndex.open).toBe(false));
       expect(document.documentElement.dataset.hydrated).toBe("true");
       expect(window.history.state).toMatchObject({ branchstoneShellLayer: "index" });
-      expect(screen.getByRole("dialog", { name: "index" })).toBeInTheDocument();
+      expect(screen.getByRole("dialog", { name: "Menu" })).toBeInTheDocument();
     } finally {
       fallbackIndex.remove();
     }
@@ -353,7 +350,7 @@ describe("shared site shell", () => {
     });
     const { container } = renderShell("contact");
 
-    const index = await screen.findByRole("dialog", { name: "index" });
+    const index = await screen.findByRole("dialog", { name: "Menu" });
     fireEvent.click(within(index).getByRole("button", { name: "Close" }));
 
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
@@ -367,7 +364,7 @@ describe("shared site shell", () => {
     fireEvent.click(container.querySelector("button.index-control"));
 
     fireEvent.click(within(
-      screen.getByRole("dialog", { name: "index" }),
+      screen.getByRole("dialog", { name: "Menu" }),
     ).getByRole("button", { name: "Close" }));
     expect(back).toHaveBeenCalledTimes(1);
 

@@ -1,25 +1,43 @@
+/* White Cube design tokens. Soil (dark) and Paper (light) share every token name. */
 :root {
   color-scheme: dark;
   --ink: #f2ede5;
-  --ink-muted: rgba(242, 237, 229, 0.64);
+  --ink-muted: rgba(242, 237, 229, 0.68);
   --ground: #15110e;
   --ground-deep: #0d0c0b;
   --surface: #211914;
   --paper: #e9e0d3;
   --paper-ink: #211c18;
-  --rule: rgba(242, 237, 229, 0.25);
-  --rule-strong: rgba(242, 237, 229, 0.52);
-  --mineral: #628b95;
+  --rule: rgba(242, 237, 229, 0.18);
+  --rule-strong: rgba(242, 237, 229, 0.42);
+  --mineral: #7fa6b0;
   --copper: #a56343;
   --error: #ef9d81;
-  --serif: "Cormorant Garamond", Georgia, serif;
+  --header-glass: rgba(21, 17, 14, 0.82);
+  --shadow-art: 0 1px 2px rgba(0, 0, 0, 0.35);
+
   --sans: "Inter Variable", "Helvetica Neue", Arial, sans-serif;
+  --display-weight: 600;
+  --display-tracking: -0.045em;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: clamp(1.125rem, 1.4vw, 1.3rem);
+  --title-md: clamp(1.75rem, 3.6vw, 2.75rem);
+  --title-lg: clamp(2.4rem, 6vw, 5rem);
+  --title-xl: clamp(2.6rem, 15.5vw, 15rem);
+
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
   --safe-gutter-left: max(var(--gutter), calc(env(safe-area-inset-left) + 1rem));
   --safe-gutter-right: max(var(--gutter), calc(env(safe-area-inset-right) + 1rem));
-  --max: 80rem;
+  --grid-gap: clamp(0.75rem, 2vw, 1.75rem);
+  --max: 90rem;
+  --measure: 38rem;
+  --pill: 999px;
+  --target: max(44px, 2.75rem);
   --ease-material: cubic-bezier(0.22, 1, 0.36, 1);
-  --site-header-height: 5rem;
+  --site-header-height: 4rem;
+
   font-family: var(--sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -30,14 +48,16 @@
 :root[data-theme="paper"] {
   color-scheme: light;
   --ink: #241e1a;
-  --ink-muted: rgba(36, 30, 26, 0.68);
+  --ink-muted: rgba(36, 30, 26, 0.7);
   --ground: #e9e0d3;
   --ground-deep: #ded3c5;
   --surface: #f2eadf;
   --paper: #f6efe5;
   --paper-ink: #211c18;
-  --rule: rgba(36, 30, 26, 0.24);
-  --rule-strong: rgba(36, 30, 26, 0.5);
+  --rule: rgba(36, 30, 26, 0.18);
+  --rule-strong: rgba(36, 30, 26, 0.45);
   --mineral: #3c606c;
   --error: #8f351f;
+  --header-glass: rgba(233, 224, 211, 0.86);
+  --shadow-art: 0 1px 2px rgba(36, 30, 26, 0.12);
 }

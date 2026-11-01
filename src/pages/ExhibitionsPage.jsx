@@ -1,5 +1,3 @@
-import bottomStrataAlpha from "../assets/material-stage/bottom-strata-alpha.webp";
-import bottomStrataMobile from "../assets/material-stage/bottom-strata-mobile.webp";
 import { SiteShell } from "../app/shell/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
 import { assetUrl } from "../content/asset-url.js";
@@ -23,26 +21,26 @@ function RecordSection({ content, records, title, note, type }) {
   const typeLabel = type === "gallery" ? content.exhibitionType : content.pressType;
 
   return (
-    <section className={`exhibitions-section editorial-chapter exhibitions-section--${type}`} aria-labelledby={`exhibitions-${type}-title`}>
-      <div className="editorial-chapter__heading">
-        <p className="chapter-number">{typeLabel}</p>
-        <h2 id={`exhibitions-${type}-title`}>{title}</h2>
+    <section className={`records records--${type}`} aria-labelledby={`exhibitions-${type}-title`}>
+      <header className="records__heading">
+        <p className="kicker">{typeLabel}</p>
+        <h2 className="display" id={`exhibitions-${type}-title`}>{title}</h2>
         <p>{note}</p>
-      </div>
-      <div className="highlight-ledger">
-        {records.map((record, index) => {
+      </header>
+      <div className="records__list">
+        {records.map((record) => {
           const institution = type === "gallery" ? record.title : record.source;
           return (
             <article className="highlight-entry" key={record.id}>
               <a className="highlight-entry__link" href={record.link} target="_blank" rel="noreferrer">
-                <img src={assetUrl(record.image)} alt="" loading="lazy" />
+                <div className="highlight-entry__frame">
+                  <img src={assetUrl(record.image)} alt="" loading="lazy" decoding="async" />
+                </div>
                 <div className="highlight-entry__copy">
-                  <p className="highlight-entry__meta">
-                    {String(index + 1).padStart(2, "0")} / {record.date} / {record.location}
-                  </p>
+                  <p className="highlight-entry__meta">{record.date} / {record.location}</p>
                   <h3>{record.subtitle}</h3>
                   <p className="highlight-entry__institution">{institution}</p>
-                  <p>{record.description}</p>
+                  <p className="highlight-entry__description">{record.description}</p>
                   <span className="highlight-entry__action">{action}</span>
                 </div>
               </a>
@@ -64,25 +62,19 @@ export function ExhibitionsPage() {
 
   return (
     <SiteShell page="exhibitions">
-      <div className="editorial-page exhibitions-page">
-        <section className="exhibitions-hero" aria-labelledby="exhibitions-title">
-          <div className="exhibitions-hero__copy">
+      <div className="exhibitions-page">
+        <section className="page-intro exhibitions-intro" aria-labelledby="exhibitions-title">
+          <div className="exhibitions-intro__copy">
             <p className="kicker">{content.eyebrow}</p>
-            <h1 id="exhibitions-title">{content.title}</h1>
-            <p>{content.introduction}</p>
+            <h1 className="display" id="exhibitions-title">{content.title}</h1>
+            <p className="lede">{content.introduction}</p>
           </div>
-          <dl className="exhibitions-hero__facts">
+          <dl className="facts">
             <div><dt>{content.period}</dt><dd>{period}</dd></div>
             <div><dt>{content.entries}</dt><dd>{String(records.length).padStart(2, "0")}</dd></div>
             <div><dt>{content.exhibitions}</dt><dd>{String(exhibitions.length).padStart(2, "0")}</dd></div>
             <div><dt>{content.press}</dt><dd>{String(press.length).padStart(2, "0")}</dd></div>
           </dl>
-          <div className="material-separator" aria-hidden="true">
-            <picture>
-              <source media="(max-width: 759px)" srcSet={bottomStrataMobile} />
-              <img src={bottomStrataAlpha} alt="" loading="lazy" fetchPriority="low" decoding="async" />
-            </picture>
-          </div>
         </section>
 
         <RecordSection
@@ -100,11 +92,11 @@ export function ExhibitionsPage() {
           type="press"
         />
 
-        <section className="editorial-invitation exhibitions-contact" aria-labelledby="exhibitions-contact-title">
+        <section className="invitation" aria-labelledby="exhibitions-contact-title">
           <p className="kicker">{content.contactEyebrow}</p>
-          <h2 id="exhibitions-contact-title">{content.contactTitle}</h2>
-          <p>{content.contactText}</p>
-          <div className="editorial-invitation__actions">
+          <h2 className="display" id="exhibitions-contact-title">{content.contactTitle}</h2>
+          <p className="lede">{content.contactText}</p>
+          <div className="invitation__actions">
             <a className="button button--bone" href={localeHref("/contact.html", locale)}>{content.contact}</a>
           </div>
         </section>

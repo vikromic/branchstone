@@ -1,12 +1,9 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import {
-  ArrowDown,
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
   BookmarkSimple,
-  EnvelopeSimple,
-  Eye,
   X,
 } from "@phosphor-icons/react";
 import { useSite } from "../../app/SiteContext.jsx";
@@ -15,12 +12,10 @@ import { artworkCopy } from "../../content/copy/artwork.js";
 import { storyParagraphs } from "../../domain/catalog.js";
 import { artworkContactHref } from "../../domain/inquiry.js";
 import { localeHref } from "../../domain/locale.js";
-import {
-  StayArtworkImage,
-  StayPhase,
-  StayReveal,
-  useStayRevealContext,
-} from "../stay/index.js";
+import "./artwork-dialog.css";
+
+// The detail image animates out of the grid tile that opened it.
+export const ARTWORK_TRANSITION_NAME = "artwork-focus";
 
 const pendingImageAnnouncementDelayMs = 500;
 const imageRecoveryDelayMs = 15000;
@@ -59,86 +54,73 @@ function artworkLocaleHref(
   return localeHref(`${url.pathname}${url.search}`, locale);
 }
 
-export function ArtworkSurface({
+// One artwork image with an honest load state: pending, ready, or error. A long
+// wait offers a retry that refetches the same source with a cache-busting query.
+function ArtworkImage({
   artwork,
   src,
-  alt,
-  className = "",
-  loading = "lazy",
-  fetchPriority = "auto",
-  height,
-  announcePending = false,
-  recoverable = false,
-  onImageSettled,
-  onOpen,
-  openId,
-  sizes,
   srcSet,
+  sizes,
   width,
+  height,
+  alt,
+  onImageSettled,
   children,
 }) {
-  const {
-    artworkImageState: imageState,
-    retryArtworkImage,
-  } = useStayRevealContext();
+  const copy = artworkCopy[artwork.locale];
   const imageRef = useRef(null);
   const retryButtonRef = useRef(null);
   const onImageSettledRef = useRef(onImageSettled);
   onImageSettledRef.current = onImageSettled;
+  const [imageRecovery, setImageRecovery] = useState(() => initialImageRecovery(src));
+  const activeRecovery = imageRecovery.source === src ? imageRecovery : initialImageRecovery(src);
+  const imageKey = `${src}:${activeRecovery.attempt}`;
+  const [loadState, setLoadState] = useState({ key: imageKey, state: "pending" });
+  const imageState = loadState.key === imageKey ? loadState.state : "pending";
+  const unavailable = imageState === "error";
+  const recoveryVisible = activeRecovery.stalled || activeRecovery.retrying || unavailable;
+  const recoveryMessage = activeRecovery.retrying
+    ? copy.imageRetrying
+    : unavailable
+      ? copy.imageUnavailable
+      : copy.imageLongWait;
+  const [imageAnnouncement, setImageAnnouncement] = useState("");
   const announcementSourceRef = useRef(src);
   const pendingAnnouncementPublishedRef = useRef(false);
-  const [imageRecovery, setImageRecovery] = useState(() => initialImageRecovery(src));
-  const activeRecovery = imageRecovery.source === src
-    ? imageRecovery
-    : initialImageRecovery(src);
-  const unavailable = imageState === "error";
-  const surfaceCopy = artworkCopy[artwork.locale];
-  const pendingLabel = surfaceCopy.imagePending;
-  const unavailableLabel = surfaceCopy.imageUnavailable;
-  const longWaitLabel = surfaceCopy.imageLongWait;
-  const retryLabel = surfaceCopy.imageRetry;
-  const retryingLabel = surfaceCopy.imageRetrying;
-  const recoveryVisible = recoverable && (
-    activeRecovery.stalled
-    || activeRecovery.retrying
-    || unavailable
-  );
-  const recoveryMessage = activeRecovery.retrying
-    ? retryingLabel
-    : unavailable
-      ? unavailableLabel
-      : longWaitLabel;
-  const [imageAnnouncement, setImageAnnouncement] = useState("");
-  const phaseClassName = ["artwork-surface", className].filter(Boolean).join(" ");
+
+  const settle = useCallback((state) => {
+    setLoadState({ key: imageKey, state });
+  }, [imageKey]);
 
   useEffect(() => {
-    setImageRecovery((current) => (
-      current.source === src ? current : initialImageRecovery(src)
-    ));
+    setImageRecovery((current) => (current.source === src ? current : initialImageRecovery(src)));
   }, [src]);
+
+  // An image that finished before hydration never fires onLoad for React.
+  useEffect(() => {
+    const image = imageRef.current;
+    if (image?.complete) settle(image.naturalWidth > 0 ? "ready" : "error");
+  }, [imageKey, settle]);
 
   useEffect(() => {
     if (imageState !== "pending") onImageSettledRef.current?.(imageState);
   }, [imageState, src]);
 
   useEffect(() => {
-    if (!recoverable || imageState !== "pending") return undefined;
+    if (imageState !== "pending") return undefined;
     const source = src;
     const attempt = activeRecovery.attempt;
     const recoveryId = globalThis.setTimeout(() => {
       setImageRecovery((current) => {
-        const matching = current.source === source
-          ? current
-          : initialImageRecovery(source);
+        const matching = current.source === source ? current : initialImageRecovery(source);
         if (matching.attempt !== attempt) return current;
         return { ...matching, stalled: true, retrying: false };
       });
     }, imageRecoveryDelayMs);
     return () => globalThis.clearTimeout(recoveryId);
-  }, [activeRecovery.attempt, imageState, recoverable, src]);
+  }, [activeRecovery.attempt, imageState, src]);
 
   useEffect(() => {
-    if (!announcePending) return undefined;
     if (announcementSourceRef.current !== src) {
       announcementSourceRef.current = src;
       pendingAnnouncementPublishedRef.current = false;
@@ -146,69 +128,57 @@ export function ArtworkSurface({
     }
     if (activeRecovery.retrying) {
       pendingAnnouncementPublishedRef.current = true;
-      setImageAnnouncement(retryingLabel);
+      setImageAnnouncement(copy.imageRetrying);
       return undefined;
     }
     if (activeRecovery.stalled && imageState === "pending") {
       pendingAnnouncementPublishedRef.current = true;
-      setImageAnnouncement(longWaitLabel);
+      setImageAnnouncement(copy.imageLongWait);
       return undefined;
     }
     if (imageState === "pending") {
       const announcementId = globalThis.setTimeout(() => {
         pendingAnnouncementPublishedRef.current = true;
-        setImageAnnouncement(pendingLabel);
+        setImageAnnouncement(copy.imagePending);
       }, pendingImageAnnouncementDelayMs);
       return () => globalThis.clearTimeout(announcementId);
     }
     if (imageState === "error") {
       pendingAnnouncementPublishedRef.current = false;
-      setImageAnnouncement(unavailableLabel);
+      setImageAnnouncement(copy.imageUnavailable);
       return undefined;
     }
     if (pendingAnnouncementPublishedRef.current) {
       pendingAnnouncementPublishedRef.current = false;
-      setImageAnnouncement(surfaceCopy.imageReady);
+      setImageAnnouncement(copy.imageReady);
     } else {
       setImageAnnouncement("");
     }
     return undefined;
-  }, [
-    activeRecovery.retrying,
-    activeRecovery.stalled,
-    announcePending,
-    imageState,
-    longWaitLabel,
-    pendingLabel,
-    retryingLabel,
-    src,
-    surfaceCopy.imageReady,
-    unavailableLabel,
-  ]);
+  }, [activeRecovery.retrying, activeRecovery.stalled, copy, imageState, src]);
 
   const restoreFocusAfterRecovery = () => {
     const retryButton = retryButtonRef.current;
     if (!retryButton || retryButton.ownerDocument.activeElement !== retryButton) return;
-    const root = retryButton.closest("[data-stay-root]");
-    const stableControl = root?.querySelector(".artwork-dialog__carousel-controls button")
-      ?? root?.querySelector("[data-modal-close]")
-      ?? root?.querySelector(".artwork-surface__open");
+    const dialog = retryButton.closest(".artwork-dialog");
+    const stableControl = dialog?.querySelector(".artwork-dialog__carousel-controls button")
+      ?? dialog?.querySelector("[data-modal-close]");
     globalThis.queueMicrotask?.(() => stableControl?.focus?.({ preventScroll: true }));
   };
 
   const handleImageLoad = () => {
     restoreFocusAfterRecovery();
-    setImageRecovery((current) => {
-      if (current.source !== src) return current;
-      return { ...current, stalled: false, retrying: false };
-    });
+    settle("ready");
+    setImageRecovery((current) => (
+      current.source === src ? { ...current, stalled: false, retrying: false } : current
+    ));
   };
 
   const handleImageError = () => {
-    setImageRecovery((current) => {
-      if (current.source !== src) return current;
-      return { ...current, stalled: false, retrying: false };
-    });
+    settle("error");
+    setImageRecovery((current) => (
+      current.source === src ? { ...current, stalled: false, retrying: false } : current
+    ));
   };
 
   const retryImage = () => {
@@ -218,7 +188,6 @@ export function ArtworkSurface({
       || imageRef.current?.src
       || activeRecovery.requestSource
       || src;
-    retryArtworkImage();
     setImageRecovery({
       source: src,
       attempt,
@@ -229,28 +198,27 @@ export function ArtworkSurface({
   };
 
   return (
-    <StayPhase
-      as="div"
-      phase="artwork"
-      className={phaseClassName}
+    <div
+      className="artwork-surface"
       data-image-state={imageState}
       data-image-recovery={recoveryVisible ? (
         activeRecovery.retrying ? "retrying" : unavailable ? "error" : "stalled"
       ) : "idle"}
     >
-      <StayArtworkImage
-        key={`${src}:${activeRecovery.attempt}`}
+      <img
+        key={imageKey}
         ref={imageRef}
         src={activeRecovery.requestSource}
-        alt={unavailable ? "" : alt}
-        loading={loading}
-        decoding="async"
-        fetchPriority={fetchPriority}
-        height={height}
-        draggable="false"
-        sizes={sizes}
         srcSet={activeRecovery.attempt > 0 ? undefined : srcSet}
+        sizes={sizes}
         width={width}
+        height={height}
+        alt={unavailable ? "" : alt}
+        loading="eager"
+        decoding="async"
+        fetchPriority="high"
+        draggable="false"
+        style={{ viewTransitionName: ARTWORK_TRANSITION_NAME }}
         data-image-request-attempt={activeRecovery.attempt}
         onLoad={handleImageLoad}
         onError={handleImageError}
@@ -261,197 +229,83 @@ export function ArtworkSurface({
         aria-label={unavailable ? artwork.name : undefined}
         aria-hidden={unavailable ? undefined : "true"}
       >
-        {imageState === "pending" ? (
-          <span className="artwork-surface__loading">
-            {pendingLabel}
-          </span>
-        ) : null}
-        {unavailable && !recoverable ? (
-          <span className="artwork-surface__error">
-            {unavailableLabel}
-          </span>
-        ) : null}
+        {imageState === "pending" ? <span className="artwork-surface__loading">{copy.imagePending}</span> : null}
       </div>
       {recoveryVisible ? (
-        <div
-          className="artwork-surface__recovery"
-          role={announcePending ? undefined : "status"}
-          aria-live={announcePending ? undefined : "polite"}
-          aria-atomic={announcePending ? undefined : "true"}
-        >
+        <div className="artwork-surface__recovery">
           <p>{recoveryMessage}</p>
           <button
             ref={retryButtonRef}
+            className="button"
             type="button"
             onClick={retryImage}
             aria-disabled={activeRecovery.retrying ? "true" : undefined}
           >
-            {retryLabel}
+            {copy.imageRetry}
           </button>
         </div>
       ) : null}
-      {announcePending ? (
-        <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-          {imageAnnouncement}
-        </span>
-      ) : null}
-      {onOpen ? (
-        <button
-          id={openId}
-          className="artwork-surface__open"
-          type="button"
-          onClick={onOpen}
-          aria-label={`${artwork.viewLabel}: ${artwork.name}`}
-        >
-          <span className="sr-only">{artwork.viewLabel}</span>
-        </button>
-      ) : null}
+      <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {imageAnnouncement}
+      </span>
       {children}
-    </StayPhase>
+    </div>
   );
 }
 
-export function ArtworkNarrative({
-  artwork,
-  locale,
-  t,
-  isFavorite,
-  onFavorite,
-  onReveal,
-  onOpen,
-  titleId,
-  descriptionId,
-  mode = "stream",
-}) {
-  const materialsId = `${titleId}-materials`;
-  const availabilityId = `${titleId}-availability`;
+function ArtworkRecord({ artwork, locale, t, titleId, isFavorite, onFavorite }) {
+  const copy = artworkCopy[locale];
   const status = artwork.sold ? t.common.collected : t.common.available;
   const story = storyParagraphs(artwork.story);
-  const hasStory = story.length > 0;
-  const narrativeCopy = artworkCopy[locale];
-  const revealLabel = narrativeCopy.reveal;
-  const controlledPhases = [materialsId, hasStory ? descriptionId : null, availabilityId]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <div className={`artwork-narrative artwork-narrative--${mode}`}>
-      <header className="artwork-narrative__identity">
-        <div className="artwork-narrative__ledger">
-          <span>{String(artwork.index + 1).padStart(2, "0")}</span>
-          <p>{artwork.collection}</p>
-          <span>{artwork.year}</span>
-        </div>
-        <div className="artwork-narrative__title-row">
-          <h2 id={titleId}>{artwork.name}</h2>
-          <button
-            className="artwork-narrative__reveal"
-            type="button"
-            onClick={onReveal}
-            aria-controls={controlledPhases}
-            data-stay-reveal-control=""
-          >
-            <span>{revealLabel}</span>
-            <ArrowDown aria-hidden="true" />
-          </button>
-        </div>
-      </header>
-
-      <StayPhase
-        as="section"
-        phase="materials"
-        id={materialsId}
-        className="artwork-narrative__phase artwork-narrative__materials"
-        aria-labelledby={`${materialsId}-label`}
-      >
-        <p id={`${materialsId}-label`} className="artwork-narrative__label">
-          {narrativeCopy.materials}
-        </p>
-        <p className="artwork-narrative__material-copy">{artwork.materials}</p>
-        <dl className="artwork-narrative__facts">
-          <div>
-            <dt>{narrativeCopy.dimensions}</dt>
-            <dd>{artwork.dimensions}</dd>
-          </div>
-          <div>
-            <dt>{narrativeCopy.year}</dt>
-            <dd>{artwork.year}</dd>
-          </div>
-        </dl>
-      </StayPhase>
-
-      {hasStory ? (
-        <StayPhase
-          as="section"
-          phase="story"
-          id={descriptionId}
-          className="artwork-narrative__phase artwork-narrative__story"
-          aria-labelledby={`${descriptionId}-label`}
-        >
-          <p id={`${descriptionId}-label`} className="artwork-narrative__label">
-            {narrativeCopy.story}
-          </p>
-          <div className="artwork-narrative__story-copy">
-            {story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-          </div>
-        </StayPhase>
+    <div className="artwork-record">
+      <p className="kicker">{artwork.collection} · {artwork.year}</p>
+      <h2 id={titleId} className="display artwork-record__title">{artwork.name}</h2>
+      {story.length ? (
+        <section className="artwork-record__story" aria-label={copy.story}>
+          {story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        </section>
       ) : null}
-
-      <StayPhase
-        as="section"
-        phase="availability"
-        id={availabilityId}
-        className="artwork-narrative__phase artwork-narrative__availability"
-        aria-labelledby={`${availabilityId}-label`}
-      >
+      <dl className="artwork-record__facts">
+        <div><dt>{copy.materials}</dt><dd>{artwork.materials}</dd></div>
+        <div><dt>{copy.dimensions}</dt><dd>{artwork.dimensions}</dd></div>
+        <div><dt>{copy.year}</dt><dd>{artwork.year}</dd></div>
         <div>
-          <p id={`${availabilityId}-label`} className="artwork-narrative__label">
-            {narrativeCopy.availability}
-          </p>
-          <p className="gallery-status" data-sold={artwork.sold ? "true" : "false"}>{status}</p>
-          {!artwork.sold && artwork.price ? <strong>USD {artwork.price}</strong> : null}
+          <dt>{copy.availability}</dt>
+          <dd>
+            <span className="status-dot" data-sold={artwork.sold ? "true" : "false"}>{status}</span>
+            {!artwork.sold && artwork.price ? <> · USD {artwork.price}</> : null}
+          </dd>
         </div>
-        <div className="artwork-narrative__actions">
-          <button
-            className="gallery-save"
-            type="button"
-            aria-pressed={isFavorite}
-            onClick={() => onFavorite(artwork.id)}
-            aria-label={`${isFavorite ? t.common.saved : t.common.save}: ${artwork.name}`}
+      </dl>
+      {artwork.sold ? <p className="artwork-record__note">{copy.collectedNote}</p> : null}
+      <div className="artwork-record__actions">
+        {!artwork.sold || artwork.prints ? (
+          <a
+            className="button button--bone"
+            href={artworkContactHref(artwork, locale, artwork.sold ? "print" : "original")}
           >
-            <BookmarkSimple weight={isFavorite ? "fill" : "regular"} aria-hidden="true" />
-            <span>{isFavorite ? t.common.saved : t.common.save}</span>
-          </button>
-          {onOpen ? (
-            <button className="artwork-narrative__view" type="button" onClick={onOpen}>
-              <Eye aria-hidden="true" />
-              {t.common.view}
-            </button>
-          ) : null}
-          {!artwork.sold || artwork.prints ? (
-            <a
-              className="artwork-narrative__inquire"
-              href={artworkContactHref(artwork, locale, artwork.sold ? "print" : "original")}
-            >
-              <EnvelopeSimple aria-hidden="true" />
-              {artwork.sold ? narrativeCopy.askAboutPrint : narrativeCopy.inquireAboutOriginal}
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-          ) : null}
-          {artwork.sold ? (
-            <p className="artwork-narrative__collected-note">
-              {narrativeCopy.collectedNote}
-            </p>
-          ) : null}
-        </div>
-      </StayPhase>
+            {artwork.sold ? copy.askAboutPrint : copy.inquireAboutOriginal}
+            <ArrowUpRight aria-hidden="true" />
+          </a>
+        ) : null}
+        <button
+          className="button"
+          type="button"
+          aria-pressed={isFavorite}
+          onClick={() => onFavorite(artwork.id)}
+          aria-label={`${isFavorite ? t.common.saved : t.common.save}: ${artwork.name}`}
+        >
+          <BookmarkSimple weight={isFavorite ? "fill" : "regular"} aria-hidden="true" />
+          {isFavorite ? t.common.saved : t.common.save}
+        </button>
+      </div>
     </div>
   );
 }
 
 export function ArtworkModal({
   artwork,
-  forceResolved = false,
   onClose,
   onStepWork,
   workCount = 1,
@@ -460,19 +314,13 @@ export function ArtworkModal({
   const { locale, t, favorites, toggleFavorite } = useSite();
   const alternateLocale = locale === "uk" ? "en" : "uk";
   const modalCopy = artworkCopy[locale];
-  const [imageSelection, setImageSelection] = useState(() => ({
-    artworkId: artwork.id,
-    index: 0,
-  }));
-  const scrollLayerRef = useRef(null);
-  const recordRef = useRef(null);
+  const [imageSelection, setImageSelection] = useState(() => ({ artworkId: artwork.id, index: 0 }));
+  const asideRef = useRef(null);
   const dialogRef = useRef(null);
   const closeRef = useRef(null);
-  const controllerRef = useRef(null);
   const gestureStartRef = useRef(null);
   const [settledImageKey, setSettledImageKey] = useState(null);
   const titleId = useId();
-  const descriptionId = useId();
   const isFavorite = favorites.includes(artwork.id);
   const displayImages = useMemo(
     () => [artwork.streamPrimary, ...artwork.images.filter((image) => image !== artwork.streamPrimary)],
@@ -483,6 +331,7 @@ export function ArtworkModal({
   const currentImageIndex = Math.min(imageIndex, Math.max(imageCount - 1, 0));
   const currentImage = displayImages[currentImageIndex];
   const currentImageKey = `${artwork.id}:${currentImageIndex}:${currentImage}`;
+  const canStepWorks = workCount > 1 && Boolean(onStepWork);
 
   useEffect(() => {
     setImageSelection((current) => (
@@ -496,8 +345,8 @@ export function ArtworkModal({
       activeGesture.surface.releasePointerCapture?.(activeGesture.pointerId);
     }
     gestureStartRef.current = null;
-    scrollLayerRef.current?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });
-    recordRef.current?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });
+    dialogRef.current?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });
+    asideRef.current?.scrollTo?.({ top: 0, left: 0, behavior: "auto" });
   }, [artwork.id]);
 
   useModalLayer({
@@ -508,12 +357,9 @@ export function ArtworkModal({
     restoreFocus: false,
   });
 
+  // Warm the next carousel image only after the current one has arrived.
   useEffect(() => {
-    if (
-      imageCount < 2
-      || settledImageKey !== currentImageKey
-      || typeof Image !== "function"
-    ) return undefined;
+    if (imageCount < 2 || settledImageKey !== currentImageKey || typeof Image !== "function") return undefined;
     const next = new Image();
     next.fetchPriority = "low";
     next.src = displayImages[(currentImageIndex + 1) % imageCount];
@@ -524,13 +370,9 @@ export function ArtworkModal({
 
   const stepImage = useCallback((direction) => {
     if (imageCount < 2) return;
-    controllerRef.current?.motion.begin("carousel");
     setImageSelection((current) => {
       const currentIndex = current.artworkId === artwork.id ? current.index : 0;
-      return {
-        artworkId: artwork.id,
-        index: (currentIndex + direction + imageCount) % imageCount,
-      };
+      return { artworkId: artwork.id, index: (currentIndex + direction + imageCount) % imageCount };
     });
   }, [artwork.id, imageCount]);
 
@@ -570,166 +412,125 @@ export function ArtworkModal({
     stepImage(deltaX > 0 ? -1 : 1);
   };
 
-  const artworkForSurface = {
-    ...artwork,
-    locale,
-    viewLabel: t.common.view,
+  // Arrow keys browse works, as in a gallery viewer. Form fields keep their keys.
+  const onKeyDown = (event) => {
+    if (!canStepWorks || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    if (event.target.closest?.("input, textarea, select")) return;
+    if (event.key === "ArrowLeft") onStepWork(-1);
+    else if (event.key === "ArrowRight") onStepWork(1);
   };
 
   return (
     <div
-      ref={scrollLayerRef}
       className="artwork-dialog-layer"
       role="presentation"
       onMouseDown={(event) => event.target === event.currentTarget && onClose()}
     >
-      <StayReveal
-        as="section"
+      <section
         ref={dialogRef}
-        controllerRef={controllerRef}
         className="artwork-dialog"
-        activeKey={`${artwork.id}:${currentImageIndex}`}
-        active
-        forceResolved={forceResolved}
-        settleOnMount
-        waitForArtwork
-        scrollTargetRef={scrollLayerRef}
-        phasePresence={{ materials: true, story: storyParagraphs(artwork.story).length > 0, availability: true }}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
+        onKeyDown={onKeyDown}
       >
         <header className="artwork-dialog__header">
-          <p className="artwork-dialog__position">
-            {t.shell.archiveIndex} / {String(artwork.index + 1).padStart(2, "0")}
+          <button
+            ref={closeRef}
+            className="button artwork-dialog__close"
+            type="button"
+            data-modal-close
+            onClick={onClose}
+          >
+            <X aria-hidden="true" />
+            {t.common.close}
+          </button>
+          <p className="artwork-dialog__position" aria-hidden="true">
+            {canStepWorks
+              ? `${String(workPosition).padStart(2, "0")} / ${String(workCount).padStart(2, "0")}`
+              : `${t.shell.archiveIndex} / ${String(artwork.index + 1).padStart(2, "0")}`}
           </p>
-          <div className="artwork-dialog__actions">
-            <a
-              className="artwork-dialog__locale"
-              href={artworkLocaleHref(artwork.id, alternateLocale)}
-              aria-label={modalCopy.switchLanguage}
-            >
-              {modalCopy.alternateLanguageChip}
-            </a>
-            <button
-              ref={closeRef}
-              className="artwork-dialog__close"
-              type="button"
-              data-modal-close
-              onClick={onClose}
-              aria-label={t.common.close}
-            >
-              <X aria-hidden="true" />
-              <span>{t.common.close}</span>
-            </button>
-          </div>
+          <a
+            className="button artwork-dialog__locale"
+            href={artworkLocaleHref(artwork.id, alternateLocale)}
+            aria-label={`${modalCopy.alternateLanguageChip}, ${modalCopy.switchLanguage}`}
+            lang={alternateLocale}
+          >
+            {modalCopy.alternateLanguageChip}
+          </a>
         </header>
 
-        <div className="artwork-dialog__body">
-          <div className="artwork-dialog__art-column">
-            <ArtworkSurface
-              artwork={artworkForSurface}
-              src={currentImage}
-              srcSet={currentImage === artwork.streamPrimary ? artwork.streamSrcSet : undefined}
-              sizes="(min-width: 1180px) 56vw, (min-width: 760px) 52vw, calc(100vw - 2rem)"
-              width={currentImage === artwork.streamPrimary ? artwork.streamPrimaryWidth : undefined}
-              height={currentImage === artwork.streamPrimary ? artwork.streamPrimaryHeight : undefined}
-              alt={`${artwork.name}, ${currentImageIndex + 1} / ${imageCount}`}
-              className="artwork-dialog__visual"
-              loading="eager"
-              fetchPriority="high"
-              announcePending
-              recoverable
-              onImageSettled={(state) => {
-                if (state === "ready") setSettledImageKey(currentImageKey);
-                controllerRef.current?.motion.settle("carousel");
+        <div className="artwork-dialog__stage">
+          <ArtworkImage
+            artwork={{ ...artwork, locale }}
+            src={currentImage}
+            srcSet={currentImage === artwork.streamPrimary ? artwork.streamSrcSet : undefined}
+            sizes="(min-width: 960px) 60vw, calc(100vw - 2.5rem)"
+            width={currentImage === artwork.streamPrimary ? artwork.streamPrimaryWidth : undefined}
+            height={currentImage === artwork.streamPrimary ? artwork.streamPrimaryHeight : undefined}
+            alt={`${artwork.name}, ${currentImageIndex + 1} / ${imageCount}`}
+            onImageSettled={(state) => {
+              if (state === "ready") setSettledImageKey(currentImageKey);
+            }}
+          >
+            <div
+              className="artwork-dialog__gesture-surface"
+              onPointerDown={onPointerDown}
+              onPointerUp={onPointerUp}
+              onPointerCancel={(event) => {
+                finishGesture(event);
               }}
-            >
-              <div
-                className="artwork-dialog__gesture-surface"
-                onPointerDown={onPointerDown}
-                onPointerUp={onPointerUp}
-                onPointerCancel={(event) => {
-                  finishGesture(event);
-                }}
-                onLostPointerCapture={(event) => {
-                  if (gestureStartRef.current?.pointerId === event.pointerId) {
-                    gestureStartRef.current = null;
-                  }
-                }}
-                aria-hidden="true"
-              />
-              {imageCount > 1 ? (
-                <div className="artwork-dialog__carousel-controls">
-                  <button type="button" onClick={() => stepImage(-1)} aria-label={modalCopy.previousImage}>
-                    <ArrowLeft aria-hidden="true" />
-                  </button>
-                  <p aria-live="polite" aria-atomic="true">
-                    <span>{modalCopy.image}</span>
-                    <span>
-                      {String(currentImageIndex + 1).padStart(2, "0")}
-                      {" / "}
-                      {String(imageCount).padStart(2, "0")}
-                    </span>
-                  </p>
-                  <button type="button" onClick={() => stepImage(1)} aria-label={modalCopy.nextImage}>
-                    <ArrowRight aria-hidden="true" />
-                  </button>
-                </div>
-              ) : null}
-            </ArtworkSurface>
-            {workCount > 1 && onStepWork ? (
-              <nav
-                className="artwork-dialog__work-navigation"
-                aria-label={modalCopy.browseWorks}
-              >
-                <button
-                  type="button"
-                  onClick={() => onStepWork(-1)}
-                  aria-label={modalCopy.previousWork}
-                >
-                  <ArrowLeft aria-hidden="true" />
-                  <span>{modalCopy.previousWorkShort}</span>
-                </button>
-                <p aria-hidden="true">
-                  <span>{modalCopy.work}</span>
-                  <span>
-                    {String(workPosition).padStart(2, "0")}
-                    {" / "}
-                    {String(workCount).padStart(2, "0")}
-                  </span>
-                </p>
-                <span className="sr-only" aria-live="polite" aria-atomic="true">
-                  {modalCopy.workAnnouncement(artwork.name, workPosition, workCount)}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => onStepWork(1)}
-                  aria-label={modalCopy.nextWork}
-                >
-                  <span>{modalCopy.nextWorkShort}</span>
-                  <ArrowRight aria-hidden="true" />
-                </button>
-              </nav>
-            ) : null}
-          </div>
+              onLostPointerCapture={(event) => {
+                if (gestureStartRef.current?.pointerId === event.pointerId) gestureStartRef.current = null;
+              }}
+              aria-hidden="true"
+            />
+          </ArtworkImage>
+          {imageCount > 1 ? (
+            <div className="artwork-dialog__carousel-controls">
+              <button className="icon-control" type="button" onClick={() => stepImage(-1)} aria-label={modalCopy.previousImage}>
+                <ArrowLeft aria-hidden="true" />
+              </button>
+              <p aria-live="polite" aria-atomic="true">
+                <span className="sr-only">{modalCopy.image} </span>
+                {currentImageIndex + 1} / {imageCount}
+              </p>
+              <button className="icon-control" type="button" onClick={() => stepImage(1)} aria-label={modalCopy.nextImage}>
+                <ArrowRight aria-hidden="true" />
+              </button>
+            </div>
+          ) : null}
+        </div>
 
-          <div key={artwork.id} ref={recordRef} className="artwork-dialog__record">
-            <ArtworkNarrative
+        <div ref={asideRef} className="artwork-dialog__aside">
+          <div key={artwork.id} className="artwork-dialog__record">
+            <ArtworkRecord
               artwork={artwork}
               locale={locale}
               t={t}
+              titleId={titleId}
               isFavorite={isFavorite}
               onFavorite={toggleFavorite}
-              onReveal={() => controllerRef.current?.settle()}
-              titleId={titleId}
-              descriptionId={descriptionId}
-              mode="modal"
             />
           </div>
+          {canStepWorks ? (
+            <nav className="artwork-dialog__work-navigation" aria-label={modalCopy.browseWorks}>
+              <button className="button" type="button" onClick={() => onStepWork(-1)} aria-label={modalCopy.previousWork}>
+                <ArrowLeft aria-hidden="true" />
+                <span aria-hidden="true">{modalCopy.previousWorkShort}</span>
+              </button>
+              <button className="button" type="button" onClick={() => onStepWork(1)} aria-label={modalCopy.nextWork}>
+                <span aria-hidden="true">{modalCopy.nextWorkShort}</span>
+                <ArrowRight aria-hidden="true" />
+              </button>
+              <span className="sr-only" aria-live="polite" aria-atomic="true">
+                {modalCopy.workAnnouncement(artwork.name, workPosition, workCount)}
+              </span>
+            </nav>
+          ) : null}
         </div>
-      </StayReveal>
+      </section>
     </div>
   );
 }

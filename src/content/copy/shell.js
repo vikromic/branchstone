@@ -87,9 +87,9 @@ export const shellCopy = {
 
 export const quietChromeCopy = {
   en: {
-    allWorks: "all works",
-    index: "index",
-    openIndex: "Open the site index",
+    allWorks: "All works",
+    index: "Menu",
+    openIndex: "Open menu",
     language: "Language",
     languageValue: "Українська",
     appearance: "Appearance",
@@ -103,9 +103,9 @@ export const quietChromeCopy = {
     utilities: "Studio and legal links",
   },
   uk: {
-    allWorks: "усі роботи",
-    index: "індекс",
-    openIndex: "Відкрити індекс сайту",
+    allWorks: "Усі роботи",
+    index: "Меню",
+    openIndex: "Відкрити меню",
     language: "Мова",
     languageValue: "English",
     appearance: "Вигляд",

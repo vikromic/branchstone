@@ -2,7 +2,6 @@ import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, Check, Copy, EnvelopeSimple } from "@phosphor-icons/react";
 import { SiteShell } from "../app/shell/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
-import { assetUrl } from "../content/asset-url.js";
 import { commissionCopy } from "../content/copy/commission.js";
 import { CONTACT_EMAIL } from "../content/site.js";
 import {
@@ -22,8 +21,6 @@ import { localeHref } from "../domain/locale.js";
 import { storageKeys } from "../domain/storage.js";
 import { copyText } from "../platform/clipboard.js";
 import { readEnvelope, writeEnvelope } from "../platform/local-storage.js";
-import commissionMaterial from "../assets/material-stage/commission-soil-hero.webp";
-import commissionMaterialMobile from "../assets/material-stage/commission-soil-hero-mobile.webp";
 import "../styles/commissions.css";
 
 function persistDraft(state) {
@@ -160,7 +157,7 @@ function CommissionWizard({ locale }) {
     <div className="commission-wizard">
       <div className="commission-wizard__intro">
         <p className="kicker">{w.kicker}</p>
-        <h2>{w.title}</h2>
+        <h2 className="display">{w.title}</h2>
         <p>{w.intro}</p>
       </div>
 
@@ -168,7 +165,7 @@ function CommissionWizard({ locale }) {
         <ol className="commission-progress" aria-label={w.stepsLabel}>
           {w.steps.map((label, index) => (
             <li key={label} className={index < state.step ? "is-complete" : index === state.step ? "is-current" : ""} aria-current={index === state.step ? "step" : undefined} aria-label={label}>
-              <span aria-hidden="true">{index < state.step ? <Check weight="bold" /> : String(index + 1).padStart(2, "0")}</span>
+              <span className="commission-progress__index" aria-hidden="true">{index < state.step ? <Check weight="bold" /> : String(index + 1).padStart(2, "0")}</span>
               <span className="commission-progress__label">{label}</span>
             </li>
           ))}
@@ -190,7 +187,7 @@ function CommissionWizard({ locale }) {
             <section className="commission-step" aria-labelledby="commission-step-1-title">
               <header>
                 <p className="commission-step__number">01 / 04</p>
-                <h3 id="commission-step-1-title" ref={stepHeading} tabIndex="-1">{w.stepOne.title}</h3>
+                <h3 className="display" id="commission-step-1-title" ref={stepHeading} tabIndex="-1">{w.stepOne.title}</h3>
                 <p>{w.stepOne.intro}</p>
               </header>
               <div className="commission-form__two-up">
@@ -209,16 +206,15 @@ function CommissionWizard({ locale }) {
             <section className="commission-step" aria-labelledby="commission-step-2-title">
               <header>
                 <p className="commission-step__number">02 / 04</p>
-                <h3 id="commission-step-2-title" ref={stepHeading} tabIndex="-1">{w.stepTwo.title}</h3>
+                <h3 className="display" id="commission-step-2-title" ref={stepHeading} tabIndex="-1">{w.stepTwo.title}</h3>
                 <p>{w.stepTwo.intro}</p>
               </header>
               <fieldset className="commission-radio-fieldset">
                 <legend>{w.stepTwo.scale}</legend>
                 <div className="commission-radio-ledger">
-                  {w.stepTwo.scaleOptions.map(([value, label, description], index) => (
-                    <label key={value} className={state.data.scale === value ? "is-selected" : ""}>
+                  {w.stepTwo.scaleOptions.map(([value, label, description]) => (
+                    <label key={value} className={`commission-choice${state.data.scale === value ? " is-selected" : ""}`}>
                       <input type="radio" name="scale" value={value} checked={state.data.scale === value} onChange={update} />
-                      <span className="commission-radio-ledger__number">{String(index + 1).padStart(2, "0")}</span>
                       <span><strong>{label}</strong><small>{description}</small></span>
                     </label>
                   ))}
@@ -242,7 +238,7 @@ function CommissionWizard({ locale }) {
             <section className="commission-step" aria-labelledby="commission-step-3-title">
               <header>
                 <p className="commission-step__number">03 / 04</p>
-                <h3 id="commission-step-3-title" ref={stepHeading} tabIndex="-1">{w.stepThree.title}</h3>
+                <h3 className="display" id="commission-step-3-title" ref={stepHeading} tabIndex="-1">{w.stepThree.title}</h3>
                 <p>{w.stepThree.intro}</p>
               </header>
               <Field id="commission-type" label={w.stepThree.type}>
@@ -274,7 +270,7 @@ function CommissionWizard({ locale }) {
             <section className="commission-step commission-step--review" aria-labelledby="commission-step-4-title">
               <header>
                 <p className="commission-step__number">04 / 04</p>
-                <h3 id="commission-step-4-title" ref={stepHeading} tabIndex="-1">{w.review.title}</h3>
+                <h3 className="display" id="commission-step-4-title" ref={stepHeading} tabIndex="-1">{w.review.title}</h3>
                 <p>{w.review.intro}</p>
               </header>
               <dl className="commission-review">
@@ -332,49 +328,40 @@ function CommissionWizard({ locale }) {
 
 function ScaleStudy({ content }) {
   return (
-    <section className="commission-scale section-shell" aria-labelledby="commission-scale-title">
-      <div className="commission-section-heading">
+    <section className="commission-section commission-scale" aria-labelledby="commission-scale-title">
+      <div className="commission-section__head">
         <p className="kicker">{content.kicker}</p>
-        <h2 id="commission-scale-title">{content.title}</h2>
+        <h2 className="display" id="commission-scale-title">{content.title}</h2>
         <p>{content.intro}</p>
       </div>
-      <ol className="commission-scale__studies">
-        {content.options.map(([title, description], index) => (
-          <li key={title}>
-            <p className="commission-scale__number">0{index + 1}</p>
-            <div>
+      <div className="commission-section__body">
+        <ol className="commission-scale__studies">
+          {content.options.map(([title, description], index) => (
+            <li key={title}>
+              <span className="commission-scale__frame" aria-hidden="true" />
+              <p className="kicker">0{index + 1}</p>
               <h3>{title}</h3>
               <p>{description}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-      <p className="commission-scale__price-note">{content.price}</p>
+            </li>
+          ))}
+        </ol>
+        <p className="commission-scale__price-note">{content.price}</p>
+      </div>
     </section>
   );
 }
 
 function ArtisticProcess({ content }) {
   return (
-    <section className="commission-process section-shell" aria-labelledby="commission-process-title">
-      <div className="commission-section-heading">
+    <section className="commission-section commission-process" aria-labelledby="commission-process-title">
+      <div className="commission-section__head">
         <p className="kicker">{content.kicker}</p>
-        <h2 id="commission-process-title">{content.title}</h2>
+        <h2 className="display" id="commission-process-title">{content.title}</h2>
       </div>
-      <div className="commission-process__material" aria-hidden="true">
-        <picture>
-          <source
-            type="image/webp"
-            srcSet={`${assetUrl("img/art1-400w.webp")} 400w, ${assetUrl("img/art1-800w.webp")} 800w, ${assetUrl("img/art1.webp")} 1222w`}
-            sizes="(min-width: 72rem) 25rem, (min-width: 52rem) 38vw, 100vw"
-          />
-          <img src={assetUrl("img/art1.jpeg")} alt="" loading="lazy" decoding="async" />
-        </picture>
-      </div>
-      <ol className="commission-process__ledger">
+      <ol className="commission-section__body commission-process__list">
         {content.steps.map(([title, description], index) => (
           <li key={title}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
+            <span className="commission-process__number">{String(index + 1).padStart(2, "0")}</span>
             <h3>{title}</h3>
             <p>{description}</p>
           </li>
@@ -386,12 +373,12 @@ function ArtisticProcess({ content }) {
 
 function CommissionFaq({ content }) {
   return (
-    <section className="commission-faq section-shell" aria-labelledby="commission-faq-title">
-      <div className="commission-section-heading">
+    <section className="commission-section commission-faq" aria-labelledby="commission-faq-title">
+      <div className="commission-section__head">
         <p className="kicker">{content.kicker}</p>
-        <h2 id="commission-faq-title">{content.title}</h2>
+        <h2 className="display" id="commission-faq-title">{content.title}</h2>
       </div>
-      <div className="commission-faq__list">
+      <div className="commission-section__body commission-faq__list">
         {content.items.map(([question, answer], index) => (
           <details key={question}>
             <summary><span>{String(index + 1).padStart(2, "0")}</span>{question}<i aria-hidden="true" /></summary>
@@ -410,27 +397,20 @@ export function CommissionsPage() {
   return (
     <SiteShell page="commissions">
       <article className="commission-page">
-        <header className="commission-hero">
-          <div className="commission-hero__content">
-            <p className="kicker">{content.hero.kicker}</p>
-            <h1>{content.hero.titleLead} <em>{content.hero.titleEmphasis}</em></h1>
-            <p className="commission-hero__intro">{content.hero.intro}</p>
-            <a className="commission-hero__jump" href="#commission-request">{content.hero.cta}<ArrowDown aria-hidden="true" /></a>
+        <section className="page-intro commission-intro">
+          <p className="kicker">{content.hero.kicker}</p>
+          <h1 className="display">{content.hero.titleLead} {content.hero.titleEmphasis}</h1>
+          <div className="commission-intro__aside">
+            <p className="lede">{content.hero.intro}</p>
+            <a className="button button--bone" href="#commission-request">{content.hero.cta}<ArrowDown aria-hidden="true" /></a>
+            <p className="commission-intro__note">{content.hero.note}</p>
           </div>
-          <div className="commission-hero__material" aria-hidden="true">
-            <picture>
-              <source media="(max-width: 759px)" srcSet={commissionMaterialMobile} />
-              <img src={commissionMaterial} alt="" fetchPriority="high" />
-            </picture>
-            <p>{content.hero.mark}</p>
-          </div>
-          <p className="commission-hero__note">{content.hero.note}</p>
-        </header>
+        </section>
 
         <ScaleStudy content={content.scale} />
         <ArtisticProcess content={content.process} />
 
-        <section id="commission-request" className="commission-request section-shell" aria-label={content.wizard.title}>
+        <section id="commission-request" className="commission-section commission-request" aria-label={content.wizard.title}>
           <CommissionWizard locale={locale} />
         </section>
 

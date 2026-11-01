@@ -9,7 +9,6 @@ export const commissionCopy = {
       intro: "A commission begins with your space, a memory, or a feeling that has no finished shape yet. Viktoria translates that starting point through bark, stone, pigment, fiber, and patient handwork.",
       cta: "Begin the request",
       note: "Each work is one of one. Scope, materials, timing, and price are discussed together before any work begins.",
-      mark: "FORM / MATTER / MEMORY",
     },
     scale: {
       kicker: "01 / SCALE STUDY",
@@ -153,7 +152,6 @@ export const commissionCopy = {
       intro: "Замовлення починається з вашого простору, спогаду чи відчуття, яке ще не має завершеної форми. Вікторія перекладає цю точку початку мовою кори, каменю, пігменту, волокна та повільної ручної роботи.",
       cta: "Почати запит",
       note: "Кожна робота існує в одному екземплярі. Обсяг, матеріали, терміни й вартість обговорюються разом до початку роботи.",
-      mark: "ФОРМА / МАТЕРІЯ / ПАМ’ЯТЬ",
     },
     scale: {
       kicker: "01 / ДОСЛІДЖЕННЯ МАСШТАБУ",

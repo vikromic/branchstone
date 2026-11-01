@@ -33,11 +33,10 @@ npm run verify:artifact
 
 The artifact verifier checks all 18 localized prerendered entries, the 32-work catalog split, EN/UK record and image-list joins, every artwork and highlight image on disk, and the required deployment files.
 
-When an artwork master or environmental source changes, regenerate the delivery derivatives first:
+When an artwork master changes, regenerate the delivery previews first:
 
 ```bash
 npm run assets:gallery-previews
-npm run assets:mobile-materials
 ```
 
 ## Publishing

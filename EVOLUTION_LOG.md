@@ -43,3 +43,12 @@ Dated product-level outcomes. Git history holds the detail; this file does not r
 - Removed the stale release-gate and physical-device protocol documents, the unused device-audit harness, and tests that pattern-matched source text; SSR markup, asset budget, and artifact data tests replace their behavioral parts.
 - Moved 141 unreferenced images and two unused JSON files out of the published `docs/` tree; EN and UK artwork records now list the same images, and the artifact verifier enforces it.
 - Prerendered HTML is unchanged apart from asset hashes.
+
+## 2026-10-31 — White Cube redesign
+
+- Replaced Carried Ground / Eroded Vault with White Cube, chosen from six explored directions: Inter display type, a sticky glass header with a Menu layer, pill controls, and sentence case in both Soil and Paper.
+- One justified Works grid at every width replaced the mobile index and the desktop Stay stream; previews keep their full composition. Home became a wordmark hero with archive facts, selected works deep-linked to Gallery, and studio routes.
+- The artwork detail is a split view with carousel, record, Prev/Next, and ←/→ between works; opening a work morphs its image where the browser supports View Transitions and motion is allowed.
+- Exhibitions, Practice, Contact, Commission, legal pages, and the 404 share the new language; Contact gained a copy-address action.
+- Retired the Stay reveal engine, the material-stage imagery and its generator, Cormorant Garamond, and the pre-paint motion class; pre-hydration now only redirects legacy links and arms the stall fallback.
+- Measured on a local production build at 390 px with 4× CPU and Fast 3G: Home and Gallery LCP 1.77 s, CLS 0.

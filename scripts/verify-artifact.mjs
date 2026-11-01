@@ -6,11 +6,11 @@ const root = process.cwd();
 const stage = resolve(root, ".stage");
 const docs = resolve(root, "docs");
 const ukrainianMarkers = {
-  "index.html": ["усі роботи"],
+  "index.html": ["Вибрані роботи"],
   "gallery.html": ["ЖИВИЙ АРХІВ МАТЕРІАЛІВ", "Роботи, що несуть землю"],
   "exhibitions.html": ["Вибрана преса", "Галерея Rena Charles", "Запити від галерей"],
   "about.html": ["Statement художниці", "02 / Біографія", "05 / Продовження"],
-  "commissions.html": ["ФОРМА / МАТЕРІЯ / ПАМ’ЯТЬ"],
+  "commissions.html": ["01 / ДОСЛІДЖЕННЯ МАСШТАБУ"],
   "contact.html": ["Почніть із нотатки."],
   "privacy.html": ["НОТАТКИ"],
   "terms.html": ["Умови для роботи й розмови."],
@@ -26,8 +26,8 @@ function verifyPrehydrateContract(html, filename) {
   if (!(prehydrate < theme && theme < body && body < root)) {
     throw new Error(`${filename}: pre-hydration, theme, body, and SSR root ordering is unsafe`);
   }
-  if (!html.includes("prefers-reduced-motion: reduce") || !html.includes("stay-enhanced")) {
-    throw new Error(`${filename}: motion enhancement gate is missing`);
+  if (!html.includes("hydrationStalled")) {
+    throw new Error(`${filename}: hydration-stall fallback is missing`);
   }
   if (filename.endsWith("index.html") && (!html.includes('pageId === "home"') || !html.includes("currentLocation.replace(target)"))) {
     throw new Error(`${filename}: Home legacy artwork redirect is missing`);
@@ -46,7 +46,7 @@ for (const filename of htmlFiles) {
   }
   if (
     filename === "gallery.html"
-    && (html.match(/class="gallery-index-work"/g) ?? []).length !== 64
+    && (html.match(/class="works-grid__item"/g) ?? []).length !== 64
   ) {
     throw new Error(`${filename}: live and fallback locale archives must each expose all 32 linked works`);
   }
@@ -63,7 +63,7 @@ for (const filename of htmlFiles) {
   }
   if (
     filename === "gallery.html"
-    && (ukrainianHtml.match(/class="gallery-index-work"/g) ?? []).length !== 32
+    && (ukrainianHtml.match(/class="works-grid__item"/g) ?? []).length !== 32
   ) {
     throw new Error(`uk/${filename}: progressive archive must expose all 32 linked works`);
   }

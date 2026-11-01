@@ -11,8 +11,6 @@ import { localeHref } from "../domain/locale.js";
 import { storageKeys } from "../domain/storage.js";
 import { copyText } from "../platform/clipboard.js";
 import { readEnvelope, safeRemove } from "../platform/local-storage.js";
-import memorySeam from "../assets/material-stage/memory-seam-alpha.webp";
-import memorySeamMobile from "../assets/material-stage/memory-seam-mobile.webp";
 import "../styles/contact.css";
 
 const statusToneByKey = Object.freeze({
@@ -36,6 +34,7 @@ export function ContactPage() {
   const [values, setValues] = useState({ name: "", email: "", subject: "", message: "", website: "" });
   const [ticketRefs, setTicketRefs] = useState([]);
   const [status, setStatus] = useState(null);
+  const [addressStatus, setAddressStatus] = useState(null);
 
   useEffect(() => {
     const fallback = bootFallbackRef.current;
@@ -173,96 +172,113 @@ export function ContactPage() {
     });
   };
 
+  const copyAddress = async () => {
+    try {
+      await copyText(CONTACT_EMAIL);
+      setAddressStatus("addressCopied");
+    } catch {
+      setAddressStatus("addressCopyError");
+    }
+  };
+
   return (
     <SiteShell page="contact">
-      <div className="contact-correspondence">
-        <header className="contact-hero">
-          <picture className="contact-hero__material-picture" aria-hidden="true">
-            <source media="(max-width: 759px)" srcSet={memorySeamMobile} />
-            <img
-              className="contact-hero__material"
-              src={memorySeam}
-              alt=""
-              loading="lazy"
-              fetchPriority="low"
-              decoding="async"
-            />
-          </picture>
-          <div className="contact-hero__grain" aria-hidden="true"><span>BR / ST</span><span>VI / 24</span></div>
-          <div className="contact-hero__copy">
-            <p className="kicker">{text.eyebrow}</p>
-            <h1>{text.title}</h1>
-            <p>{text.introduction}</p>
+      <section className="page-intro contact-intro">
+        <p className="kicker">{text.eyebrow}</p>
+        <h1 className="display">{text.title}</h1>
+        <p className="lede">{text.introduction}</p>
+      </section>
+
+      <div className="contact-layout page-section">
+        <section className="contact-channels" aria-labelledby="contact-desk-title">
+          <p className="kicker">{text.desk}</p>
+          <h2 id="contact-desk-title" className="display">{text.deskTitle}</h2>
+          <ul className="contact-channels__list" role="list">
+            <li>
+              <a className="contact-channel" href={`mailto:${CONTACT_EMAIL}`}>
+                <span className="contact-channel__label"><EnvelopeSimple aria-hidden="true" />{text.emailLabel}</span>
+                <strong>{CONTACT_EMAIL}</strong>
+                <ArrowUpRight aria-hidden="true" />
+              </a>
+            </li>
+            <li>
+              <a className="contact-channel" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
+                <span className="contact-channel__label"><InstagramLogo aria-hidden="true" />{text.instagramLabel}</span>
+                <strong>@thebranchstone</strong>
+                <ArrowUpRight aria-hidden="true" />
+              </a>
+            </li>
+          </ul>
+          <button className="button button--line contact-channels__copy" type="button" onClick={copyAddress}>
+            <CopySimple aria-hidden="true" />
+            {text.copyAddress}
+          </button>
+          <p className="contact-channels__status" aria-live="polite">{addressStatus ? text[addressStatus] : ""}</p>
+          <div className="contact-channels__note">
+            <p className="kicker">{text.replyLabel}</p>
+            <p>{text.replyText}</p>
           </div>
-          <p className="contact-hero__marker" aria-hidden="true">{text.marker}</p>
-        </header>
+        </section>
 
-        <section className="contact-sheet-section" aria-labelledby="contact-sheet-title">
-          <div className="contact-sheet">
-            <div className="contact-sheet__header">
-              <p className="kicker">{text.marker}</p>
-              <span aria-hidden="true">BS—C01</span>
-            </div>
-            <div className="contact-sheet__intro">
-              <h2 id="contact-sheet-title">{text.sheetTitle}</h2>
-              <p>{text.sheetIntroduction}</p>
-            </div>
+        <section className="contact-letter" aria-labelledby="contact-sheet-title">
+          <h2 id="contact-sheet-title" className="display">{text.sheetTitle}</h2>
+          <p className="contact-letter__intro">{text.sheetIntroduction}</p>
 
-            {tickets.length > 0 && (
-              <section className="inquiry-register" aria-labelledby="inquiry-register-title">
-                <p id="inquiry-register-title" className="inquiry-register__title">{text.context} / {String(tickets.length).padStart(2, "0")}</p>
-                <div className="inquiry-register__items">
-                  {tickets.map((artwork, index) => (
-                    <article className="inquiry-ticket" key={artwork.id}>
-                      <span className="inquiry-ticket__number">{String(index + 1).padStart(2, "0")}</span>
-                      {artwork.mainImage ? (
-                        <img
-                          src={artwork.streamPreview ?? artwork.mainImage}
-                          alt=""
-                          width={artwork.streamPreviewWidth}
-                          height={artwork.streamPreviewHeight}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : (
-                        <span className="inquiry-ticket__placeholder" aria-hidden="true">BS</span>
-                      )}
-                      <div>
-                        <h3>{artwork.name}</h3>
-                        {artwork.collection && <p>{artwork.collection}</p>}
-                      </div>
-                      <button
-                        type="button"
-                        data-ticket-remove
-                        onClick={() => removeTicket(artwork.id, index)}
-                        aria-label={`${text.removeWork}: ${artwork.name}`}
-                      >
-                        <X aria-hidden="true" />
-                      </button>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            )}
-            <p className="sr-only" aria-live="polite">{text.worksRemaining.replace("{count}", tickets.length)}</p>
+          {tickets.length > 0 && (
+            <section className="contact-works" aria-labelledby="inquiry-register-title">
+              <p id="inquiry-register-title" className="kicker">{text.context} ({tickets.length})</p>
+              <ul className="contact-works__list" role="list">
+                {tickets.map((artwork, index) => (
+                  <li className="contact-work" key={artwork.id}>
+                    {artwork.mainImage ? (
+                      <img
+                        src={artwork.streamPreview ?? artwork.mainImage}
+                        alt=""
+                        width={artwork.streamPreviewWidth}
+                        height={artwork.streamPreviewHeight}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span className="contact-work__placeholder" aria-hidden="true">BS</span>
+                    )}
+                    <div className="contact-work__text">
+                      <p className="contact-work__title">{artwork.name}</p>
+                      {artwork.collection && <p className="contact-work__meta">{artwork.collection}</p>}
+                    </div>
+                    <button
+                      className="icon-control"
+                      type="button"
+                      data-ticket-remove
+                      onClick={() => removeTicket(artwork.id, index)}
+                      aria-label={`${text.removeWork}: ${artwork.name}`}
+                    >
+                      <X aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          <p className="sr-only" aria-live="polite">{text.worksRemaining.replace("{count}", tickets.length)}</p>
 
-            <form ref={formRef} className="correspondence-form" noValidate onSubmit={openEmail}>
-              <fieldset disabled={!isHydrated}>
+          <form ref={formRef} className="correspondence-form" noValidate onSubmit={openEmail}>
+            <fieldset disabled={!isHydrated}>
               <p className="correspondence-form__required">{text.required}</p>
               <div className="correspondence-field">
-                <label htmlFor="contact-name"><span aria-hidden="true">01 — </span>{text.fields.name}</label>
+                <label htmlFor="contact-name">{text.fields.name}</label>
                 <input id="contact-name" name="name" type="text" autoComplete="name" required maxLength="120" placeholder={text.placeholders.name} value={values.name} onChange={updateField} />
               </div>
               <div className="correspondence-field">
-                <label htmlFor="contact-email"><span aria-hidden="true">02 — </span>{text.fields.email}</label>
+                <label htmlFor="contact-email">{text.fields.email}</label>
                 <input id="contact-email" name="email" type="email" inputMode="email" autoComplete="email" required maxLength="254" placeholder={text.placeholders.email} value={values.email} onChange={updateField} />
               </div>
               <div className="correspondence-field">
-                <label htmlFor="contact-subject"><span aria-hidden="true">03 — </span>{text.fields.subject}</label>
+                <label htmlFor="contact-subject">{text.fields.subject}</label>
                 <input id="contact-subject" name="subject" type="text" autoComplete="off" required maxLength="180" placeholder={text.placeholders.subject} value={values.subject} onChange={updateField} />
               </div>
-              <div className="correspondence-field correspondence-field--message">
-                <label htmlFor="contact-message"><span aria-hidden="true">04 — </span>{text.fields.message}</label>
+              <div className="correspondence-field">
+                <label htmlFor="contact-message">{text.fields.message}</label>
                 <textarea id="contact-message" name="message" required maxLength="5000" rows="8" placeholder={text.placeholders.message} value={values.message} onChange={updateField} />
               </div>
 
@@ -272,70 +288,46 @@ export function ContactPage() {
               </div>
 
               <div className="correspondence-form__actions">
-                <button className="contact-action contact-action--primary" type="submit">
+                <button className="button button--bone" type="submit">
                   <EnvelopeSimple aria-hidden="true" />
-                  <span>{text.openEmail}</span>
+                  {text.openEmail}
                   <ArrowUpRight aria-hidden="true" />
                 </button>
-                <button className="contact-action contact-action--copy" type="button" onClick={copyLetter}>
+                <button className="button button--line" type="button" onClick={copyLetter}>
                   <CopySimple aria-hidden="true" />
-                  <span>{text.copy}</span>
+                  {text.copy}
                 </button>
               </div>
               <p className="correspondence-form__handoff">{text.handoff}</p>
               <p className={`contact-form-status${status ? ` contact-form-status--${statusToneByKey[status]}` : ""}`} aria-live="polite">
                 {status ? text[status] : ""}
               </p>
-              </fieldset>
-              <p
-                ref={bootFallbackRef}
-                className="correspondence-form__boot-fallback"
-                data-contact-boot-fallback=""
-                role="status"
-                suppressHydrationWarning
-              >
-                {text.bootFallback} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-              </p>
-              <noscript><p className="correspondence-form__noscript">{text.noScript} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p></noscript>
-            </form>
-          </div>
+            </fieldset>
+            <p
+              ref={bootFallbackRef}
+              className="correspondence-form__boot-fallback"
+              data-contact-boot-fallback=""
+              role="status"
+              suppressHydrationWarning
+            >
+              {text.bootFallback} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            </p>
+            <noscript><p className="correspondence-form__noscript">{text.noScript} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p></noscript>
+          </form>
         </section>
+      </div>
 
-        <section className="contact-desk" aria-labelledby="contact-desk-title">
-          <div className="contact-desk__heading">
-            <p className="kicker">{text.desk}</p>
-            <h2 id="contact-desk-title">{text.deskTitle}</h2>
-          </div>
-          <div className="contact-ledger">
-            <a className="contact-ledger__row" href={`mailto:${CONTACT_EMAIL}`}>
-              <span><EnvelopeSimple aria-hidden="true" />{text.emailLabel}</span>
-              <strong>{CONTACT_EMAIL}</strong>
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-            <a className="contact-ledger__row" href={INSTAGRAM_URL} target="_blank" rel="noreferrer">
-              <span><InstagramLogo aria-hidden="true" />{text.instagramLabel}</span>
-              <strong>@thebranchstone</strong>
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-            <div className="contact-ledger__row contact-ledger__row--static">
-              <span>{text.replyLabel}</span>
-              <p>{text.replyText}</p>
-              <span aria-hidden="true">—</span>
-            </div>
-          </div>
-        </section>
-
-        <section className="contact-faq" aria-labelledby="contact-faq-title">
-          <div className="contact-faq__heading">
-            <p className="kicker">{text.faqEyebrow}</p>
-            <h2 id="contact-faq-title">{text.faqTitle}</h2>
-          </div>
+      <section className="contact-faq page-section" aria-labelledby="contact-faq-title">
+        <div className="contact-faq__heading">
+          <p className="kicker">{text.faqEyebrow}</p>
+          <h2 id="contact-faq-title" className="display">{text.faqTitle}</h2>
+        </div>
+        <div className="contact-faq__body">
           <div className="contact-faq__list">
-            {text.faq.map((item, index) => (
+            {text.faq.map((item) => (
               <details key={item.question}>
                 <summary>
-                  <span className="contact-faq__number">{String(index + 1).padStart(2, "0")}</span>
-                  {item.question}
+                  <span>{item.question}</span>
                   <span className="contact-faq__toggle" aria-hidden="true">
                     <Plus className="contact-faq__plus" />
                     <Minus className="contact-faq__minus" />
@@ -346,11 +338,11 @@ export function ContactPage() {
             ))}
           </div>
           <nav className="contact-faq__routes" aria-label={text.relatedPages}>
-            <a href={localeHref("/commissions.html", locale)}>{text.commissionLink}<ArrowUpRight aria-hidden="true" /></a>
-            <a href={localeHref("/gallery.html", locale)}>{text.galleryLink}<ArrowUpRight aria-hidden="true" /></a>
+            <a className="button button--line" href={localeHref("/commissions.html", locale)}>{text.commissionLink}<ArrowUpRight aria-hidden="true" /></a>
+            <a className="button button--line" href={localeHref("/gallery.html", locale)}>{text.galleryLink}<ArrowUpRight aria-hidden="true" /></a>
           </nav>
-        </section>
-      </div>
+        </div>
+      </section>
     </SiteShell>
   );
 }

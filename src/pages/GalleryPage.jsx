@@ -1,25 +1,11 @@
-import {
-  memo,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
-import { CaretDown } from "@phosphor-icons/react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SiteShell } from "../app/shell/SiteShell.jsx";
 import { useSite } from "../app/SiteContext.jsx";
 import { catalogStats } from "../content/artworks.js";
 import { artworkCopy } from "../content/copy/artwork.js";
 import { galleryCopy } from "../content/copy/gallery.js";
-import {
-  ArtworkModal,
-  ArtworkNarrative,
-  ArtworkSurface,
-} from "../features/artwork/index.js";
-import { StayReveal, useViewportArtworkSelection } from "../features/stay/index.js";
+import { ArtworkModal } from "../features/artwork/index.js";
+import { WorksGrid, withArtworkTransition } from "../features/works/index.js";
 import {
   catalogStatsFor,
   collectionLabel,
@@ -27,89 +13,25 @@ import {
   storyParagraphs,
 } from "../domain/catalog.js";
 import {
+  artworkHref,
   findArtwork,
   galleryUrl,
-  mobileArtworkHref,
   normalizeAvailability,
   relativeUrl,
   safeNormalizeCollection,
 } from "../domain/gallery-url.js";
 import { artworkContactHref } from "../domain/inquiry.js";
 import { normalizeLocale } from "../domain/locale.js";
-import { safeMatchMedia, subscribeMediaQuery } from "../platform/media-query.js";
-import gallerySeamMobile from "../assets/material-stage/gallery-seam-mobile.webp";
-import gallerySeamDesktop from "../assets/material-stage/gallery-seam-desktop.webp";
 import "../styles/gallery.css";
 
 const modalHistoryKey = "branchstoneArtworkModal";
-const desktopGalleryQuery = "(min-width: 760px)";
-const galleryIndexMinAspect = 4 / 5;
-const galleryIndexMaxAspect = 5 / 4;
 const galleryCountRules = {
   en: new Intl.PluralRules("en"),
   uk: new Intl.PluralRules("uk"),
 };
 
-function subscribeDesktopGallery(callback) {
-  if (typeof window === "undefined") return () => {};
-  return subscribeMediaQuery(safeMatchMedia(desktopGalleryQuery, window), callback);
-}
-
-function desktopGallerySnapshot() {
-  return typeof window !== "undefined"
-    && Boolean(safeMatchMedia(desktopGalleryQuery, window)?.matches);
-}
-
-function useDesktopGallery() {
-  return useSyncExternalStore(
-    subscribeDesktopGallery,
-    desktopGallerySnapshot,
-    () => false,
-  );
-}
-
 function currentGalleryUrl(update) {
   return galleryUrl(window.location.href, update);
-}
-
-function galleryIndexAspect(artwork) {
-  const width = artwork.streamPrimaryWidth;
-  const height = artwork.streamPrimaryHeight;
-  if (
-    !Number.isFinite(width)
-    || width <= 0
-    || !Number.isFinite(height)
-    || height <= 0
-  ) {
-    throw new Error(`Invalid Gallery preview dimensions: ${artwork.id}`);
-  }
-
-  const ratio = width / height;
-  if (ratio <= galleryIndexMinAspect) return "4 / 5";
-  if (ratio >= galleryIndexMaxAspect) return "5 / 4";
-  return `${width} / ${height}`;
-}
-
-function galleryIndexStyle(artwork) {
-  const aspect = galleryIndexAspect(artwork);
-  const ratio = artwork.streamPrimaryWidth / artwork.streamPrimaryHeight;
-  const orientation = ratio <= galleryIndexMinAspect
-    ? "portrait"
-    : ratio >= galleryIndexMaxAspect
-      ? "landscape"
-      : "square";
-  const estimates = {
-    portrait: ["24rem", "31rem"],
-    square: ["21rem", "26rem"],
-    landscape: ["19rem", "23rem"],
-  };
-  const [estimate, narrowEstimate] = estimates[orientation];
-
-  return {
-    "--gallery-index-aspect": aspect,
-    "--gallery-index-estimate": estimate,
-    "--gallery-index-estimate-narrow": narrowEstimate,
-  };
 }
 
 function galleryWorkCount(count, locale) {
@@ -119,13 +41,12 @@ function galleryWorkCount(count, locale) {
   return `${String(count).padStart(2, "0")} ${forms[category] ?? forms.other}`;
 }
 
+// Static artwork details for the time before hydration (and if it stalls):
+// every grid link resolves to one of these anchors without JavaScript.
 function ProgressiveArtworkDetails({ artworks, locale, t }) {
   const detailsCopy = artworkCopy[locale];
   return (
-    <section
-      className="gallery-progressive-details"
-      aria-label={galleryCopy[locale].progressiveDetails}
-    >
+    <section className="gallery-progressive-details" aria-label={galleryCopy[locale].progressiveDetails}>
       {artworks.map((artwork) => {
         const story = storyParagraphs(artwork.story);
         const status = artwork.sold ? t.common.collected : t.common.available;
@@ -137,12 +58,8 @@ function ProgressiveArtworkDetails({ artworks, locale, t }) {
             tabIndex="-1"
           >
             <header>
-              <p>
-                {String(artwork.index + 1).padStart(2, "0")}
-                {" / "}
-                {artwork.collection}
-                {" / "}
-                {artwork.year}
+              <p className="kicker">
+                {String(artwork.index + 1).padStart(2, "0")} / {artwork.collection} / {artwork.year}
               </p>
               <h2>{artwork.name}</h2>
             </header>
@@ -155,20 +72,11 @@ function ProgressiveArtworkDetails({ artworks, locale, t }) {
               decoding="async"
             />
             <dl>
-              <div>
-                <dt>{detailsCopy.materials}</dt>
-                <dd>{artwork.materials}</dd>
-              </div>
-              <div>
-                <dt>{detailsCopy.dimensions}</dt>
-                <dd>{artwork.dimensions}</dd>
-              </div>
+              <div><dt>{detailsCopy.materials}</dt><dd>{artwork.materials}</dd></div>
+              <div><dt>{detailsCopy.dimensions}</dt><dd>{artwork.dimensions}</dd></div>
               <div>
                 <dt>{detailsCopy.availability}</dt>
-                <dd>
-                  {status}
-                  {!artwork.sold && artwork.price ? ` · USD ${artwork.price}` : ""}
-                </dd>
+                <dd>{status}{!artwork.sold && artwork.price ? ` · USD ${artwork.price}` : ""}</dd>
               </div>
             </dl>
             {story.length ? (
@@ -177,18 +85,14 @@ function ProgressiveArtworkDetails({ artworks, locale, t }) {
                 {story.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               </div>
             ) : null}
-            {artwork.sold ? (
-              <p className="gallery-progressive-detail__collected-note">
-                {detailsCopy.collectedNote}
-              </p>
-            ) : null}
+            {artwork.sold ? <p>{detailsCopy.collectedNote}</p> : null}
             <footer>
               {!artwork.sold || artwork.prints ? (
-                <a href={artworkContactHref(artwork, locale, artwork.sold ? "print" : "original")}>
+                <a className="button button--bone" href={artworkContactHref(artwork, locale, artwork.sold ? "print" : "original")}>
                   {artwork.sold ? detailsCopy.askAboutPrint : detailsCopy.inquireAboutOriginal}
                 </a>
               ) : null}
-              <a href={`#artwork-open-${artwork.id}`}>
+              <a className="button" href={`#artwork-open-${artwork.id}`}>
                 {galleryCopy[locale].backToArchive}
               </a>
             </footer>
@@ -199,288 +103,9 @@ function ProgressiveArtworkDetails({ artworks, locale, t }) {
   );
 }
 
-function MobileGalleryIndex({
-  artworks,
-  availability,
-  collection,
-  locale,
-  onOpen,
-  t,
-}) {
-  const [showProgressiveDetails, setShowProgressiveDetails] = useState(true);
-  const [failedPreviews, setFailedPreviews] = useState(() => new Set());
-
-  useEffect(() => {
-    setShowProgressiveDetails(false);
-  }, []);
-
-  const setPreviewFailed = useCallback((artworkId, failed) => {
-    setFailedPreviews((current) => {
-      if (current.has(artworkId) === failed) return current;
-      const next = new Set(current);
-      if (failed) next.add(artworkId);
-      else next.delete(artworkId);
-      return next;
-    });
-  }, []);
-
-  return (
-    <>
-      <ol className="gallery-mobile-index" role="list">
-        {artworks.map((artwork, position) => {
-          const titleId = `gallery-index-${artwork.id}-title`;
-          const statusId = `gallery-index-${artwork.id}-status`;
-          const viewId = `gallery-index-${artwork.id}-view`;
-          const status = artwork.sold ? t.common.collected : t.common.available;
-          const previewFailed = failedPreviews.has(artwork.id);
-          return (
-            <li
-              key={artwork.id}
-              className="gallery-index-work"
-              data-sold={artwork.sold ? "true" : "false"}
-              style={galleryIndexStyle(artwork)}
-            >
-              <article aria-labelledby={titleId}>
-                <a
-                  id={`artwork-open-${artwork.id}`}
-                  className="gallery-index-work__link"
-                  href={mobileArtworkHref(
-                    artwork.id,
-                    collection,
-                    availability,
-                    showProgressiveDetails,
-                  )}
-                  aria-haspopup={showProgressiveDetails ? undefined : "dialog"}
-                  aria-labelledby={`${titleId} ${statusId} ${viewId}`}
-                  onClick={(event) => {
-                    if (
-                      event.button !== 0
-                      || event.metaKey
-                      || event.ctrlKey
-                      || event.shiftKey
-                      || event.altKey
-                    ) return;
-                    event.preventDefault();
-                    onOpen(artwork.id, event.currentTarget);
-                  }}
-                >
-                  <span
-                    className="gallery-index-work__visual"
-                    data-preview-error={previewFailed ? "true" : "false"}
-                  >
-                    <img
-                      src={artwork.streamPreview}
-                      alt=""
-                      width={artwork.streamPreviewWidth}
-                      height={artwork.streamPreviewHeight}
-                      loading={position < 2 ? "eager" : "lazy"}
-                      fetchPriority={position < 2 ? "high" : "auto"}
-                      decoding="async"
-                      draggable="false"
-                      onLoad={() => setPreviewFailed(artwork.id, false)}
-                      onError={() => setPreviewFailed(artwork.id, true)}
-                    />
-                    {previewFailed ? (
-                      <span className="gallery-index-work__preview-error">
-                        {artworkCopy[locale].imageUnavailable}
-                      </span>
-                    ) : null}
-                  </span>
-                  <span className="gallery-index-work__ledger">
-                    <span>{String(artwork.index + 1).padStart(2, "0")}</span>
-                    <span>{artwork.collection}</span>
-                    <span>{artwork.year}</span>
-                  </span>
-                  <div className="gallery-index-work__identity">
-                    <h2 id={titleId}>{artwork.name}</h2>
-                    <span
-                      id={statusId}
-                      className="gallery-index-work__status"
-                      data-sold={artwork.sold ? "true" : "false"}
-                    >
-                      {status}
-                    </span>
-                  </div>
-                  <span id={viewId} className="gallery-index-work__view">
-                    {t.common.view}
-                    <span aria-hidden="true">+</span>
-                  </span>
-                </a>
-              </article>
-            </li>
-          );
-        })}
-      </ol>
-      {showProgressiveDetails ? (
-        <ProgressiveArtworkDetails artworks={artworks} locale={locale} t={t} />
-      ) : null}
-    </>
-  );
-}
-
-const WorkRecord = memo(function WorkRecord({
-  artwork,
-  position,
-  isActive,
-  isFavorite,
-  onActivate,
-  onRegister,
-  onOpen,
-  onFavorite,
-  locale,
-  t,
-}) {
-  const articleRef = useRef(null);
-  const controllerRef = useRef(null);
-  const explicitRevealRef = useRef(false);
-  const [stayAnnouncement, setStayAnnouncement] = useState("");
-  const titleId = `gallery-work-${artwork.id}-title`;
-  const descriptionId = `gallery-work-${artwork.id}-story`;
-
-  const setArticleRef = useCallback((node) => {
-    articleRef.current = node;
-    onRegister(artwork.id, node);
-  }, [artwork.id, onRegister]);
-
-  useEffect(() => {
-    if (!isActive) {
-      setStayAnnouncement("");
-      return;
-    }
-    const focusedInside = articleRef.current?.contains(document.activeElement);
-    if (!explicitRevealRef.current && !focusedInside) return;
-    explicitRevealRef.current = false;
-    controllerRef.current?.settle();
-  }, [isActive]);
-
-  const activate = () => onActivate(artwork.id);
-
-  const reveal = () => {
-    if (isActive) {
-      controllerRef.current?.settle();
-      return;
-    }
-    explicitRevealRef.current = true;
-    activate();
-  };
-
-  const surfaceArtwork = {
-    ...artwork,
-    locale,
-    viewLabel: t.common.view,
-  };
-
-  return (
-    <StayReveal
-      as="article"
-      ref={setArticleRef}
-      controllerRef={controllerRef}
-      className="gallery-work"
-      activeKey={artwork.id}
-      active={isActive}
-      observeWindowScroll={isActive}
-      waitForArtwork
-      phasePresence={{ materials: true, story: storyParagraphs(artwork.story).length > 0, availability: true }}
-      onPhaseChange={(phase, state) => {
-        if (state !== "resolved" || !isActive) return;
-        const phaseLabels = galleryCopy[locale].revealAnnouncements;
-        if (phaseLabels[phase]) setStayAnnouncement(phaseLabels[phase]);
-      }}
-      data-artwork-id={artwork.id}
-      data-gallery-active={isActive ? "true" : "false"}
-      data-sold={artwork.sold ? "true" : "false"}
-      aria-labelledby={titleId}
-    >
-      <ArtworkSurface
-        artwork={surfaceArtwork}
-        src={artwork.streamPrimary}
-        srcSet={artwork.streamSrcSet}
-        sizes="(min-width: 1180px) 58vw, (min-width: 760px) 54vw, 100vw"
-        width={artwork.streamPrimaryWidth}
-        height={artwork.streamPrimaryHeight}
-        alt={artwork.name}
-        className="gallery-work__visual"
-        loading={position === 0 ? "eager" : "lazy"}
-        fetchPriority={position === 0 ? "high" : "auto"}
-        recoverable={isActive}
-        onOpen={(event) => onOpen(artwork.id, event.currentTarget)}
-        openId={`artwork-open-${artwork.id}`}
-      />
-
-      <ArtworkNarrative
-        artwork={artwork}
-        locale={locale}
-        t={t}
-        isFavorite={isFavorite}
-        onFavorite={onFavorite}
-        onReveal={reveal}
-        onOpen={(event) => onOpen(artwork.id, event.currentTarget)}
-        titleId={titleId}
-        descriptionId={descriptionId}
-      />
-      <span className="sr-only" aria-live="polite" aria-atomic="true">
-        {isActive ? stayAnnouncement : ""}
-      </span>
-    </StayReveal>
-  );
-});
-
-function GalleryStream({ artworks, favoriteIds, locale, onFavorite, onOpen, t }) {
-  const {
-    activeId,
-    activateArtwork,
-    registerArtwork,
-  } = useViewportArtworkSelection(artworks);
-  const recoveryFocusOwnerRef = useRef(null);
-
-  useLayoutEffect(() => {
-    const recoveryOwner = recoveryFocusOwnerRef.current;
-    if (!recoveryOwner || recoveryOwner === activeId) return;
-    recoveryFocusOwnerRef.current = null;
-
-    const activeElement = document.activeElement;
-    const focusWasLost = !activeElement
-      || activeElement === document.body
-      || !activeElement.isConnected;
-    if (!focusWasLost || !activeId) return;
-    document.getElementById(`artwork-open-${activeId}`)
-      ?.focus?.({ preventScroll: true });
-  }, [activeId]);
-
-  return (
-    <div
-      className="gallery-stream"
-      onFocusCapture={(event) => {
-        const retry = event.target.closest?.(".artwork-surface__recovery button");
-        if (!retry) return;
-        recoveryFocusOwnerRef.current = retry
-          .closest("[data-artwork-id]")
-          ?.dataset.artworkId ?? null;
-      }}
-    >
-      {artworks.map((artwork, position) => (
-        <WorkRecord
-          key={artwork.id}
-          artwork={artwork}
-          position={position}
-          isActive={activeId === artwork.id}
-          isFavorite={favoriteIds.has(artwork.id)}
-          onActivate={activateArtwork}
-          onRegister={registerArtwork}
-          onOpen={onOpen}
-          onFavorite={onFavorite}
-          locale={locale}
-          t={t}
-        />
-      ))}
-    </div>
-  );
-}
-
 export function GalleryPage() {
-  const { catalog, favorites, locale, t, toggleFavorite } = useSite();
+  const { catalog, locale, t } = useSite();
   const pageCopy = galleryCopy[locale];
-  const desktopGallery = useDesktopGallery();
   const [collection, setCollection] = useState("all");
   const [availability, setAvailability] = useState("all");
   const [filtersReady, setFiltersReady] = useState(false);
@@ -560,9 +185,8 @@ export function GalleryPage() {
         : null;
       const archiveTarget = document.getElementById(`artwork-open-${closedArtworkId}`);
       const target = savedTarget || archiveTarget || document.getElementById("works-title");
-      const inPlace = Boolean(savedTarget);
       target?.focus?.({ preventScroll: Boolean(savedTarget || archiveTarget) });
-      if (!inPlace && archiveTarget) {
+      if (!savedTarget && archiveTarget) {
         archiveTarget.scrollIntoView?.({ block: "center", behavior: "instant" });
       }
       triggerRef.current = null;
@@ -598,7 +222,7 @@ export function GalleryPage() {
     });
     const nextState = { ...(window.history.state || {}), [modalHistoryKey]: id };
     window.history.pushState(nextState, "", href);
-    setModalId(id);
+    withArtworkTransition(trigger, () => setModalId(id));
   }, []);
 
   const closeArtwork = useCallback(() => {
@@ -634,7 +258,6 @@ export function GalleryPage() {
       )),
     [availability, collectionWorks],
   );
-  const favoriteIds = useMemo(() => new Set(favorites), [favorites]);
   const modalArtwork = modalId ? findArtwork(catalog, modalId) : null;
   const modalSequence = useMemo(
     () => modalArtwork && visibleWorks.some(({ id }) => id === modalArtwork.id)
@@ -658,10 +281,7 @@ export function GalleryPage() {
       url.hash = `#artwork-details-${nextArtwork.id}`;
     }
     const currentState = window.history.state;
-    const nextState = Object.prototype.hasOwnProperty.call(
-      currentState ?? {},
-      modalHistoryKey,
-    )
+    const nextState = Object.prototype.hasOwnProperty.call(currentState ?? {}, modalHistoryKey)
       ? { ...currentState, [modalHistoryKey]: nextArtwork.id }
       : currentState;
     window.history.replaceState(nextState, "", relativeUrl(url));
@@ -669,164 +289,95 @@ export function GalleryPage() {
   }, [modalPosition, modalSequence]);
 
   return (
-    <SiteShell page="gallery" immersive footer={false}>
-      <section className="gallery-intro" aria-labelledby="works-title">
-        <p className="gallery-intro__index">BRANCHSTONE / {String(catalogStats.total).padStart(2, "0")}</p>
-        <div className="gallery-intro__title">
-          <p>{pageCopy.indexEyebrow}</p>
-          <h1 id="works-title" tabIndex="-1">
-            {pageCopy.title}
-          </h1>
-          <p>
-            {pageCopy.introduction}
-          </p>
-        </div>
-        <dl className="gallery-intro__counts" aria-label={pageCopy.statusLabel}>
-          <div><dt>{pageCopy.allWorks}</dt><dd>{catalogStats.total}</dd></div>
-          <div><dt>{t.common.available}</dt><dd>{catalogStats.available}</dd></div>
-          <div><dt>{t.common.collected}</dt><dd>{catalogStats.collected}</dd></div>
-        </dl>
-      </section>
-
-      <div className="gallery-material-seam" aria-hidden="true">
-        <picture>
-          <source media="(min-width: 760px)" srcSet={gallerySeamDesktop} />
-          <img
-            src={gallerySeamMobile}
-            alt=""
-            width="645"
-            height="369"
-            draggable="false"
-            loading="eager"
-            fetchPriority="auto"
-            decoding="async"
-          />
-        </picture>
-      </div>
-
-      <section className="gallery-controls" aria-labelledby="filters-title">
-        <div className="gallery-controls__heading">
-          <h2 id="filters-title">{pageCopy.findWork}</h2>
-          <p aria-live="polite" aria-atomic="true">
-            {galleryWorkCount(visibleWorks.length, locale)}
-          </p>
-        </div>
-
-        <div className="gallery-mobile-filters">
-          <label>
-            <span>{pageCopy.availability}</span>
-            <span className="gallery-mobile-filter__control">
-              <select
-                disabled={!filtersReady}
-                value={availability}
-                onChange={(event) => selectAvailability(event.target.value)}
-              >
-                <option value="all">{t.common.all} · {collectionWorks.length}</option>
-                <option value="available">{t.common.available} · {availabilityStats.available}</option>
-                <option value="collected">{t.common.collected} · {availabilityStats.collected}</option>
-              </select>
-              <CaretDown aria-hidden="true" />
-            </span>
-          </label>
-          <label>
-            <span>{pageCopy.collection}</span>
-            <span className="gallery-mobile-filter__control">
-              <select
-                disabled={!filtersReady}
-                value={collection}
-                onChange={(event) => selectCollection(event.target.value)}
-              >
-                <option value="all">{t.common.all}</option>
-                {collections.map((record) => (
-                  <option key={record.id} value={record.id}>
-                    {collectionLabel(record.id, locale)}
-                  </option>
-                ))}
-              </select>
-              <CaretDown aria-hidden="true" />
-            </span>
-          </label>
-        </div>
-
-        <div className="gallery-status-filter" role="group" aria-label={pageCopy.availabilityFilter}>
-          {[
-            ["all", t.common.all, collectionWorks.length],
-            ["available", t.common.available, availabilityStats.available],
-            ["collected", t.common.collected, availabilityStats.collected],
-          ].map(([id, label, count]) => (
-            <button
-              key={id}
-              type="button"
-              disabled={!filtersReady}
-              aria-pressed={availability === id}
-              onClick={() => selectAvailability(id)}
-            >
-              <span>{label}</span><small>{String(count).padStart(2, "0")}</small>
-            </button>
-          ))}
-        </div>
-
-        <div className="gallery-collection-filter" role="group" aria-label={pageCopy.collectionFilter}>
-          <button
-            type="button"
-            disabled={!filtersReady}
-            aria-pressed={collection === "all"}
-            onClick={() => selectCollection("all")}
-          >
-            <span>00</span>{t.common.all}
-          </button>
-          {collections.map((record, index) => (
-            <button
-              key={record.id}
-              type="button"
-              disabled={!filtersReady}
-              aria-pressed={collection === record.id}
-              onClick={() => selectCollection(record.id)}
-            >
-              <span>{String(index + 1).padStart(2, "0")}</span>{collectionLabel(record.id, locale)}
-            </button>
-          ))}
+    <SiteShell page="gallery">
+      <section className="page-intro works-intro" aria-labelledby="works-title">
+        <p className="kicker">{pageCopy.indexEyebrow}</p>
+        <h1 id="works-title" className="display" tabIndex="-1">{pageCopy.title}</h1>
+        <div className="works-intro__row">
+          <p className="lede">{pageCopy.introduction}</p>
+          <dl className="facts" aria-label={pageCopy.statusLabel}>
+            <div><dt>{pageCopy.allWorks}</dt><dd>{catalogStats.total}</dd></div>
+            <div><dt>{t.common.available}</dt><dd>{catalogStats.available}</dd></div>
+            <div><dt>{t.common.collected}</dt><dd>{catalogStats.collected}</dd></div>
+          </dl>
         </div>
       </section>
 
-      <section className="gallery-archive" aria-label={pageCopy.archive}>
-        <p className="gallery-archive__pending" role="status">
-          {pageCopy.opening}
+      <section className="works-controls" aria-labelledby="filters-title">
+        <h2 id="filters-title" className="sr-only">{pageCopy.findWork}</h2>
+        <div className="works-controls__scroller">
+          <div className="segmented" role="group" aria-label={pageCopy.availabilityFilter}>
+            {[
+              ["all", t.common.all, collectionWorks.length],
+              ["available", t.common.available, availabilityStats.available],
+              ["collected", t.common.collected, availabilityStats.collected],
+            ].map(([id, label, count]) => (
+              <button
+                key={id}
+                type="button"
+                disabled={!filtersReady}
+                aria-pressed={availability === id}
+                onClick={() => selectAvailability(id)}
+              >
+                {id === "available" ? <span className="status-dot" data-sold="false" aria-hidden="true" /> : null}
+                {label}
+                <small>{count}</small>
+              </button>
+            ))}
+          </div>
+          <div className="works-controls__collections" role="group" aria-label={pageCopy.collectionFilter}>
+            <button
+              className="pill"
+              type="button"
+              disabled={!filtersReady}
+              aria-pressed={collection === "all"}
+              onClick={() => selectCollection("all")}
+            >
+              {pageCopy.allCollections}
+            </button>
+            {collections.map((record) => (
+              <button
+                key={record.id}
+                className="pill"
+                type="button"
+                disabled={!filtersReady}
+                aria-pressed={collection === record.id}
+                onClick={() => selectCollection(record.id)}
+              >
+                {collectionLabel(record.id, locale)}
+              </button>
+            ))}
+          </div>
+        </div>
+        <p className="works-controls__count" aria-live="polite" aria-atomic="true">
+          {galleryWorkCount(visibleWorks.length, locale)}
         </p>
+      </section>
+
+      <section className="works-archive" aria-label={pageCopy.archive}>
         {visibleWorks.length ? (
-          desktopGallery ? (
-            <GalleryStream
-              artworks={visibleWorks}
-              favoriteIds={favoriteIds}
-              locale={locale}
-              onFavorite={toggleFavorite}
-              onOpen={openArtwork}
-              t={t}
-            />
-          ) : (
-            <MobileGalleryIndex
-              artworks={visibleWorks}
-              availability={availability}
-              collection={collection}
-              locale={locale}
-              onOpen={openArtwork}
-              t={t}
-            />
-          )
+          <WorksGrid
+            artworks={visibleWorks}
+            locale={locale}
+            t={t}
+            hrefFor={(artwork) => artworkHref(artwork.id, collection, availability, !filtersReady)}
+            onOpen={filtersReady ? openArtwork : undefined}
+            eagerCount={6}
+          />
         ) : (
-          <div className="gallery-empty" role="status">
+          <div className="works-empty" role="status">
             <p>{pageCopy.empty}</p>
-            <button type="button" onClick={() => { selectCollection("all"); selectAvailability("all"); }}>
+            <button className="button" type="button" onClick={() => { selectCollection("all"); selectAvailability("all"); }}>
               {pageCopy.showAll}
             </button>
           </div>
         )}
+        {filtersReady ? null : <ProgressiveArtworkDetails artworks={visibleWorks} locale={locale} t={t} />}
       </section>
 
       {modalArtwork ? (
         <ArtworkModal
           artwork={modalArtwork}
-          forceResolved={!desktopGallery}
           onClose={closeArtwork}
           onStepWork={stepModalArtwork}
           workCount={modalSequence.length}

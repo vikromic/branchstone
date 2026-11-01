@@ -1,0 +1,165 @@
+body.gallery-modal-open { overflow: hidden; }
+
+::view-transition-group(artwork-focus) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease-material);
+}
+
+.artwork-dialog-layer {
+  position: fixed;
+  z-index: 400;
+  inset: 0;
+  background: var(--ground);
+}
+
+.artwork-dialog {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-content: start;
+  background: var(--ground);
+  color: var(--ink);
+}
+.artwork-dialog:focus { outline: none; }
+
+.artwork-dialog__header {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: max(0.5rem, env(safe-area-inset-top)) var(--safe-gutter-right) 0.5rem var(--safe-gutter-left);
+  background: var(--header-glass);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.artwork-dialog__header .button { min-height: var(--target); padding-inline: 1rem; }
+.artwork-dialog__position {
+  margin: 0 auto 0 0.5rem;
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.artwork-dialog__stage {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  height: min(68svh, 44rem);
+  padding: 0.5rem var(--safe-gutter-right) 0 var(--safe-gutter-left);
+}
+
+.artwork-surface {
+  position: relative;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+.artwork-surface > img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.artwork-surface[data-image-state="error"] > img { visibility: hidden; }
+.artwork-surface__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+.artwork-surface[data-image-state="ready"] .artwork-surface__placeholder { background: transparent; }
+.artwork-surface__recovery {
+  position: absolute;
+  z-index: 3;
+  inset: auto 0.75rem 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  background: var(--ground);
+  border: 1px solid var(--rule);
+  font-size: var(--text-sm);
+}
+.artwork-surface__recovery p { margin: 0; flex: 1 1 14rem; }
+.artwork-dialog__gesture-surface {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  touch-action: pan-y;
+}
+
+.artwork-dialog__carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.artwork-dialog__carousel-controls p {
+  margin: 0;
+  min-width: 3.5rem;
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.artwork-dialog__aside {
+  display: grid;
+  align-content: start;
+  gap: 2rem;
+  padding: 1.5rem var(--safe-gutter-right) max(2.5rem, calc(env(safe-area-inset-bottom) + 1.5rem)) var(--safe-gutter-left);
+}
+
+.artwork-record { display: grid; gap: 1.1rem; max-width: 36rem; }
+.artwork-record__title { font-size: clamp(2.4rem, 5vw, 4.25rem); overflow-wrap: anywhere; }
+.artwork-record__story { display: grid; gap: 0.8rem; }
+.artwork-record__story p { margin: 0; line-height: 1.6; }
+.artwork-record__facts {
+  display: grid;
+  margin: 0.25rem 0 0;
+  border-top: 1px solid var(--rule);
+}
+.artwork-record__facts > div {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 0.4fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: var(--text-sm);
+}
+.artwork-record__facts dt { color: var(--ink-muted); }
+.artwork-record__facts dd { margin: 0; }
+.artwork-record__note { margin: 0; color: var(--ink-muted); font-size: var(--text-sm); }
+.artwork-record__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; padding-top: 0.25rem; }
+
+.artwork-dialog__work-navigation { display: flex; gap: 0.6rem; }
+
+@media (min-width: 960px) {
+  .artwork-dialog {
+    overflow: hidden;
+    grid-template-columns: minmax(0, 1.6fr) minmax(22rem, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .artwork-dialog__header { grid-column: 1 / -1; position: static; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .artwork-dialog__stage { height: auto; padding: 0.5rem 1rem 2rem var(--safe-gutter-left); }
+  .artwork-dialog__aside {
+    overflow-y: auto;
+    align-content: end;
+    padding: 1rem var(--safe-gutter-right) 2.5rem 1.5rem;
+  }
+}

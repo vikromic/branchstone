@@ -37,7 +37,9 @@ export function normalizeAvailability(value) {
   return value === "available" || value === "collected" ? value : "all";
 }
 
-export function mobileArtworkHref(artworkId, collection, availability, progressiveOnly = false) {
+// Grid link for one work. Before hydration it targets the static details anchor;
+// afterwards it is the canonical deep link the enhanced view opens in place.
+export function artworkHref(artworkId, collection, availability, progressiveOnly = false) {
   if (progressiveOnly) return `#artwork-details-${artworkId}`;
   const search = new URLSearchParams();
   if (collection !== "all") search.set("collection", collection);

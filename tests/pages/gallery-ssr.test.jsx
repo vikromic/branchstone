@@ -25,7 +25,7 @@ describe("Gallery progressive archive", () => {
       "Робота у приватній колекції.",
       "32 роботи",
     ],
-  ])("keeps every linked work in the %s prerender before desktop hydration", (
+  ])("keeps every linked work and its static details in the %s prerender", (
     locale,
     heading,
     firstWork,
@@ -39,29 +39,22 @@ describe("Gallery progressive archive", () => {
     );
     const workCount = getCatalog(locale).length;
 
-    expect(html).toContain('class="gallery-mobile-index" role="list"');
-    expect(html.match(/class="gallery-index-work"/g)).toHaveLength(workCount);
-    expect(html.match(/--gallery-index-aspect:/g)).toHaveLength(workCount);
-    expect(html.match(/--gallery-index-estimate:/g)).toHaveLength(workCount);
-    expect(html.match(/--gallery-index-estimate-narrow:/g)).toHaveLength(workCount);
-    expect(html.match(/<select[^>]*disabled=""/g)).toHaveLength(2);
+    expect(html).toContain('class="works-grid" role="list"');
+    expect(html.match(/class="works-grid__item"/g)).toHaveLength(workCount);
+    expect(html.match(/class="works-grid__link"/g)).toHaveLength(workCount);
+    expect(html.match(/--ar:/g)).toHaveLength(workCount);
     expect(html.match(/<button[^>]*disabled=""/g))
-      .toHaveLength(4 + collections.length);
-    expect(html.match(/class="gallery-index-work__link"/g)).toHaveLength(workCount);
+      .toHaveLength(3 + 1 + collections.length);
     expect(html.match(/class="gallery-progressive-detail"/g)).toHaveLength(workCount);
-    expect(html).not.toContain("gallery-index-work__preview-error");
+    expect(html).not.toContain("works-grid__preview-error");
+    expect(html).not.toMatch(/class="works-grid__link"[^>]*aria-haspopup/);
     expect(html).toContain(heading);
     expect(html).toContain(firstWork);
-    expect(html).not.toMatch(
-      /class="gallery-index-work__link"[^>]*aria-haspopup="dialog"/,
-    );
     expect(html).toContain('href="#artwork-details-born-of-burn"');
     expect(html).toContain('id="artwork-details-born-of-burn"');
-    expect(html).toContain('class="gallery-progressive-detail"');
     expect(html).toContain(firstMaterial);
     expect(html).toContain(price);
     expect(html).toContain(collectedNote);
     expect(html).toContain(resultCount);
-    expect(html).toContain('class="gallery-archive__pending" role="status"');
   });
 });

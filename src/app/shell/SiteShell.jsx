@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import indexMaterial from "../../assets/material-stage/bottom-strata-alpha.webp";
 import { quietChromeCopy } from "../../content/copy/shell.js";
 import { CONTACT_EMAIL, INSTAGRAM_URL } from "../../content/site.js";
 import { localeHref } from "../../domain/locale.js";
@@ -56,17 +55,6 @@ function SecondaryLinks({ chrome, locale, onNavigate, page, t }) {
   );
 }
 
-function IndexMaterial() {
-  return (
-    <div className="site-index__material" aria-hidden="true">
-      <picture>
-        <source media="(min-width: 760px)" srcSet={indexMaterial} />
-        <img alt="" decoding="async" />
-      </picture>
-    </div>
-  );
-}
-
 function LegalLinks({ page, locale, onNavigate, t }) {
   return (
     <>
@@ -88,7 +76,7 @@ function LegalLinks({ page, locale, onNavigate, t }) {
   );
 }
 
-export function SiteShell({ page, children, immersive = false, footer = true }) {
+export function SiteShell({ page, children, footer = true }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [favoritesOpen, setFavoritesOpen] = useState(false);
   const menuRef = useRef(null);
@@ -203,11 +191,11 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
   }, [favoritesOpen, menuOpen]);
 
   return (
-    <div className={`site-frame page-${page}${immersive ? " site-frame--immersive" : ""}`}>
+    <div className={`site-frame page-${page}`}>
       <a className="skip-link" href="#main-content">{t.shell.skip}</a>
       <header className="site-header">
         <a className="wordmark" href={localeHref("/", locale)} aria-label={t.shell.homeLabel}>
-          <span>BRANCHSTONE</span><small>BY VIKTORIA</small>
+          <span>Branchstone</span><small>by Viktoria</small>
         </a>
         <RouteNavigation className="primary-navigation" items={primaryRoutes} locale={locale} page={page} t={t} />
         <div className="quiet-index-trigger">
@@ -251,7 +239,6 @@ export function SiteShell({ page, children, immersive = false, footer = true }) 
         <div className="drawer-layer drawer-layer--index" role="presentation">
           <section id="site-index-layer" ref={menuRef} className="site-index" role="dialog" aria-modal="true" aria-labelledby="site-index-title">
             <FocusTrap active={menuOpen} containerRef={menuRef} onClose={closeIndex} />
-            <IndexMaterial />
             <header className="site-index__header">
               <p id="site-index-title">{indexLabel}</p>
               <button className="site-index__close" type="button" onClick={closeIndex}>{t.shell.close}</button>

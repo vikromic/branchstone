@@ -14,7 +14,6 @@ import { CommissionsPage } from "../../src/pages/CommissionsPage.jsx";
 afterEach(() => {
   document.body.replaceChildren();
   document.head.querySelectorAll("[data-test-contact-css]").forEach((node) => node.remove());
-  document.documentElement.classList.remove("stay-enhanced");
   delete document.documentElement.dataset.hydrated;
   delete document.documentElement.dataset.hydrationStalled;
   vi.restoreAllMocks();
@@ -54,7 +53,6 @@ describe("contact progressive safety", () => {
       location: window.location,
       localStorage: null,
       navigator: window.navigator,
-      matchMedia: undefined,
       setTimeout: vi.fn((callback, delay) => {
         callbacks.push({ callback, delay });
         return callbacks.length;
@@ -68,10 +66,7 @@ describe("contact progressive safety", () => {
     expect(fallback.getAttribute("aria-live")).toBeNull();
     expect(fallback.getAttribute("aria-atomic")).toBeNull();
     expect(getComputedStyle(fallback).display).toBe("none");
-    expect(runBranchstonePrehydrate("contact", runtime)).toEqual({
-      enhanced: false,
-      redirected: false,
-    });
+    expect(runBranchstonePrehydrate("contact", runtime)).toEqual({ redirected: false });
     expect(callbacks).toHaveLength(1);
     expect(callbacks[0].delay).toBe(8000);
 
@@ -100,7 +95,6 @@ describe("contact progressive safety", () => {
       location: window.location,
       localStorage: null,
       navigator: window.navigator,
-      matchMedia: undefined,
       setTimeout: (callback) => {
         callbacks.push(callback);
         return callbacks.length;
